@@ -30,7 +30,7 @@ jobs:
       - name: Run data pipeline
         run: |
           cd R
-          Rscript -e 'source("01_fundamentals.R"); fund_data <- run_module1(force_refresh=TRUE)'
+          Rscript -e 'source("01_fundamentals.R"); fund_data <- run_module1()'
           Rscript -e 'source("04_master_score.R"); run_module4(fund_data)'
       
       - name: Deploy to shinyapps.io
