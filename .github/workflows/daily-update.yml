@@ -31,10 +31,15 @@ jobs:
         run: |
           Rscript -e '
             source("R/01_fundamentals.R")
+            source("R/02_momentum.R")
+            source("R/03_data.R")
             source("R/04_master_score.R")
+            
             fund_data <- run_module1()
+            fund_data <- run_module2(fund_data)
+            fund_data <- run_module3(fund_data)
             run_module4(fund_data)
-          'Jus
+          '
       
       - name: Deploy to shinyapps.io
         env:
