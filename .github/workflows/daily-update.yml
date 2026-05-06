@@ -34,7 +34,7 @@ jobs:
             source("R/04_master_score.R")
             fund_data <- run_module1()
             run_module4(fund_data)
-          '
+          'Jus
       
       - name: Deploy to shinyapps.io
         env:
