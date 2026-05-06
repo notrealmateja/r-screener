@@ -1,0 +1,10 @@
+name: r-codescreener
+title:
+username: r-codescreener
+account: r-codescreener
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 16827649
+bundleId: 11724075
+url: https://r-codescreener.shinyapps.io/r-codescreener/
+version: 1
