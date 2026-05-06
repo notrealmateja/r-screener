@@ -1,0 +1,58 @@
+name: Daily Stock Screener Update
+
+on:
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+jobs:
+  update-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: '4.5.2'
+      
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev
+      
+      - name: Install R packages
+        run: |
+          Rscript -e 'install.packages(c("rsconnect", "quantmod", "tidyverse", "httr", "jsonlite", "lubridate"))'
+      
+      - name: Run data pipeline
+        run: |
+          cd R
+          Rscript -e 'source("01_fundamentals.R"); fund_data <- run_module1(force_refresh=TRUE)'
+          Rscript -e 'source("04_master_score.R"); run_module4(fund_data)'
+      
+      - name: Deploy to shinyapps.io
+        env:
+          SHINYAPPS_ACCOUNT: ${{ secrets.SHINYAPPS_ACCOUNT }}
+          SHINYAPPS_TOKEN: ${{ secrets.SHINYAPPS_TOKEN }}
+          SHINYAPPS_SECRET: ${{ secrets.SHINYAPPS_SECRET }}
+        run: |
+          Rscript -e '
+            library(rsconnect)
+            rsconnect::setAccountInfo(
+              name = Sys.getenv("SHINYAPPS_ACCOUNT"),
+              token = Sys.getenv("SHINYAPPS_TOKEN"),
+              secret = Sys.getenv("SHINYAPPS_SECRET")
+            )
+            rsconnect::deployApp(appDir = "app", forceUpdate = TRUE)
+          '
+      
+      - name: Commit updated data
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add app/data/*.csv
+          git diff --quiet && git diff --staged --quiet || git commit -m "Auto-update: Daily data refresh $(date +'%Y-%m-%d')"
+          git push
