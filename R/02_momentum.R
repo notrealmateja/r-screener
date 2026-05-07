@@ -109,7 +109,11 @@ run_module2 <- function(tickers=NULL) {
 
   message("Saved: data/momentum_scored.csv + data/price_history.csv")
   message(glue("Top momentum: {summary$symbol[which.max(summary$momentum_score)]}"))
-  summary
+  
+  # Merge fundamentals with momentum data
+result <- merge(fund_data, summary, by = "symbol", all.x = TRUE)
+
+result
 }
 
 if (!exists("SOURCED_BY_MASTER")) momentum_data <- run_module2()
