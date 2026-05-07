@@ -25,15 +25,14 @@ jobs:
       
       - name: Install R packages
         run: |
-          Rscript -e 'install.packages(c("rsconnect", "quantmod", "tidyverse", "httr", "jsonlite", "lubridate", "tidyquant"))'
+         Rscript -e 'install.packages(c("rsconnect", "quantmod", "tidyverse", "httr", "jsonlite", "lubridate", "tidyquant", "DT", "shiny"))''
       
       - name: Run data pipeline
         run: |
           Rscript -e '
             source("R/01_fundamentals.R")
             source("R/02_momentum.R")
-            source("R/04_master_score.R")
-            
+            source("R/04_master_score.R")            
             fund_data <- run_module1()
             fund_data <- run_module2(fund_data)
             run_module4()
