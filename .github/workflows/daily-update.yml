@@ -112,6 +112,8 @@ jobs:
 
             rsconnect::deployApp(
               appDir      = "app",
+              appName     = "r-codescreener",
+              account     = acct,
               forceUpdate = TRUE,
               lint        = FALSE
             )
