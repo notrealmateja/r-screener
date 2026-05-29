@@ -11,58 +11,68 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up R
         uses: r-lib/actions/setup-r@v2
         with:
           r-version: '4.4.0'
+          # Use Posit binary package manager — pre-built Ubuntu binaries,
+          # no compilation, no missing system libs, installs in ~2 min
+          use-public-rspm: true
 
       - name: Install system dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            libcurl4-openssl-dev \
-            libssl-dev \
-            libxml2-dev \
-            libharfbuzz-dev \
-            libfribidi-dev \
-            libfontconfig1-dev \
-            libfreetype6-dev \
-            libpng-dev \
-            libtiff5-dev \
-            libjpeg-dev \
-            libgit2-dev \
-            zlib1g-dev
+          sudo apt-get update -qq
+          sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev
 
       - name: Install R packages
         run: |
           Rscript -e '
-            pkgs <- c(
-              "httr", "jsonlite", "readr", "dplyr", "tidyr", "glue", "lubridate",
-              "TTR", "xts", "zoo", "quantmod",
-              "tidyquant",
-              "shiny", "shinydashboard", "DT", "plotly", "scales",
-              "rsconnect"
-            )
-            install.packages(pkgs, dependencies = TRUE, repos = "https://cloud.r-project.org")
+            # Posit binary repo — pre-compiled for ubuntu-latest (jammy)
+            options(repos = c(
+              RSPM = "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
+              CRAN = "https://cloud.r-project.org"
+            ))
 
-            # Hard stop if any package failed — catches silent install failures
-            missing <- pkgs[!sapply(pkgs, requireNamespace, quietly = TRUE)]
-            if (length(missing) > 0) {
-              stop("PACKAGE INSTALL FAILED: ", paste(missing, collapse = ", "))
-            }
-            message("All packages installed OK: ", paste(pkgs, collapse = ", "))
+            # Install in dependency order, each group explicit
+            # Group 1 — core data packages (no heavy deps)
+            install.packages(c(
+              "httr", "jsonlite", "readr", "dplyr", "tidyr",
+              "glue", "lubridate", "scales"
+            ))
+
+            # Group 2 — time-series / finance base
+            install.packages(c("xts", "zoo", "TTR", "quantmod"))
+
+            # Group 3 — tidyquant (depends on groups 1+2 being present)
+            install.packages("tidyquant")
+
+            # Group 4 — Shiny stack
+            install.packages(c("shiny", "shinydashboard", "DT", "plotly"))
+
+            # Group 5 — deployment
+            install.packages("rsconnect")
+
+            # Hard verification — fail NOW if anything is missing
+            required <- c(
+              "httr","jsonlite","readr","dplyr","tidyr","glue","lubridate",
+              "scales","xts","zoo","TTR","quantmod","tidyquant",
+              "shiny","shinydashboard","DT","plotly","rsconnect"
+            )
+            missing <- required[!sapply(required, requireNamespace, quietly=TRUE)]
+            if (length(missing) > 0) stop("MISSING: ", paste(missing, collapse=", "))
+            message("ALL PACKAGES OK")
           '
 
       - name: Run data pipeline
         run: |
           Rscript -e '
-            source("R/01_fundamentals.R")   # Yahoo + Alpha Vantage (rotating cache)
-            source("R/02_momentum.R")       # Price, technicals, daily alpha vs SPY
-            source("R/02b_polygon.R")       # Polygon: options, SEC financials, VWAP
-            source("R/03_data.R")           # FMP: short interest, earnings, news, sector
-            source("R/04_master_score.R")   # Composite alpha scoring engine
+            source("R/01_fundamentals.R")
+            source("R/02_momentum.R")
+            source("R/02b_polygon.R")
+            source("R/03_data.R")
+            source("R/04_master_score.R")
 
             fund_data <- run_module1()
             run_module2(fund_data$symbol)
@@ -70,12 +80,13 @@ jobs:
             run_module3(fund_data$symbol)
             run_module4()
 
-            # Copy all generated CSVs and RDS into app/ so Shiny can read them
-            csv_files <- list.files("data", pattern = "\\.csv$", full.names = TRUE)
-            file.copy(csv_files, file.path("app", basename(csv_files)), overwrite = TRUE)
-            rds_files <- list.files("data", pattern = "\\.rds$", full.names = TRUE)
-            file.copy(rds_files, file.path("app", basename(rds_files)), overwrite = TRUE)
-            message("Copied ", length(csv_files) + length(rds_files), " data files into app/")
+            csv_files <- list.files("data", pattern="\\.csv$", full.names=TRUE)
+            file.copy(csv_files, file.path("app", basename(csv_files)), overwrite=TRUE)
+            rds_files <- list.files("data", pattern="\\.rds$", full.names=TRUE)
+            file.copy(rds_files, file.path("app", basename(rds_files)), overwrite=TRUE)
+            if (!dir.exists("app/data")) dir.create("app/data")
+            file.copy(rds_files, file.path("app/data", basename(rds_files)), overwrite=TRUE)
+            message("Copied ", length(csv_files)+length(rds_files), " files into app/")
           '
 
       - name: Deploy to shinyapps.io
@@ -91,7 +102,7 @@ jobs:
               token  = Sys.getenv("SHINYAPPS_TOKEN"),
               secret = Sys.getenv("SHINYAPPS_SECRET")
             )
-            rsconnect::deployApp(appDir = "app", forceUpdate = TRUE)
+            rsconnect::deployApp(appDir="app", forceUpdate=TRUE)
           '
 
       - name: Commit updated data
