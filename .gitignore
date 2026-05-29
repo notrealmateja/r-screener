@@ -1,0 +1,27 @@
+# R project files — never commit these
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+
+# Backup workflow files
+*.backup
+*.bak
+*.save
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Old loose files at repo root (not part of the pipeline)
+/01_fundamentals.R
+/APP_PATCH.R
+/CRASH_FIX.R
+/FULL_FIX.R
+/MASTER_FIX.R
+/MOBILE_FIX.R
+/app.R
+/files 4/
+/files.zip
+/{R,data,output,app}/
+/output/
