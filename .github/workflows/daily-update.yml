@@ -17,8 +17,6 @@ jobs:
         uses: r-lib/actions/setup-r@v2
         with:
           r-version: '4.4.0'
-          # Use Posit binary package manager — pre-built Ubuntu binaries,
-          # no compilation, no missing system libs, installs in ~2 min
           use-public-rspm: true
 
       - name: Install system dependencies
@@ -29,37 +27,19 @@ jobs:
       - name: Install R packages
         run: |
           Rscript -e '
-            # Posit binary repo — pre-compiled for ubuntu-latest (jammy)
             options(repos = c(
               RSPM = "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
               CRAN = "https://cloud.r-project.org"
             ))
-
-            # Install in dependency order, each group explicit
-            # Group 1 — core data packages (no heavy deps)
-            install.packages(c(
-              "httr", "jsonlite", "readr", "dplyr", "tidyr",
-              "glue", "lubridate", "scales"
-            ))
-
-            # Group 2 — time-series / finance base
-            install.packages(c("xts", "zoo", "TTR", "quantmod"))
-
-            # Group 3 — tidyquant (depends on groups 1+2 being present)
+            install.packages(c("httr","jsonlite","readr","dplyr","tidyr","glue","lubridate","scales"))
+            install.packages(c("xts","zoo","TTR","quantmod"))
             install.packages("tidyquant")
-
-            # Group 4 — Shiny stack
-            install.packages(c("shiny", "shinydashboard", "DT", "plotly"))
-
-            # Group 5 — deployment
+            install.packages(c("shiny","shinydashboard","DT","plotly"))
             install.packages("rsconnect")
 
-            # Hard verification — fail NOW if anything is missing
-            required <- c(
-              "httr","jsonlite","readr","dplyr","tidyr","glue","lubridate",
-              "scales","xts","zoo","TTR","quantmod","tidyquant",
-              "shiny","shinydashboard","DT","plotly","rsconnect"
-            )
+            required <- c("httr","jsonlite","readr","dplyr","tidyr","glue","lubridate",
+                          "scales","xts","zoo","TTR","quantmod","tidyquant",
+                          "shiny","shinydashboard","DT","plotly","rsconnect")
             missing <- required[!sapply(required, requireNamespace, quietly=TRUE)]
             if (length(missing) > 0) stop("MISSING: ", paste(missing, collapse=", "))
             message("ALL PACKAGES OK")
@@ -89,28 +69,42 @@ jobs:
             message("Copied ", length(csv_files)+length(rds_files), " files into app/")
           '
 
+      # ── Commit data BEFORE deploy so it is never lost ──────────────────────
+      # if: always() ensures this runs even if a later step fails
+      - name: Commit updated data
+        if: always()
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add data/alpha_history.csv data/av_cache.csv data/polygon_cache.csv \
+                  data/*.csv data/*.rds app/*.csv app/*.rds app/data/*.rds || true
+          git diff --quiet && git diff --staged --quiet || \
+            git commit -m "Auto-update: Daily alpha refresh $(date +'%Y-%m-%d')"
+          git push || true
+
+      # ── Deploy — runs after data is safely committed ───────────────────────
+      # continue-on-error: true so a deploy failure never blocks future runs
       - name: Deploy to shinyapps.io
+        continue-on-error: true
         env:
           SHINYAPPS_ACCOUNT: ${{ secrets.SHINYAPPS_ACCOUNT }}
           SHINYAPPS_TOKEN: ${{ secrets.SHINYAPPS_TOKEN }}
           SHINYAPPS_SECRET: ${{ secrets.SHINYAPPS_SECRET }}
         run: |
           Rscript -e '
-            library(rsconnect)
-            rsconnect::setAccountInfo(
-              name   = Sys.getenv("SHINYAPPS_ACCOUNT"),
-              token  = Sys.getenv("SHINYAPPS_TOKEN"),
-              secret = Sys.getenv("SHINYAPPS_SECRET")
-            )
-            rsconnect::deployApp(appDir="app", forceUpdate=TRUE)
-          '
+            acct   <- Sys.getenv("SHINYAPPS_ACCOUNT")
+            token  <- Sys.getenv("SHINYAPPS_TOKEN")
+            secret <- Sys.getenv("SHINYAPPS_SECRET")
 
-      - name: Commit updated data
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add data/alpha_history.csv data/av_cache.csv data/polygon_cache.csv \
-                  data/*.csv data/*.rds app/*.csv app/*.rds app/data/*.rds
-          git diff --quiet && git diff --staged --quiet || \
-            git commit -m "Auto-update: Daily alpha refresh $(date +'%Y-%m-%d')"
-          git push
+            if (nchar(acct) == 0 || nchar(token) == 0 || nchar(secret) == 0) {
+              message("Skipping deploy — SHINYAPPS secrets not configured.")
+              message("Add SHINYAPPS_ACCOUNT / TOKEN / SECRET in:")
+              message("  GitHub repo → Settings → Secrets → Actions")
+              quit(status = 0)
+            }
+
+            library(rsconnect)
+            rsconnect::setAccountInfo(name=acct, token=token, secret=secret)
+            rsconnect::deployApp(appDir="app", forceUpdate=TRUE, quiet=FALSE)
+            message("Deploy complete.")
+          '
