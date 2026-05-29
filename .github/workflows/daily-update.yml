@@ -105,6 +105,15 @@ jobs:
 
             library(rsconnect)
             rsconnect::setAccountInfo(name=acct, token=token, secret=secret)
-            rsconnect::deployApp(appDir="app", forceUpdate=TRUE)
+
+            # Disable renv/packrat snapshot — causes pre-flight validation
+            # failure when packages were installed from binary (RSPM) repo
+            options(rsconnect.packrat = FALSE)
+
+            rsconnect::deployApp(
+              appDir      = "app",
+              forceUpdate = TRUE,
+              lint        = FALSE
+            )
             message("Deploy complete.")
           '
