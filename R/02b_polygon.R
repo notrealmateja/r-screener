@@ -33,17 +33,21 @@ poly_get <- function(path, query = list()) {
 
 # ── Ticker details (market cap, shares outstanding, float, description) ──────
 get_poly_ticker_details <- function(sym) {
-  raw <- poly_get(glue("/v3/reference/tickers/{sym}"))
-  if (is.null(raw) || is.null(raw$results)) return(NULL)
-  r <- raw$results
-  tibble(
-    symbol             = sym,
-    shares_outstanding = suppressWarnings(as.numeric(r$share_class_shares_outstanding)),
-    shares_float       = suppressWarnings(as.numeric(r$weighted_shares_outstanding)),
-    market_cap_poly    = suppressWarnings(as.numeric(r$market_cap)),
-    primary_exchange   = r$primary_exchange %||% NA_character_,
-    locale             = r$locale %||% NA_character_
-  )
+  tryCatch({
+    raw <- poly_get(glue("/v3/reference/tickers/{sym}"))
+    if (is.null(raw) || is.null(raw$results)) return(NULL)
+    r <- raw$results
+    tibble(
+      symbol             = sym,
+      shares_outstanding = suppressWarnings(as.numeric(r$share_class_shares_outstanding)),
+      shares_float       = suppressWarnings(as.numeric(r$weighted_shares_outstanding)),
+      market_cap_poly    = suppressWarnings(as.numeric(r$market_cap)),
+      primary_exchange   = tryCatch(as.character(r$primary_exchange), error=function(e) NA_character_),
+      locale             = tryCatch(as.character(r$locale),           error=function(e) NA_character_)
+    )
+  }, error = function(e) {
+    message("  Polygon ticker details error for ", sym, ": ", e$message); NULL
+  })
 }
 
 # ── SEC quarterly financials (balance sheet → debt/equity, revenue) ──────────
@@ -55,52 +59,67 @@ get_poly_financials <- function(sym) {
     sort      = "period_of_report_date"
   ))
   if (is.null(raw) || is.null(raw$results) || length(raw$results) == 0) return(NULL)
-  r <- raw$results[[length(raw$results)]]   # most recent quarter
 
-  safe <- function(path) {
-    tryCatch(suppressWarnings(as.numeric(path)), error = function(e) NA_real_)
-  }
+  # Wrap everything — Polygon's nested financials structure varies by ticker
+  tryCatch({
+    r <- raw$results[[length(raw$results)]]   # most recent quarter
 
-  # Navigate the nested financials structure
-  bs  <- r$financials$balance_sheet
-  inc <- r$financials$income_statement
-  cf  <- r$financials$cash_flow_statement
+    # Guard: financials must be a list, not an atomic vector
+    fin <- r$financials
+    if (is.null(fin) || !is.list(fin)) return(NULL)
 
-  total_debt   <- safe(bs$long_term_debt$value)           %||% NA_real_
-  total_equity <- safe(bs$equity$value)                   %||% NA_real_
-  total_assets <- safe(bs$assets$value)                   %||% NA_real_
-  revenues     <- safe(inc$revenues$value)                %||% NA_real_
-  net_income   <- safe(inc$net_income_loss$value)         %||% NA_real_
-  op_income    <- safe(inc$operating_income_loss$value)   %||% NA_real_
-  gross_profit <- safe(inc$gross_profit$value)            %||% NA_real_
-  basic_eps    <- safe(inc$basic_earnings_per_share$value)%||% NA_real_
-  capex        <- safe(cf$capital_expenditure$value)      %||% NA_real_
-  fcf          <- safe(cf$net_cash_flow$value)            %||% NA_real_
+    safe_val <- function(x) {
+      # Handles both list(value=123) and plain numeric/character
+      tryCatch({
+        if (is.list(x) && "value" %in% names(x)) suppressWarnings(as.numeric(x$value))
+        else suppressWarnings(as.numeric(x))
+      }, error = function(e) NA_real_)
+    }
 
-  debt_equity_poly <- if (!is.na(total_debt) && !is.na(total_equity) && total_equity != 0)
-                        round(total_debt / total_equity, 4) else NA_real_
-  roa_poly         <- if (!is.na(net_income) && !is.na(total_assets) && total_assets != 0)
-                        round(net_income / total_assets, 4) else NA_real_
-  gross_margin     <- if (!is.na(gross_profit) && !is.na(revenues) && revenues != 0)
-                        round(gross_profit / revenues, 4) else NA_real_
+    bs  <- if (is.list(fin$balance_sheet))   fin$balance_sheet   else list()
+    inc <- if (is.list(fin$income_statement)) fin$income_statement else list()
+    cf  <- if (is.list(fin$cash_flow_statement)) fin$cash_flow_statement else list()
 
-  tibble(
-    symbol           = sym,
-    debt_equity_poly = debt_equity_poly,
-    revenue_poly     = revenues,
-    net_income_poly  = net_income,
-    op_income_poly   = op_income,
-    gross_margin     = gross_margin,
-    roa_poly         = roa_poly,
-    eps_poly         = basic_eps,
-    capex            = capex,
-    fcf              = fcf,
-    report_date      = r$period_of_report_date %||% NA_character_
-  )
+    total_debt   <- safe_val(bs$long_term_debt)
+    total_equity <- safe_val(bs$equity)
+    total_assets <- safe_val(bs$assets)
+    revenues     <- safe_val(inc$revenues)
+    net_income   <- safe_val(inc$net_income_loss)
+    op_income    <- safe_val(inc$operating_income_loss)
+    gross_profit <- safe_val(inc$gross_profit)
+    basic_eps    <- safe_val(inc$basic_earnings_per_share)
+    capex        <- safe_val(cf$capital_expenditure)
+    fcf          <- safe_val(cf$net_cash_flow)
+
+    debt_equity_poly <- if (!is.na(total_debt) && !is.na(total_equity) && total_equity != 0)
+                          round(total_debt / total_equity, 4) else NA_real_
+    roa_poly         <- if (!is.na(net_income) && !is.na(total_assets) && total_assets != 0)
+                          round(net_income / total_assets, 4) else NA_real_
+    gross_margin     <- if (!is.na(gross_profit) && !is.na(revenues) && revenues != 0)
+                          round(gross_profit / revenues, 4) else NA_real_
+
+    tibble(
+      symbol           = sym,
+      debt_equity_poly = debt_equity_poly,
+      revenue_poly     = revenues,
+      net_income_poly  = net_income,
+      op_income_poly   = op_income,
+      gross_margin     = gross_margin,
+      roa_poly         = roa_poly,
+      eps_poly         = basic_eps,
+      capex            = capex,
+      fcf              = fcf,
+      report_date      = tryCatch(as.character(r$period_of_report_date), error=function(e) NA_character_)
+    )
+  }, error = function(e) {
+    message("  Polygon financials parse error for ", sym, ": ", e$message)
+    NULL   # return NULL so this ticker is skipped, not crashed
+  })
 }
 
 # ── Options snapshot (put/call ratio, total IV, options volume) ──────────────
 get_poly_options <- function(sym) {
+  tryCatch({
   # Snapshot of all options for this ticker
   raw <- poly_get(glue("/v3/snapshot/options/{sym}"),
                   query = list(limit = 250))
@@ -109,7 +128,7 @@ get_poly_options <- function(sym) {
   opts <- tryCatch({
     d <- bind_rows(lapply(raw$results, function(r) {
       tibble(
-        contract_type = r$details$contract_type  %||% NA_character_,
+        contract_type = tryCatch(as.character(r$details$contract_type), error=function(e) NA_character_),
         iv            = suppressWarnings(as.numeric(r$implied_volatility)),
         volume        = suppressWarnings(as.numeric(r$day$volume)),
         open_interest = suppressWarnings(as.numeric(r$open_interest)),
@@ -141,6 +160,9 @@ get_poly_options <- function(sym) {
     call_volume    = call_vol,
     put_volume     = put_vol
   )
+  }, error = function(e) {
+    message("  Polygon options error for ", sym, ": ", e$message); NULL
+  })
 }
 
 # ── Previous-day snapshot (VWAP, open gap, volume ratio) ─────────────────────
