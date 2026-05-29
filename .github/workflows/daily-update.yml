@@ -35,7 +35,12 @@ jobs:
             install.packages(c("xts","zoo","TTR","quantmod"))
             install.packages("tidyquant")
             install.packages(c("shiny","shinydashboard","DT","plotly"))
-            install.packages("rsconnect")
+
+            # Pin rsconnect to 0.8.29 — last version before renv was introduced.
+            # v1.0+ renv pre-flight validation always fails in GitHub Actions CI.
+            install.packages("remotes")
+            remotes::install_version("rsconnect", version="0.8.29",
+              repos="https://cloud.r-project.org", upgrade="never")
 
             required <- c("httr","jsonlite","readr","dplyr","tidyr","glue","lubridate",
                           "scales","xts","zoo","TTR","quantmod","tidyquant",
@@ -69,8 +74,6 @@ jobs:
             message("Copied ", length(csv_files)+length(rds_files), " files into app/")
           '
 
-      # ── Commit data BEFORE deploy so it is never lost ──────────────────────
-      # if: always() ensures this runs even if a later step fails
       - name: Commit updated data
         if: always()
         run: |
@@ -82,8 +85,6 @@ jobs:
             git commit -m "Auto-update: Daily alpha refresh $(date +'%Y-%m-%d')"
           git push || true
 
-      # ── Deploy — runs after data is safely committed ───────────────────────
-      # continue-on-error: true so a deploy failure never blocks future runs
       - name: Deploy to shinyapps.io
         continue-on-error: true
         env:
@@ -97,25 +98,17 @@ jobs:
             secret <- Sys.getenv("SHINYAPPS_SECRET")
 
             if (nchar(acct) == 0 || nchar(token) == 0 || nchar(secret) == 0) {
-              message("Skipping deploy — SHINYAPPS secrets not configured.")
-              message("Add SHINYAPPS_ACCOUNT / TOKEN / SECRET in:")
-              message("  GitHub repo → Settings → Secrets → Actions")
+              message("Skipping deploy — secrets not set.")
               quit(status = 0)
             }
 
             library(rsconnect)
             rsconnect::setAccountInfo(name=acct, token=token, secret=secret)
-
-            # Disable renv/packrat snapshot — causes pre-flight validation
-            # failure when packages were installed from binary (RSPM) repo
-            options(rsconnect.packrat = FALSE)
-
             rsconnect::deployApp(
               appDir      = "app",
               appName     = "r-codescreener",
               account     = acct,
-              forceUpdate = TRUE,
-              lint        = FALSE
+              forceUpdate = TRUE
             )
             message("Deploy complete.")
           '
