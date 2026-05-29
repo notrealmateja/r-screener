@@ -270,6 +270,29 @@ run_module_polygon <- function(tickers = NULL) {
     result <- fresh
   }
 
+  # ── Ensure all columns exist before mutating (handles all-NULL fetch runs) ──
+  ensure_col <- function(df, col, default) {
+    if (!col %in% names(df)) df[[col]] <- default
+    df
+  }
+  result <- result %>%
+    ensure_col("put_call_ratio",  NA_real_) %>%
+    ensure_col("put_call_oi",     NA_real_) %>%
+    ensure_col("options_volume",  NA_real_) %>%
+    ensure_col("avg_iv",          NA_real_) %>%
+    ensure_col("call_volume",     NA_real_) %>%
+    ensure_col("put_volume",      NA_real_) %>%
+    ensure_col("today_close",     NA_real_) %>%
+    ensure_col("vwap",            NA_real_) %>%
+    ensure_col("vol_ratio",       NA_real_) %>%
+    ensure_col("open_gap_pct",    NA_real_) %>%
+    ensure_col("debt_equity_poly",NA_real_) %>%
+    ensure_col("revenue_poly",    NA_real_) %>%
+    ensure_col("gross_margin",    NA_real_) %>%
+    ensure_col("fcf",             NA_real_) %>%
+    ensure_col("shares_float",    NA_real_) %>%
+    ensure_col("market_cap_poly", NA_real_)
+
   # ── Compute derived signals ──────────────────────────────────────────────
   result <- result %>% mutate(
     # Options sentiment signal: <0.7 bullish, 0.7-1.3 neutral, >1.3 bearish
