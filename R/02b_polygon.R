@@ -233,11 +233,20 @@ run_module_polygon <- function(tickers = NULL) {
       snap_list[[sym]]    <- get_poly_snapshot(sym);       Sys.sleep(POLY_SLEEP)
     }
 
-    # Combine all four sources per ticker
-    details_df <- bind_rows(Filter(Negate(is.null), details_list))
-    fin_df     <- bind_rows(Filter(Negate(is.null), fin_list))
-    opts_df    <- bind_rows(Filter(Negate(is.null), opts_list))
-    snap_df    <- bind_rows(Filter(Negate(is.null), snap_list))
+    # Combine all four sources per ticker.
+    # safe_bind: if every ticker returned NULL the list is empty and
+    # bind_rows() produces a 0-col tibble — add a symbol column so
+    # left_join never crashes on a missing key.
+    safe_bind <- function(lst) {
+      df <- bind_rows(Filter(Negate(is.null), lst))
+      if (!"symbol" %in% names(df)) df$symbol <- character(0)
+      df
+    }
+
+    details_df <- safe_bind(details_list)
+    fin_df     <- safe_bind(fin_list)
+    opts_df    <- safe_bind(opts_list)
+    snap_df    <- safe_bind(snap_list)
 
     new_rows <- tibble(symbol = need) %>%
       left_join(details_df, by = "symbol") %>%
