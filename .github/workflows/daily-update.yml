@@ -21,29 +21,51 @@ jobs:
       - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev libharfbuzz-dev libfribidi-dev
+          sudo apt-get install -y \
+            libcurl4-openssl-dev \
+            libssl-dev \
+            libxml2-dev \
+            libharfbuzz-dev \
+            libfribidi-dev \
+            libfontconfig1-dev \
+            libfreetype6-dev \
+            libpng-dev \
+            libtiff5-dev \
+            libjpeg-dev \
+            libgit2-dev \
+            zlib1g-dev
 
       - name: Install R packages
         run: |
-          Rscript -e 'install.packages(c(
-            "rsconnect", "shiny", "shinydashboard",
-            "quantmod", "tidyverse", "httr", "jsonlite",
-            "lubridate", "tidyquant", "TTR", "glue",
-            "DT", "plotly", "scales", "readr"
-          ), repos = "https://cloud.r-project.org")'
+          Rscript -e '
+            pkgs <- c(
+              "httr", "jsonlite", "readr", "dplyr", "tidyr", "glue", "lubridate",
+              "TTR", "xts", "zoo", "quantmod",
+              "tidyquant",
+              "shiny", "shinydashboard", "DT", "plotly", "scales",
+              "rsconnect"
+            )
+            install.packages(pkgs, dependencies = TRUE, repos = "https://cloud.r-project.org")
+
+            # Hard stop if any package failed — catches silent install failures
+            missing <- pkgs[!sapply(pkgs, requireNamespace, quietly = TRUE)]
+            if (length(missing) > 0) {
+              stop("PACKAGE INSTALL FAILED: ", paste(missing, collapse = ", "))
+            }
+            message("All packages installed OK: ", paste(pkgs, collapse = ", "))
+          '
 
       - name: Run data pipeline
         run: |
           Rscript -e '
-            setwd(getwd())
             source("R/01_fundamentals.R")   # Yahoo + Alpha Vantage (rotating cache)
             source("R/02_momentum.R")       # Price, technicals, daily alpha vs SPY
             source("R/02b_polygon.R")       # Polygon: options, SEC financials, VWAP
             source("R/03_data.R")           # FMP: short interest, earnings, news, sector
             source("R/04_master_score.R")   # Composite alpha scoring engine
 
-            fund_data  <- run_module1()
-            mom_data   <- run_module2(fund_data$symbol)
+            fund_data <- run_module1()
+            run_module2(fund_data$symbol)
             run_module_polygon(fund_data$symbol)
             run_module3(fund_data$symbol)
             run_module4()
@@ -76,9 +98,8 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          # alpha_history.csv is the compounding record — must be committed every day
-          # Commit: alpha_history + av_cache + polygon_cache must persist across runs
           git add data/alpha_history.csv data/av_cache.csv data/polygon_cache.csv \
                   data/*.csv data/*.rds app/*.csv app/*.rds app/data/*.rds
-          git diff --quiet && git diff --staged --quiet || git commit -m "Auto-update: Daily alpha refresh $(date +'%Y-%m-%d')"
+          git diff --quiet && git diff --staged --quiet || \
+            git commit -m "Auto-update: Daily alpha refresh $(date +'%Y-%m-%d')"
           git push
