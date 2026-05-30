@@ -1,1 +1,16 @@
 symbol,company,sector,price,unicorn_score,master_score,rating,signal,unicorn_confidence,confidence_5d,confidence_band,days_tracked,hist_ir,hist_alpha_ann,alpha_hit_rate,alpha_streak,expected_return_1d,primary_driver,pe_ratio,market_cap,revenue_growth,ret_1m,ret_3m,rsi14,momentum_score,put_call_ratio,options_sentiment,avg_iv,analyst_target,analyst_upside
+MS,Morgan Stanley,Financials,208,91.4,59.6,Hold,Hold,1.6,1.6,Emerging,1,0,4.5781,1,1,0.0182,Strong Trend,18.25,317996401000,0.319,0.1118,0.2492,74.2067,79.7653,NA,Unknown,NA,203.29,-0.0226
+TXN,Texas Instruments Inc.,Technology,305.68,87.9,58.1,Hold,Hold,1.6,1.6,Emerging,1,0,-8.8192,0,0,-0.035,Strong Trend,52.77,280954733000,0.313,0.1354,0.4411,60.8831,88.5051,NA,Unknown,NA,290.33,-0.0502
+ORCL,Oracle Corp.,Technology,225.78,82.8,56.7,Hold,Hold,1.6,1.6,Emerging,1,0,26.6876,1,1,0.1059,Strong Trend,34.22,549209768000,0.245,0.3781,0.5528,75.0915,73.7449,NA,Unknown,NA,244.03,0.0808
+V,Visa Inc.,Financials,326.36,82.8,51.7,Hold,Hold,1.6,1.6,Emerging,1,0,0.4657,1,1,0.0018,Analyst Upside,28.56,623030239000,0.355,-0.0254,0.0194,54.0418,56.8469,NA,Unknown,NA,398.74,0.2218
+KO,Coca-Cola Co.,Consumer Staples,79.01,70.7,52.3,Hold,Hold,1.6,1.6,Emerging,1,0,-5.0153,0,0,-0.0199,Balanced,25.67,351168627000,0.182,0.0018,-0.0313,47.4124,61.2806,NA,Unknown,NA,86.06,0.0892
+BAC,Bank of America Corp.,Financials,51.6,70.7,51.4,Hold,Hold,1.6,1.6,Emerging,1,0,3.492,1,1,0.0139,Analyst Upside,12.68,362635788000,0.244,-0.0242,0.0355,51.144,59.8265,NA,Unknown,NA,63.16,0.224
+NEE,NextEra Energy Inc.,Utilities,87.01,63.8,45.6,Hold,Hold,1.6,1.6,Emerging,1,0,-1.321,0,0,-0.0052,Balanced,22.25,182803317000,1.6,-0.076,-0.0721,35.693,32.7092,NA,Unknown,NA,98.55,0.1326
+CRM,Salesforce Inc.,Technology,191.1,60.3,49,Hold,Hold,1.6,1.6,Emerging,1,0,20.7285,1,1,0.0823,Analyst Upside,20.57,145212719000,0.179,0.0545,-0.0189,60.506,53.2959,NA,Unknown,NA,261.16,0.3666
+LIN,Linde PLC,Materials,497.69,58.6,50,Hold,Hold,1.6,1.6,Emerging,1,0,-2.7816,0,0,-0.011,Balanced,33.33,232089108000,0.134,-0.0139,-0.0204,44.3621,52.7857,NA,Unknown,NA,541.61,0.0882
+UNH,UnitedHealth Group Inc.,Health Care,380.31,58.6,56,Hold,Hold,1.6,1.6,Emerging,1,0,-2.0903,0,0,-0.0083,Strong Trend,28.89,348736520000,0.007,0.0258,0.2968,57.7502,83.6071,NA,Unknown,NA,397.31,0.0447
+RTX,RTX Corp.,Industrials,179.66,58.6,46.1,Hold,Hold,1.6,1.6,Emerging,1,0,0.3578,1,1,0.0014,Analyst Upside,33.58,241002463000,0.325,0.0398,-0.1133,50.4153,39.4184,NA,Unknown,NA,215.27,0.1982
+HON,Honeywell International Inc.,Industrials,237.86,50,55.4,Hold,Hold,1.6,1.6,Emerging,1,0,4.6285,1,1,0.0184,Strong Trend,37.05,146722390000,-0.419,0.1311,-0.0235,70.4872,70.7857,NA,Unknown,NA,247.22,0.0394
+TMO,Thermo Fisher Scientific Inc.,Health Care,492.51,50,48,Hold,Hold,1.6,1.6,Emerging,1,0,2.1082,1,1,0.0084,Analyst Upside,25.07,169537421000,0.113,0.0563,-0.0549,62.2923,45.7449,NA,Unknown,NA,611.56,0.2417
+MRK,Merck & Co. Inc.,Health Care,118.72,50,53.7,Hold,Hold,1.6,1.6,Emerging,1,0,-3.087,0,0,-0.0122,Strong Trend,33.87,296971698000,-0.193,0.07,-0.0412,57.1607,73.3214,NA,Unknown,NA,129.74,0.0928
+COST,Costco Wholesale Corp.,Consumer Staples,956.32,50,42.1,Underperform,Underperform,1.6,1.6,Emerging,1,0,-10.4729,0,0,-0.0416,Balanced,52.09,445289628000,0.455,-0.0424,-0.053900000000000003,34.1364,31.3827,NA,Unknown,NA,1076.97,0.1262

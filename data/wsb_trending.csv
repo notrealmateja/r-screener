@@ -1,0 +1,51 @@
+rank,ticker,name,mentions,upvotes,rank_24h_ago,mentions_24h_ago,mentions_chg,rank_chg,momentum
+1,ASTS,AST SpaceMobile,461,2201,7,200,261,6,Surging
+2,MU,Micron Technology,398,2797,1,571,-173,-1,Steady
+3,MSFT,Microsoft,316,1314,5,302,14,2,Rising
+4,NVDA,NVIDIA,305,1651,6,262,43,2,Rising
+5,SPY,SPDR S&amp;P 500 ETF Trust,233,718,4,291,-58,-1,Steady
+6,CRSR,Corsair Gaming,166,600,2,544,-378,-4,Fading
+7,NOW,ServiceNow,165,506,9,118,47,2,Rising
+8,DELL,Dell,147,1021,3,412,-265,-5,Falling
+9,IBM,IBM,126,326,34,44,82,25,Surging
+10,HOOD,Robinhood,120,385,15,89,31,5,Surging
+11,PLTR,Palantir,100,251,22,64,36,11,Surging
+12,HPE,Hewlett Packard Enterprise,96,220,24,79,17,12,Surging
+13,RKLB,Rocket Lab USA,95,359,21,65,30,8,Surging
+14,DTE,DTE Energy,94,1922,27,62,32,13,Surging
+15,QQQ,Invesco QQQ ETF,85,1821,12,86,-1,-3,Fading
+16,AMD,AMD,80,792,8,162,-82,-8,Falling
+17,SOFI,SoFi,79,282,48,22,57,31,Surging
+18,RDDT,Reddit,77,304,13,94,-17,-5,Falling
+19,SMCI,Supermicro,74,223,10,120,-46,-9,Falling
+20,BB,BlackBerry,71,204,30,52,19,10,Surging
+21,LUNR,Intuitive Machines,65,236,23,76,-11,2,Rising
+22,TSLA,Tesla,58,155,25,57,1,3,Rising
+23,SPCE,Virgin Galactic,56,873,68,15,41,45,Surging
+24,SPCX,Collaborative Investment Series Trust - The SPAC and New Issue ETF,54,1417,49,22,32,25,Surging
+25,GOOG,Alphabet (Google),49,166,73,10,39,48,Surging
+26,SNDK,Sandisk,47,182,19,66,-19,-7,Falling
+27,AM,Antero Midstream,45,103,26,59,-14,-1,Steady
+28,AVGO,Broadcom,44,163,45,24,20,17,Surging
+29,ORCL,Oracle,43,166,33,43,0,4,Rising
+30,META,Meta Platforms (Facebook),43,132,16,83,-40,-14,Falling
+31,INTC,Intel,42,121,36,33,9,5,Surging
+32,NBIS,Nebius Group,39,111,29,42,-3,-3,Fading
+33,GOOGL,Alphabet (Google),37,105,71,11,26,38,Surging
+34,SOUN,SoundHound AI,34,75,76,11,23,42,Surging
+35,NOK,Nokia,33,107,31,52,-19,-4,Fading
+36,USO,United States Commodity Funds LLC - United States Oil Fund,29,77,41,26,3,5,Surging
+37,CE,Celanese,27,275,175,2,25,138,Surging
+38,IT,Gartner,26,101,42,26,0,4,Rising
+39,PL,Planet Labs,26,99,135,6,20,96,Surging
+40,ONDS,Ondas Holdings,26,121,18,79,-53,-22,Falling
+41,YOU,CLEAR Secure,24,66,47,20,4,6,Surging
+42,RIVN,Rivian,23,60,201,4,19,159,Surging
+43,OKLO,Oklo,23,73,72,20,3,29,Surging
+44,VRRM,Verra Mobility,20,56,67,12,8,23,Surging
+45,MDB,MongoDB,20,31,14,87,-67,-31,Falling
+46,CRWD,CrowdStrike,19,44,153,4,15,107,Surging
+47,OPEN,Opendoor,19,198,100,7,12,53,Surging
+48,PATH,UiPath,19,72,11,105,-86,-37,Falling
+49,HUBC,HUB Cyber Security,19,34,254,2,17,205,Surging
+50,UMAC,Unusual Machines,19,39,20,72,-53,-30,Falling
