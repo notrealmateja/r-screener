@@ -257,6 +257,22 @@ table.dataTable tbody tr:hover td { background:rgba(255,107,0,0.06) !important; 
 .news-meta { font-family:var(--mono); font-size:10px; color:var(--muted); display:flex; gap:12px; }
 .news-ticker { color:var(--orange); font-weight:600; }
 
+/* ── WSB TRENDING ── */
+.wsb-item { display:flex; align-items:center; gap:10px; padding:8px 12px; border-bottom:1px solid var(--border); font-family:var(--mono); font-size:11px; transition:background 0.15s; }
+.wsb-item:hover { background:rgba(255,107,0,0.04); }
+.wsb-item:last-child { border:none; }
+.wsb-rank { color:var(--muted); min-width:24px; font-weight:600; font-size:10px; }
+.wsb-sym  { color:var(--orange); font-weight:700; min-width:55px; letter-spacing:0.3px; }
+.wsb-name { color:var(--text2); flex:1; font-size:10px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.wsb-mentions { color:var(--text); font-weight:600; min-width:45px; text-align:right; }
+.wsb-upvotes  { color:var(--muted); min-width:50px; text-align:right; font-size:10px; }
+.wsb-momentum { font-size:9px; font-weight:700; min-width:65px; text-align:right; letter-spacing:0.3px; }
+.wsb-surge  { color:#FF3D00; }
+.wsb-rise   { color:#00C853; }
+.wsb-fade   { color:#FF6B00; }
+.wsb-fall   { color:#FF3D00; }
+.wsb-steady { color:#666666; }
+
 /* ── EARNINGS ROW ── */
 .earn-item { display:flex; align-items:center; gap:10px; padding:7px 0; border-bottom:1px solid var(--border); font-family:var(--mono); font-size:11px; }
 .earn-item:last-child { border:none; }
@@ -849,20 +865,29 @@ ui <- fluidPage(
     # ── NEWS & EVENTS ──────────────────────────────────────────────────────
     div(class="tab-pane", id="pane-news",
       div(class="g55",
-        div(class="panel",
-          div(class="panel-head",
-            div(class="panel-head-title","MARKET NEWS FEED"),
-            div(class="panel-head-meta", uiOutput("news_count"))),
-          div(class="panel-body", style="max-height:650px;overflow-y:auto;",
-            uiOutput("news_feed"))
-        ),
         div(
+          div(class="panel",
+            div(class="panel-head",
+              div(class="panel-head-title","MARKET NEWS FEED"),
+              div(class="panel-head-meta", uiOutput("news_count"))),
+            div(class="panel-body", style="max-height:420px;overflow-y:auto;",
+              uiOutput("news_feed"))
+          ),
           div(class="panel",
             div(class="panel-head",
               div(class="panel-head-title","EARNINGS CALENDAR"),
               div(class="panel-head-meta","NEXT 60 DAYS")),
             div(class="panel-body", style="max-height:320px;overflow-y:auto;",
               uiOutput("earnings_feed"))
+          )
+        ),
+        div(
+          div(class="panel",
+            div(class="panel-head",
+              div(class="panel-head-title","WSB TRENDING"),
+              div(class="panel-head-meta", uiOutput("wsb_count"))),
+            div(class="panel-body", style="max-height:420px;overflow-y:auto;",
+              uiOutput("wsb_feed"))
           ),
           div(class="panel",
             div(class="panel-head", div(class="panel-head-title","SECTOR PERFORMANCE TODAY")),
@@ -975,32 +1000,62 @@ server <- function(input, output, session) {
     div(parts[1], style="font-family:IBM Plex Mono;font-size:13px;color:#FF6B00;font-weight:600;")
   })
 
-  # ── TICKER TAPE ──────────────────────────────────────────────────────────
+  # ── LIVE TICKER TAPE ────────────────────────────────────────────────────
+  # Refresh live quotes every 60 seconds via quantmod::getQuote (Yahoo Finance)
+  ticker_timer <- reactiveTimer(60000)
+
+  live_quotes <- reactive({
+    ticker_timer()
+    if (is.null(master_data)) return(NULL)
+    top_syms <- master_data %>%
+      arrange(desc(master_score)) %>%
+      head(25) %>%
+      pull(symbol)
+    tryCatch({
+      q <- getQuote(top_syms)
+      tibble(
+        symbol     = rownames(q),
+        price      = as.numeric(q$Last),
+        change     = as.numeric(q$Change),
+        change_pct = as.numeric(q$`% Change`)
+      ) %>% filter(!is.na(price), price > 0)
+    }, error = function(e) {
+      message("getQuote failed: ", e$message)
+      NULL
+    })
+  })
+
   output$ticker_tape <- renderUI({
-    if (is.null(master_data)) {
-      return(div(class="ticker-content",
-        div(class="ticker-item",
-          span(class="ticker-sym","EDGESCREENER"),
-          span(class="ticker-price","Run pipeline to load live data"))))
-    }
-    tickers_show <- master_data %>%
-      filter(!is.na(close), !is.na(changesPercentage)) %>%
-      arrange(desc(abs(changesPercentage))) %>%
-      head(30)
+    lq <- live_quotes()
 
     make_item <- function(sym, price, chg) {
       cls <- if (chg >= 0) "ticker-up" else "ticker-dn"
       arrow <- if (chg >= 0) "▲" else "▼"
       div(class="ticker-item",
         span(class="ticker-sym", sym),
-        span(class="ticker-price", paste0("$", round(price, 2))),
+        span(class="ticker-price", paste0("$", formatC(price, format="f", digits=2, big.mark=","))),
         span(class=cls, paste0(arrow, " ", round(abs(chg), 2), "%"))
       )
     }
-    items <- mapply(make_item,
-      tickers_show$symbol, tickers_show$close, tickers_show$changesPercentage,
-      SIMPLIFY=FALSE)
-    # Duplicate for seamless scroll
+
+    if (!is.null(lq) && nrow(lq) > 0) {
+      # Live data available
+      items <- mapply(make_item, lq$symbol, lq$price, lq$change_pct, SIMPLIFY=FALSE)
+    } else if (!is.null(master_data)) {
+      # Fallback to static CSV data
+      static <- master_data %>%
+        filter(!is.na(close), !is.na(changesPercentage)) %>%
+        arrange(desc(abs(changesPercentage))) %>%
+        head(25)
+      items <- mapply(make_item, static$symbol, static$close, static$changesPercentage, SIMPLIFY=FALSE)
+    } else {
+      return(div(class="ticker-content",
+        div(class="ticker-item",
+          span(class="ticker-sym","EDGESCREENER"),
+          span(class="ticker-price","Run pipeline to load live data"))))
+    }
+
+    # Duplicate items for seamless infinite scroll
     div(class="ticker-content", do.call(tagList, c(items, items)))
   })
 
@@ -1624,22 +1679,97 @@ server <- function(input, output, session) {
   })
 
   output$earnings_feed <- renderUI({
-    if (is.null(earnings_data) || nrow(earnings_data)==0) return(div("No earnings data. Run pipeline."))
+    if (is.null(earnings_data) || nrow(earnings_data)==0)
+      return(div("No earnings data. Run pipeline.",
+                 style="color:#666;padding:20px;font-family:IBM Plex Mono;font-size:11px;"))
     upcoming <- earnings_data %>%
       filter(!is.na(date), date >= Sys.Date()) %>%
-      arrange(date) %>% head(30)
-    if (nrow(upcoming)==0) return(div("No upcoming earnings in next 60 days."))
+      arrange(date) %>% head(40)
+    if (nrow(upcoming)==0) return(div("No upcoming earnings in next 60 days.",
+                                      style="color:#666;padding:20px;font-family:IBM Plex Mono;"))
+    # Flag stocks in our universe
+    our_syms <- if (!is.null(master_data)) master_data$symbol else character(0)
     items <- lapply(1:nrow(upcoming), function(i) {
       row <- upcoming[i,]
-      div(class="earn-item",
-        div(class="earn-date", format(row$date,"%b %d")),
-        div(class="earn-sym",  row$symbol),
-        div(class="earn-time", replace_na(row$time,"")),
-        div(class="earn-eps",
-          if(!is.na(row$epsEstimated)) paste0("Est. $",round(row$epsEstimated,2)) else "")
+      in_universe <- row$symbol %in% our_syms
+      sym_style <- if (in_universe) "color:#FF6B00;font-weight:700;" else "color:#FF8C00;font-weight:600;"
+      bg_style  <- if (in_universe) "background:rgba(255,107,0,0.05);" else ""
+      eps_est   <- if (!is.na(row$epsEstimated)) paste0("Est $", round(row$epsEstimated, 2)) else ""
+      rev_est   <- if ("revenueEstimated" %in% names(row) && !is.na(row$revenueEstimated))
+                     paste0(" · Rev ", fmt_mktcap(row$revenueEstimated)) else ""
+      time_str  <- replace_na(row$time, "")
+      time_icon <- switch(time_str,
+        "bmo" = "Pre-Market",
+        "amc" = "After-Close",
+        time_str
+      )
+      div(class="earn-item", style=bg_style,
+        div(class="earn-date", format(row$date, "%b %d")),
+        div(style=paste0(sym_style, "min-width:55px;font-family:var(--mono);font-size:11px;"), row$symbol),
+        div(class="earn-time", time_icon),
+        div(class="earn-eps", paste0(eps_est, rev_est))
       )
     })
     do.call(tagList, items)
+  })
+
+  # ── WSB Trending Feed ──────────────────────────────────────────────────
+  output$wsb_count <- renderUI({
+    if (!is.null(wsb_data) && nrow(wsb_data) > 0) {
+      div(glue("TOP {nrow(wsb_data)} · r/WALLSTREETBETS"))
+    } else {
+      div("—")
+    }
+  })
+
+  output$wsb_feed <- renderUI({
+    if (is.null(wsb_data) || nrow(wsb_data) == 0) {
+      return(div("No WSB data available. Pipeline will fetch on next run.",
+                 style="color:#666;padding:20px;font-family:IBM Plex Mono;font-size:11px;"))
+    }
+
+    # Header row
+    header <- div(class="wsb-item", style="border-bottom:2px solid #2A2A2A;",
+      div(class="wsb-rank", "#"),
+      div(class="wsb-sym", "TICKER"),
+      div(class="wsb-name", "COMPANY"),
+      div(class="wsb-mentions", "MENTIONS"),
+      div(class="wsb-upvotes", "UPVOTES"),
+      div(class="wsb-momentum", "TREND")
+    )
+
+    items <- lapply(1:min(30, nrow(wsb_data)), function(i) {
+      row <- wsb_data[i,]
+      rank_val    <- row$rank
+      sym         <- row$ticker
+      name_val    <- replace_na(row$name, "")
+      mentions    <- row$mentions
+      upvotes     <- row$upvotes
+      momentum    <- if ("momentum" %in% names(row)) replace_na(row$momentum, "Steady") else "Steady"
+      rank_chg    <- if ("rank_chg" %in% names(row)) replace_na(row$rank_chg, 0) else 0
+
+      mom_cls <- switch(momentum,
+        "Surging" = "wsb-surge",
+        "Rising"  = "wsb-rise",
+        "Falling" = "wsb-fall",
+        "Fading"  = "wsb-fade",
+        "wsb-steady"
+      )
+
+      rank_arrow <- if (rank_chg > 0) paste0("▲", rank_chg) else
+                    if (rank_chg < 0) paste0("▼", abs(rank_chg)) else "—"
+
+      div(class="wsb-item",
+        div(class="wsb-rank", rank_val),
+        div(class="wsb-sym", sym),
+        div(class="wsb-name", name_val),
+        div(class="wsb-mentions", formatC(mentions, format="d", big.mark=",")),
+        div(class="wsb-upvotes", paste0("▲ ", formatC(upvotes, format="d", big.mark=","))),
+        div(class=paste("wsb-momentum", mom_cls), paste0(rank_arrow, " ", momentum))
+      )
+    })
+
+    div(header, do.call(tagList, items))
   })
 
   output$sector_today <- renderPlotly({

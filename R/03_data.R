@@ -107,6 +107,37 @@ get_sector_performance <- function() {
   }, error=function(e) tibble())
 }
 
+# ── WSB / Reddit Trending (ApeWisdom) ──────────────────────────────────
+get_wsb_trending <- function(n = 50) {
+  message("Pulling WallStreetBets trending stocks (ApeWisdom)...")
+  tryCatch({
+    url <- "https://apewisdom.io/api/v1.0/filter/wallstreetbets/page/1"
+    resp <- GET(url, add_headers(`User-Agent` = "EdgeScreener/1.0"))
+    if (status_code(resp) != 200) {
+      message("  WSB API returned status ", status_code(resp))
+      return(tibble())
+    }
+    raw <- fromJSON(content(resp, as = "text", encoding = "UTF-8"))
+    if (length(raw$results) == 0) return(tibble())
+    as_tibble(raw$results) %>%
+      head(n) %>%
+      mutate(
+        mentions_chg = mentions - mentions_24h_ago,
+        rank_chg     = rank_24h_ago - rank,
+        momentum     = case_when(
+          rank_chg >= 5  ~ "Surging",
+          rank_chg >= 2  ~ "Rising",
+          rank_chg <= -5 ~ "Falling",
+          rank_chg <= -2 ~ "Fading",
+          TRUE           ~ "Steady"
+        )
+      )
+  }, error = function(e) {
+    message("WSB trending failed: ", e$message)
+    tibble()
+  })
+}
+
 # ── Squeeze Scoring ─────────────────────────────────────────────────────────
 build_squeeze_score <- function(short_data, fund_data) {
   message("Building squeeze scores...")
@@ -156,6 +187,7 @@ run_module3 <- function(tickers=NULL) {
   earn   <- get_earnings_calendar()
   news   <- get_market_news(50)
   sector <- get_sector_performance()
+  wsb    <- get_wsb_trending(50)
 
   if (!dir.exists("data")) dir.create("data", recursive=TRUE)
   write_csv(squeeze, "data/squeeze_scored.csv")
@@ -163,9 +195,11 @@ run_module3 <- function(tickers=NULL) {
   write_csv(earn,    "data/earnings_calendar.csv")
   write_csv(news,    "data/market_news.csv")
   write_csv(sector,  "data/sector_performance.csv")
+  write_csv(wsb,     "data/wsb_trending.csv")
 
-  message("Saved: squeeze, macro, earnings, news, sector data")
-  list(squeeze=squeeze, macro=macro, earnings=earn, news=news, sector=sector)
+  message("Saved: squeeze, macro, earnings, news, sector, wsb data")
+  list(squeeze=squeeze, macro=macro, earnings=earn, news=news,
+       sector=sector, wsb=wsb)
 }
 
 if (!exists("SOURCED_BY_MASTER")) module3_data <- run_module3()

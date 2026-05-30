@@ -430,14 +430,41 @@ run_module4 <- function(fund_data = NULL) {
     )
   write_csv(top15_sweetspot, "data/top15_sweetspot.csv")
 
-  # ── 11. Top 15 Unicorns: IR-ranked with all app columns ───────────────────
-  top15_unicorns <- df %>%
-    filter(!is.na(hist_ir)) %>%
-    arrange(desc(hist_ir)) %>%
+  # ── 11. Top 15 Unicorns: small-cap high-growth ─────────────────────────────
+  # Definition: Market Cap < $5B, Revenue Growth > 15%, ranked by growth + score
+  unicorn_pool <- df %>%
+    filter(!is.na(market_cap) & market_cap > 0 & market_cap < 5e9,
+           !is.na(revenue_growth) & revenue_growth > 0.15)
+
+  # Fallback: relax to market_cap < $10B and revenue_growth > 5%
+  if (nrow(unicorn_pool) < 5) {
+    message("  Strict unicorn filter returned ", nrow(unicorn_pool),
+            " stocks — relaxing criteria...")
+    unicorn_pool <- df %>%
+      filter(!is.na(market_cap) & market_cap > 0 & market_cap < 10e9,
+             !is.na(revenue_growth) & revenue_growth > 0.05)
+  }
+
+  # Last-resort fallback: just use smallest-cap stocks with any growth
+  if (nrow(unicorn_pool) < 3) {
+    message("  Relaxed filter still sparse — using smallest-cap stocks...")
+    unicorn_pool <- df %>%
+      filter(!is.na(market_cap) & market_cap > 0) %>%
+      arrange(market_cap) %>%
+      head(30)
+  }
+
+  top15_unicorns <- unicorn_pool %>%
+    mutate(
+      growth_rank = percent_rank(revenue_growth),
+      score_rank  = percent_rank(final_score),
+      unicorn_composite = growth_rank * 0.5 + score_rank * 0.5
+    ) %>%
+    arrange(desc(unicorn_composite)) %>%
     head(15) %>%
     transmute(
       symbol, company, sector, price,
-      unicorn_score         = round(pmin(pmax((hist_ir + 3) / 6 * 100, 0), 100), 1),
+      unicorn_score         = round(unicorn_composite * 100, 1),
       master_score          = final_score,
       rating,
       signal,
@@ -445,8 +472,8 @@ run_module4 <- function(fund_data = NULL) {
       confidence_5d         = round(confidence_weight * 100, 1),
       confidence_band,
       days_tracked,
-      hist_ir,
-      hist_alpha_ann,
+      hist_ir               = ifelse(is.na(hist_ir), 0, hist_ir),
+      hist_alpha_ann        = ifelse(is.na(hist_alpha_ann), 0, hist_alpha_ann),
       alpha_hit_rate,
       alpha_streak,
       expected_return_1d,

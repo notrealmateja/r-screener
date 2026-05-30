@@ -14,6 +14,7 @@ macro_data     <- load_csv("macro_data.csv")
 earnings_data  <- load_csv("earnings_calendar.csv")
 news_data      <- load_csv("market_news.csv")
 sector_perf    <- load_csv("sector_performance.csv")
+wsb_data       <- load_csv("wsb_trending.csv")
 
 meta <- tryCatch(readRDS("meta.rds"),
                  error=function(e) list(last_updated="Not yet run", n_stocks=0))
