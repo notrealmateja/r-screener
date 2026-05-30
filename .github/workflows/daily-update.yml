@@ -5,6 +5,9 @@ on:
     - cron: '0 6 * * *'
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   update-and-deploy:
     runs-on: ubuntu-latest
@@ -34,7 +37,7 @@ jobs:
             install.packages(c("httr","jsonlite","readr","dplyr","tidyr","glue","lubridate","scales"))
             install.packages(c("xts","zoo","TTR","quantmod"))
             install.packages("tidyquant")
-            install.packages(c("shiny","shinydashboard","DT","plotly"))
+            install.packages(c("shiny","shinydashboard","DT","plotly","ggplot2"))
 
             # Pin rsconnect to 0.8.29 — last version before renv was introduced.
             # v1.0+ renv pre-flight validation always fails in GitHub Actions CI.
@@ -44,7 +47,7 @@ jobs:
 
             required <- c("httr","jsonlite","readr","dplyr","tidyr","glue","lubridate",
                           "scales","xts","zoo","TTR","quantmod","tidyquant",
-                          "shiny","shinydashboard","DT","plotly","rsconnect")
+                          "shiny","shinydashboard","DT","plotly","ggplot2","rsconnect")
             missing <- required[!sapply(required, requireNamespace, quietly=TRUE)]
             if (length(missing) > 0) stop("MISSING: ", paste(missing, collapse=", "))
             message("ALL PACKAGES OK")
@@ -53,6 +56,9 @@ jobs:
       - name: Run data pipeline
         run: |
           Rscript -e '
+            # Prevent modules from auto-running on source()
+            SOURCED_BY_MASTER <- TRUE
+
             source("R/01_fundamentals.R")
             source("R/02_momentum.R")
             source("R/02b_polygon.R")
@@ -74,16 +80,41 @@ jobs:
             message("Copied ", length(csv_files)+length(rds_files), " files into app/")
           '
 
-      - name: Commit updated data
+      - name: Clean stale files and commit updated data
         if: always()
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
+
+          # Remove stale nested app/app/ directory (duplicate data from old pipeline)
+          if [ -d "app/app" ]; then
+            git rm -r --cached app/app/ 2>/dev/null || true
+            rm -rf app/app/
+          fi
+
           git add data/alpha_history.csv data/av_cache.csv data/polygon_cache.csv \
                   data/*.csv data/*.rds app/*.csv app/*.rds app/data/*.rds || true
           git diff --quiet && git diff --staged --quiet || \
             git commit -m "Auto-update: Daily alpha refresh $(date +'%Y-%m-%d')"
           git push || true
+
+      - name: Strip Bioconductor packages before deploy
+        run: |
+          Rscript -e '
+            # rsconnect packrat scanner picks up ALL installed packages and their
+            # dependency chains.  tidyquant → timetk → recipes (Bioconductor) breaks
+            # the manifest.  Remove the entire chain so rsconnect never sees it.
+            nuke <- c("recipes","timetk","tidyquant","hardhat","workflows",
+                       "parsnip","rsample","yardstick","modeldata","tune",
+                       "workflowsets","infer","corrr","modelenv")
+            for (pkg in nuke) {
+              if (requireNamespace(pkg, quietly=TRUE)) {
+                try(remove.packages(pkg), silent=TRUE)
+                message("Removed: ", pkg)
+              }
+            }
+            message("Remaining packages: ", length(.packages(all.available=TRUE)))
+          '
 
       - name: Deploy to shinyapps.io
         continue-on-error: true
@@ -102,12 +133,23 @@ jobs:
               quit(status = 0)
             }
 
+            message("=== DEPLOY CONFIG ===")
+            message("Account: ", acct)
+            message("rsconnect version: ", packageVersion("rsconnect"))
+            message("=====================")
+
             library(rsconnect)
             rsconnect::setAccountInfo(name=acct, token=token, secret=secret)
+
+            # List files to deploy (exclude nested app/ subdir)
+            app_files <- list.files("app", recursive = TRUE)
+            app_files <- app_files[!grepl("^app/", app_files)]
+
             rsconnect::deployApp(
               appDir      = "app",
               appName     = "r-codescreener",
               account     = acct,
+              appFiles    = app_files,
               forceUpdate = TRUE
             )
             message("Deploy complete.")

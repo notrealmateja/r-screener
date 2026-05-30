@@ -86,11 +86,19 @@ run_module4 <- function(fund_data = NULL) {
   squeeze_path <- "data/squeeze_scored.csv"
   if (file.exists(squeeze_path)) {
     sq <- read_csv(squeeze_path, show_col_types = FALSE) %>%
-      select(symbol, squeeze_score = squeeze_score, squeeze_tier)
+      select(symbol, squeeze_score, squeeze_tier,
+             any_of(c("short_percent_float", "short_ratio", "short_trend",
+                       "fundamentals_improving", "short_float_pct",
+                       "improvement_count")))
     df <- left_join(df, sq, by = "symbol")
   } else {
-    df$squeeze_score <- NA_real_
-    df$squeeze_tier  <- "No Signal"
+    df$squeeze_score        <- NA_real_
+    df$squeeze_tier         <- "No Signal"
+    df$short_percent_float  <- NA_real_
+    df$short_ratio          <- NA_real_
+    df$short_trend          <- "Unknown"
+    df$fundamentals_improving <- FALSE
+    df$short_float_pct      <- "N/A"
   }
 
   # Merge Polygon data (options, SEC financials, VWAP, snapshot)
@@ -119,6 +127,23 @@ run_module4 <- function(fund_data = NULL) {
 
   # Merge company/sector lookup
   df <- left_join(df, ticker_meta, by = "symbol")
+
+  # Ensure all expected columns exist (handles first-run / empty-cache scenarios)
+  ensure_col <- function(df, col, default) {
+    if (!col %in% names(df)) df[[col]] <- default
+    df
+  }
+  av_num_cols <- c("pb_ratio","ev_ebitda","ev_revenue","operating_margin",
+                   "gross_margin","roe","profit_margin","earningsGrowth",
+                   "revenue_growth","analyst_score","analyst_upside",
+                   "analyst_target","peg_ratio","debt_equity","market_cap",
+                   "high_52w","low_52w","price","price_now",
+                   "ret_1m","ret_3m","ret_6m","ret_1y")
+  for (col in av_num_cols) df <- ensure_col(df, col, NA_real_)
+  char_cols <- c("rsi_zone")
+  for (col in char_cols) df <- ensure_col(df, col, NA_character_)
+  bool_cols <- c("golden_cross","macd_bullish","above_ma200","above_ma50","above_ma20")
+  for (col in bool_cols) df <- ensure_col(df, col, FALSE)
 
   n <- nrow(df)
   message("Scoring ", n, " stocks...\n")
@@ -248,7 +273,7 @@ run_module4 <- function(fund_data = NULL) {
 
     signal = rating,                                       # keep signal too
 
-    golden_cross_flag = isTRUE(golden_cross),              # app reads golden_cross_flag
+    golden_cross_flag = !is.na(golden_cross) & golden_cross == TRUE,  # vectorized
 
     squeeze_candidate = (!is.na(squeeze_score) &           # app reads squeeze_candidate
                            squeeze_score >= 60),
@@ -280,16 +305,81 @@ run_module4 <- function(fund_data = NULL) {
     ),
 
     signal_matches = paste0(
-      ifelse(isTRUE(golden_cross),                                    "GX ",       ""),
-      ifelse(isTRUE(macd_bullish),                                    "MACD ",     ""),
+      ifelse(!is.na(golden_cross) & golden_cross == TRUE,             "GX ",       ""),
+      ifelse(!is.na(macd_bullish) & macd_bullish == TRUE,             "MACD ",     ""),
       ifelse(!is.na(rsi14) & rsi14 >= 50 & rsi14 < 70,               "RSI ",      ""),
-      ifelse(isTRUE(above_ma200),                                     "MA200 ",    ""),
+      ifelse(!is.na(above_ma200) & above_ma200 == TRUE,               "MA200 ",    ""),
       ifelse(!is.na(alpha_hit_rate) & alpha_hit_rate >= 0.55,         "α>SPY ",    ""),
       ifelse(!is.na(put_call_ratio) & put_call_ratio < 0.75,          "PUT/CALL ", ""),
       ifelse(!is.na(analyst_upside) & analyst_upside > 0.10,          "ANALYST",   "")
     ) %>% trimws(),
 
     across(where(is.numeric), ~ round(., 4))
+  )
+
+  # ── 8b. Add app-expected column aliases ──────────────────────────────────────
+  # The Shiny app references column names that differ from pipeline output.
+  # Add aliases so the app works without modification.
+  message("[Step 4b] Adding app compatibility columns...")
+
+  df <- df %>% mutate(
+    # Price/change aliases (ticker tape + deep dive use these)
+    close             = dplyr::coalesce(price_now, price),
+    changesPercentage = ifelse(is.na(ret_1m), 0, ret_1m * 100),
+    yearHigh          = high_52w,
+    yearLow           = low_52w,
+
+    # CamelCase aliases (app deep-dive uses FMP-style names)
+    priceToBook        = pb_ratio,
+    enterpriseToEbitda = ev_ebitda,
+    grossMargin        = gross_margin,
+    operatingMargin    = operating_margin,
+    profitMargins      = profit_margin,
+    returnOnEquity     = roe,
+    revenueGrowth      = revenue_growth,
+    debtToEquity       = debt_equity,
+    debt_to_equity     = debt_equity,
+    currentRatio       = NA_real_,
+    current_ratio      = NA_real_,
+    marketCap          = market_cap,
+
+    # Formatted columns for screener/deep-dive tables
+    mktcap_fmt = dplyr::case_when(
+      is.na(market_cap)  ~ "N/A",
+      market_cap >= 1e12 ~ paste0("$", round(market_cap / 1e12, 2), "T"),
+      market_cap >= 1e9  ~ paste0("$", round(market_cap / 1e9, 1), "B"),
+      market_cap >= 1e6  ~ paste0("$", round(market_cap / 1e6, 1), "M"),
+      TRUE               ~ "N/A"
+    ),
+    pe_fmt = ifelse(is.na(pe_ratio) | pe_ratio <= 0, "N/A",
+                    as.character(round(pe_ratio, 1))),
+    ret_1m_fmt = ifelse(is.na(ret_1m), "N/A",
+                        paste0(ifelse(ret_1m >= 0, "+", ""), round(ret_1m * 100, 1), "%")),
+    ret_3m_fmt = ifelse(is.na(ret_3m), "N/A",
+                        paste0(ifelse(ret_3m >= 0, "+", ""), round(ret_3m * 100, 1), "%")),
+    ret_6m_fmt = ifelse(is.na(ret_6m), "N/A",
+                        paste0(ifelse(ret_6m >= 0, "+", ""), round(ret_6m * 100, 1), "%")),
+    ret_1y_fmt = ifelse(is.na(ret_1y), "N/A",
+                        paste0(ifelse(ret_1y >= 0, "+", ""), round(ret_1y * 100, 1), "%")),
+
+    # Radar chart scores (app expects these 4 sub-scores)
+    value_score   = quality_gate,
+    quality_score = quality_gate,
+    growth_score  = tech_filter,
+    safety_score  = pmin(100, quality_gate * 0.6 + 50 * 0.4),
+
+    # Short float alias (app uses both short_percent_float and short_float)
+    short_float = short_percent_float,
+
+    # Tier classification (used in app bottom-section charts)
+    tier = dplyr::case_when(
+      golden_cross_flag & squeeze_candidate          ~ "Tier 1: Golden Squeeze",
+      golden_cross_flag                              ~ "Tier 2: Golden Cross",
+      squeeze_candidate                              ~ "Tier 3: Squeeze Setup",
+      master_score >= 65                             ~ "Tier 4: High Score",
+      master_score >= 45                             ~ "Tier 5: Underdog Watch",
+      TRUE                                           ~ "No Signal"
+    )
   )
 
   # ── 9. Save master_scored.csv ───────────────────────────────────────────────
@@ -409,5 +499,5 @@ run_module4 <- function(fund_data = NULL) {
   return(df)
 }
 
-# Auto-run if sourced by master
-if (exists("SOURCED_BY_MASTER")) results <- run_module4()
+# Auto-run only when executed directly (not sourced by workflow)
+if (!exists("SOURCED_BY_MASTER")) results <- run_module4()

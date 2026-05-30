@@ -52,7 +52,7 @@ get_macro_data <- function() {
   for (sym in names(series)) {
     tryCatch({
       d <- tq_get(sym, get="economic.data", from=Sys.Date()-730, to=Sys.Date()) %>%
-        mutate(series=series[[sym]], ticker=sym)
+        mutate(series=series[[sym]], ticker=sym, value=price)
       macro_list[[sym]] <- d
       Sys.sleep(0.3)
     }, error=function(e) message(glue("  Skipped {sym}: {e$message}")))

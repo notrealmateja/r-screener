@@ -1,7 +1,10 @@
 # global.R
+# NOTE: Do NOT load tidyquant here — it pulls in Bioconductor's 'recipes'
+# package which breaks rsconnect manifest parsing on shinyapps.io.
+# The app only needs quantmod (for live price fallback) and zoo (for indexing).
 library(shiny); library(dplyr); library(tidyr); library(ggplot2)
-library(plotly); library(DT); library(tidyquant); library(scales)
-library(glue); library(readr); library(lubridate); library(TTR)
+library(plotly); library(DT); library(quantmod); library(scales)
+library(glue); library(readr); library(lubridate); library(TTR); library(zoo)
 
 load_csv <- function(p) if (file.exists(p)) read_csv(p, show_col_types=FALSE) else NULL
 

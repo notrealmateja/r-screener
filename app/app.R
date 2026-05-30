@@ -926,16 +926,17 @@ ui <- fluidPage(
 server <- function(input, output, session) {
 
 
-  # Auto-refresh: re-run pipeline if data is older than 8 hours
+  # Auto-refresh: log data age (pipeline runs via GitHub Actions cron, not in-app)
   observe({
     meta_file <- "data/meta.rds"
     if (file.exists(meta_file)) {
-      meta <- readRDS(meta_file)
-      age_hours <- as.numeric(difftime(Sys.time(), meta$last_updated, units="hours"))
-      if (age_hours > 8) {
-        message("Data is ", round(age_hours,1), " hours old — auto-refreshing...")
-        source("R/05_run_all.R", local=TRUE)
-      }
+      tryCatch({
+        m <- readRDS(meta_file)
+        age_hours <- as.numeric(difftime(Sys.time(), as.POSIXct(m$last_updated), units="hours"))
+        if (age_hours > 8) {
+          message("Data is ", round(age_hours,1), " hours old. Pipeline refreshes daily via cron.")
+        }
+      }, error = function(e) NULL)
     }
   })
 
@@ -1477,7 +1478,6 @@ server <- function(input, output, session) {
 
   output$dd_dcf <- renderUI({
     s <- sel(); req(nrow(s)>0)
-    source("../R/04_master_score.R", local=TRUE)
     dcf <- tryCatch(compute_dcf(s), error=function(e) list(intrinsic_value=NA,upside=NA,dcf_rating="N/A"))
     upside_cls <- if (!is.na(dcf$upside) && dcf$upside>0) "dcf-upside-pos" else "dcf-upside-neg"
     price <- replace_na(s$close[1], 0)
@@ -1771,16 +1771,21 @@ server <- function(input, output, session) {
     req(macro_data)
     df <- macro_data
     if (is.null(df) || nrow(df) == 0) return(div("No macro data available"))
-    
-    items <- lapply(1:nrow(df), function(i) {
-      row <- df[i,]
-      val <- round(as.numeric(row$value), 2)
+
+    # Show latest value per series (not all rows)
+    latest <- df %>% group_by(ticker) %>%
+      arrange(desc(date)) %>% slice(1) %>% ungroup()
+
+    items <- lapply(1:nrow(latest), function(i) {
+      row <- latest[i,]
+      val <- round(as.numeric(coalesce(row$value, row$price)), 2)
       color <- if (!is.na(val) && val >= 0) "#00C853" else "#FF3D00"
+      display_name <- if ("series" %in% names(row)) row$series else row$ticker
       div(class="macro-card",
-        div(class="macro-name", row$name),
+        div(class="macro-name", display_name),
         div(class="macro-value", style=paste0("color:",color,";font-size:1.6em;font-weight:700;"),
             paste0(val, "%")),
-        div(class="macro-date", style="color:#666;font-size:0.75em;", row$date)
+        div(class="macro-date", style="color:#666;font-size:0.75em;", as.character(row$date))
       )
     })
     div(class="macro-grid", style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;", items)
@@ -1791,8 +1796,8 @@ server <- function(input, output, session) {
     df <- macro_data
     maturities <- c("2Y","10Y")
     yields <- c(
-      df$value[df$series=="DGS2"][1],
-      df$value[df$series=="DGS10"][1]
+      df$value[df$ticker=="DGS2"][1],
+      df$value[df$ticker=="DGS10"][1]
     )
     yields <- suppressWarnings(as.numeric(yields))
     
@@ -1813,8 +1818,8 @@ server <- function(input, output, session) {
   output$treasury_spread_plot <- renderPlotly({
     req(macro_data)
     df <- macro_data
-    g10 <- suppressWarnings(as.numeric(df$value[df$series=="DGS10"][1]))
-    g2  <- suppressWarnings(as.numeric(df$value[df$series=="DGS2"][1]))
+    g10 <- suppressWarnings(as.numeric(df$value[df$ticker=="DGS10"][1]))
+    g2  <- suppressWarnings(as.numeric(df$value[df$ticker=="DGS2"][1]))
     spread <- g10 - g2
     
     plotly::plot_ly(
@@ -1832,8 +1837,8 @@ server <- function(input, output, session) {
   output$fed_funds_plot <- renderPlotly({
     req(macro_data)
     df <- macro_data
-    ff  <- suppressWarnings(as.numeric(df$value[df$series=="DFF"][1]))
-    cpi <- suppressWarnings(as.numeric(df$value[df$series=="CPIAUCSL"][1]))
+    ff  <- suppressWarnings(as.numeric(df$value[df$ticker=="FEDFUNDS"][1]))
+    cpi <- suppressWarnings(as.numeric(df$value[df$ticker=="CPIAUCSL"][1]))
     
     plotly::plot_ly(
       x=c("Fed Funds Rate","CPI YoY","Real Rate (approx)"),
@@ -1852,8 +1857,8 @@ server <- function(input, output, session) {
   output$yield_spread_plot <- renderPlotly({
     req(macro_data)
     df <- macro_data
-    g10 <- suppressWarnings(as.numeric(df$value[df$series=="DGS10"][1]))
-    g2  <- suppressWarnings(as.numeric(df$value[df$series=="DGS2"][1]))
+    g10 <- suppressWarnings(as.numeric(df$value[df$ticker=="DGS10"][1]))
+    g2  <- suppressWarnings(as.numeric(df$value[df$ticker=="DGS2"][1]))
     spread <- g10 - g2
     inv_color <- if (spread < 0) "#FF3D00" else "#00C853"
     

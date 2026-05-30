@@ -249,7 +249,8 @@ run_module1 <- function(tickers = NULL) {
         roe_score * 0.30 + margin_score * 0.15 +
         analyst_score * 0.10, 2)
     ) %>%
-    select(-pe_yahoo, -eps_yahoo, -high_52w_av, -low_52w_av, -company_av, -sector_av) %>%
+    select(-any_of(c("pe_yahoo", "eps_yahoo", "high_52w_av", "low_52w_av",
+                      "company_av", "sector_av"))) %>%
     arrange(desc(fundamental_score))
 
   write_csv(merged, "data/fundamentals_scored.csv")
