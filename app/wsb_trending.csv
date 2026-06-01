@@ -1,51 +1,51 @@
 rank,ticker,name,mentions,upvotes,rank_24h_ago,mentions_24h_ago,mentions_chg,rank_chg,momentum
-1,SPCE,Virgin Galactic,824,28670,23,56,768,22,Surging
-2,SPCX,Collaborative Investment Series Trust - The SPAC and New Issue ETF,120,2825,24,56,64,22,Surging
-3,MU,Micron Technology,73,984,2,384,-311,-1,Steady
-4,NVDA,NVIDIA,43,224,4,305,-262,0,Steady
-5,ASTS,AST SpaceMobile,38,305,1,462,-424,-4,Fading
-6,NOW,ServiceNow,34,157,7,162,-128,1,Steady
-7,MSFT,Microsoft,29,100,3,316,-287,-4,Fading
-8,SPY,SPDR S&amp;P 500 ETF Trust,29,80,5,230,-201,-3,Fading
-9,RKLB,Rocket Lab USA,26,297,12,93,-67,3,Rising
-10,AMD,AMD,24,97,15,79,-55,5,Surging
-11,AVGO,Broadcom,23,72,30,42,-19,19,Surging
-12,CE,Celanese,23,3682,37,27,-4,25,Surging
-13,IBM,IBM,20,57,9,122,-102,-4,Fading
-14,HOOD,Robinhood,20,277,10,119,-99,-4,Fading
-15,AMC,AMC Entertainment,18,49,137,4,14,122,Surging
-16,OPEN,Opendoor,18,153,47,19,-1,31,Surging
-17,TSLA,Tesla,14,57,22,56,-42,5,Surging
-18,ADBE,Adobe,14,176,86,7,7,68,Surging
-19,ZM,Zoom,14,386,80,9,5,61,Surging
-20,HPE,Hewlett Packard Enterprise,12,42,13,93,-81,-7,Falling
-21,DELL,Dell,12,199,8,141,-129,-13,Falling
-22,NOK,Nokia,12,161,34,33,-21,12,Surging
-23,AM,Antero Midstream,12,80,27,43,-31,4,Rising
-24,QQQ,Invesco QQQ ETF,12,21,16,85,-73,-8,Falling
-25,CRSR,Corsair Gaming,12,126,6,165,-153,-19,Falling
-26,RDDT,Reddit,11,71,20,76,-65,-6,Falling
-27,ALL,Allstate,10,46,71,12,-2,44,Surging
-28,IQ,iQIYI,10,4,89,8,2,61,Surging
-29,DTE,DTE Energy,9,43,14,92,-83,-15,Falling
-30,XOM,Exxon Mobil,9,195,318,NA,NA,288,Surging
-31,SMCI,Supermicro,9,25,17,71,-62,-14,Falling
-32,UUUU,Energy Fuels,9,57,188,4,5,156,Surging
-33,AGI,Alamos Gold,9,79,82,7,2,49,Surging
-34,WOLF,Wolfspeed,9,212,209,1,8,175,Surging
-35,SGA,Saga Communications,9,18,854,1,8,819,Surging
-36,NBIS,Nebius Group,9,20,32,38,-29,-4,Fading
-37,SNDK,Sandisk,9,203,28,47,-38,-9,Falling
-38,ORCL,Oracle,8,24,31,43,-35,-7,Falling
-39,CAR,Avis Budget Group,8,68,459,1,7,420,Surging
-40,BB,BlackBerry,8,605,19,71,-63,-21,Falling
-41,USO,United States Commodity Funds LLC - United States Oil Fund,8,27,36,29,-21,-5,Falling
-42,VOO,Vanguard S&amp;P 500 ETF,8,23,74,10,-2,32,Surging
-43,LINK,Interlink Electronics,8,14,66,11,-3,23,Surging
-44,BE,Bloom Energy,7,107,91,6,1,47,Surging
-45,PLTR,Palantir,7,40,11,99,-92,-34,Falling
-46,GME,GameStop,7,69,118,6,1,72,Surging
-47,SPXC,SPX Corporation,7,66,138,4,3,91,Surging
-48,TSM,TSMC,6,43,63,18,-12,15,Surging
-49,IT,Gartner,6,26,38,26,-20,-11,Falling
-50,OR,Osisko Gold Royalties,6,28,494,1,5,444,Surging
+1,SPCE,Virgin Galactic,1111,14271,1,844,267,0,Steady
+2,MU,Micron Technology,370,2621,3,65,305,1,Steady
+3,NOW,ServiceNow,219,1093,6,30,189,3,Rising
+4,NVDA,NVIDIA,140,1581,4,41,99,0,Steady
+5,MSFT,Microsoft,135,1545,8,38,97,3,Rising
+6,IBM,IBM,103,1165,13,25,78,7,Surging
+7,HPE,Hewlett Packard Enterprise,87,436,21,12,75,14,Surging
+8,SPY,SPDR S&amp;P 500 ETF Trust,77,304,7,27,50,-1,Steady
+9,ASTS,AST SpaceMobile,69,437,5,33,36,-4,Fading
+10,AMD,AMD,62,907,10,24,38,0,Steady
+11,SPCX,Collaborative Investment Series Trust - The SPAC and New Issue ETF,62,914,2,119,-57,-9,Falling
+12,RKLB,Rocket Lab USA,59,330,9,26,33,-3,Fading
+13,RDDT,Reddit,44,160,25,9,35,12,Surging
+14,DELL,Dell,42,1113,26,12,30,12,Surging
+15,ARM,Arm Holdings,42,179,60,5,37,45,Surging
+16,TSLA,Tesla,40,167,17,19,21,1,Steady
+17,INTC,Intel,37,834,63,4,33,46,Surging
+18,HOOD,Robinhood,37,115,16,21,16,-2,Fading
+19,NBIS,Nebius Group,36,142,35,9,27,16,Surging
+20,SNDK,Sandisk,34,142,36,8,26,16,Surging
+21,QQQ,Invesco QQQ ETF,32,99,23,11,21,2,Rising
+22,IT,Gartner,30,62,49,6,24,27,Surging
+23,AM,Antero Midstream,30,495,22,8,22,-1,Steady
+24,PLTR,Palantir,26,801,45,6,20,21,Surging
+25,BB,BlackBerry,25,194,39,12,13,14,Surging
+26,ORCL,Oracle,24,823,37,8,16,11,Surging
+27,DTE,DTE Energy,24,166,30,9,15,3,Rising
+28,AVGO,Broadcom,22,105,11,23,-1,-17,Falling
+29,NOK,Nokia,22,336,19,13,9,-10,Falling
+30,CRSR,Corsair Gaming,22,114,24,10,12,-6,Falling
+31,OPEN,Opendoor,22,256,14,19,3,-17,Falling
+32,MSTR,MicroStrategy,20,120,537,4,16,505,Surging
+33,GOOG,Alphabet (Google),19,47,128,4,15,95,Surging
+34,SAP,SAP,19,133,94,1,18,60,Surging
+35,IGV,BlackRock Institutional Trust Company N.A. - iShares Expanded Tech-Sof,19,10,70,4,15,35,Surging
+36,META,Meta Platforms (Facebook),19,55,687,10,9,651,Surging
+37,ADBE,Adobe,16,38,20,13,3,-17,Falling
+38,HIVE,HIVE Blockchain Technologies,16,244,90,3,13,52,Surging
+39,FLY,FLY Leasing,15,75,392,1,14,353,Surging
+40,MA,Mastercard,14,7,130,1,13,90,Surging
+41,QCOM,QUALCOMM,14,33,97,2,12,56,Surging
+42,HP,Helmerich &amp; Payne,14,927,546,1,13,504,Surging
+43,AGI,Alamos Gold,13,15,33,13,0,-10,Falling
+44,AMC,AMC Entertainment,13,232,15,17,-4,-29,Falling
+45,CRDO,Credo Technology,13,34,52,5,8,7,Surging
+46,ALL,Allstate,12,195,27,10,2,-19,Falling
+47,CE,Celanese,12,84,12,23,-11,-35,Falling
+48,SMCI,Supermicro,12,80,32,6,6,-16,Falling
+49,CRWD,CrowdStrike,12,54,68,2,10,19,Surging
+50,YOU,CLEAR Secure,12,32,51,6,6,1,Steady
