@@ -1,51 +1,51 @@
 rank,ticker,name,mentions,upvotes,rank_24h_ago,mentions_24h_ago,mentions_chg,rank_chg,momentum
-1,AVGO,Broadcom,1287,8442,8,274,1013,7,Surging
-2,MRVL,Marvell Technology Group,584,3120,2,857,-273,0,Steady
-3,SPCE,Virgin Galactic,486,6872,1,1891,-1405,-2,Fading
-4,MU,Micron Technology,474,1761,3,545,-71,-1,Steady
-5,SPY,SPDR S&amp;P 500 ETF Trust,441,2248,5,392,49,0,Steady
-6,MSFT,Microsoft,324,2964,6,363,-39,0,Steady
-7,NVDA,NVIDIA,318,2736,7,349,-31,0,Steady
-8,MSTR,MicroStrategy,145,1213,14,134,11,6,Surging
-9,NOW,ServiceNow,140,634,12,180,-40,3,Rising
-10,AMD,AMD,129,627,25,62,67,15,Surging
-11,QQQ,Invesco QQQ ETF,117,869,20,82,35,9,Surging
-12,ASTS,AST SpaceMobile,101,1000,9,205,-104,-3,Fading
-13,META,Meta Platforms (Facebook),95,1395,18,89,6,5,Surging
-14,SNDK,Sandisk,92,239,24,65,27,10,Surging
-15,CRWD,CrowdStrike,88,370,49,27,61,34,Surging
-16,GOOG,Alphabet (Google),81,344,15,126,-45,-1,Steady
-17,AMZN,Amazon,79,1330,40,31,48,23,Surging
-18,RKLB,Rocket Lab USA,79,1058,17,91,-12,-1,Steady
-19,BB,BlackBerry,77,211,10,203,-126,-9,Falling
-20,DTE,DTE Energy,72,470,28,52,20,8,Surging
-21,OPEN,Opendoor,71,254,4,408,-337,-17,Falling
-22,HOOD,Robinhood,66,759,32,42,24,10,Surging
-23,RDDT,Reddit,61,161,37,40,21,14,Surging
-24,LUNR,Intuitive Machines,59,1867,51,26,33,27,Surging
-25,TSLA,Tesla,58,184,34,39,19,9,Surging
-26,SPCX,Collaborative Investment Series Trust - The SPAC and New Issue ETF,55,746,19,87,-32,-7,Falling
-27,AM,Antero Midstream,53,134,27,65,-12,0,Steady
-28,HPE,Hewlett Packard Enterprise,50,591,13,138,-88,-15,Falling
-29,SOXS,Direxion Shares ETF Trust - Direxion Daily Semiconductor Bear 3X Share,49,138,59,19,30,30,Surging
-30,SOXL,Direxion Shares ETF Trust - Direxion Daily Semiconductor Bull 3X Share,48,94,38,40,8,8,Surging
-31,GOOGL,Alphabet (Google),47,1274,22,70,-23,-9,Falling
-32,NOK,Nokia,44,169,16,104,-60,-16,Falling
-33,PANW,Palo Alto Networks,43,97,11,187,-144,-22,Falling
-34,LASE,Laser Photonics,42,75,48,30,12,14,Surging
-35,AAPL,Apple,41,106,43,32,9,8,Surging
-36,NFLX,Netflix,40,128,45,32,8,9,Surging
-37,IBM,IBM,40,99,26,60,-20,-11,Falling
-38,NBIS,Nebius Group,36,64,23,64,-28,-15,Falling
-39,WMT,Walmart,35,100,62,15,20,23,Surging
-40,INTC,Intel,34,124,39,30,4,-1,Steady
-41,NVTS,Navitas Semiconductor,34,62,160,5,29,119,Surging
-42,IT,Gartner,33,86,36,33,0,-6,Falling
-43,ORCL,Oracle,30,68,44,29,1,1,Steady
-44,YOU,CLEAR Secure,29,198,47,30,-1,3,Rising
-45,PLTR,Palantir,27,66,30,43,-16,-15,Falling
-46,CRSR,Corsair Gaming,27,84,35,36,-9,-11,Falling
-47,EU,enCore Energy,26,1196,286,2,24,239,Surging
-48,VOO,Vanguard S&amp;P 500 ETF,25,68,74,13,12,26,Surging
-49,ONDS,Ondas Holdings,25,63,56,21,4,7,Surging
-50,SPXC,SPX Corporation,24,20,75,17,7,25,Surging
+1,MU,Micron Technology,662,2602,1,885,-223,0,Steady
+2,SPY,SPDR S&amp;P 500 ETF Trust,541,6551,3,404,137,1,Steady
+3,QQQ,Invesco QQQ ETF,324,976,8,159,165,5,Surging
+4,AVGO,Broadcom,279,1058,2,660,-381,-2,Fading
+5,MRVL,Marvell Technology Group,242,1126,5,245,-3,0,Steady
+6,NVDA,NVIDIA,187,635,7,215,-28,1,Steady
+7,MSFT,Microsoft,145,577,6,228,-83,-1,Steady
+8,DTE,DTE Energy,130,1014,15,73,57,7,Surging
+9,META,Meta Platforms (Facebook),116,377,23,53,63,14,Surging
+10,SOXL,Direxion Shares ETF Trust - Direxion Daily Semiconductor Bull 3X Share,111,331,22,57,54,12,Surging
+11,SPCX,Collaborative Investment Series Trust - The SPAC and New Issue ETF,96,313,10,107,-11,-1,Steady
+12,MSTR,MicroStrategy,93,255,13,89,4,1,Steady
+13,ASTS,AST SpaceMobile,90,724,28,43,47,15,Surging
+14,AMD,AMD,87,195,14,63,24,0,Steady
+15,TSLA,Tesla,82,186,18,68,14,3,Rising
+16,SOXS,Direxion Shares ETF Trust - Direxion Daily Semiconductor Bear 3X Share,78,165,29,38,40,13,Surging
+17,VOO,Vanguard S&amp;P 500 ETF,67,4986,37,29,38,20,Surging
+18,SNDK,Sandisk,58,206,21,51,7,3,Rising
+19,NOW,ServiceNow,55,1456,11,95,-40,-8,Falling
+20,AAPL,Apple,50,78,36,23,27,16,Surging
+21,RDDT,Reddit,49,136,9,127,-78,-12,Falling
+22,NBIS,Nebius Group,49,165,20,59,-10,-2,Fading
+23,LULU,lululemon athletica,48,147,4,259,-211,-19,Falling
+24,PL,Planet Labs,45,127,12,89,-44,-12,Falling
+25,HOOD,Robinhood,42,133,16,67,-25,-9,Falling
+26,AM,Antero Midstream,41,98,25,45,-4,-1,Steady
+27,IT,Gartner,39,146,41,20,19,14,Surging
+28,AMZN,Amazon,38,94,50,14,24,22,Surging
+29,TQQQ,ProShares Trust - ProShares UltraPro QQQ,36,125,151,1,35,122,Surging
+30,UNH,UnitedHealth,31,55,24,54,-23,-6,Falling
+31,YOU,CLEAR Secure,31,154,31,32,-1,0,Steady
+32,RKLB,Rocket Lab USA,30,74,27,46,-16,-5,Falling
+33,ORCL,Oracle,29,121,53,13,16,20,Surging
+34,GOOG,Alphabet (Google),28,77,26,45,-17,-8,Falling
+35,NOK,Nokia,24,90,30,35,-11,-5,Falling
+36,DOW,Dow,23,85,42,19,4,6,Surging
+37,GOOGL,Alphabet (Google),23,711,45,17,6,8,Surging
+38,WMT,Walmart,22,39,69,10,12,31,Surging
+39,DJT,Trump Media &amp; Technology Group,21,96,137,4,17,98,Surging
+40,ALL,Allstate,20,48,63,13,7,23,Surging
+41,BB,BlackBerry,20,42,19,61,-41,-22,Falling
+42,JPM,JPMorgan Chase,19,116,92,7,12,50,Surging
+43,PLTR,Palantir,19,40,40,21,-2,-3,Fading
+44,SQQQ,ProShares Trust - ProShares UltraPro Short QQQ,19,39,203,2,17,159,Surging
+45,UP,Wheels Up,19,61,44,19,0,-1,Steady
+46,LUNR,Intuitive Machines,19,43,89,6,13,43,Surging
+47,INTC,Intel,18,54,58,13,5,11,Surging
+48,MSOS,Advisorshares Trust - AdvisorShares Pure US Cannabis ETF,18,253,619,1,17,571,Surging
+49,NFLX,Netflix,17,48,34,26,-9,-15,Falling
+50,SMH,VanEck Vectors ETF Trust - VanEck Vectors Semiconductor ETF,17,41,93,7,10,43,Surging
