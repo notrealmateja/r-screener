@@ -1,8 +1,9 @@
 symbol,short_percent_float,short_ratio,shares_short,short_trend,improvement_count,fundamentals_improving,sf_score,dtc_score,fi_score,st_score,squeeze_score_raw,squeeze_mult,squeeze_score,squeeze_tier,short_float_pct
 BAC,NA,NA,NA,Unknown,0,FALSE,50,50,0,40,28.5,1,28.5,No Signal,N/A
 ACN,NA,NA,NA,Unknown,0,FALSE,50,50,0,40,28.5,1,28.5,No Signal,N/A
-INTU,NA,NA,NA,Unknown,0,FALSE,50,50,0,40,28.5,1,28.5,No Signal,N/A
 JPM,NA,NA,NA,Unknown,0,FALSE,50,50,0,40,28.5,1,28.5,No Signal,N/A
+INTU,NA,NA,NA,Unknown,0,FALSE,50,50,0,40,28.5,1,28.5,No Signal,N/A
+IBM,NA,NA,NA,Unknown,0,FALSE,50,50,0,40,28.5,1,28.5,No Signal,N/A
 MSFT,NA,NA,NA,Unknown,0,FALSE,50,50,0,40,28.5,1,28.5,No Signal,N/A
 META,NA,NA,NA,Unknown,0,FALSE,50,50,0,40,28.5,1,28.5,No Signal,N/A
 PG,NA,NA,NA,Unknown,0,FALSE,50,50,0,40,28.5,1,28.5,No Signal,N/A
@@ -16,7 +17,6 @@ UPS,NA,NA,NA,Unknown,0,FALSE,50,50,0,40,28.5,1,28.5,No Signal,N/A
 NEE,NA,NA,NA,Unknown,0,FALSE,50,50,0,40,28.5,1,28.5,No Signal,N/A
 PEP,NA,NA,NA,Unknown,0,FALSE,50,50,0,40,28.5,1,28.5,No Signal,N/A
 HON,NA,NA,NA,Unknown,0,FALSE,50,50,0,40,28.5,1,28.5,No Signal,N/A
-IBM,NA,NA,NA,Unknown,0,FALSE,50,50,0,40,28.5,1,28.5,No Signal,N/A
 MA,NA,NA,NA,Unknown,0,FALSE,50,50,0,40,28.5,1,28.5,No Signal,N/A
 V,NA,NA,NA,Unknown,0,FALSE,50,50,0,40,28.5,1,28.5,No Signal,N/A
 NVDA,NA,NA,NA,Unknown,0,FALSE,50,50,0,40,28.5,1,28.5,No Signal,N/A
