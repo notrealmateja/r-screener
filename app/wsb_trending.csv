@@ -1,49 +1,49 @@
 rank,ticker,name,mentions,upvotes,rank_24h_ago,mentions_24h_ago,mentions_chg,rank_chg,momentum
-1,GOOG,Alphabet (Google),419,1467,4,303,116,3,Rising
-2,MU,Micron Technology,406,1493,1,334,72,-1,Steady
-3,TSLA,Tesla,401,1261,13,151,250,10,Surging
-4,SPY,SPDR S&amp;P 500 ETF Trust,378,1101,2,287,91,-2,Fading
-5,SPCX,SpaceX,335,1512,7,222,113,2,Rising
-6,GOOGL,Alphabet (Google),257,1873,12,198,59,6,Surging
-7,INTC,Intel,220,728,28,17,203,21,Surging
-8,MSFT,Microsoft,160,519,3,224,-64,-5,Falling
-9,NOW,ServiceNow,159,412,10,169,-10,1,Steady
-10,QQQ,Invesco QQQ ETF,133,297,9,109,24,-1,Steady
-11,NVDA,NVIDIA,91,1079,6,152,-61,-5,Falling
-12,IBM,IBM,88,738,16,101,-13,4,Rising
+1,GOOG,Alphabet (Google),407,1429,4,339,68,3,Rising
+2,MU,Micron Technology,403,1474,1,333,70,-1,Steady
+3,TSLA,Tesla,396,1243,13,185,211,10,Surging
+4,SPY,SPDR S&amp;P 500 ETF Trust,377,1100,2,294,83,-2,Fading
+5,SPCX,SpaceX,328,1488,7,231,97,2,Rising
+6,GOOGL,Alphabet (Google),254,1855,12,222,32,6,Surging
+7,INTC,Intel,219,726,28,17,202,21,Surging
+8,MSFT,Microsoft,160,519,3,230,-70,-5,Falling
+9,NOW,ServiceNow,156,399,10,201,-45,1,Steady
+10,QQQ,Invesco QQQ ETF,131,295,9,108,23,-1,Steady
+11,NVDA,NVIDIA,89,214,6,154,-65,-5,Falling
+12,IBM,IBM,86,371,16,107,-21,4,Rising
 13,META,Meta Platforms (Facebook),84,205,18,51,33,5,Surging
 14,USO,United States Commodity Funds LLC - United States Oil Fund,72,191,35,12,60,21,Surging
-15,SNDK,Sandisk,71,708,11,82,-11,-4,Fading
-16,DTE,DTE Energy,59,123,17,51,8,1,Steady
-17,NBIS,Nebius Group,57,133,15,55,2,-2,Fading
-18,AMD,AMD,56,237,8,113,-57,-10,Falling
-19,AGI,Alamos Gold,52,569,68,10,42,49,Surging
-20,EU,enCore Energy,52,1426,69,8,44,49,Surging
+15,SNDK,Sandisk,71,708,11,83,-12,-4,Fading
+16,DTE,DTE Energy,59,123,17,53,6,1,Steady
+17,AMD,AMD,56,237,8,113,-57,-9,Falling
+18,NBIS,Nebius Group,56,131,15,53,3,-3,Fading
+19,AGI,Alamos Gold,52,569,68,9,43,49,Surging
+20,EU,enCore Energy,52,1426,69,7,45,49,Surging
 21,AMZN,Amazon,50,130,27,24,26,6,Surging
-22,FCF,First Commonwealth Financial Corp,37,48,136,6,31,114,Surging
-23,NOK,Nokia,32,85,44,10,22,21,Surging
-24,RDDT,Reddit,32,77,14,90,-58,-10,Falling
-25,ORCL,Oracle,26,69,22,24,2,-3,Fading
-26,YOU,CLEAR Secure,26,67,31,19,7,5,Surging
+22,FCF,First Commonwealth Financial Corp,37,48,136,8,29,114,Surging
+23,RDDT,Reddit,32,77,14,89,-57,-9,Falling
+24,NOK,Nokia,30,81,44,10,20,20,Surging
+25,ORCL,Oracle,26,69,22,25,1,-3,Fading
+26,YOU,CLEAR Secure,26,67,31,20,6,5,Surging
 27,WTI,W&amp;T Offshore,25,77,47,7,18,20,Surging
-28,SOXL,Direxion Shares ETF Trust - Direxion Daily Semiconductor Bull 3X Share,24,68,32,16,8,4,Rising
+28,SOXL,Direxion Shares ETF Trust - Direxion Daily Semiconductor Bull 3X Share,24,68,32,15,9,4,Rising
 29,AVGO,Broadcom,23,57,37,21,2,8,Surging
-30,AAPL,Apple,22,42,26,26,-4,-4,Fading
-31,AM,Antero Midstream,21,115,40,13,8,9,Surging
+30,AAPL,Apple,21,38,26,27,-6,-4,Fading
+31,AM,Antero Midstream,21,115,40,14,7,9,Surging
 32,VOO,Vanguard S&amp;P 500 ETF,21,102,43,18,3,11,Surging
 33,ALL,Allstate,18,2188,70,4,14,37,Surging
-34,NFLX,Netflix,17,42,24,24,-7,-10,Falling
-35,ASTS,AST SpaceMobile,17,42,21,28,-11,-14,Falling
-36,IT,Gartner,16,106,30,23,-7,-6,Falling
+34,NFLX,Netflix,16,36,24,24,-8,-10,Falling
+35,IT,Gartner,16,106,30,23,-7,-5,Falling
+36,ASTS,AST SpaceMobile,16,39,21,28,-12,-15,Falling
 37,ES,Eversource Energy,15,25,64,5,10,27,Surging
-38,SMCI,Supermicro,15,33,5,146,-131,-33,Falling
+38,SMCI,Supermicro,15,33,5,134,-119,-33,Falling
 39,UP,Wheels Up,15,37,59,9,6,20,Surging
-40,CSX,CSX Corporation,13,30,188,1,12,148,Surging
-41,IQ,iQIYI,13,49,118,1,12,77,Surging
+40,IQ,iQIYI,13,49,118,1,12,78,Surging
+41,CSX,CSX Corporation,12,29,188,1,11,147,Surging
 42,SMH,VanEck Vectors ETF Trust - VanEck Vectors Semiconductor ETF,12,67,42,11,1,0,Steady
 43,WEN,Wendy’s Company,11,17,38,15,-4,-5,Falling
 44,SGOV,iShares Trust - iShares 0-3 Month Treasury Bond ETF,11,25,456,10,1,412,Surging
-45,CRWV,CoreWeave,11,23,33,17,-6,-12,Falling
+45,CRWV,CoreWeave,11,23,33,16,-5,-12,Falling
 46,MRVL,Marvell Technology Group,10,35,46,7,3,0,Steady
 47,UI,Ubiquiti,10,317,336,3,7,289,Surging
 48,BE,Bloom Energy,10,36,39,13,-3,-9,Falling
