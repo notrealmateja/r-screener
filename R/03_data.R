@@ -7,6 +7,7 @@
 #   Market news       — Alpha Vantage NEWS_SENTIMENT endpoint (JSON)
 #   Sector perf       — computed from Module 1 fundamentals (self-sourced)
 #   WSB trending      — ApeWisdom API (free, no key needed)
+#   StockTwits        — StockTwits API (free, no key needed)
 #   Short interest    — stub (no reliable free API; squeeze scores use
 #                       options data from Polygon in Module 2b instead)
 # =============================================================================
@@ -203,6 +204,78 @@ get_wsb_trending <- function(n = 50) {
   })
 }
 
+# ── StockTwits Trending (free, no API key) ─────────────────────────────────
+get_stocktwits_trending <- function() {
+  message("Pulling StockTwits trending symbols...")
+  tryCatch({
+    sym_resp <- GET("https://api.stocktwits.com/api/2/trending/symbols.json",
+                    add_headers(`User-Agent` = "EdgeScreener/1.0"))
+    if (status_code(sym_resp) != 200) {
+      message("  StockTwits symbols returned status ", status_code(sym_resp))
+      return(tibble())
+    }
+    sym_raw <- fromJSON(content(sym_resp, as = "text", encoding = "UTF-8"))
+    if (is.null(sym_raw$symbols) || length(sym_raw$symbols) == 0) return(tibble())
+
+    symbols <- as_tibble(sym_raw$symbols) %>%
+      transmute(
+        symbol = symbol,
+        title  = title,
+        watchlist_count = suppressWarnings(as.numeric(watchlist_count))
+      )
+
+    Sys.sleep(1)
+
+    msg_resp <- GET("https://api.stocktwits.com/api/2/streams/trending.json",
+                    add_headers(`User-Agent` = "EdgeScreener/1.0"))
+    if (status_code(msg_resp) != 200) {
+      message("  StockTwits stream returned status ", status_code(msg_resp))
+      return(symbols %>% mutate(messages = 0L, bullish = 0L, bearish = 0L))
+    }
+    msg_raw <- fromJSON(content(msg_resp, as = "text", encoding = "UTF-8"))
+    if (!is.null(msg_raw$messages) && length(msg_raw$messages) > 0) {
+      msgs <- as_tibble(msg_raw$messages)
+      msg_syms <- sapply(msgs$symbols, function(s) {
+        if (is.data.frame(s) && nrow(s) > 0) s$symbol[1] else NA_character_
+      })
+      msg_sent <- sapply(msgs$entities, function(e) {
+        if (is.list(e) && !is.null(e$sentiment) && !is.null(e$sentiment$basic))
+          e$sentiment$basic else NA_character_
+      })
+      msg_df <- tibble(msg_symbol = msg_syms, sentiment = msg_sent) %>%
+        filter(!is.na(msg_symbol)) %>%
+        group_by(msg_symbol) %>%
+        summarize(
+          messages = n(),
+          bullish  = sum(sentiment == "Bullish", na.rm = TRUE),
+          bearish  = sum(sentiment == "Bearish", na.rm = TRUE),
+          .groups  = "drop"
+        )
+      symbols <- symbols %>%
+        left_join(msg_df, by = c("symbol" = "msg_symbol")) %>%
+        mutate(across(c(messages, bullish, bearish), ~replace_na(.x, 0L)))
+    } else {
+      symbols <- symbols %>% mutate(messages = 0L, bullish = 0L, bearish = 0L)
+    }
+    symbols <- symbols %>%
+      mutate(
+        sentiment_label = case_when(
+          bullish > bearish * 2 ~ "Very Bullish",
+          bullish > bearish     ~ "Bullish",
+          bearish > bullish * 2 ~ "Very Bearish",
+          bearish > bullish     ~ "Bearish",
+          TRUE                  ~ "Neutral"
+        ),
+        fetched_at = Sys.time()
+      )
+    message(glue("  StockTwits: {nrow(symbols)} trending symbols"))
+    symbols
+  }, error = function(e) {
+    message("StockTwits trending failed: ", e$message)
+    tibble()
+  })
+}
+
 # ── Squeeze Scoring ─────────────────────────────────────────────────────────
 build_squeeze_score <- function(short_data, fund_data) {
   message("Building squeeze scores...")
@@ -253,12 +326,14 @@ run_module3 <- function(tickers=NULL) {
   news    <- get_market_news(50)
   sector  <- get_sector_performance()
   wsb     <- get_wsb_trending(50)
+  stwits  <- get_stocktwits_trending()
 
   # ── Data validation ──────────────────────────────────────────────────────
   if (nrow(earn) == 0)   warning("WARN: Earnings calendar is EMPTY — AV API may be rate-limited")
   if (nrow(news) == 0)   warning("WARN: Market news is EMPTY — AV API may be rate-limited")
   if (nrow(macro) == 0)  warning("WARN: Macro data is EMPTY — FRED may be unreachable")
   if (nrow(wsb) == 0)    warning("WARN: WSB trending is EMPTY — ApeWisdom may be down")
+  if (nrow(stwits) == 0) warning("WARN: StockTwits trending is EMPTY — API may be down")
 
   if (!dir.exists("data")) dir.create("data", recursive=TRUE)
   write_csv(squeeze, "data/squeeze_scored.csv")
@@ -267,12 +342,14 @@ run_module3 <- function(tickers=NULL) {
   write_csv(news,    "data/market_news.csv")
   write_csv(sector,  "data/sector_performance.csv")
   write_csv(wsb,     "data/wsb_trending.csv")
+  write_csv(stwits,  "data/stocktwits_trending.csv")
 
   message(glue("Saved: squeeze({nrow(squeeze)}), macro({nrow(macro)}), ",
                "earnings({nrow(earn)}), news({nrow(news)}), ",
-               "sector({nrow(sector)}), wsb({nrow(wsb)})"))
+               "sector({nrow(sector)}), wsb({nrow(wsb)}), ",
+               "stocktwits({nrow(stwits)})"))
   list(squeeze=squeeze, macro=macro, earnings=earn, news=news,
-       sector=sector, wsb=wsb)
+       sector=sector, wsb=wsb, stocktwits=stwits)
 }
 
 if (!exists("SOURCED_BY_MASTER")) module3_data <- run_module3()

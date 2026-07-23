@@ -165,6 +165,7 @@ html, body { background:var(--bg); color:var(--text); font-family:var(--sans);
 .g64 { display:grid; grid-template-columns:6fr 4fr;         gap:16px; }
 .g84 { display:grid; grid-template-columns:8fr 4fr;         gap:16px; }
 .g55 { display:grid; grid-template-columns:5fr 5fr;         gap:16px; }
+.g345 { display:grid; grid-template-columns:3fr 4fr 5fr;    gap:16px; }
 .g442 { display:grid; grid-template-columns:4fr 4fr 2fr;    gap:16px; }
 
 /* ── DATA TABLE OVERRIDES ── */
@@ -272,6 +273,19 @@ table.dataTable tbody tr:hover td { background:rgba(255,107,0,0.06) !important; 
 .wsb-fade   { color:#FF6B00; }
 .wsb-fall   { color:#FF3D00; }
 .wsb-steady { color:#666666; }
+
+/* ── STOCKTWITS ── */
+.st-item { display:flex; align-items:center; gap:10px; padding:8px 12px; border-bottom:1px solid var(--border); font-family:var(--mono); font-size:11px; transition:background 0.15s; }
+.st-item:hover { background:rgba(0,184,217,0.04); }
+.st-item:last-child { border:none; }
+.st-rank  { color:var(--muted); min-width:20px; font-weight:600; font-size:10px; }
+.st-sym   { color:var(--cyan); font-weight:700; min-width:55px; letter-spacing:0.3px; }
+.st-name  { color:var(--text2); flex:1; font-size:10px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.st-watch { color:var(--text); font-weight:600; min-width:50px; text-align:right; font-size:10px; }
+.st-sent  { font-size:9px; font-weight:700; min-width:75px; text-align:right; letter-spacing:0.3px; }
+.st-bull  { color:#00C853; }
+.st-bear  { color:#FF3D00; }
+.st-neut  { color:#666666; }
 
 /* ── EARNINGS ROW ── */
 .earn-item { display:flex; align-items:center; gap:10px; padding:7px 0; border-bottom:1px solid var(--border); font-family:var(--mono); font-size:11px; }
@@ -468,6 +482,7 @@ mobile_css <- "
   .g2   { grid-template-columns: 1fr; }
   .g3   { grid-template-columns: 1fr; }
   .g55  { grid-template-columns: 1fr; }
+  .g345 { grid-template-columns: 1fr; }
   .g73  { grid-template-columns: 1fr; }
   .g84  { grid-template-columns: 1fr; }
   .g64  { grid-template-columns: 1fr; }
@@ -864,21 +879,27 @@ ui <- fluidPage(
 
     # ── NEWS & EVENTS ──────────────────────────────────────────────────────
     div(class="tab-pane", id="pane-news",
-      div(class="g55",
+      div(class="g345",
+        div(
+          div(class="panel",
+            div(class="panel-head",
+              div(class="panel-head-title","EARNINGS CALENDAR"),
+              div(class="panel-head-meta","NEXT 60 DAYS")),
+            div(class="panel-body", style="max-height:420px;overflow-y:auto;",
+              uiOutput("earnings_feed"))
+          ),
+          div(class="panel",
+            div(class="panel-head", div(class="panel-head-title","SECTOR PERFORMANCE TODAY")),
+            div(class="panel-body", plotlyOutput("sector_today", height="240px"))
+          )
+        ),
         div(
           div(class="panel",
             div(class="panel-head",
               div(class="panel-head-title","MARKET NEWS FEED"),
               div(class="panel-head-meta", uiOutput("news_count"))),
-            div(class="panel-body", style="max-height:420px;overflow-y:auto;",
+            div(class="panel-body", style="max-height:760px;overflow-y:auto;",
               uiOutput("news_feed"))
-          ),
-          div(class="panel",
-            div(class="panel-head",
-              div(class="panel-head-title","EARNINGS CALENDAR"),
-              div(class="panel-head-meta","NEXT 60 DAYS")),
-            div(class="panel-body", style="max-height:320px;overflow-y:auto;",
-              uiOutput("earnings_feed"))
           )
         ),
         div(
@@ -886,12 +907,15 @@ ui <- fluidPage(
             div(class="panel-head",
               div(class="panel-head-title","WSB TRENDING"),
               div(class="panel-head-meta", uiOutput("wsb_count"))),
-            div(class="panel-body", style="max-height:420px;overflow-y:auto;",
+            div(class="panel-body", style="max-height:380px;overflow-y:auto;",
               uiOutput("wsb_feed"))
           ),
           div(class="panel",
-            div(class="panel-head", div(class="panel-head-title","SECTOR PERFORMANCE TODAY")),
-            div(class="panel-body", plotlyOutput("sector_today", height="240px"))
+            div(class="panel-head",
+              div(class="panel-head-title","STOCKTWITS TRENDING"),
+              div(class="panel-head-meta", uiOutput("stwits_count"))),
+            div(class="panel-body", style="max-height:380px;overflow-y:auto;",
+              uiOutput("stwits_feed"))
           )
         )
       )
@@ -1660,7 +1684,7 @@ server <- function(input, output, session) {
         "CNBC Markets"="#E00000","CNBC Finance"="#E00000",
         "Reuters"="#FF8C00","WSJ Markets"="#0080FF",
         "MarketWatch"="#00AA44","Reddit /r/stocks"="#FF4500",
-        "Reddit /r/investing"="#FF4500","Reddit WSB"="#FF4500",
+        "Reddit /r/investing"="#FF4500","Reddit WSB"="#FF4500","StockTwits"="#00B8D9",
         "BBC Business"="#BB1919","Financial Times"="#FFA500",
         "#FF6B00"
       )
@@ -1766,6 +1790,57 @@ server <- function(input, output, session) {
         div(class="wsb-mentions", formatC(mentions, format="d", big.mark=",")),
         div(class="wsb-upvotes", paste0("▲ ", formatC(upvotes, format="d", big.mark=","))),
         div(class=paste("wsb-momentum", mom_cls), paste0(rank_arrow, " ", momentum))
+      )
+    })
+
+    div(header, do.call(tagList, items))
+  })
+
+  # ── StockTwits Trending Feed ──────────────────────────────────────────────
+  output$stwits_count <- renderUI({
+    if (!is.null(stwits_data) && nrow(stwits_data) > 0) {
+      div(glue("TOP {nrow(stwits_data)} · SOCIAL"))
+    } else {
+      div("—")
+    }
+  })
+
+  output$stwits_feed <- renderUI({
+    if (is.null(stwits_data) || nrow(stwits_data) == 0) {
+      return(div("No StockTwits data. Pipeline will fetch on next run.",
+                 style="color:#666;padding:20px;font-family:IBM Plex Mono;font-size:11px;"))
+    }
+
+    header <- div(class="st-item", style="border-bottom:2px solid #2A2A2A;",
+      div(class="st-rank", "#"),
+      div(class="st-sym", "TICKER"),
+      div(class="st-name", "NAME"),
+      div(class="st-watch", "WATCHERS"),
+      div(class="st-sent", "SENTIMENT")
+    )
+
+    items <- lapply(1:min(30, nrow(stwits_data)), function(i) {
+      row <- stwits_data[i,]
+      sym   <- row$symbol
+      name  <- replace_na(row$title, "")
+      watch <- if ("watchlist_count" %in% names(row) && !is.na(row$watchlist_count))
+                 formatC(row$watchlist_count, format = "d", big.mark = ",") else "—"
+      sent  <- if ("sentiment_label" %in% names(row)) replace_na(row$sentiment_label, "Neutral") else "Neutral"
+      bull  <- if ("bullish" %in% names(row)) replace_na(row$bullish, 0) else 0
+      bear  <- if ("bearish" %in% names(row)) replace_na(row$bearish, 0) else 0
+
+      sent_cls <- if (grepl("Bull", sent)) "st-bull" else if (grepl("Bear", sent)) "st-bear" else "st-neut"
+      sent_icon <- if (grepl("Very Bull", sent)) paste0("▲▲ ", sent) else
+                   if (grepl("Bull", sent)) paste0("▲ ", sent) else
+                   if (grepl("Very Bear", sent)) paste0("▼▼ ", sent) else
+                   if (grepl("Bear", sent)) paste0("▼ ", sent) else sent
+
+      div(class="st-item",
+        div(class="st-rank", i),
+        div(class="st-sym", sym),
+        div(class="st-name", name),
+        div(class="st-watch", watch),
+        div(class=paste("st-sent", sent_cls), sent_icon)
       )
     })
 
