@@ -13,7 +13,7 @@
 # =============================================================================
 library(quantmod); library(dplyr); library(readr); library(httr); library(jsonlite)
 
-AV_KEY   <- "4GQPMHS72JE36TT0"
+AV_KEY   <- Sys.getenv("AV_KEY", "4GQPMHS72JE36TT0")
 AV_BASE  <- "https://www.alphavantage.co/query"
 AV_CACHE <- "data/av_cache.csv"
 AV_MAX_PER_RUN <- 20          # stay well under 25/day

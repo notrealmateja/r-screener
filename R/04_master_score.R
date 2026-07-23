@@ -431,27 +431,38 @@ run_module4 <- function(fund_data = NULL) {
   write_csv(top15_sweetspot, "data/top15_sweetspot.csv")
 
   # ── 11. Top 15 Unicorns: small-cap high-growth ─────────────────────────────
-  # Definition: Market Cap < $5B, Revenue Growth > 15%, ranked by growth + score
-  unicorn_pool <- df %>%
-    filter(!is.na(market_cap) & market_cap > 0 & market_cap < 5e9,
+  # When market_cap is NA (AV not yet cached), exclude those stocks rather than
+  # treating them as small-cap. The pool grows as AV cache fills over ~3 days.
+  has_mcap <- df %>% filter(!is.na(market_cap) & market_cap > 0)
+  message("  Unicorn pool: ", nrow(has_mcap), "/", nrow(df), " stocks have market_cap data")
+
+  unicorn_pool <- has_mcap %>%
+    filter(market_cap < 5e9,
            !is.na(revenue_growth) & revenue_growth > 0.15)
 
-  # Fallback: relax to market_cap < $10B and revenue_growth > 5%
   if (nrow(unicorn_pool) < 5) {
     message("  Strict unicorn filter returned ", nrow(unicorn_pool),
-            " stocks — relaxing criteria...")
-    unicorn_pool <- df %>%
-      filter(!is.na(market_cap) & market_cap > 0 & market_cap < 10e9,
+            " stocks — relaxing to <$10B, growth>5%...")
+    unicorn_pool <- has_mcap %>%
+      filter(market_cap < 10e9,
              !is.na(revenue_growth) & revenue_growth > 0.05)
   }
 
-  # Last-resort fallback: just use smallest-cap stocks with any growth
+  # Last-resort: smallest-cap stocks from whatever we have
   if (nrow(unicorn_pool) < 3) {
-    message("  Relaxed filter still sparse — using smallest-cap stocks...")
-    unicorn_pool <- df %>%
-      filter(!is.na(market_cap) & market_cap > 0) %>%
+    message("  Relaxed filter still sparse — using smallest-cap stocks with any data...")
+    unicorn_pool <- has_mcap %>%
       arrange(market_cap) %>%
-      head(30)
+      head(15)
+  }
+
+  # If NO stocks have market_cap yet (first run, AV cache empty), use top momentum instead
+  if (nrow(unicorn_pool) == 0) {
+    message("  No market_cap data available yet — using top momentum stocks as unicorn proxies...")
+    unicorn_pool <- df %>%
+      filter(!is.na(momentum_score)) %>%
+      arrange(desc(momentum_score)) %>%
+      head(15)
   }
 
   top15_unicorns <- unicorn_pool %>%

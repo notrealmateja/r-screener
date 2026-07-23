@@ -17,7 +17,7 @@
 library(httr); library(jsonlite); library(dplyr); library(readr)
 library(glue); library(lubridate)
 
-POLY_KEY   <- "CZ9uLCagJ4dWJMs1Efz79gA80ThXlQlO"
+POLY_KEY   <- Sys.getenv("POLY_KEY", "CZ9uLCagJ4dWJMs1Efz79gA80ThXlQlO")
 POLY_BASE  <- "https://api.polygon.io"
 POLY_CACHE <- "data/polygon_cache.csv"
 POLY_SLEEP <- 0.25   # 4 calls/sec — well inside free-tier limit

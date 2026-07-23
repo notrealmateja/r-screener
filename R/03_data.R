@@ -1,110 +1,175 @@
 # =============================================================================
 # MODULE 3 — SHORT INTEREST, MACRO DATA, EARNINGS CALENDAR, NEWS
+#
+# Data sources:
+#   Macro (FRED)      — quantmod::getSymbols(src="FRED")  (no tidyquant needed)
+#   Earnings calendar — Alpha Vantage EARNINGS_CALENDAR endpoint (CSV)
+#   Market news       — Alpha Vantage NEWS_SENTIMENT endpoint (JSON)
+#   Sector perf       — computed from Module 1 fundamentals (self-sourced)
+#   WSB trending      — ApeWisdom API (free, no key needed)
+#   Short interest    — stub (no reliable free API; squeeze scores use
+#                       options data from Polygon in Module 2b instead)
 # =============================================================================
-library(tidyquant); library(dplyr); library(tidyr); library(readr)
+library(quantmod); library(dplyr); library(tidyr); library(readr)
 library(glue); library(httr); library(jsonlite); library(lubridate)
 
-FMP_KEY  <- "WEe4bM0zNn8UagrZtzyijnANOJa6qrBK"
-FMP_BASE <- "https://financialmodelingprep.com/api/v3"
+AV_KEY   <- Sys.getenv("AV_KEY", "4GQPMHS72JE36TT0")
+AV_BASE  <- "https://www.alphavantage.co/query"
 
-# ── Short Interest ──────────────────────────────────────────────────────────
+# ── Short Interest (stub — no reliable free source) ────────────────────────
 get_short_interest <- function(tickers) {
-  message("Pulling short interest data...")
-  results <- list()
-  for (i in seq_along(tickers)) {
-    t <- tickers[i]
-    if (i%%20==0) message(glue("  Short interest: {i}/{length(tickers)}..."))
-    tryCatch({
-      resp <- GET(glue("{FMP_BASE}/key-metrics-ttm/{t}?apikey={FMP_KEY}"))
-      row  <- tibble(symbol=t, short_percent_float=NA_real_,
-                     short_ratio=NA_real_, shares_short=NA_real_,
-                     short_trend="Unknown")
-      if (status_code(resp)==200) {
-        raw <- fromJSON(content(resp,as="text",encoding="UTF-8"))
-        if (length(raw)>0) {
-          d <- as_tibble(raw) %>% slice(1)
-          if ("daysOfInventoryOnHandTTM" %in% names(d)) row$short_ratio <- d$daysOfInventoryOnHandTTM[1]
-        }
-      }
-      results[[i]] <- row
-      Sys.sleep(0.2)
-    }, error=function(e) {
-      results[[i]] <<- tibble(symbol=t, short_percent_float=NA_real_,
-                               short_ratio=NA_real_, shares_short=NA_real_, short_trend="Unknown")
-    })
-  }
-  bind_rows(results)
+  message("Building short interest stubs (no reliable free API)...")
+  tibble(
+    symbol             = tickers,
+    short_percent_float = NA_real_,
+    short_ratio        = NA_real_,
+    shares_short       = NA_real_,
+    short_trend        = "Unknown"
+  )
 }
 
-# ── Macro Data via FRED through tidyquant ───────────────────────────────────
+# ── Macro Data via FRED (quantmod, not tidyquant) ──────────────────────────
 get_macro_data <- function() {
-  message("Pulling macro data (FRED)...")
+  message("Pulling macro data (FRED via quantmod)...")
   series <- c(
-    "DGS10"  = "10Y Treasury",
-    "DGS2"   = "2Y Treasury",
-    "DGS3MO" = "3M Treasury",
-    "CPIAUCSL"= "CPI",
-    "UNRATE" = "Unemployment",
-    "FEDFUNDS"= "Fed Funds Rate",
-    "T10Y2Y" = "Yield Curve Spread"
+    "DGS10"   = "10Y Treasury",
+    "DGS2"    = "2Y Treasury",
+    "DGS3MO"  = "3M Treasury",
+    "CPIAUCSL" = "CPI",
+    "UNRATE"  = "Unemployment",
+    "FEDFUNDS" = "Fed Funds Rate",
+    "T10Y2Y"  = "Yield Curve Spread"
   )
   macro_list <- list()
   for (sym in names(series)) {
     tryCatch({
-      d <- tq_get(sym, get="economic.data", from=Sys.Date()-730, to=Sys.Date()) %>%
-        mutate(series=series[[sym]], ticker=sym, value=price)
+      getSymbols(sym, src = "FRED", auto.assign = TRUE, env = environment())
+      xts_data <- get(sym, envir = environment())
+      d <- data.frame(date = index(xts_data), price = as.numeric(coredata(xts_data))) %>%
+        filter(date >= Sys.Date() - 730) %>%
+        mutate(series = series[[sym]], ticker = sym, value = price) %>%
+        as_tibble()
       macro_list[[sym]] <- d
       Sys.sleep(0.3)
-    }, error=function(e) message(glue("  Skipped {sym}: {e$message}")))
+    }, error = function(e) message(glue("  Skipped {sym}: {e$message}")))
   }
-  bind_rows(macro_list)
+  result <- bind_rows(macro_list)
+  message(glue("  FRED: {nrow(result)} rows across {length(macro_list)} series"))
+  result
 }
 
-# ── Earnings Calendar ───────────────────────────────────────────────────────
+# ── Earnings Calendar (Alpha Vantage — CSV endpoint) ───────────────────────
 get_earnings_calendar <- function() {
-  message("Pulling earnings calendar from FMP...")
-  from_dt <- format(Sys.Date(), "%Y-%m-%d")
-  to_dt   <- format(Sys.Date()+60, "%Y-%m-%d")
+  message("Pulling earnings calendar (Alpha Vantage)...")
   tryCatch({
-    url  <- glue("{FMP_BASE}/earning_calendar?from={from_dt}&to={to_dt}&apikey={FMP_KEY}")
+    url <- glue("{AV_BASE}?function=EARNINGS_CALENDAR&horizon=3month&apikey={AV_KEY}")
     resp <- GET(url)
-    if (status_code(resp)!=200) return(tibble())
-    raw  <- fromJSON(content(resp,as="text",encoding="UTF-8"))
-    if (length(raw)==0) return(tibble())
-    as_tibble(raw) %>%
-      select(any_of(c("symbol","date","eps","epsEstimated","revenue","revenueEstimated","time"))) %>%
-      mutate(date=as.Date(date)) %>%
+    if (status_code(resp) != 200) {
+      message("  AV earnings returned status ", status_code(resp))
+      return(tibble())
+    }
+    raw_text <- content(resp, as = "text", encoding = "UTF-8")
+    if (nchar(raw_text) < 20) {
+      message("  AV earnings returned empty response")
+      return(tibble())
+    }
+    df <- read_csv(raw_text, show_col_types = FALSE)
+    if (nrow(df) == 0) return(tibble())
+    df <- df %>%
+      rename(any_of(c(
+        date = "reportDate",
+        epsEstimated = "estimate",
+        time = "timeOfTheDay"
+      ))) %>%
+      mutate(date = as.Date(date)) %>%
       filter(!is.na(date)) %>%
       arrange(date)
-  }, error=function(e) { message("Earnings calendar failed: ", e$message); tibble() })
+    message(glue("  Earnings: {nrow(df)} upcoming reports"))
+    df
+  }, error = function(e) {
+    message("Earnings calendar failed: ", e$message)
+    tibble()
+  })
 }
 
-# ── Stock News ──────────────────────────────────────────────────────────────
-get_market_news <- function(n=50) {
-  message("Pulling market news...")
+# ── Stock News (Alpha Vantage NEWS_SENTIMENT) ──────────────────────────────
+get_market_news <- function(n = 50) {
+  message("Pulling market news (Alpha Vantage)...")
   tryCatch({
-    url  <- glue("{FMP_BASE}/stock_news?limit={n}&apikey={FMP_KEY}")
+    url <- glue("{AV_BASE}?function=NEWS_SENTIMENT&limit={n}&apikey={AV_KEY}")
     resp <- GET(url)
-    if (status_code(resp)!=200) return(tibble())
-    raw  <- fromJSON(content(resp,as="text",encoding="UTF-8"))
-    if (length(raw)==0) return(tibble())
-    as_tibble(raw) %>%
-      select(any_of(c("symbol","publishedDate","title","text","url","site","image"))) %>%
-      mutate(publishedDate=as.POSIXct(publishedDate)) %>%
+    if (status_code(resp) != 200) {
+      message("  AV news returned status ", status_code(resp))
+      return(tibble())
+    }
+    raw <- fromJSON(content(resp, as = "text", encoding = "UTF-8"))
+    if (is.null(raw$feed) || length(raw$feed) == 0) {
+      if (!is.null(raw$Note)) message("  AV rate limit: ", raw$Note)
+      return(tibble())
+    }
+    df <- as_tibble(raw$feed) %>%
+      head(n) %>%
+      transmute(
+        title           = title,
+        url             = url,
+        publishedDate   = as.POSIXct(time_published, format = "%Y%m%dT%H%M%S"),
+        source          = source,
+        summary         = summary,
+        sentiment       = overall_sentiment_label,
+        sentiment_score = overall_sentiment_score,
+        symbol          = sapply(ticker_sentiment, function(ts) {
+          if (is.data.frame(ts) && nrow(ts) > 0) ts$ticker[1] else NA_character_
+        }),
+        category        = sapply(topics, function(tp) {
+          if (is.data.frame(tp) && nrow(tp) > 0) tp$topic[1] else ""
+        })
+      ) %>%
       arrange(desc(publishedDate))
-  }, error=function(e) { message("News failed: ", e$message); tibble() })
+    message(glue("  News: {nrow(df)} articles"))
+    df
+  }, error = function(e) {
+    message("News failed: ", e$message)
+    tibble()
+  })
 }
 
-# ── Sector Performance ──────────────────────────────────────────────────────
+# ── Sector Performance (computed from fundamentals data) ───────────────────
 get_sector_performance <- function() {
-  message("Pulling sector performance...")
+  message("Computing sector performance from fundamentals...")
   tryCatch({
-    url  <- glue("{FMP_BASE}/sectors-performance?apikey={FMP_KEY}")
-    resp <- GET(url)
-    if (status_code(resp)!=200) return(tibble())
-    raw  <- fromJSON(content(resp,as="text",encoding="UTF-8"))
-    as_tibble(raw)
-  }, error=function(e) tibble())
+    fund_path <- "data/fundamentals_scored.csv"
+    mom_path  <- "data/momentum_scored.csv"
+    if (!file.exists(fund_path)) return(tibble())
+    fund <- read_csv(fund_path, show_col_types = FALSE)
+    if (file.exists(mom_path)) {
+      mom <- read_csv(mom_path, show_col_types = FALSE) %>%
+        select(symbol, any_of(c("ret_1m", "ret_3m")))
+      fund <- left_join(fund, mom, by = "symbol")
+    }
+    if (!"sector" %in% names(fund)) {
+      # Try AV cache for sector info
+      av_path <- "data/av_cache.csv"
+      if (file.exists(av_path)) {
+        av <- read_csv(av_path, show_col_types = FALSE) %>%
+          select(symbol, sector_av) %>% filter(!is.na(sector_av))
+        fund <- left_join(fund, av, by = "symbol") %>%
+          mutate(sector = coalesce(sector, sector_av))
+      }
+    }
+    if (!"ret_1m" %in% names(fund) || !"sector" %in% names(fund)) return(tibble())
+    fund %>%
+      filter(!is.na(sector), !is.na(ret_1m)) %>%
+      group_by(sector) %>%
+      summarize(
+        changesPercentage = round(mean(ret_1m * 100, na.rm = TRUE), 2),
+        n_stocks = n(),
+        .groups = "drop"
+      ) %>%
+      arrange(changesPercentage)
+  }, error = function(e) {
+    message("Sector performance failed: ", e$message)
+    tibble()
+  })
 }
 
 # ── WSB / Reddit Trending (ApeWisdom) ──────────────────────────────────
@@ -159,7 +224,7 @@ build_squeeze_score <- function(short_data, fund_data) {
       st_score   = case_when(short_trend=="Decreasing"~80, short_trend=="Increasing"~20, TRUE~40),
       squeeze_score_raw = sf_score*0.25 + dtc_score*0.20 + fi_score*0.40 + st_score*0.15,
       squeeze_mult  = ifelse(!is.na(short_percent_float) & short_percent_float>0.10 &
-                               isTRUE(fundamentals_improving), 1.20, 1.0),
+                               !is.na(fundamentals_improving) & fundamentals_improving, 1.20, 1.0),
       squeeze_score = pmin(squeeze_score_raw * squeeze_mult, 100),
       squeeze_tier  = case_when(
         squeeze_score>=80 ~ "High Conviction",
@@ -181,13 +246,19 @@ run_module3 <- function(tickers=NULL) {
   }
   fund_data <- read_csv("data/fundamentals_scored.csv", show_col_types=FALSE)
 
-  short  <- get_short_interest(tickers)
+  short   <- get_short_interest(tickers)
   squeeze <- build_squeeze_score(short, fund_data)
-  macro  <- get_macro_data()
-  earn   <- get_earnings_calendar()
-  news   <- get_market_news(50)
-  sector <- get_sector_performance()
-  wsb    <- get_wsb_trending(50)
+  macro   <- get_macro_data()
+  earn    <- get_earnings_calendar()
+  news    <- get_market_news(50)
+  sector  <- get_sector_performance()
+  wsb     <- get_wsb_trending(50)
+
+  # ── Data validation ──────────────────────────────────────────────────────
+  if (nrow(earn) == 0)   warning("WARN: Earnings calendar is EMPTY — AV API may be rate-limited")
+  if (nrow(news) == 0)   warning("WARN: Market news is EMPTY — AV API may be rate-limited")
+  if (nrow(macro) == 0)  warning("WARN: Macro data is EMPTY — FRED may be unreachable")
+  if (nrow(wsb) == 0)    warning("WARN: WSB trending is EMPTY — ApeWisdom may be down")
 
   if (!dir.exists("data")) dir.create("data", recursive=TRUE)
   write_csv(squeeze, "data/squeeze_scored.csv")
@@ -197,7 +268,9 @@ run_module3 <- function(tickers=NULL) {
   write_csv(sector,  "data/sector_performance.csv")
   write_csv(wsb,     "data/wsb_trending.csv")
 
-  message("Saved: squeeze, macro, earnings, news, sector, wsb data")
+  message(glue("Saved: squeeze({nrow(squeeze)}), macro({nrow(macro)}), ",
+               "earnings({nrow(earn)}), news({nrow(news)}), ",
+               "sector({nrow(sector)}), wsb({nrow(wsb)})"))
   list(squeeze=squeeze, macro=macro, earnings=earn, news=news,
        sector=sector, wsb=wsb)
 }
