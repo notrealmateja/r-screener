@@ -13,7 +13,7 @@
 library(quantmod); library(dplyr); library(tidyr); library(readr)
 library(glue); library(httr); library(jsonlite); library(lubridate)
 
-AV_KEY   <- Sys.getenv("AV_KEY", "4GQPMHS72JE36TT0")
+AV_KEY   <- Sys.getenv("AV_KEY")
 AV_BASE  <- "https://www.alphavantage.co/query"
 
 # ── Short Interest (stub — no reliable free source) ────────────────────────
