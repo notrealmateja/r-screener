@@ -1,16 +1,16 @@
 symbol,company,sector,price,unicorn_score,master_score,rating,signal,unicorn_confidence,confidence_5d,confidence_band,days_tracked,hist_ir,hist_alpha_ann,alpha_hit_rate,alpha_streak,expected_return_1d,primary_driver,pe_ratio,market_cap,revenue_growth,ret_1m,ret_3m,rsi14,momentum_score,put_call_ratio,options_sentiment,avg_iv,analyst_target,analyst_upside
-HON,Honeywell International Inc.,Industrials,248.79,89.3,54.3,Hold,Hold,60.3,60.3,Developing,38,1.3612,0.4532,0.4737,0,0.0018,Quality,9.34,77032268000,2.639,0.0762,0.0939,63.6298,71.0765,NA,Unknown,NA,263.11,0.0576
-CRM,Salesforce Inc.,Technology,190.99,71.4,53,Hold,Hold,60.3,60.3,Developing,38,1.1747,0.6855,0.4211,2,0.0027,Alpha Leader,20.91,154283229000,0.522,0.153,0.0541,63.8732,56.3571,NA,Unknown,NA,241.72,0.2656
-DHR,Danaher Corp.,Health Care,194.78,64.3,43.7,Underperform,Underperform,60.3,60.3,Developing,38,0.1883,0.0913,0.5526,0,4e-4,Consistent Beat,34.76,137068216000,0.597,0.006,0.1135,51.6336,53.9898,NA,Unknown,NA,227.96,0.1703
-AMGN,Amgen Inc.,Health Care,390.02,60.7,66.2,Buy,Buy,60.3,60.3,Developing,38,3.6758,1.06,0.4737,1,0.0042,Alpha Leader,26.95,207874048000,0.044,0.0643,0.1779,64.8505,80.8724,NA,Unknown,NA,357.03,-0.0846
-BLK,BlackRock Inc.,Financials,1131.13,57.1,47.1,Hold,Hold,60.3,60.3,Developing,38,0.1565,0.0436,0.4474,0,2e-4,Analyst Upside,26.32,171654398000,0.197,0.1186,0.0536,65.328,63.8929,NA,Unknown,NA,1313.5,0.1612
-INTU,Intuit Inc.,Technology,323.6,53.6,47.8,Hold,Hold,60.3,60.3,Developing,38,1.1999,0.7216,0.4737,0,0.0029,Alpha Leader,19.27,86456836000,0.107,0.1891,-0.1672,61.8701,35.7449,NA,Unknown,NA,456.47,0.4106
-NEE,NextEra Energy Inc.,Utilities,87.2,53.6,39.3,Underperform,Underperform,60.3,60.3,Developing,38,0.1325,0.0337,0.5,0,1e-4,Balanced,19.53,181313225000,0.531,-0.0027,-0.0859,44.9221,24.9286,NA,Unknown,NA,99,0.1353
-IBM,IBM Corp.,Technology,235.15,53.6,55.6,Hold,Hold,60.3,60.3,Developing,38,1.9525,1.1447,0.5263,2,0.0045,Alpha Leader,19.69,210708349000,-0.018,-0.2149,0.0417,48.3703,33.4184,NA,Unknown,NA,244.16,0.0383
-PEP,PepsiCo Inc.,Consumer Staples,139.1,50,32.7,Underperform,Underperform,60.3,60.3,Developing,38,-0.9065,-0.29,0.4474,0,-0.0012,Balanced,18.29,190638965000,1.37,-0.0292,-0.1081,48.4292,24.2347,NA,Unknown,NA,155,0.1143
-ACN,Accenture PLC,Technology,170.43,42.9,46.8,Hold,Hold,60.3,60.3,Developing,38,0.0108,0.008,0.5789,2,0,Consistent Beat,13.24,101533426000,0.09,0.2444,-0.0237,64.6337,42.6837,NA,Unknown,NA,178.89,0.0496
-SPGI,S&P Global Inc.,Financials,412.53,42.9,40.8,Underperform,Underperform,60.3,60.3,Developing,38,0.4147,0.1755,0.4211,0,7e-4,Analyst Upside,25.06,121436963000,0.177,-0.0776,0.0295,45.0115,43.0918,NA,Unknown,NA,518.63,0.2572
-UPS,United Parcel Service Inc.,Industrials,109.11,42.9,54.9,Hold,Hold,60.3,60.3,Developing,38,2.1715,0.613,0.5263,1,0.0024,High IR,19.37,88876655000,-0.53,-0.0083,0.0923,48.7224,57.8112,NA,Unknown,NA,115.85,0.0618
-ISRG,Intuitive Surgical Inc.,Health Care,368.27,32.1,24.6,Avoid,Avoid,60.3,60.3,Developing,38,-2.9814,-1.4146,0.3684,0,-0.0056,Analyst Upside,40.47,126590378000,0.265,-0.1492,-0.1848,47.0019,18.9286,NA,Unknown,NA,477.25,0.2959
-MCD,McDonald's Corp.,Consumer Discretionary,268.34,21.4,33.3,Underperform,Underperform,60.3,60.3,Developing,38,-0.1167,-0.0355,0.4474,0,-1e-4,Analyst Upside,22.33,192312623000,0.069,-0.0399,-0.0555,47.0503,25.051,NA,Unknown,NA,323.58,0.2059
-QCOM,Qualcomm Inc.,Technology,162.67,14.3,36.2,Underperform,Underperform,60.3,60.3,Developing,38,-2.7082,-1.6722,0.4211,1,-0.0066,Analyst Upside,16.87,154990494000,-0.23,-0.1277,-0.1553,42.4124,32.4796,NA,Unknown,NA,196.27,0.2066
+PRPL,NA,NA,9.75,NA,60.3,Hold,Hold,1.6,1.6,Emerging,1,0,16.4566,1,1,0.0653,Strong Trend,NA,40309020,NA,26.1588,17.932,88.7598,82.5,NA,Unknown,NA,NA,NA
+BARK,NA,NA,9.92,NA,45.8,Hold,Hold,1.6,1.6,Emerging,1,0,-2.236,0,0,-0.0089,Balanced,NA,83920816,NA,-0.0443,0.1071,58.363,50.3557,NA,Unknown,NA,NA,NA
+BRCC,NA,NA,1.05,NA,46.9,Hold,Hold,1.6,1.6,Emerging,1,0,-4.5433,0,0,-0.018,Balanced,NA,118174048,NA,-0.087,-0.1667,40.7473,33.8608,NA,Unknown,NA,NA,NA
+NPWR,NA,NA,1.54,NA,41.4,Underperform,Underperform,1.6,1.6,Emerging,1,0,0.4634,1,1,0.0018,Balanced,NA,134343376,NA,-0.0833,-0.2903,49.5676,20.0258,NA,Unknown,NA,NA,NA
+LOVE,NA,NA,18.16,NA,54.5,Hold,Hold,1.6,1.6,Emerging,1,0,15.2097,1,1,0.0604,Strong Trend,73.64,269493280,NA,0.0067,0.1508,60.0602,76.1624,NA,Unknown,NA,NA,NA
+ZNTL,NA,NA,4.88,NA,57.4,Hold,Hold,1.6,1.6,Emerging,1,0,7.9211,1,1,0.0314,Strong Trend,NA,352372416,NA,0.0339,0.1675,56.6469,80.4407,NA,Unknown,NA,NA,NA
+ORN,NA,NA,10.18,NA,38.1,Underperform,Underperform,1.6,1.6,Emerging,1,0,0.2495,1,1,0.001,Balanced,129.125,418316320,NA,-0.3163,-0.3249,31.1729,11.6057,NA,Unknown,NA,NA,NA
+HNST,NA,NA,3.89,NA,56.6,Hold,Hold,1.6,1.6,Emerging,1,0,10.9275,1,1,0.0434,Strong Trend,NA,423802656,NA,-0.0127,0.1475,56.3081,78.5851,NA,Unknown,NA,NA,NA
+VITL,NA,NA,12.15,NA,43.3,Underperform,Underperform,1.6,1.6,Emerging,1,0,-17.1531,0,0,-0.0681,Balanced,11.7692,524465088,NA,-0.0537,0.0125,45.2886,35.201,NA,Unknown,NA,NA,NA
+YEXT,NA,NA,5.71,NA,51.2,Hold,Hold,1.6,1.6,Emerging,1,0,-3.2122,0,0,-0.0127,Balanced,71.625,574421696,NA,0.1443,0.4134,65.4425,66.3969,NA,Unknown,NA,NA,NA
+LMB,NA,NA,77.11,NA,45.9,Hold,Hold,1.6,1.6,Emerging,1,0,8.7361,1,1,0.0347,Balanced,18.1496,592834688,NA,-0.035,0.0018,54.0415,38.3969,NA,Unknown,NA,NA,NA
+SG,NA,NA,5.71,NA,40.1,Underperform,Underperform,1.6,1.6,Emerging,1,0,-13.4825,0,0,-0.0535,Balanced,50.8333,724848704,NA,-0.2907,-0.1688,34.5132,19.183,NA,Unknown,NA,NA,NA
+MITK,NA,NA,17.72,NA,55.2,Hold,Hold,1.6,1.6,Emerging,1,0,6.2841,1,1,0.0249,Strong Trend,50.3824,773571072,NA,-0.1082,0.1635,50.6925,79.6675,NA,Unknown,NA,NA,NA
+TDUP,NA,NA,6.17,NA,54.7,Hold,Hold,1.6,1.6,Emerging,1,0,-6.1664,0,0,-0.0245,Strong Trend,NA,810376576,NA,-0.1084,0.2242,52.2881,79.4098,NA,Unknown,NA,NA,NA
+PD,NA,NA,11.29,NA,59,Hold,Hold,1.6,1.6,Emerging,1,0,-0.2298,0,0,-9e-4,Strong Trend,5.4203,865315264,NA,0.1347,0.6482,64.0254,84.3376,NA,Unknown,NA,NA,NA
