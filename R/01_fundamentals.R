@@ -7,17 +7,22 @@
 #
 # Rate-limit strategy (free tier = 25 calls/day, 5/min):
 #   - Maintain data/av_cache.csv with a last_fetched timestamp per ticker
-#   - Each run refreshes the 20 stalest tickers (>7 days old first, then oldest)
+#   - Each run refreshes the 22 stalest tickers (missing first, then oldest)
 #   - Sleep 13 s between calls to stay under 5/min
-#   - Full 50-ticker universe rotates in ~3 days
+#   - Full 195-ticker universe rotates in ~9 days, so newly added tickers have
+#     no fundamentals until their turn comes up
 # =============================================================================
 library(quantmod); library(dplyr); library(readr); library(httr); library(jsonlite)
 
 AV_KEY   <- Sys.getenv("AV_KEY")
 AV_BASE  <- "https://www.alphavantage.co/query"
 AV_CACHE <- "data/av_cache.csv"
-AV_MAX_PER_RUN <- 20          # stay well under 25/day
-AV_TTL_DAYS    <- 7           # refresh each ticker every 7 days
+# Free tier is 25 calls/day.  Module 3 needs 1 for news plus 1 for the earnings
+# calendar every 3rd day, so 22 here leaves headroom.  At 195 tickers a full
+# rotation takes ~9 days, so the TTL is set to match — a shorter TTL would just
+# mark the whole universe permanently stale.
+AV_MAX_PER_RUN <- 22
+AV_TTL_DAYS    <- 10
 AV_SLEEP_SEC   <- 13          # 13 s = ~4.6 calls/min (under 5/min limit)
 
 # ── Alpha Vantage OVERVIEW fetcher ───────────────────────────────────────────
@@ -104,11 +109,31 @@ run_module1 <- function(tickers = NULL) {
   message("\n\n=== MODULE 1: FUNDAMENTALS (Yahoo + Alpha Vantage) ===\n")
 
   if (is.null(tickers)) {
-    tickers <- c("AAPL","MSFT","NVDA","AMZN","GOOGL","META","TSLA","JPM","V","UNH",
-                 "XOM","LLY","JNJ","WMT","MA","PG","HD","MRK","ORCL","BAC",
-                 "ABBV","KO","PEP","AVGO","CVX","COST","MCD","TMO","CRM","NFLX",
-                 "ACN","LIN","DHR","TXN","NEE","PM","MS","RTX","AMGN","HON",
-                 "UPS","QCOM","IBM","CAT","GE","INTU","SPGI","AMD","ISRG","BLK")
+    tickers <- c(
+    # Mega / large cap (50)
+      "AAPL", "MSFT", "NVDA", "AMZN", "GOOGL", "META", "TSLA", "JPM", "V", "UNH",
+      "XOM", "LLY", "JNJ", "WMT", "MA", "PG", "HD", "MRK", "ORCL", "BAC",
+      "ABBV", "KO", "PEP", "AVGO", "CVX", "COST", "MCD", "TMO", "CRM", "NFLX",
+      "ACN", "LIN", "DHR", "TXN", "NEE", "PM", "MS", "RTX", "AMGN", "HON",
+      "UPS", "QCOM", "IBM", "CAT", "GE", "INTU", "SPGI", "AMD", "ISRG", "BLK",
+    # Mid cap (77)
+      "ETSY", "ROKU", "DKNG", "PINS", "SNAP", "TWLO", "ZM", "DOCU", "OKTA", "NET",
+      "DDOG", "CRWD", "ZS", "MDB", "TEAM", "HUBS", "VEEV", "WDAY", "PANW", "FTNT",
+      "ANET", "KEYS", "GRMN", "TER", "MPWR", "SWKS", "QRVO", "MCHP", "ON", "ENTG",
+      "RJF", "IBKR", "TROW", "NTRS", "ZION", "WAL", "WBS", "FHN", "CFR", "NTRA",
+      "ALNY", "BMRN", "INCY", "JAZZ", "NBIX", "SRPT", "HALO", "MEDP", "AXON", "HUBB",
+      "NDSN", "GGG", "MLI", "ATI", "CRS", "MTZ", "EXP", "WTS", "CROX", "DECK",
+      "ONON", "FIVE", "OLLI", "DKS", "TXRH", "WING", "PLNT", "DUOL", "CAVA", "TOST",
+      "RBLX", "U", "AFRM", "UPST", "SOFI", "HOOD", "COIN",
+    # Small cap - these make the Unicorn screen meaningful (68)
+      "AMPL", "ASAN", "BRZE", "FROG", "PD", "APPN", "VERX", "CXM", "ALRM", "INTA",
+      "DOCN", "FSLY", "BBAI", "SOUN", "IONQ", "RGTI", "QBTS", "AI", "LSCC", "AMKR",
+      "KRYS", "ANAB", "CRNX", "IDYA", "KYMR", "OLMA", "PTGX", "RXRX", "SANA", "VERA",
+      "XENE", "ARWR", "IONS", "ACAD", "STRL", "IESC", "ROAD", "PRIM", "WLDN", "ORN",
+      "LMB", "NPWR", "MYRG", "LOVE", "PRPL", "BARK", "HNST", "FIGS", "TDUP", "ARHS",
+      "SG", "YETI", "CALM", "JBSS", "SENEA", "FIZZ", "UTZ", "BRCC", "CELH", "VITL",
+      "SMPL", "MITK", "YEXT", "CGEM", "ERAS", "ZNTL", "RARE", "ALGM"
+    )
   }
 
   if (!dir.exists("data")) dir.create("data", recursive = TRUE)
@@ -120,22 +145,14 @@ run_module1 <- function(tickers = NULL) {
       env <- new.env()
       suppressWarnings(getSymbols(sym, src = "yahoo", env = env, auto.assign = TRUE))
       px    <- Cl(env[[sym]])
-      price <- as.numeric(last(px))
-      hi52  <- as.numeric(max(px, na.rm = TRUE))
-      lo52  <- as.numeric(min(px, na.rm = TRUE))
-      q     <- tryCatch(getQuote(sym), error = function(e) NULL)
-      pe_y  <- if (!is.null(q) && "P/E Ratio" %in% names(q))
-                 suppressWarnings(as.numeric(q[["P/E Ratio"]])) else NA_real_
-      eps_y <- if (!is.null(q) && "EPS" %in% names(q))
-                 suppressWarnings(as.numeric(q[["EPS"]])) else NA_real_
-
-      tibble(symbol = sym, price = round(price, 2),
-             high_52w = round(hi52, 2), low_52w = round(lo52, 2),
-             pe_yahoo = pe_y, eps_yahoo = eps_y)
+      tibble(symbol   = sym,
+             price    = round(as.numeric(last(px)), 2),
+             high_52w = round(as.numeric(max(px, na.rm = TRUE)), 2),
+             low_52w  = round(as.numeric(min(px, na.rm = TRUE)), 2))
     }, error = function(e) {
       message("  Yahoo skip ", sym, ": ", e$message)
-      tibble(symbol = sym, price = NA_real_, high_52w = NA_real_,
-             low_52w = NA_real_, pe_yahoo = NA_real_, eps_yahoo = NA_real_)
+      tibble(symbol = sym, price = NA_real_,
+             high_52w = NA_real_, low_52w = NA_real_)
     })
   }
 
@@ -144,6 +161,35 @@ run_module1 <- function(tickers = NULL) {
     message("  Yahoo: ", s)
     get_yahoo_base(s)
   }))
+
+  # Quote fields in one batched call rather than one per ticker.  The old code
+  # called getQuote(sym) with default fields, which do NOT include P/E or EPS,
+  # so pe_yahoo/eps_yahoo were always NA.  Market cap matters most: Alpha
+  # Vantage only refreshes AV_MAX_PER_RUN tickers per run, so without this the
+  # newly added names would have no market_cap for ~9 days and the Unicorn
+  # screen could not evaluate them.
+  message("Fetching Yahoo quote fields (market cap, P/E, EPS)...")
+  fields <- yahooQF(c("Market Capitalization", "P/E Ratio", "Earnings/Share"))
+  quote_rows <- list()
+  chunks <- split(tickers, ceiling(seq_along(tickers) / 40))
+  for (ch in chunks) {
+    q <- tryCatch(getQuote(ch, what = fields), error = function(e) NULL)
+    if (!is.null(q) && nrow(q) > 0) {
+      quote_rows[[length(quote_rows) + 1]] <- tibble(
+        symbol           = rownames(q),
+        market_cap_yahoo = suppressWarnings(as.numeric(q[["Market Capitalization"]])),
+        pe_yahoo         = suppressWarnings(as.numeric(q[["P/E Ratio"]])),
+        eps_yahoo        = suppressWarnings(as.numeric(q[["Earnings/Share"]]))
+      )
+    }
+    Sys.sleep(0.5)
+  }
+  quotes <- if (length(quote_rows) > 0) bind_rows(quote_rows) else
+    tibble(symbol = character(), market_cap_yahoo = numeric(),
+           pe_yahoo = numeric(), eps_yahoo = numeric())
+  message(glue::glue("  Quotes: {sum(!is.na(quotes$market_cap_yahoo))}/{length(tickers)} have market cap"))
+
+  yahoo_data <- yahoo_data %>% left_join(quotes, by = "symbol")
 
   # ── Step 2: Alpha Vantage enrichment (rotating cache) ─────────────────────
   message("\nLoading Alpha Vantage cache...")
@@ -181,13 +227,22 @@ run_module1 <- function(tickers = NULL) {
   av_latest <- av_cache %>% filter(symbol %in% tickers)
 
   merged <- yahoo_data %>%
-    left_join(av_latest, by = "symbol") %>%
+    left_join(av_latest, by = "symbol")
+
+  # av_latest can be missing these columns entirely on a cold cache, which would
+  # make the coalesce below fail rather than simply fall back to Yahoo.
+  for (col in c("pe_ratio", "eps", "market_cap", "high_52w_av", "low_52w_av")) {
+    if (!col %in% names(merged)) merged[[col]] <- NA_real_
+  }
+
+  merged <- merged %>%
     mutate(
       # Prefer AV where available, fall back to Yahoo
       pe_ratio      = dplyr::coalesce(pe_ratio,      pe_yahoo),
       eps           = dplyr::coalesce(eps,            eps_yahoo),
-      high_52w      = dplyr::coalesce(high_52w_av,    high_52w),
-      low_52w       = dplyr::coalesce(low_52w_av,     low_52w),
+      market_cap    = dplyr::coalesce(market_cap,    market_cap_yahoo),
+      high_52w      = dplyr::coalesce(high_52w_av,   high_52w),
+      low_52w       = dplyr::coalesce(low_52w_av,    low_52w),
 
       # Fundamental scores using real data now (not NA fallbacks)
       pe_score = dplyr::case_when(
@@ -249,7 +304,8 @@ run_module1 <- function(tickers = NULL) {
         roe_score * 0.30 + margin_score * 0.15 +
         analyst_score * 0.10, 2)
     ) %>%
-    select(-any_of(c("pe_yahoo", "eps_yahoo", "high_52w_av", "low_52w_av",
+    select(-any_of(c("pe_yahoo", "eps_yahoo", "market_cap_yahoo",
+                      "high_52w_av", "low_52w_av",
                       "company_av", "sector_av"))) %>%
     arrange(desc(fundamental_score))
 

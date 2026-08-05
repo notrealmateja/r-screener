@@ -223,14 +223,31 @@ run_module_polygon <- function(tickers = NULL) {
     opts_list    <- list()
     snap_list    <- list()
 
+    # Probe each endpoint family once before looping the whole universe.
+    # Options snapshots, vX financials and real-time snapshots are paid-tier
+    # on Polygon; on a free key they return nothing, and the old code still
+    # issued 4 calls per ticker to collect it — 200 wasted calls at 50 tickers,
+    # 720 at 180.  Probe once, then only fetch what this key can actually serve.
+    probe <- need[1]
+    message(glue("  Probing Polygon endpoints with {probe}..."))
+    can_details <- !is.null(get_poly_ticker_details(probe)); Sys.sleep(POLY_SLEEP)
+    can_fin     <- !is.null(get_poly_financials(probe));     Sys.sleep(POLY_SLEEP)
+    can_opts    <- !is.null(get_poly_options(probe));        Sys.sleep(POLY_SLEEP)
+    can_snap    <- !is.null(get_poly_snapshot(probe));       Sys.sleep(POLY_SLEEP)
+    message(glue("  Available -> details:{can_details} financials:{can_fin} ",
+                 "options:{can_opts} snapshot:{can_snap}"))
+    if (!any(c(can_details, can_fin, can_opts, can_snap)))
+      message("  No Polygon endpoint is available on this key — skipping fetch loop.")
+
     for (i in seq_along(need)) {
       sym <- need[i]
+      if (!any(c(can_details, can_fin, can_opts, can_snap))) break
       message(glue("  Polygon [{i}/{length(need)}]: {sym}"))
 
-      details_list[[sym]] <- get_poly_ticker_details(sym); Sys.sleep(POLY_SLEEP)
-      fin_list[[sym]]     <- get_poly_financials(sym);     Sys.sleep(POLY_SLEEP)
-      opts_list[[sym]]    <- get_poly_options(sym);        Sys.sleep(POLY_SLEEP)
-      snap_list[[sym]]    <- get_poly_snapshot(sym);       Sys.sleep(POLY_SLEEP)
+      if (can_details) { details_list[[sym]] <- get_poly_ticker_details(sym); Sys.sleep(POLY_SLEEP) }
+      if (can_fin)     { fin_list[[sym]]     <- get_poly_financials(sym);     Sys.sleep(POLY_SLEEP) }
+      if (can_opts)    { opts_list[[sym]]    <- get_poly_options(sym);        Sys.sleep(POLY_SLEEP) }
+      if (can_snap)    { snap_list[[sym]]    <- get_poly_snapshot(sym);       Sys.sleep(POLY_SLEEP) }
     }
 
     # Combine all four sources per ticker.

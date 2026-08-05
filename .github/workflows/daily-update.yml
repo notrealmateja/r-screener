@@ -2,7 +2,11 @@ name: Daily Stock Screener Update
 
 on:
   schedule:
-    - cron: '0 6 * * *'
+    # 21:30 UTC = 5:30pm ET, after the US close, so each run captures the same
+    # day's close.  The previous 06:00 UTC slot ran at 2am ET — before the open —
+    # so every run used the prior trading day, and Sat/Sun/Mon all reused
+    # Friday's close and produced near-identical output.
+    - cron: '30 21 * * *'
   workflow_dispatch:
 
 permissions:
