@@ -1,16 +1,4 @@
 symbol,company,sector,price,unicorn_score,master_score,rating,signal,unicorn_confidence,confidence_5d,confidence_band,days_tracked,hist_ir,hist_alpha_ann,alpha_hit_rate,alpha_streak,expected_return_1d,primary_driver,pe_ratio,market_cap,revenue_growth,ret_1m,ret_3m,rsi14,momentum_score,put_call_ratio,options_sentiment,avg_iv,analyst_target,analyst_upside
-PRPL,NA,NA,9.75,NA,60.3,Hold,Hold,1.6,1.6,Emerging,1,0,16.4566,1,1,0.0653,Strong Trend,NA,40309020,NA,26.1588,17.932,88.7598,82.5,NA,Unknown,NA,NA,NA
-BARK,NA,NA,9.92,NA,45.8,Hold,Hold,1.6,1.6,Emerging,1,0,-2.236,0,0,-0.0089,Balanced,NA,83920816,NA,-0.0443,0.1071,58.363,50.3557,NA,Unknown,NA,NA,NA
-BRCC,NA,NA,1.05,NA,46.9,Hold,Hold,1.6,1.6,Emerging,1,0,-4.5433,0,0,-0.018,Balanced,NA,118174048,NA,-0.087,-0.1667,40.7473,33.8608,NA,Unknown,NA,NA,NA
-NPWR,NA,NA,1.54,NA,41.4,Underperform,Underperform,1.6,1.6,Emerging,1,0,0.4634,1,1,0.0018,Balanced,NA,134343376,NA,-0.0833,-0.2903,49.5676,20.0258,NA,Unknown,NA,NA,NA
-LOVE,NA,NA,18.16,NA,54.5,Hold,Hold,1.6,1.6,Emerging,1,0,15.2097,1,1,0.0604,Strong Trend,73.64,269493280,NA,0.0067,0.1508,60.0602,76.1624,NA,Unknown,NA,NA,NA
-ZNTL,NA,NA,4.88,NA,57.4,Hold,Hold,1.6,1.6,Emerging,1,0,7.9211,1,1,0.0314,Strong Trend,NA,352372416,NA,0.0339,0.1675,56.6469,80.4407,NA,Unknown,NA,NA,NA
-ORN,NA,NA,10.18,NA,38.1,Underperform,Underperform,1.6,1.6,Emerging,1,0,0.2495,1,1,0.001,Balanced,129.125,418316320,NA,-0.3163,-0.3249,31.1729,11.6057,NA,Unknown,NA,NA,NA
-HNST,NA,NA,3.89,NA,56.6,Hold,Hold,1.6,1.6,Emerging,1,0,10.9275,1,1,0.0434,Strong Trend,NA,423802656,NA,-0.0127,0.1475,56.3081,78.5851,NA,Unknown,NA,NA,NA
-VITL,NA,NA,12.15,NA,43.3,Underperform,Underperform,1.6,1.6,Emerging,1,0,-17.1531,0,0,-0.0681,Balanced,11.7692,524465088,NA,-0.0537,0.0125,45.2886,35.201,NA,Unknown,NA,NA,NA
-YEXT,NA,NA,5.71,NA,51.2,Hold,Hold,1.6,1.6,Emerging,1,0,-3.2122,0,0,-0.0127,Balanced,71.625,574421696,NA,0.1443,0.4134,65.4425,66.3969,NA,Unknown,NA,NA,NA
-LMB,NA,NA,77.11,NA,45.9,Hold,Hold,1.6,1.6,Emerging,1,0,8.7361,1,1,0.0347,Balanced,18.1496,592834688,NA,-0.035,0.0018,54.0415,38.3969,NA,Unknown,NA,NA,NA
-SG,NA,NA,5.71,NA,40.1,Underperform,Underperform,1.6,1.6,Emerging,1,0,-13.4825,0,0,-0.0535,Balanced,50.8333,724848704,NA,-0.2907,-0.1688,34.5132,19.183,NA,Unknown,NA,NA,NA
-MITK,NA,NA,17.72,NA,55.2,Hold,Hold,1.6,1.6,Emerging,1,0,6.2841,1,1,0.0249,Strong Trend,50.3824,773571072,NA,-0.1082,0.1635,50.6925,79.6675,NA,Unknown,NA,NA,NA
-TDUP,NA,NA,6.17,NA,54.7,Hold,Hold,1.6,1.6,Emerging,1,0,-6.1664,0,0,-0.0245,Strong Trend,NA,810376576,NA,-0.1084,0.2242,52.2881,79.4098,NA,Unknown,NA,NA,NA
-PD,NA,NA,11.29,NA,59,Hold,Hold,1.6,1.6,Emerging,1,0,-0.2298,0,0,-9e-4,Strong Trend,5.4203,865315264,NA,0.1347,0.6482,64.0254,84.3376,NA,Unknown,NA,NA,NA
+QRVO,NA,NA,95.04,50,49.7,Hold,Hold,100,100,Proven,250,-0.1048,-0.0349,0.48,1,-1e-4,Balanced,20.75,8384584000,2.556,0.0908,0.0686,60.4209,70.4716,NA,Unknown,NA,90.77,-0.0449
+SNAP,NA,NA,5.79,50,31.2,Underperform,Underperform,100,100,Proven,250,-0.9835,-0.531,0.44,2,-0.0021,Analyst Upside,NA,8352091000,3.958,0.2189,-0.0524,74.3284,43.6005,NA,Unknown,NA,7.23,0.2487
+WAL,NA,NA,84.33,50,51.2,Hold,Hold,100,100,Proven,250,-0.2332,-0.0773,0.528,2,-3e-4,Consistent Beat,9.52,9200476000,0.142,0.0222,0.012,57.7042,55.317,NA,Unknown,NA,92.33,0.0949
