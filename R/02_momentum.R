@@ -2,12 +2,16 @@
 # MODULE 2 — PRICE, MOMENTUM, TECHNICALS & ALPHA CALCULATION
 #
 # Alpha philosophy:
-#   Each day this runs it computes each stock's excess return vs SPY and
-#   APPENDS a row to data/alpha_history.csv.  Over time the history grows —
-#   after 20 days you have a rough signal; after 63 days (one quarter) the
-#   information ratio becomes statistically meaningful; after 252 days (one
-#   year) the estimates are robust.  Every metric that feeds Module 4 is
-#   confidence-weighted by how many days of history exist.
+#   Each run computes every stock's daily excess return vs SPY across the full
+#   1-year price pull and rebuilds data/alpha_history.csv from it, preserving
+#   any rows already recorded live.  Confidence scales with the number of
+#   observations behind the estimate: 20 days is a rough signal, 63 days (one
+#   quarter) makes the information ratio statistically meaningful, 252 days is
+#   robust.  Every metric feeding Module 4 is weighted by that count.
+#
+#   History is rebuilt rather than appended one row at a time so that a newly
+#   added ticker is weighted on the same evidence as a long-tracked one, and so
+#   a missed or failed run backfills itself on the next successful run.
 #
 # Key alpha metrics produced
 #   daily_alpha       — today's excess return vs SPY
@@ -200,33 +204,50 @@ run_module2 <- function(tickers = NULL) {
       across(where(is.numeric), ~ round(., 6))
     )
 
-  # ── 5. Append today's alpha snapshot to the compounding history ────────────
-  message("Appending today's alpha snapshot to alpha_history.csv...")
-  if (!dir.exists("data")) dir.create("data", recursive = TRUE)
+  # ── 5. Rebuild the compounding alpha history ───────────────────────────────
+  # `tech` already carries daily_alpha for every symbol across the whole 1-year
+  # price pull, but this step used to keep only the final day and append that
+  # single row.  Two consequences: a newly added ticker needed ~63 live runs
+  # before its alpha carried any weight, and every missed or failed run left a
+  # permanent hole in the series.  Backfilling from `tech` uses realized past
+  # excess returns — no look-ahead — so the history self-heals and new tickers
+  # are weighted on the same evidence as long-tracked ones.
+  message("Rebuilding alpha history from the full price window...")
+  if (!dir.exists("data") ) dir.create("data", recursive = TRUE)
 
-  today_snapshot <- summary_today %>%
-    transmute(
-      date             = today,
-      symbol,
-      daily_alpha      = today_alpha,
-      mean_daily_alpha,
-      jensen_alpha_ann,
-      info_ratio,
-      beta,
-      ret_1m,
-      ret_3m,
-      momentum_score
-    )
+  per_symbol <- summary_today %>%
+    select(symbol, mean_daily_alpha, jensen_alpha_ann, info_ratio, beta,
+           ret_1m, ret_3m, momentum_score)
+
+  window_history <- tech %>%
+    filter(!is.na(daily_alpha)) %>%
+    select(date, symbol, daily_alpha) %>%
+    left_join(per_symbol, by = "symbol") %>%
+    mutate(date = as.Date(date))
 
   history_path <- "data/alpha_history.csv"
   if (file.exists(history_path)) {
-    existing <- read_csv(history_path, show_col_types = FALSE)
-    # Avoid duplicate rows if re-run on same day
-    existing <- existing %>% filter(!(date == today & symbol %in% today_snapshot$symbol))
-    alpha_history <- bind_rows(existing, today_snapshot) %>% arrange(symbol, date)
+    existing <- tryCatch(
+      read_csv(history_path, show_col_types = FALSE) %>% mutate(date = as.Date(date)),
+      error = function(e) NULL)
+    if (!is.null(existing) && nrow(existing) > 0) {
+      # Rows recorded live carry that run's as-of metrics, so prefer them and
+      # backfill only the symbol/date pairs that are missing.  Today is always
+      # recomputed so a re-run picks up the latest prices.
+      existing <- existing %>% filter(date != today)
+      alpha_history <- bind_rows(existing, window_history)
+    } else {
+      alpha_history <- window_history
+    }
   } else {
-    alpha_history <- today_snapshot %>% arrange(symbol, date)
+    alpha_history <- window_history
   }
+
+  alpha_history <- alpha_history %>%
+    distinct(symbol, date, .keep_all = TRUE) %>%
+    filter(date >= Sys.Date() - 400) %>%   # bound file growth
+    arrange(symbol, date)
+
   write_csv(alpha_history, history_path)
   message(glue("alpha_history.csv now has {nrow(alpha_history)} rows across ",
                "{n_distinct(alpha_history$date)} trading days."))
