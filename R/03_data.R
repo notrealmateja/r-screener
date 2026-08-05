@@ -103,28 +103,45 @@ get_market_news <- function(n = 50) {
       message("  AV news returned status ", status_code(resp))
       return(tibble())
     }
-    raw <- fromJSON(content(resp, as = "text", encoding = "UTF-8"))
-    if (is.null(raw$feed) || length(raw$feed) == 0) {
-      if (!is.null(raw$Note)) message("  AV rate limit: ", raw$Note)
+    txt <- content(resp, as = "text", encoding = "UTF-8")
+    raw <- fromJSON(txt)
+    f <- raw$feed
+    if (is.null(f) || !is.data.frame(f) || nrow(f) == 0) {
+      # Alpha Vantage reports throttling/errors under several different keys
+      # depending on tier and endpoint. Checking only $Note made every one of
+      # these look like a silent empty result.
+      keys <- c("Note", "Information", "Error Message")
+      hit  <- FALSE
+      for (k in keys) if (!is.null(raw[[k]])) {
+        message("  AV ", k, ": ", substr(as.character(raw[[k]]), 1, 250)); hit <- TRUE
+      }
+      if (!hit) message("  AV news returned no feed. Response head: ", substr(txt, 1, 250))
       return(tibble())
     }
-    df <- as_tibble(raw$feed) %>%
+
+    # Pull nested columns defensively — ticker_sentiment/topics are ragged
+    # list-columns and their shape varies per article.
+    nested_first <- function(col, field, default = NA_character_) {
+      if (!col %in% names(f)) return(rep(default, nrow(f)))
+      vapply(f[[col]], function(x) {
+        if (is.data.frame(x) && nrow(x) > 0 && field %in% names(x))
+          as.character(x[[field]][1]) else default
+      }, character(1))
+    }
+    getcol <- function(nm) if (nm %in% names(f)) as.character(f[[nm]]) else rep(NA_character_, nrow(f))
+
+    df <- tibble(
+      title           = getcol("title"),
+      url             = getcol("url"),
+      publishedDate   = as.POSIXct(getcol("time_published"), format = "%Y%m%dT%H%M%S"),
+      source          = getcol("source"),
+      summary         = getcol("summary"),
+      sentiment       = getcol("overall_sentiment_label"),
+      sentiment_score = suppressWarnings(as.numeric(getcol("overall_sentiment_score"))),
+      symbol          = nested_first("ticker_sentiment", "ticker"),
+      category        = nested_first("topics", "topic", "")
+    ) %>%
       head(n) %>%
-      transmute(
-        title           = title,
-        url             = url,
-        publishedDate   = as.POSIXct(time_published, format = "%Y%m%dT%H%M%S"),
-        source          = source,
-        summary         = summary,
-        sentiment       = overall_sentiment_label,
-        sentiment_score = overall_sentiment_score,
-        symbol          = sapply(ticker_sentiment, function(ts) {
-          if (is.data.frame(ts) && nrow(ts) > 0) ts$ticker[1] else NA_character_
-        }),
-        category        = sapply(topics, function(tp) {
-          if (is.data.frame(tp) && nrow(tp) > 0) tp$topic[1] else ""
-        })
-      ) %>%
       arrange(desc(publishedDate))
     message(glue("  News: {nrow(df)} articles"))
     df
@@ -148,13 +165,17 @@ get_sector_performance <- function() {
       fund <- left_join(fund, mom, by = "symbol")
     }
     if (!"sector" %in% names(fund)) {
-      # Try AV cache for sector info
+      # Fall back to the AV cache for sector labels.  Note we are inside the
+      # branch where `sector` does NOT exist, so it cannot be coalesced against
+      # itself — doing so aborted this function on every run.
       av_path <- "data/av_cache.csv"
       if (file.exists(av_path)) {
-        av <- read_csv(av_path, show_col_types = FALSE) %>%
-          select(symbol, sector_av) %>% filter(!is.na(sector_av))
-        fund <- left_join(fund, av, by = "symbol") %>%
-          mutate(sector = coalesce(sector, sector_av))
+        av <- read_csv(av_path, show_col_types = FALSE)
+        if ("sector_av" %in% names(av)) {
+          av <- av %>% select(symbol, sector_av) %>% filter(!is.na(sector_av))
+          fund <- left_join(fund, av, by = "symbol") %>%
+            mutate(sector = sector_av)
+        }
       }
     }
     if (!"ret_1m" %in% names(fund) || !"sector" %in% names(fund)) return(tibble())
@@ -215,14 +236,28 @@ get_stocktwits_trending <- function() {
       return(tibble())
     }
     sym_raw <- fromJSON(content(sym_resp, as = "text", encoding = "UTF-8"))
-    if (is.null(sym_raw$symbols) || length(sym_raw$symbols) == 0) return(tibble())
+    s <- sym_raw$symbols
+    if (is.null(s) || !is.data.frame(s) || nrow(s) == 0) return(tibble())
 
-    symbols <- as_tibble(sym_raw$symbols) %>%
-      transmute(
-        symbol = symbol,
-        title  = title,
-        watchlist_count = suppressWarnings(as.numeric(watchlist_count))
-      )
+    # Build from atomic vectors only.  The payload carries nested data.frame
+    # columns (trends/features/fundamentals) whose shape varies between calls;
+    # as_tibble() on the whole object intermittently aborts with
+    # "Tibble columns must have compatible sizes".
+    pick <- function(col, cast = as.character) {
+      if (!col %in% names(s)) return(rep(NA, nrow(s)))
+      v <- s[[col]]
+      if (is.list(v) || length(v) != nrow(s)) return(rep(NA, nrow(s)))
+      suppressWarnings(cast(v))
+    }
+
+    symbols <- tibble(
+      symbol          = pick("symbol"),
+      title           = pick("title"),
+      watchlist_count = pick("watchlist_count", as.numeric),
+      st_rank         = pick("rank",            as.numeric),
+      trending_score  = pick("trending_score",  as.numeric)
+    ) %>% filter(!is.na(symbol))
+    if (nrow(symbols) == 0) return(tibble())
 
     Sys.sleep(1)
 
@@ -233,15 +268,20 @@ get_stocktwits_trending <- function() {
       return(symbols %>% mutate(messages = 0L, bullish = 0L, bearish = 0L))
     }
     msg_raw <- fromJSON(content(msg_resp, as = "text", encoding = "UTF-8"))
-    if (!is.null(msg_raw$messages) && length(msg_raw$messages) > 0) {
-      msgs <- as_tibble(msg_raw$messages)
-      msg_syms <- sapply(msgs$symbols, function(s) {
-        if (is.data.frame(s) && nrow(s) > 0) s$symbol[1] else NA_character_
-      })
-      msg_sent <- sapply(msgs$entities, function(e) {
-        if (is.list(e) && !is.null(e$sentiment) && !is.null(e$sentiment$basic))
-          e$sentiment$basic else NA_character_
-      })
+    msgs <- msg_raw$messages
+    if (is.data.frame(msgs) && nrow(msgs) > 0 && "symbols" %in% names(msgs)) {
+      msg_syms <- vapply(msgs$symbols, function(x) {
+        if (is.data.frame(x) && nrow(x) > 0 && "symbol" %in% names(x))
+          as.character(x$symbol[1]) else NA_character_
+      }, character(1))
+      ent <- msgs$entities
+      msg_sent <- if (is.data.frame(ent) && "sentiment" %in% names(ent)) {
+        sent <- ent$sentiment
+        if (is.data.frame(sent) && "basic" %in% names(sent))
+          as.character(sent$basic) else rep(NA_character_, nrow(msgs))
+      } else rep(NA_character_, nrow(msgs))
+      if (length(msg_sent) != length(msg_syms)) msg_sent <- rep(NA_character_, length(msg_syms))
+
       msg_df <- tibble(msg_symbol = msg_syms, sentiment = msg_sent) %>%
         filter(!is.na(msg_symbol)) %>%
         group_by(msg_symbol) %>%
@@ -322,8 +362,11 @@ run_module3 <- function(tickers=NULL) {
   short   <- get_short_interest(tickers)
   squeeze <- build_squeeze_score(short, fund_data)
   macro   <- get_macro_data()
-  earn    <- get_earnings_calendar()
+  # News before earnings: both draw on the same Alpha Vantage daily quota that
+  # Module 1 has already partly consumed, and news is the more time-sensitive
+  # of the two (the earnings calendar returns a 3-month horizon).
   news    <- get_market_news(50)
+  earn    <- get_earnings_calendar()
   sector  <- get_sector_performance()
   wsb     <- get_wsb_trending(50)
   stwits  <- get_stocktwits_trending()
