@@ -163,8 +163,10 @@ jobs:
             message("Remaining packages: ", length(.packages(all.available=TRUE)))
           '
 
+      # No continue-on-error: a silently failed deploy leaves the live site
+      # stale while the run still reports green.  Transient failures are
+      # retried below; a genuine one must turn the run red so GitHub notifies.
       - name: Deploy to shinyapps.io
-        continue-on-error: true
         env:
           SHINYAPPS_ACCOUNT: ${{ secrets.SHINYAPPS_ACCOUNT }}
           SHINYAPPS_TOKEN: ${{ secrets.SHINYAPPS_TOKEN }}
@@ -192,12 +194,25 @@ jobs:
             app_files <- list.files("app", recursive = TRUE)
             app_files <- app_files[!grepl("^app/", app_files)]
 
-            rsconnect::deployApp(
-              appDir      = "app",
-              appName     = "r-codescreener",
-              account     = acct,
-              appFiles    = app_files,
-              forceUpdate = TRUE
-            )
+            # Retry transient shinyapps.io failures; fail loudly if all fail.
+            ok <- FALSE
+            for (attempt in 1:3) {
+              ok <- tryCatch({
+                rsconnect::deployApp(
+                  appDir      = "app",
+                  appName     = "r-codescreener",
+                  account     = acct,
+                  appFiles    = app_files,
+                  forceUpdate = TRUE
+                )
+                TRUE
+              }, error = function(e) {
+                message("Deploy attempt ", attempt, " failed: ", conditionMessage(e))
+                FALSE
+              })
+              if (isTRUE(ok)) break
+              if (attempt < 3) { message("Retrying in 30s..."); Sys.sleep(30) }
+            }
+            if (!isTRUE(ok)) stop("Deploy failed after 3 attempts")
             message("Deploy complete.")
           '

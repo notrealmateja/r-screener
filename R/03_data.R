@@ -60,7 +60,23 @@ get_macro_data <- function() {
 }
 
 # ── Earnings Calendar (Alpha Vantage — CSV endpoint) ───────────────────────
+EARN_CACHE    <- "data/earnings_calendar.csv"
+EARN_TTL_DAYS <- 3
+
 get_earnings_calendar <- function() {
+  # This endpoint returns a 3-month horizon, so refetching it daily spends a
+  # scarce free-tier AV call on data that barely moves — and it was crowding
+  # out the news call. Reuse the cached copy until it is EARN_TTL_DAYS old.
+  if (file.exists(EARN_CACHE)) {
+    cached <- tryCatch(read_csv(EARN_CACHE, show_col_types = FALSE),
+                       error = function(e) tibble())
+    age <- as.numeric(difftime(Sys.time(), file.mtime(EARN_CACHE), units = "days"))
+    if (nrow(cached) > 0 && age < EARN_TTL_DAYS) {
+      message(glue("Earnings calendar: reusing cache ({nrow(cached)} rows, {round(age,1)}d old)"))
+      return(cached)
+    }
+  }
+
   message("Pulling earnings calendar (Alpha Vantage)...")
   tryCatch({
     url <- glue("{AV_BASE}?function=EARNINGS_CALENDAR&horizon=3month&apikey={AV_KEY}")
@@ -74,6 +90,14 @@ get_earnings_calendar <- function() {
       message("  AV earnings returned empty response")
       return(tibble())
     }
+    # When the daily quota is spent AV answers this CSV endpoint with a JSON
+    # notice.  Feeding that to read_csv produced an opaque `as.Date(date)`
+    # failure instead of a usable message.
+    if (grepl("^\\s*[{\\[]", raw_text)) {
+      message("  AV earnings returned a JSON notice, not CSV: ",
+              substr(gsub("\\s+", " ", raw_text), 1, 220))
+      return(tibble())
+    }
     df <- read_csv(raw_text, show_col_types = FALSE)
     if (nrow(df) == 0) return(tibble())
     df <- df %>%
@@ -81,14 +105,20 @@ get_earnings_calendar <- function() {
         date = "reportDate",
         epsEstimated = "estimate",
         time = "timeOfTheDay"
-      ))) %>%
+      )))
+    if (!"date" %in% names(df)) {
+      message("  AV earnings CSV has no recognisable date column. Columns: ",
+              paste(names(df), collapse = ", "))
+      return(tibble())
+    }
+    df <- df %>%
       mutate(date = as.Date(date)) %>%
       filter(!is.na(date)) %>%
       arrange(date)
     message(glue("  Earnings: {nrow(df)} upcoming reports"))
     df
   }, error = function(e) {
-    message("Earnings calendar failed: ", e$message)
+    message("Earnings calendar failed: ", conditionMessage(e))
     tibble()
   })
 }
@@ -379,13 +409,29 @@ run_module3 <- function(tickers=NULL) {
   if (nrow(stwits) == 0) warning("WARN: StockTwits trending is EMPTY — API may be down")
 
   if (!dir.exists("data")) dir.create("data", recursive=TRUE)
+
+  # A transient API failure must never destroy good data that is already on
+  # disk.  Previously an empty fetch overwrote the previous day's file with a
+  # 0-row CSV, so one bad response blanked a panel until the next good run.
+  write_or_keep <- function(df, path, label) {
+    if (nrow(df) > 0) { write_csv(df, path); return(invisible(NULL)) }
+    prev <- if (file.exists(path))
+      tryCatch(nrow(read_csv(path, show_col_types = FALSE)), error = function(e) 0) else 0
+    if (prev > 0) {
+      message(glue("  {label}: fetch empty — keeping previous {prev} rows on disk"))
+    } else {
+      write_csv(df, path)
+    }
+    invisible(NULL)
+  }
+
   write_csv(squeeze, "data/squeeze_scored.csv")
   write_csv(macro,   "data/macro_data.csv")
-  write_csv(earn,    "data/earnings_calendar.csv")
-  write_csv(news,    "data/market_news.csv")
-  write_csv(sector,  "data/sector_performance.csv")
-  write_csv(wsb,     "data/wsb_trending.csv")
-  write_csv(stwits,  "data/stocktwits_trending.csv")
+  write_or_keep(earn,   "data/earnings_calendar.csv",   "earnings")
+  write_or_keep(news,   "data/market_news.csv",         "news")
+  write_or_keep(sector, "data/sector_performance.csv",  "sector")
+  write_or_keep(wsb,    "data/wsb_trending.csv",        "wsb")
+  write_or_keep(stwits, "data/stocktwits_trending.csv", "stocktwits")
 
   message(glue("Saved: squeeze({nrow(squeeze)}), macro({nrow(macro)}), ",
                "earnings({nrow(earn)}), news({nrow(news)}), ",
