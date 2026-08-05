@@ -40,6 +40,10 @@ fmt_mktcap <- function(x) {
             x>=1e9~paste0("$",round(x/1e9,1),"B"), x>=1e6~paste0("$",round(x/1e6,1),"M"), TRUE~"N/A")
 }
 fmt_pct <- function(x, d=1) ifelse(is.na(x),"N/A", paste0(round(x*100,d),"%"))
+# Signed percent for return columns. ret_1m/ret_3m/ret_6m are stored as decimal
+# fractions (0.0501 = 5.01%), so they must be scaled by 100 before display.
+fmt_ret <- function(x, d=1) ifelse(is.na(x), "N/A",
+                                   paste0(ifelse(x>=0,"+",""), round(x*100, d), "%"))
 fmt_chg <- function(x) {
   if (is.na(x)) return("N/A")
   col <- if(x>=0) GREEN else RED

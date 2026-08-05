@@ -83,6 +83,50 @@ jobs:
             message("Copied ", length(csv_files)+length(rds_files), " files into app/")
           '
 
+      - name: Verify pipeline output
+        if: always()
+        run: |
+          Rscript -e '
+            suppressMessages(library(readr))
+            files <- c("data/master_scored.csv","data/top15_sweetspot.csv",
+                       "data/top15_unicorns.csv","data/alpha_history.csv",
+                       "data/market_news.csv","data/earnings_calendar.csv",
+                       "data/wsb_trending.csv","data/stocktwits_trending.csv",
+                       "data/macro_data.csv","data/sector_performance.csv")
+            out <- c("## Data health", "",
+                     "| File | Rows | Age (h) | Status |", "|---|---:|---:|---|")
+            problems <- character(0)
+            for (f in files) {
+              if (!file.exists(f)) {
+                out <- c(out, sprintf("| `%s` | - | - | MISSING |", basename(f)))
+                problems <- c(problems, paste(basename(f), "missing"))
+                next
+              }
+              n <- tryCatch(nrow(suppressWarnings(read_csv(f, show_col_types = FALSE))),
+                            error = function(e) NA_integer_)
+              age <- round(as.numeric(difftime(Sys.time(), file.mtime(f), units = "hours")), 1)
+              status <- "OK"
+              if (is.na(n) || n == 0) {
+                status <- "EMPTY"
+                problems <- c(problems, paste(basename(f), "empty"))
+              } else if (age > 36) {
+                status <- "STALE"
+                problems <- c(problems, paste(basename(f), "stale"))
+              }
+              out <- c(out, sprintf("| `%s` | %s | %s | %s |", basename(f), n, age, status))
+            }
+            out <- c(out, "")
+            if (length(problems) > 0) {
+              out <- c(out, sprintf("**%d issue(s):** %s", length(problems),
+                                    paste(problems, collapse = "; ")))
+            } else {
+              out <- c(out, "All outputs present and fresh.")
+            }
+            cat(paste(out, collapse = "\n"), "\n")
+            sf <- Sys.getenv("GITHUB_STEP_SUMMARY")
+            if (nzchar(sf)) writeLines(out, sf)
+          '
+
       - name: Clean stale files and commit updated data
         if: always()
         run: |

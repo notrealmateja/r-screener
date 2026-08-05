@@ -40,11 +40,26 @@ run_module2 <- function(tickers = NULL) {
                        to   = Sys.Date())
 
   spy_ret <- prices_raw %>%
-    filter(symbol == "SPY") %>%
+    filter(symbol == "SPY", !is.na(close)) %>%
     arrange(date) %>%
     transmute(date, spy_ret = (close / lag(close)) - 1)
 
-  prices <- prices_raw %>% filter(symbol != "SPY")
+  # Yahoo intermittently returns bars with NA OHLC in the middle of a series.
+  # Every TTR indicator aborts on those ("Series contains non-leading NAs"),
+  # which halted the entire pipeline on ~30% of runs.  Drop incomplete bars
+  # per symbol before computing anything.
+  prices <- prices_raw %>%
+    filter(symbol != "SPY", !is.na(close), !is.na(high), !is.na(low))
+
+  dropped <- nrow(prices_raw %>% filter(symbol != "SPY")) - nrow(prices)
+  if (dropped > 0) message(glue("  Dropped {dropped} incomplete price bars before indicators."))
+
+  # Backstop: a symbol with too little history still makes TTR error out.
+  # Return an all-NA column for that symbol instead of killing the run.
+  safe_calc <- function(expr, n) {
+    out <- tryCatch(suppressWarnings(expr), error = function(e) NULL)
+    if (is.null(out) || length(out) != n) rep(NA_real_, n) else as.numeric(out)
+  }
 
   # ── 2. Technical indicators ────────────────────────────────────────────────
   message("Calculating technical indicators...")
@@ -52,23 +67,23 @@ run_module2 <- function(tickers = NULL) {
     group_by(symbol) %>%
     arrange(date) %>%
     mutate(
-      ma20        = SMA(close, 20),
-      ma50        = SMA(close, 50),
-      ma200       = SMA(close, 200),
-      ema12       = EMA(close, 12),
-      ema26       = EMA(close, 26),
-      rsi14       = RSI(close, 14),
-      macd_line   = MACD(close, 12, 26, 9)[, "macd"],
-      macd_signal = MACD(close, 12, 26, 9)[, "signal"],
+      ma20        = safe_calc(SMA(close, 20),  length(close)),
+      ma50        = safe_calc(SMA(close, 50),  length(close)),
+      ma200       = safe_calc(SMA(close, 200), length(close)),
+      ema12       = safe_calc(EMA(close, 12),  length(close)),
+      ema26       = safe_calc(EMA(close, 26),  length(close)),
+      rsi14       = safe_calc(RSI(close, 14),  length(close)),
+      macd_line   = safe_calc(MACD(close, 12, 26, 9)[, "macd"],   length(close)),
+      macd_signal = safe_calc(MACD(close, 12, 26, 9)[, "signal"], length(close)),
       macd_hist   = macd_line - macd_signal,
-      bb_upper    = as.numeric(TTR::BBands(cbind(close, close, close), n = 20)[, "up"]),
-      bb_lower    = as.numeric(TTR::BBands(cbind(close, close, close), n = 20)[, "dn"]),
-      bb_mid      = as.numeric(TTR::BBands(cbind(close, close, close), n = 20)[, "mavg"]),
+      bb_upper    = safe_calc(TTR::BBands(cbind(close, close, close), n = 20)[, "up"],   length(close)),
+      bb_lower    = safe_calc(TTR::BBands(cbind(close, close, close), n = 20)[, "dn"],   length(close)),
+      bb_mid      = safe_calc(TTR::BBands(cbind(close, close, close), n = 20)[, "mavg"], length(close)),
       bb_pct      = (close - bb_lower) / (bb_upper - bb_lower),
-      atr14       = ATR(cbind(high, low, close), 14)[, "atr"],
+      atr14       = safe_calc(ATR(cbind(high, low, close), 14)[, "atr"], length(close)),
       daily_ret   = (close / lag(close)) - 1,
-      vol20       = rollapply(daily_ret, 20, sd, na.rm = TRUE,
-                              fill = NA, align = "right") * sqrt(252)
+      vol20       = safe_calc(rollapply(daily_ret, 20, sd, na.rm = TRUE,
+                              fill = NA, align = "right") * sqrt(252), length(close))
     ) %>%
     ungroup()
 

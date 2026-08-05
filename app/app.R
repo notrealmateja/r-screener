@@ -1125,8 +1125,10 @@ server <- function(input, output, session) {
   }
 
   # ── Expected return HTML helper ───────────────────────────────────────────
+  # Input is a 1-day expected return stored as a decimal fraction
+  # (0.0044 = 0.44%/day), so scale by 100 before display.
   exp_ret_html <- function(ret) {
-    ret <- replace_na(as.numeric(ret), 0)
+    ret <- replace_na(as.numeric(ret), 0) * 100
     cls <- if (ret >= 0) "pos" else "neg"
     pfx <- if (ret >= 0) "+" else ""
     as.character(tags$span(class=paste("exp-ret", cls),
@@ -1158,13 +1160,11 @@ server <- function(input, output, session) {
           market_cap >= 1e12 ~ paste0("$",round(market_cap/1e12,1),"T"),
           market_cap >= 1e9  ~ paste0("$",round(market_cap/1e9,1),"B"),
           TRUE               ~ "N/A"),
-        ret_1m_fmt   = ifelse(is.na(ret_1m),"N/A",
-                              paste0(ifelse(ret_1m>=0,"+",""),round(ret_1m,1),"%")),
-        ret_3m_fmt   = ifelse(is.na(ret_3m),"N/A",
-                              paste0(ifelse(ret_3m>=0,"+",""),round(ret_3m,1),"%"))
+        ret_1m_fmt   = fmt_ret(ret_1m),
+        ret_3m_fmt   = fmt_ret(ret_3m)
       ) %>%
       select(`#`, Symbol=symbol, Company=company, Sector=sector,
-             Score, Rating, Confidence, `Exp Return`,
+             Score, Rating, Confidence, `Exp Ret/D`=`Exp Return`,
              `1M`=ret_1m_fmt, `3M`=ret_3m_fmt,
              Percentile, Driver, `Sig Matches`=Signals,
              `P/E`=pe_fmt, `Mkt Cap`=mktcap_fmt)
@@ -1207,10 +1207,8 @@ server <- function(input, output, session) {
         rev_g_fmt    = ifelse(is.na(revenue_growth),"N/A",
                               paste0(ifelse(revenue_growth>=0,"+",""),
                                      round(revenue_growth*100,1),"%")),
-        ret_3m_fmt   = ifelse(is.na(ret_3m),"N/A",
-                              paste0(ifelse(ret_3m>=0,"+",""),round(ret_3m,1),"%")),
-        ret_1m_fmt   = ifelse(is.na(ret_1m),"N/A",
-                              paste0(ifelse(ret_1m>=0,"+",""),round(ret_1m,1),"%")),
+        ret_3m_fmt   = fmt_ret(ret_3m),
+        ret_1m_fmt   = fmt_ret(ret_1m),
         pe_fmt       = ifelse(is.na(pe_ratio)|pe_ratio<=0,"N/A",
                               as.character(round(pe_ratio,1)))
       ) %>%
@@ -1291,10 +1289,10 @@ server <- function(input, output, session) {
         Rating  = sapply(rating, pill),
         pe_fmt       = ifelse(is.na(pe_ratio)|pe_ratio<=0,"N/A",as.character(round(pe_ratio,1))),
         mktcap_fmt   = case_when(is.na(market_cap)~"N/A",market_cap>=1e12~paste0("$",round(market_cap/1e12,1),"T"),market_cap>=1e9~paste0("$",round(market_cap/1e9,1),"B"),TRUE~"N/A"),
-        ret_1m_fmt   = ifelse(is.na(ret_1m),"N/A",paste0(ifelse(ret_1m>=0,"+",""),round(ret_1m,1),"%")),
-        ret_3m_fmt   = ifelse(is.na(ret_3m),"N/A",paste0(ifelse(ret_3m>=0,"+",""),round(ret_3m,1),"%")),
-        ret_6m_fmt   = ifelse(is.na(ret_6m),"N/A",paste0(ifelse(ret_6m>=0,"+",""),round(ret_6m,1),"%")),
-        ret_1y_fmt   = ifelse(is.na(ret_1y),"N/A",paste0(ifelse(ret_1y>=0,"+",""),round(ret_1y,1),"%")),
+        ret_1m_fmt   = fmt_ret(ret_1m),
+        ret_3m_fmt   = fmt_ret(ret_3m),
+        ret_6m_fmt   = fmt_ret(ret_6m),
+        ret_1y_fmt   = fmt_ret(ret_1y),
         short_float_pct = ifelse(is.na(short_percent_float),"N/A",paste0(round(short_percent_float*100,1),"%")),
         squeeze_tier = ifelse(is.null(squeeze_tier)|is.na(squeeze_tier),"No Signal",squeeze_tier),
         momentum_score = coalesce(momentum_score, 45),
