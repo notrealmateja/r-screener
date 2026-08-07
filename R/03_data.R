@@ -346,6 +346,22 @@ get_stocktwits_trending <- function() {
   })
 }
 
+# A transient API failure must never destroy good data that is already on disk.
+# An empty fetch used to overwrite the previous day's file with a 0-row CSV, so
+# one bad response blanked a panel until the next good run.  At file scope so it
+# is unit-testable.
+write_or_keep <- function(df, path, label = basename(path)) {
+  if (nrow(df) > 0) { write_csv(df, path); return(invisible(NULL)) }
+  prev <- if (file.exists(path))
+    tryCatch(nrow(read_csv(path, show_col_types = FALSE)), error = function(e) 0) else 0
+  if (prev > 0) {
+    message(glue("  {label}: fetch empty — keeping previous {prev} rows on disk"))
+  } else {
+    write_csv(df, path)
+  }
+  invisible(NULL)
+}
+
 # ── Squeeze Scoring ─────────────────────────────────────────────────────────
 build_squeeze_score <- function(short_data, fund_data) {
   message("Building squeeze scores...")
@@ -409,21 +425,6 @@ run_module3 <- function(tickers=NULL) {
   if (nrow(stwits) == 0) warning("WARN: StockTwits trending is EMPTY — API may be down")
 
   if (!dir.exists("data")) dir.create("data", recursive=TRUE)
-
-  # A transient API failure must never destroy good data that is already on
-  # disk.  Previously an empty fetch overwrote the previous day's file with a
-  # 0-row CSV, so one bad response blanked a panel until the next good run.
-  write_or_keep <- function(df, path, label) {
-    if (nrow(df) > 0) { write_csv(df, path); return(invisible(NULL)) }
-    prev <- if (file.exists(path))
-      tryCatch(nrow(read_csv(path, show_col_types = FALSE)), error = function(e) 0) else 0
-    if (prev > 0) {
-      message(glue("  {label}: fetch empty — keeping previous {prev} rows on disk"))
-    } else {
-      write_csv(df, path)
-    }
-    invisible(NULL)
-  }
 
   write_csv(squeeze, "data/squeeze_scored.csv")
   write_csv(macro,   "data/macro_data.csv")

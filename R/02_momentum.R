@@ -25,6 +25,14 @@
 library(tidyquant); library(dplyr); library(tidyr)
 library(TTR); library(readr); library(glue); library(lubridate)
 
+# Guard a TTR call: a series that is too short (or otherwise unusable) returns
+# an all-NA column instead of aborting the whole pipeline.  At file scope so it
+# is unit-testable.
+safe_calc <- function(expr, n) {
+  out <- tryCatch(suppressWarnings(expr), error = function(e) NULL)
+  if (is.null(out) || length(out) != n) rep(NA_real_, n) else as.numeric(out)
+}
+
 run_module2 <- function(tickers = NULL) {
   message("\n=== MODULE 2: MOMENTUM, TECHNICALS & ALPHA ===\n")
 
@@ -57,13 +65,6 @@ run_module2 <- function(tickers = NULL) {
 
   dropped <- nrow(prices_raw %>% filter(symbol != "SPY")) - nrow(prices)
   if (dropped > 0) message(glue("  Dropped {dropped} incomplete price bars before indicators."))
-
-  # Backstop: a symbol with too little history still makes TTR error out.
-  # Return an all-NA column for that symbol instead of killing the run.
-  safe_calc <- function(expr, n) {
-    out <- tryCatch(suppressWarnings(expr), error = function(e) NULL)
-    if (is.null(out) || length(out) != n) rep(NA_real_, n) else as.numeric(out)
-  }
 
   # ── 2. Technical indicators ────────────────────────────────────────────────
   message("Calculating technical indicators...")

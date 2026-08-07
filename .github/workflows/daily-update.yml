@@ -49,12 +49,25 @@ jobs:
             remotes::install_version("rsconnect", version="0.8.29",
               repos="https://cloud.r-project.org", upgrade="never")
 
+            install.packages("testthat")
+
             required <- c("httr","jsonlite","readr","dplyr","tidyr","glue","lubridate",
                           "scales","xts","zoo","TTR","quantmod",
-                          "shiny","shinydashboard","DT","plotly","ggplot2","rsconnect")
+                          "shiny","shinydashboard","DT","plotly","ggplot2","rsconnect",
+                          "testthat")
             missing <- required[!sapply(required, requireNamespace, quietly=TRUE)]
             if (length(missing) > 0) stop("MISSING: ", paste(missing, collapse=", "))
             message("ALL PACKAGES OK")
+          '
+
+      # Runs before the pipeline so a broken change fails fast, without first
+      # burning API quota or deploying bad output to the live site.
+      - name: Run unit tests
+        run: |
+          Rscript -e '
+            library(testthat)
+            res <- test_dir("tests/testthat", reporter = "summary", stop_on_failure = TRUE)
+            message("Tests passed.")
           '
 
       - name: Run data pipeline
