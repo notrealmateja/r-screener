@@ -1,4 +1,6 @@
 symbol,company,sector,price,unicorn_score,master_score,rating,signal,unicorn_confidence,confidence_5d,confidence_band,days_tracked,hist_ir,hist_alpha_ann,alpha_hit_rate,alpha_streak,expected_return_1d,primary_driver,pe_ratio,market_cap,revenue_growth,ret_1m,ret_3m,rsi14,momentum_score,put_call_ratio,options_sentiment,avg_iv,analyst_target,analyst_upside
-QRVO,NA,NA,95.04,50,49.7,Hold,Hold,100,100,Proven,250,-0.1048,-0.0349,0.48,1,-1e-4,Balanced,20.75,8384584000,2.556,0.0908,0.0686,60.4209,70.4716,NA,Unknown,NA,90.77,-0.0449
-SNAP,NA,NA,5.79,50,31.2,Underperform,Underperform,100,100,Proven,250,-0.9835,-0.531,0.44,2,-0.0021,Analyst Upside,NA,8352091000,3.958,0.2189,-0.0524,74.3284,43.6005,NA,Unknown,NA,7.23,0.2487
-WAL,NA,NA,84.33,50,51.2,Hold,Hold,100,100,Proven,250,-0.2332,-0.0773,0.528,2,-3e-4,Consistent Beat,9.52,9200476000,0.142,0.0222,0.012,57.7042,55.317,NA,Unknown,NA,92.33,0.0949
+SRPT,NA,NA,16.78,75,45.4,Hold,Hold,100,100,Proven,252,0.1578,0.1227,0.5119,1,5e-4,Consistent Beat,NA,1681829000,26.64,-0.1521,-0.1593,51.2004,33.6546,NA,Unknown,NA,22.17,0.3212
+HALO,NA,NA,85.76,62.5,67.1,Buy,Buy,100,100,Proven,252,0.587,0.181,0.5238,2,7e-4,Consistent Beat,29.23,9914861000,0.312,0.0514,0.3375,71.7834,71.3454,NA,Unknown,NA,86.89,0.0132
+QRVO,NA,NA,95.33,62.5,54.5,Hold,Hold,100,100,Proven,252,-0.0843,-0.028,0.4841,3,-1e-4,Balanced,20.75,8384584000,2.556,0.1198,0.053,60.8937,70.9871,NA,Unknown,NA,90.77,-0.0478
+SNAP,NA,NA,5.22,37.5,24.5,Avoid,Avoid,100,100,Proven,252,-1.1473,-0.6233,0.4365,0,-0.0025,Analyst Upside,NA,8352091000,3.958,0.1226,-0.1414,57.7414,45.9742,NA,Unknown,NA,7.23,0.3851
+WAL,NA,NA,81.33,12.5,43.9,Underperform,Underperform,100,100,Proven,252,-0.3293,-0.109,0.5238,0,-4e-4,Consistent Beat,9.52,9200476000,0.142,-0.006,-0.007,48.4566,43.9253,NA,Unknown,NA,92.33,0.1353
