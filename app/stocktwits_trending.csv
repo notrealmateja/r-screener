@@ -1,31 +1,31 @@
 symbol,title,watchlist_count,st_rank,trending_score,messages,bullish,bearish,sentiment_label,fetched_at
-SOUN,SoundHound AI Inc,58395,1,16.9706,4,4,0,Very Bullish,2026-08-07T19:33:47Z
-MSTR,Strategy,81397,2,11.7806,1,1,0,Very Bullish,2026-08-07T19:33:47Z
-OKLO,Oklo Inc.,39045,3,9.49815,1,1,0,Very Bullish,2026-08-07T19:33:47Z
-RDW,Redwire Corp,23528,4,10.9424,1,0,0,Neutral,2026-08-07T19:33:47Z
-DOCS,Doximity Inc,4736,5,10.3661,0,0,0,Neutral,2026-08-07T19:33:47Z
-ABNB,Airbnb Inc,55032,6,7.46828,1,1,0,Very Bullish,2026-08-07T19:33:47Z
-AVAV,AeroVironment Inc.,12943,7,8.84969,0,0,0,Neutral,2026-08-07T19:33:47Z
-CIFR,Cipher Digital Inc.,22545,8,12.5158,1,0,0,Neutral,2026-08-07T19:33:47Z
-TEAM,Atlassian Corporation Plc,14940,9,8.75185,1,0,0,Neutral,2026-08-07T19:33:47Z
-CRSR,Corsair Gaming Inc,24344,10,8.86054,0,0,0,Neutral,2026-08-07T19:33:47Z
-SEZL,Sezzle Inc.,4410,11,9.93324,0,0,0,Neutral,2026-08-07T19:33:47Z
-NET,Cloudflare Inc,35048,12,5.10725,0,0,0,Neutral,2026-08-07T19:33:47Z
-TWLO,Twilio Inc,45367,13,7.70427,0,0,0,Neutral,2026-08-07T19:33:47Z
-GLD,SPDR Gold Shares ETF,95720,14,5.19966,0,0,0,Neutral,2026-08-07T19:33:47Z
-TEM,Tempus AI Inc,21072,15,4.16736,0,0,0,Neutral,2026-08-07T19:33:47Z
-TLOFF,Talon Metals Corp,2363,16,4.15346,0,0,0,Neutral,2026-08-07T19:33:47Z
-MP,MP Materials Corporation,34340,17,9.1258,0,0,0,Neutral,2026-08-07T19:33:47Z
-XRP.X,Ripple,234905,18,6.20054,0,0,0,Neutral,2026-08-07T19:33:47Z
-FOUR,Shift4 Payments Inc - Ordinary Shares - Class A,4822,19,5.27851,0,0,0,Neutral,2026-08-07T19:33:47Z
-LASR,nLIGHT Inc,2844,20,5.54622,0,0,0,Neutral,2026-08-07T19:33:47Z
-SMR,NuScale Power Corp,24643,21,4.24007,0,0,0,Neutral,2026-08-07T19:33:47Z
-WDC,Western Digital Corp.,20800,22,5.29563,0,0,0,Neutral,2026-08-07T19:33:47Z
-USAR,USA Rare Earth Inc,18812,23,6.7175,0,0,0,Neutral,2026-08-07T19:33:47Z
-BTG,B2gold Corp,8100,24,7.02676,0,0,0,Neutral,2026-08-07T19:33:47Z
-BCRX,Biocryst Pharmaceuticals Inc.,36905,25,3.98542,0,0,0,Neutral,2026-08-07T19:33:47Z
-MRNA,Moderna Inc,110898,26,1.47529,0,0,0,Neutral,2026-08-07T19:33:47Z
-SENS,Senseonics Holdings Inc,48243,27,5.963,0,0,0,Neutral,2026-08-07T19:33:47Z
-ZTS,Zoetis Inc - Ordinary Shares - Class A,4383,28,5.86148,0,0,0,Neutral,2026-08-07T19:33:47Z
-MNST,Monster Beverage Corp.,7570,29,4.8815,0,0,0,Neutral,2026-08-07T19:33:47Z
-AGNC,AGNC Investment Corp,12884,30,5.77012,0,0,0,Neutral,2026-08-07T19:33:47Z
+INFQ,Infleqtion Inc.,15483,1,10.6421,2,0,0,Neutral,2026-08-07T22:13:40Z
+XRP.X,Ripple,234910,2,8.82934,3,0,1,Very Bearish,2026-08-07T22:13:40Z
+UAMY,United States Antimony Corp.,20021,3,7.81519,0,0,0,Neutral,2026-08-07T22:13:40Z
+ABCL,AbCellera Biologics Inc,8911,4,6.88598,1,0,0,Neutral,2026-08-07T22:13:40Z
+USAR,USA Rare Earth Inc,18821,5,6.80154,0,0,0,Neutral,2026-08-07T22:13:40Z
+SENS,Senseonics Holdings Inc,48245,6,6.46144,0,0,0,Neutral,2026-08-07T22:13:40Z
+CIFR,Cipher Digital Inc.,22575,7,5.62701,0,0,0,Neutral,2026-08-07T22:13:40Z
+GLD,SPDR Gold Shares ETF,95722,8,5.4556,0,0,0,Neutral,2026-08-07T22:13:40Z
+CRO.X,Crypto.com Coin,37098,9,5.37201,0,0,0,Neutral,2026-08-07T22:13:40Z
+AEVA,Aeva Technologies Inc,7558,10,4.94893,0,0,0,Neutral,2026-08-07T22:13:40Z
+WEN,Wendy's Co,15832,11,4.68014,1,0,0,Neutral,2026-08-07T22:13:40Z
+FISV,"Fiserv, Inc.",10121,12,4.65544,0,0,0,Neutral,2026-08-07T22:13:40Z
+AVAV,AeroVironment Inc.,12960,13,4.63889,1,1,0,Very Bullish,2026-08-07T22:13:40Z
+SLV,iShares Silver Trust,61426,14,4.63682,1,0,0,Neutral,2026-08-07T22:13:40Z
+LPTH,"Lightpath Technologies, Inc. - Ordinary Shares - Class A",8418,15,4.56817,1,0,0,Neutral,2026-08-07T22:13:40Z
+CRDO,Credo Technology Group Holding Ltd,11112,16,4.51309,0,0,0,Neutral,2026-08-07T22:13:40Z
+VG,Venture Global Inc,4585,17,4.391,0,0,0,Neutral,2026-08-07T22:13:40Z
+RKT,Rocket Companies Inc,58323,18,4.33162,0,0,0,Neutral,2026-08-07T22:13:40Z
+SEZL,Sezzle Inc.,4442,19,4.30618,0,0,0,Neutral,2026-08-07T22:13:40Z
+UMAC,Unusual Machines Inc,11879,20,4.18747,0,0,0,Neutral,2026-08-07T22:13:40Z
+CELH,Celsius Holdings Inc,30674,21,4.05985,2,0,0,Neutral,2026-08-07T22:13:40Z
+MP,MP Materials Corporation,34369,22,3.67759,2,0,0,Neutral,2026-08-07T22:13:40Z
+SPCX,SpaceX,100348,23,3.5993,8,4,0,Very Bullish,2026-08-07T22:13:40Z
+DAVE,Dave Inc,3983,24,3.56083,0,0,0,Neutral,2026-08-07T22:13:40Z
+WING,Wingstop Inc,4981,25,3.52093,0,0,0,Neutral,2026-08-07T22:13:40Z
+LULU,Lululemon Athletica Inc,48906,26,3.36039,0,0,0,Neutral,2026-08-07T22:13:40Z
+CBRS,Cerebras Systems Inc,11599,27,3.32907,1,0,0,Neutral,2026-08-07T22:13:40Z
+GILD,"Gilead Sciences, Inc.",77635,28,3.2508,0,0,0,Neutral,2026-08-07T22:13:40Z
+UBER,Uber Technologies Inc,130054,29,3.23307,0,0,0,Neutral,2026-08-07T22:13:40Z
+SGML,Sigma Lithium Corporation,3621,30,3.2307,0,0,0,Neutral,2026-08-07T22:13:40Z
