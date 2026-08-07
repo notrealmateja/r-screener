@@ -1,31 +1,31 @@
 symbol,title,watchlist_count,st_rank,trending_score,messages,bullish,bearish,sentiment_label,fetched_at
-TTD,Trade Desk Inc,48749,1,13.2963,3,1,0,Very Bullish,2026-08-07T01:14:41Z
-DKNG,DraftKings Inc,120485,2,13.1452,0,0,0,Neutral,2026-08-07T01:14:41Z
-WEN,Wendy's Co,15727,3,11.788,4,3,0,Very Bullish,2026-08-07T01:14:41Z
-IOVA,Iovance Biotherapeutics Inc,19544,4,9.33828,6,3,0,Very Bullish,2026-08-07T01:14:41Z
-AAOI,Applied Optoelectronics Inc,24223,5,9.09294,3,1,0,Very Bullish,2026-08-07T01:14:41Z
-CELH,Celsius Holdings Inc,30553,6,8.09462,1,0,0,Neutral,2026-08-07T01:14:41Z
-RCAT,Red Cat Holdings Inc,28113,7,7.83179,1,1,0,Very Bullish,2026-08-07T01:14:41Z
-DOCS,Doximity Inc,4251,8,7.56973,1,0,0,Neutral,2026-08-07T01:14:41Z
-MARA,Marathon Digital Holdings Inc,158037,9,7.09299,3,0,2,Very Bearish,2026-08-07T01:14:41Z
-SEZL,Sezzle Inc.,4170,10,7.07168,0,0,0,Neutral,2026-08-07T01:14:41Z
-REPL,Replimune Group Inc,5174,11,6.86465,0,0,0,Neutral,2026-08-07T01:14:41Z
-TEAM,Atlassian Corporation Plc,14781,12,6.79653,0,0,0,Neutral,2026-08-07T01:14:41Z
-BROS,Dutch Bros Inc,11955,13,6.42491,1,0,0,Neutral,2026-08-07T01:14:41Z
-SG,Sweetgreen Inc - Ordinary Shares - Class A,4584,14,6.2162,1,0,0,Neutral,2026-08-07T01:14:41Z
-RGTI,Rigetti Computing Inc,51920,15,5.96283,1,0,1,Very Bearish,2026-08-07T01:14:41Z
-ROKU,Roku Inc,134104,16,5.86325,0,0,0,Neutral,2026-08-07T01:14:41Z
-CRSR,Corsair Gaming Inc,24280,17,5.51323,0,0,0,Neutral,2026-08-07T01:14:41Z
-TE,T1 Energy Inc.,17004,18,5.51124,0,0,0,Neutral,2026-08-07T01:14:41Z
-FSLR,First Solar Inc,35293,19,5.48394,1,1,0,Very Bullish,2026-08-07T01:14:41Z
-INOD,Innodata Inc,10847,20,5.4449,0,0,0,Neutral,2026-08-07T01:14:41Z
-LUMN,Lumen Technologies Inc,19013,21,5.19098,0,0,0,Neutral,2026-08-07T01:14:41Z
-VST,Vistra Corp,13634,22,5.0228,0,0,0,Neutral,2026-08-07T01:14:41Z
-XERS,Xeris Biopharma Holdings Inc,10696,23,4.94857,1,0,0,Neutral,2026-08-07T01:14:41Z
-IMSR,Terrestrial Energy Inc.,4964,24,4.90852,0,0,0,Neutral,2026-08-07T01:14:41Z
-TTWO,"Take-Two Interactive Software, Inc.",23149,25,4.51995,0,0,0,Neutral,2026-08-07T01:14:41Z
-RILY,B. Riley Financial Inc,6516,26,4.44887,0,0,0,Neutral,2026-08-07T01:14:41Z
-APP,Applovin Corp,22417,27,4.42002,1,0,0,Neutral,2026-08-07T01:14:41Z
-GRPN,Groupon Inc,37553,28,4.3085,1,0,0,Neutral,2026-08-07T01:14:41Z
-AZN,AstraZeneca PLC,19023,29,4.18224,0,0,0,Neutral,2026-08-07T01:14:41Z
-ELF,e.l.f. Beauty Inc,13415,30,3.96119,0,0,0,Neutral,2026-08-07T01:14:41Z
+TTD,Trade Desk Inc,48768,1,11.8653,1,0,0,Neutral,2026-08-07T02:01:00Z
+AAOI,Applied Optoelectronics Inc,24236,2,10.5363,1,0,0,Neutral,2026-08-07T02:01:00Z
+IOVA,Iovance Biotherapeutics Inc,19564,3,10.0737,1,0,0,Neutral,2026-08-07T02:01:00Z
+WEN,Wendy's Co,15737,4,9.88681,2,2,0,Very Bullish,2026-08-07T02:01:00Z
+RGTI,Rigetti Computing Inc,51925,5,7.91865,0,0,0,Neutral,2026-08-07T02:01:00Z
+MARA,Marathon Digital Holdings Inc,158046,6,7.89802,0,0,0,Neutral,2026-08-07T02:01:00Z
+REPL,Replimune Group Inc,5182,7,7.58166,2,0,2,Very Bearish,2026-08-07T02:01:00Z
+TEAM,Atlassian Corporation Plc,14786,8,7.41641,1,0,0,Neutral,2026-08-07T02:01:00Z
+NET,Cloudflare Inc,35004,9,7.24585,1,0,0,Neutral,2026-08-07T02:01:00Z
+DKNG,DraftKings Inc,120492,10,7.22856,2,0,0,Neutral,2026-08-07T02:01:00Z
+DOCS,Doximity Inc,4269,11,6.71205,0,0,0,Neutral,2026-08-07T02:01:00Z
+SEZL,Sezzle Inc.,4181,12,6.59018,2,2,0,Very Bullish,2026-08-07T02:01:00Z
+BROS,Dutch Bros Inc,11958,13,6.41148,1,1,0,Very Bullish,2026-08-07T02:01:00Z
+SG,Sweetgreen Inc - Ordinary Shares - Class A,4583,14,6.28652,0,0,0,Neutral,2026-08-07T02:01:00Z
+HNST,Honest Company Inc (The ),6002,15,6.24953,2,1,0,Very Bullish,2026-08-07T02:01:00Z
+BTC.X,Bitcoin,674433,16,6.04326,9,1,3,Very Bearish,2026-08-07T02:01:00Z
+ADA.X,Cardano,128992,17,5.97037,1,0,0,Neutral,2026-08-07T02:01:00Z
+TWLO,Twilio Inc,45325,18,5.85308,0,0,0,Neutral,2026-08-07T02:01:00Z
+ABNB,Airbnb Inc,54985,19,5.75642,0,0,0,Neutral,2026-08-07T02:01:00Z
+MRNA,Moderna Inc,110903,20,5.28589,0,0,0,Neutral,2026-08-07T02:01:00Z
+CLSK,Cleanspark Inc,56788,21,5.28349,0,0,0,Neutral,2026-08-07T02:01:00Z
+TTWO,"Take-Two Interactive Software, Inc.",23151,22,5.13417,0,0,0,Neutral,2026-08-07T02:01:00Z
+BETR,Better Home & Finance Holding Co.,5818,23,5.0672,0,0,0,Neutral,2026-08-07T02:01:00Z
+SYM,Symbotic Inc ,10876,24,4.73945,0,0,0,Neutral,2026-08-07T02:01:00Z
+OSCR,Oscar Health Inc - Ordinary Shares - Class A,16070,25,4.7034,1,1,0,Very Bullish,2026-08-07T02:01:00Z
+MP,MP Materials Corporation,34248,26,4.69598,0,0,0,Neutral,2026-08-07T02:01:00Z
+RIOT,Riot Platforms Inc,129230,27,4.42144,0,0,0,Neutral,2026-08-07T02:01:00Z
+SERV,Serve Robotics Inc,17363,28,4.3563,0,0,0,Neutral,2026-08-07T02:01:00Z
+CELH,Celsius Holdings Inc,30565,29,4.27571,0,0,0,Neutral,2026-08-07T02:01:00Z
+JD,JD.com Inc - ADR,66047,30,4.20329,0,0,0,Neutral,2026-08-07T02:01:00Z
