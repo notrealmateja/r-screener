@@ -287,6 +287,46 @@ table.dataTable tbody tr:hover td { background:rgba(255,107,0,0.06) !important; 
 .st-bear  { color:#FF3D00; }
 .st-neut  { color:#666666; }
 
+/* ── METHODOLOGY PAGE ── */
+.doc { max-width:1100px; }
+.doc h2 { font-family:var(--mono); font-size:13px; color:var(--orange); letter-spacing:1.5px;
+          text-transform:uppercase; margin:26px 0 10px; padding-bottom:6px;
+          border-bottom:1px solid var(--border); }
+.doc h2:first-child { margin-top:0; }
+.doc p  { font-size:12.5px; line-height:1.65; color:var(--text2); margin-bottom:10px; }
+.doc strong { color:var(--text); font-weight:600; }
+.doc code { font-family:var(--mono); font-size:11px; background:var(--s2);
+            border:1px solid var(--border); padding:1px 5px; color:var(--orange3); }
+.doc pre  { font-family:var(--mono); font-size:11px; background:var(--s2);
+            border:1px solid var(--border); border-left:3px solid var(--orange);
+            padding:12px 14px; margin:10px 0 14px; overflow-x:auto;
+            color:var(--text2); line-height:1.6; }
+.doc ul { margin:0 0 12px 18px; }
+.doc li { font-size:12.5px; line-height:1.6; color:var(--text2); margin-bottom:6px; }
+.dtable { width:100%; border-collapse:collapse; margin:8px 0 16px; font-size:11.5px; }
+.dtable th { font-family:var(--mono); font-size:9.5px; text-transform:uppercase;
+             letter-spacing:1px; color:var(--muted); text-align:left;
+             padding:7px 10px; border-bottom:1px solid var(--border2); }
+.dtable td { padding:7px 10px; border-bottom:1px solid var(--border);
+             color:var(--text2); vertical-align:top; }
+.dtable td.num { font-family:var(--mono); text-align:right;
+                 font-variant-numeric:tabular-nums; color:var(--text); }
+.dtable tr:last-child td { border-bottom:none; }
+.callout { border:1px solid var(--border2); border-left:3px solid var(--yellow);
+           background:rgba(255,214,0,0.04); padding:12px 14px; margin:12px 0 16px; }
+.callout .ct { font-family:var(--mono); font-size:9.5px; color:var(--yellow);
+               text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; }
+.callout p { margin-bottom:6px; font-size:12px; }
+.callout p:last-child { margin-bottom:0; }
+.statrow { display:grid; grid-template-columns:repeat(4,1fr); gap:1px;
+           background:var(--border); margin:6px 0 16px; }
+.statcell { background:var(--s2); padding:14px; }
+.statcell .k { font-family:var(--mono); font-size:9px; color:var(--muted);
+               text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; }
+.statcell .v { font-family:var(--mono); font-size:20px; font-weight:600; color:var(--orange); }
+.statcell .s { font-size:10px; color:var(--muted); margin-top:3px; }
+@media (max-width:860px){ .statrow { grid-template-columns:repeat(2,1fr); } }
+
 /* ── EARNINGS ROW ── */
 .earn-item { display:flex; align-items:center; gap:10px; padding:7px 0; border-bottom:1px solid var(--border); font-family:var(--mono); font-size:11px; }
 .earn-item:last-child { border:none; }
@@ -647,7 +687,8 @@ ui <- fluidPage(
       div(class="topbar-nav-item",        id="nav-squeeze",   onclick="showPane('squeeze')",   "Short/Squeeze"),
       div(class="topbar-nav-item",        id="nav-deepdive",  onclick="showPane('deepdive')",  "Deep Dive"),
       div(class="topbar-nav-item",        id="nav-macro",     onclick="showPane('macro')",     "Macro"),
-      div(class="topbar-nav-item",        id="nav-news",      onclick="showPane('news')",      "News & Events")
+      div(class="topbar-nav-item",        id="nav-news",      onclick="showPane('news')",      "News & Events"),
+      div(class="topbar-nav-item",        id="nav-about",     onclick="showPane('about')",     "Methodology")
     ),
     div(class="topbar-right",
       div(class="topbar-time",
@@ -665,7 +706,8 @@ ui <- fluidPage(
     div(class="mobile-nav-item",        id="mnav-squeeze",   onclick="showPane('squeeze')",   "▸ Short / Squeeze"),
     div(class="mobile-nav-item",        id="mnav-deepdive",  onclick="showPane('deepdive')",  "▸ Deep Dive"),
     div(class="mobile-nav-item",        id="mnav-macro",     onclick="showPane('macro')",     "▸ Macro"),
-    div(class="mobile-nav-item",        id="mnav-news",      onclick="showPane('news')",      "▸ News & Events")
+    div(class="mobile-nav-item",        id="mnav-news",      onclick="showPane('news')",      "▸ News & Events"),
+    div(class="mobile-nav-item",        id="mnav-about",     onclick="showPane('about')",     "▸ Methodology")
   ),
 
   # ── BODY ─────────────────────────────────────────────────────────────────
@@ -918,6 +960,16 @@ ui <- fluidPage(
               uiOutput("stwits_feed"))
           )
         )
+      )
+    ),
+
+    # ── METHODOLOGY ────────────────────────────────────────────────────────
+    div(class="tab-pane", id="pane-about",
+      div(class="panel",
+        div(class="panel-head",
+          div(class="panel-head-title","METHODOLOGY & VALIDATION"),
+          div(class="panel-head-meta", uiOutput("about_meta"))),
+        div(class="panel-body", div(class="doc", uiOutput("about_body")))
       )
     )
   ),
@@ -1849,6 +1901,177 @@ server <- function(input, output, session) {
     })
 
     div(header, do.call(tagList, items))
+  })
+
+  # ── Methodology & Validation ──────────────────────────────────────────────
+  output$about_meta <- renderUI({
+    n <- if (!is.null(master_data)) nrow(master_data) else 0
+    div(glue("{n} STOCKS · UPDATED {meta$last_updated}"))
+  })
+
+  output$about_body <- renderUI({
+    pct <- function(x, d = 1) if (is.na(x)) "n/a" else sprintf("%+.*f%%", d, x * 100)
+
+    # ── Validation block, driven by the live backtest output ────────────────
+    validation <- if (is.null(bt_headline) || nrow(bt_headline) == 0) {
+      div(class="callout",
+        div(class="ct","Validation pending"),
+        tags$p("The walk-forward backtest has not produced results yet. It needs at least ",
+               "85 trading days of alpha history."))
+    } else {
+      h <- bt_headline[1, ]
+      stats <- div(class="statrow",
+        div(class="statcell", div(class="k","Q1 ann. alpha"),
+            div(class="v", pct(h$q1_ann_alpha, 1)),
+            div(class="s","top-scored quintile")),
+        div(class="statcell", div(class="k","Q1 − Q5 spread"),
+            div(class="v", pct(h$spread_ann, 1)),
+            div(class="s","annualised")),
+        div(class="statcell", div(class="k","Mean rank IC"),
+            div(class="v", sprintf("%+.3f", h$mean_rank_ic)),
+            div(class="s", sprintf("t = %.2f", h$ic_t_stat))),
+        div(class="statcell", div(class="k","Rebalances"),
+            div(class="v", h$rebalances),
+            div(class="s", sprintf("%dd hold", h$hold_days)))
+      )
+
+      tbl <- if (!is.null(bt_summary) && nrow(bt_summary) > 0) {
+        rows <- lapply(seq_len(nrow(bt_summary)), function(i) {
+          r <- bt_summary[i, ]
+          tags$tr(
+            tags$td(r$bucket_label),
+            tags$td(class="num", pct(r$ann_alpha, 2)),
+            tags$td(class="num", sprintf("%.2f", r$alpha_ir)),
+            tags$td(class="num", sprintf("%.0f%%", r$hit_rate * 100)),
+            tags$td(class="num", pct(r$worst_period, 2)),
+            tags$td(class="num", r$avg_n)
+          )
+        })
+        tags$table(class="dtable",
+          tags$thead(tags$tr(tags$th("Bucket"), tags$th("Ann. alpha"), tags$th("IR"),
+                             tags$th("Hit rate"), tags$th("Worst period"), tags$th("Names"))),
+          tags$tbody(do.call(tagList, rows)))
+      } else NULL
+
+      honest <- if (is.na(h$ic_t_stat) || abs(h$ic_t_stat) < 2) {
+        div(class="callout",
+          div(class="ct","How to read this"),
+          tags$p(tags$strong("The spread is encouraging; the significance is not. "),
+            sprintf("Top-quintile names returned %s annualised excess return against %s for the bottom quintile, but the mean rank information coefficient is %+.3f with a t-statistic of %.2f.",
+                    pct(h$q1_ann_alpha,1), pct(h$q5_ann_alpha,1), h$mean_rank_ic, h$ic_t_stat)),
+          tags$p("A t-statistic below 2 means that relationship is not statistically ",
+                 "distinguishable from zero. With ", h$rebalances, " rebalances there is not ",
+                 "enough independent evidence to claim the score has genuine predictive skill."),
+          if (!isTRUE(h$monotonic)) tags$p(tags$strong("Bucket ordering is not monotonic. "),
+            "Alpha does not decline cleanly from Q1 to Q5, which is what you would expect ",
+            "from a signal with consistent power. Q1 separating from the rest, with the ",
+            "middle buckets noisy, is the honest description.") else NULL)
+      } else {
+        div(class="callout",
+          div(class="ct","How to read this"),
+          tags$p(sprintf("Mean rank IC of %+.3f with t = %.2f clears the conventional |t| > 2 bar, so the relationship between score and forward alpha is statistically distinguishable from zero over this sample.",
+                         h$mean_rank_ic, h$ic_t_stat)))
+      }
+
+      tagList(stats, tbl, honest)
+    }
+
+    tagList(
+      tags$h2("What this is"),
+      tags$p("A quantitative screener that ranks a ", tags$strong("195-stock universe"),
+             " by risk-adjusted excess return against SPY. The pipeline runs unattended ",
+             "every trading day at 21:30 UTC on GitHub Actions — pulling market data, ",
+             "recomputing the model, and redeploying this dashboard without any manual step."),
+      tags$p("The model ranks on ", tags$strong("alpha, not raw return"),
+             ". A stock up 15% while the market is up 14% scores worse than one up 6% ",
+             "while the market is up 2%."),
+
+      tags$h2("Composite score"),
+      tags$pre(
+"final_score = alpha_score    x 0.55
+            + tech_filter    x 0.22
+            + quality_gate   x 0.13
+            + options_signal x 0.10"),
+      tags$p("The alpha component is a percentile blend of five measures taken from each ",
+             "stock's daily excess-return series:"),
+      tags$pre(
+"alpha_raw = annualised_alpha  x 0.30   Jensen's alpha, CAPM-adjusted
+          + information_ratio x 0.25   alpha per unit of tracking error
+          + hit_rate          x 0.20   % of days the stock beat SPY
+          + alpha_63d         x 0.15   compounded alpha over one quarter
+          + streak            x 0.10   consecutive positive-alpha days"),
+
+      tags$h2("Confidence weighting"),
+      tags$p("A short return series gives a noisy alpha estimate, so the raw score is ",
+             "shrunk toward a neutral 50 in proportion to how much history supports it:"),
+      tags$pre("alpha_score = alpha_raw x w + 50 x (1 - w),   w = min(days_tracked / 63, 1)"),
+      tags$p("63 trading days is one quarter — the point at which an information ratio ",
+             "becomes statistically meaningful. Below that the model deliberately refuses ",
+             "to express conviction. Alpha history is rebuilt from the full one-year price ",
+             "window on every run, so a missed run backfills itself and a newly added ticker ",
+             "is judged on the same evidence as one tracked since day one."),
+
+      tags$h2("Does it actually work?"),
+      tags$p("Walk-forward test, out-of-sample by construction: at each rebalance the score ",
+             "is computed from a 63-day formation window, stocks are sorted into quintiles, ",
+             "and realised alpha is measured over the following 21 days — data the score ",
+             "could not have seen. The weights are the live model's, not fitted here."),
+      validation,
+
+      tags$h2("Data sources"),
+      tags$table(class="dtable",
+        tags$thead(tags$tr(tags$th("Source"), tags$th("Provides"), tags$th("Cadence"))),
+        tags$tbody(
+          tags$tr(tags$td("Yahoo Finance"), tags$td("Prices, market cap, P/E, EPS"), tags$td("Every run, all 195")),
+          tags$tr(tags$td("Alpha Vantage OVERVIEW"), tags$td("P/B, ROE, margins, growth, analyst ratings, sector"), tags$td("22 tickers/run — free tier is 25 calls/day")),
+          tags$tr(tags$td("Alpha Vantage NEWS"), tags$td("Market news with sentiment scoring"), tags$td("Daily")),
+          tags$tr(tags$td("Alpha Vantage EARNINGS"), tags$td("Earnings dates and EPS estimates"), tags$td("Cached 3 days")),
+          tags$tr(tags$td("FRED"), tags$td("Treasury curve, CPI, unemployment, Fed funds"), tags$td("Daily")),
+          tags$tr(tags$td("ApeWisdom"), tags$td("r/wallstreetbets mentions and rank deltas"), tags$td("Daily")),
+          tags$tr(tags$td("StockTwits"), tags$td("Trending symbols, bull/bear sentiment"), tags$td("Daily")),
+          tags$tr(tags$td("Polygon.io"), tags$td("Options positioning, SEC financials"), tags$td("See limitations")))),
+
+      tags$h2("Known limitations"),
+      tags$p("Stated plainly, because they change how the output should be read."),
+      tags$ul(
+        tags$li(tags$strong("Survivorship bias in the backtest. "),
+                "The universe is built from tickers that exist and have a year of history ",
+                "today, so companies that were delisted or acquired over the test window are ",
+                "absent. That biases measured returns upward, and it is the single largest ",
+                "caveat on the numbers above."),
+        tags$li(tags$strong("options_signal contributes nothing. "),
+                "It carries 10% of the composite weight, but Polygon's free tier serves no ",
+                "options snapshots, so it is a constant 50 for every stock — a flat +5 with ",
+                "zero discriminating power. The effective model is alpha 0.55 / technicals ",
+                "0.22 / quality 0.13."),
+        tags$li(tags$strong("Sector coverage is partial. "),
+                "Sector comes only from Alpha Vantage, which refreshes 22 tickers per run, ",
+                "so recently added names show an em dash until rotation reaches them."),
+        tags$li(tags$strong("Short interest is a stub. "),
+                "No free API provides reliable short-float data, so the field is explicitly ",
+                "NA rather than filled with an unrelated proxy."),
+        tags$li(tags$strong("Small sample. "),
+                "One year of history supports only a handful of independent rebalances. ",
+                "Treat every figure above as directional, not conclusive.")),
+
+      tags$h2("Engineering"),
+      tags$p("Five R modules run in sequence, each writing CSV that is committed back to the ",
+             "repo and copied into the app before deploy — so the dashboard is a pure read of ",
+             "pre-computed state and stays responsive regardless of upstream API latency."),
+      tags$ul(
+        tags$li("Incomplete price bars are dropped per symbol and every technical indicator ",
+                "is individually guarded — one malformed series cannot halt a run."),
+        tags$li("A fetch returning empty keeps the previous file rather than overwriting it, ",
+                "so a transient API failure degrades a panel to stale instead of blank."),
+        tags$li("Payloads with variable nested schemas are parsed field by field from atomic ",
+                "vectors rather than bulk-coerced."),
+        tags$li("Every run publishes a data-health table — row counts, file age, status — to ",
+                "the workflow summary."),
+        tags$li("Deploys retry three times, then fail the run loudly rather than reporting ",
+                "success while the live site goes stale.")),
+      tags$p(style="margin-top:18px;color:#555;font-size:11px;font-family:var(--mono);",
+             "Built in R — quantmod, dplyr, TTR, Shiny, plotly. CI/CD on GitHub Actions.")
+    )
   })
 
   output$sector_today <- renderPlotly({

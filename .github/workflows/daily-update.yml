@@ -71,12 +71,17 @@ jobs:
             source("R/02b_polygon.R")
             source("R/03_data.R")
             source("R/04_master_score.R")
+            source("R/05_backtest.R")
 
             fund_data <- run_module1()
             run_module2(fund_data$symbol)
             run_module_polygon(fund_data$symbol)
             run_module3(fund_data$symbol)
             run_module4()
+            # Walk-forward validation of the score. Non-fatal: a backtest
+            # failure should never block the data refresh or the deploy.
+            tryCatch(run_backtest(),
+                     error = function(e) message("Backtest skipped: ", conditionMessage(e)))
 
             csv_files <- list.files("data", pattern="\\.csv$", full.names=TRUE)
             file.copy(csv_files, file.path("app", basename(csv_files)), overwrite=TRUE)

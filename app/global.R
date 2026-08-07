@@ -16,6 +16,9 @@ news_data      <- load_csv("market_news.csv")
 sector_perf    <- load_csv("sector_performance.csv")
 wsb_data       <- load_csv("wsb_trending.csv")
 stwits_data    <- load_csv("stocktwits_trending.csv")
+bt_summary     <- load_csv("backtest_summary.csv")
+bt_headline    <- load_csv("backtest_headline.csv")
+bt_ic          <- load_csv("backtest_ic.csv")
 
 meta <- tryCatch(readRDS("meta.rds"),
                  error=function(e) list(last_updated="Not yet run", n_stocks=0))

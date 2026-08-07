@@ -1,0 +1,2 @@
+formation_days,hold_days,rebalances,n_buckets,q1_ann_alpha,q5_ann_alpha,spread_ann,mean_rank_ic,ic_t_stat,monotonic
+63,21,8,5,0.35512889997093233,0.05943636478781385,0.2956925351831185,0.06021684094421689,1.035929047015795,FALSE

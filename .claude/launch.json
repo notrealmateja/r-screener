@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "edgescreener",
+      "runtimeExecutable": "Rscript",
+      "runtimeArgs": ["-e", "shiny::runApp('app', port=7788, host='127.0.0.1', launch.browser=FALSE)"],
+      "port": 7788
+    }
+  ]
+}
