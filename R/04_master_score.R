@@ -262,12 +262,25 @@ run_module4 <- function(fund_data = NULL) {
     # Options signal from Polygon (50 if unavailable — no penalty for missing data)
     options_signal = ifelse(is.na(options_score), 50, options_score),
 
-    # Primary ranking score — now includes options market sentiment
+    # Is the options signal carrying any information this run?  On a free
+    # Polygon key the options snapshot endpoint returns nothing, so every stock
+    # gets the same fallback 50 — a constant that contributed 10% of the weight
+    # while discriminating between nothing.  Only include the term when it
+    # actually varies across the universe; the weight it would have taken is
+    # redistributed across the three components that do carry signal.
+    #
+    # This reactivates automatically if a paid Polygon key is configured.
+    options_live = length(unique(options_signal[!is.na(options_signal)])) > 1,
+
+    # Primary ranking score
     final_score  = round(
-      alpha_score    * 0.55 +
-      tech_filter    * 0.22 +
-      quality_gate   * 0.13 +
-      options_signal * 0.10,   # Polygon put/call ratio signal
+      ifelse(
+        options_live,
+        alpha_score  * 0.55 + tech_filter * 0.22 +
+        quality_gate * 0.13 + options_signal * 0.10,
+        alpha_score  * 0.61 + tech_filter * 0.24 +
+        quality_gate * 0.15
+      ),
       1),
 
     # ── App expects these exact column names ──
@@ -513,6 +526,15 @@ run_module4 <- function(fund_data = NULL) {
   write_csv(top15_unicorns, "data/top15_unicorns.csv")
 
   message("Saved: top15_sweetspot.csv + top15_unicorns.csv\n")
+
+  # Report which weighting was applied, so a silently-dead options feed is
+  # visible in the run log rather than quietly diluting every score.
+  if (isTRUE(df$options_live[1])) {
+    message("Scoring weights: alpha 0.55 / tech 0.22 / quality 0.13 / options 0.10")
+  } else {
+    message("Scoring weights: alpha 0.61 / tech 0.24 / quality 0.15 ",
+            "(options signal carries no information this run — term dropped)")
+  }
 
   # ── 12. Meta file ──────────────────────────────────────────────────────────
   meta_obj <- list(

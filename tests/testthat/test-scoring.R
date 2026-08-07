@@ -1,8 +1,34 @@
 # Scoring invariants. These are the properties the model claims to have, so a
 # change that silently breaks one should fail here rather than on the dashboard.
 
-test_that("composite weights sum to 1", {
+test_that("both composite weightings sum to 1", {
+  # With a live options feed
   expect_equal(0.55 + 0.22 + 0.13 + 0.10, 1.0)
+  # With the options term dropped (free Polygon tier), its weight is
+  # redistributed rather than simply removed — otherwise every score would
+  # silently shrink by 10%.
+  expect_equal(0.61 + 0.24 + 0.15, 1.0)
+})
+
+test_that("dropping a constant options term widens the score range", {
+  # The failure this guards against: a term that is identical for every stock
+  # still consumes weight, compressing the spread between good and bad names.
+  alpha <- c(90, 70, 50, 30, 10); tech <- c(80, 65, 50, 35, 20)
+  qual  <- c(75, 60, 50, 40, 25); opts <- rep(50, 5)   # constant, no information
+
+  with_opts <- alpha*0.55 + tech*0.22 + qual*0.13 + opts*0.10
+  without   <- alpha*0.61 + tech*0.24 + qual*0.15
+
+  expect_gt(diff(range(without)), diff(range(with_opts)))
+  # Ordering must be unaffected — this is a rescaling, not a re-ranking
+  expect_equal(order(without), order(with_opts))
+})
+
+test_that("options term is only active when the signal actually varies", {
+  is_live <- function(x) length(unique(x[!is.na(x)])) > 1
+  expect_false(is_live(rep(50, 195)))        # free tier: constant fallback
+  expect_false(is_live(rep(NA_real_, 10)))   # nothing fetched at all
+  expect_true(is_live(c(20, 50, 80)))        # paid key: real variation
 })
 
 test_that("alpha component weights sum to 1", {

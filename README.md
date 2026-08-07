@@ -74,11 +74,23 @@ a pure read of pre-computed state and stays fast regardless of API latency.
 **Composite score** (`R/04_master_score.R`):
 
 ```
-final_score = alpha_score    × 0.55
+final_score = alpha_score  × 0.61     # options feed inactive (default)
+            + tech_filter  × 0.24
+            + quality_gate × 0.15
+
+final_score = alpha_score    × 0.55   # options feed carrying information
             + tech_filter    × 0.22
             + quality_gate   × 0.13
             + options_signal × 0.10
 ```
+
+The options term is only included when it actually varies across the universe.
+On a free Polygon key the options snapshot endpoint returns nothing, so every
+stock falls back to an identical 50 — a constant that took 10% of the weight
+while distinguishing nothing, compressing the score range by the same 10%. The
+run detects this and redistributes that weight across the three components that
+do carry signal; configuring a paid Polygon key reactivates the term with no
+code change. Each run logs which weighting it used.
 
 **Alpha score** is a percentile blend of five measures computed from the daily
 excess-return series:
@@ -158,11 +170,11 @@ This runs unattended, so most of the work is in failure handling:
 
 Stated plainly because they affect how the output should be read:
 
-- **`options_signal` contributes nothing.** It carries 10% of the composite weight
-  but Polygon's free tier does not serve options snapshots or SEC financials, so it
-  is a constant 50 for every stock — a flat +5 with zero discriminating power. The
-  effective model is alpha 0.55 / technicals 0.22 / quality 0.13. Either a paid
-  Polygon plan or removing the term would fix this.
+- **No options data on the free Polygon tier.** Options snapshots and SEC
+  financials are paid-tier endpoints, so `put_call_ratio`, `options_sentiment` and
+  `avg_iv` are empty. The scoring model detects the dead feed and drops the term
+  rather than letting a constant dilute every score, but the signal itself is
+  genuinely missing until a paid key is configured.
 - **Sector coverage is partial.** Sector comes only from Alpha Vantage, which
   refreshes 22 tickers per run, so recently added names show `—` until rotation
   reaches them.

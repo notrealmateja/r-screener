@@ -1987,11 +1987,32 @@ server <- function(input, output, session) {
              "while the market is up 2%."),
 
       tags$h2("Composite score"),
-      tags$pre(
+      # Show the weighting actually in force, read from the scored output rather
+      # than hardcoded, so this page cannot drift from the model.
+      (function() {
+        live <- !is.null(master_data) && "options_live" %in% names(master_data) &&
+                isTRUE(master_data$options_live[1])
+        if (live) tagList(
+          tags$pre(
 "final_score = alpha_score    x 0.55
             + tech_filter    x 0.22
             + quality_gate   x 0.13
             + options_signal x 0.10"),
+          tags$p("The options term is active: Polygon is returning options data ",
+                 "that varies across the universe."))
+        else tagList(
+          tags$pre(
+"final_score = alpha_score  x 0.61
+            + tech_filter  x 0.24
+            + quality_gate x 0.15"),
+          tags$p("The options term is ", tags$strong("currently excluded"),
+                 ". Polygon's free tier returns no options snapshot, so every stock ",
+                 "falls back to an identical 50 — a constant that would take 10% of ",
+                 "the weight while distinguishing nothing, compressing the score range ",
+                 "by the same 10%. The model detects this and redistributes that weight ",
+                 "across the three components that do carry signal. A paid Polygon key ",
+                 "reactivates the term with no code change."))
+      })(),
       tags$p("The alpha component is a percentile blend of five measures taken from each ",
              "stock's daily excess-return series:"),
       tags$pre(
@@ -2039,11 +2060,11 @@ server <- function(input, output, session) {
                 "today, so companies that were delisted or acquired over the test window are ",
                 "absent. That biases measured returns upward, and it is the single largest ",
                 "caveat on the numbers above."),
-        tags$li(tags$strong("options_signal contributes nothing. "),
-                "It carries 10% of the composite weight, but Polygon's free tier serves no ",
-                "options snapshots, so it is a constant 50 for every stock — a flat +5 with ",
-                "zero discriminating power. The effective model is alpha 0.55 / technicals ",
-                "0.22 / quality 0.13."),
+        tags$li(tags$strong("No options data on the free Polygon tier. "),
+                "Options snapshots and SEC financials are paid-tier endpoints, so put/call ",
+                "ratio, options sentiment and implied volatility are all empty. The score ",
+                "drops the term rather than letting a constant dilute every stock, but the ",
+                "signal itself is genuinely missing until a paid key is configured."),
         tags$li(tags$strong("Sector coverage is partial. "),
                 "Sector comes only from Alpha Vantage, which refreshes 22 tickers per run, ",
                 "so recently added names show an em dash until rotation reaches them."),
