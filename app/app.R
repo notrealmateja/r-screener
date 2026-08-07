@@ -1161,9 +1161,11 @@ server <- function(input, output, session) {
           market_cap >= 1e9  ~ paste0("$",round(market_cap/1e9,1),"B"),
           TRUE               ~ "N/A"),
         ret_1m_fmt   = fmt_ret(ret_1m),
-        ret_3m_fmt   = fmt_ret(ret_3m)
+        ret_3m_fmt   = fmt_ret(ret_3m),
+        company_fmt  = coalesce(company, symbol),
+        sector_fmt   = coalesce(sector, "—")
       ) %>%
-      select(`#`, Symbol=symbol, Company=company, Sector=sector,
+      select(`#`, Symbol=symbol, Company=company_fmt, Sector=sector_fmt,
              Score, Rating, Confidence, `Exp Ret/D`=`Exp Return`,
              `1M`=ret_1m_fmt, `3M`=ret_3m_fmt,
              Percentile, Driver, `Sig Matches`=Signals,
@@ -1210,9 +1212,11 @@ server <- function(input, output, session) {
         ret_3m_fmt   = fmt_ret(ret_3m),
         ret_1m_fmt   = fmt_ret(ret_1m),
         pe_fmt       = ifelse(is.na(pe_ratio)|pe_ratio<=0,"N/A",
-                              as.character(round(pe_ratio,1)))
+                              as.character(round(pe_ratio,1))),
+        company_fmt  = coalesce(company, symbol),
+        sector_fmt   = coalesce(sector, "—")
       ) %>%
-      select(`#`, Badge, Symbol=symbol, Company=company, Sector=sector,
+      select(`#`, Badge, Symbol=symbol, Company=company_fmt, Sector=sector_fmt,
              Score, Rating, `Wk Conf`, Driver,
              `1M`=ret_1m_fmt, `3M`=ret_3m_fmt,
              `Rev Growth`=rev_g_fmt, `Mkt Cap`=mktcap_fmt, `P/E`=pe_fmt)
@@ -1293,12 +1297,14 @@ server <- function(input, output, session) {
         ret_3m_fmt   = fmt_ret(ret_3m),
         ret_6m_fmt   = fmt_ret(ret_6m),
         ret_1y_fmt   = fmt_ret(ret_1y),
+        company_fmt  = coalesce(company, symbol),
+        sector_fmt   = coalesce(sector, "—"),
         short_float_pct = ifelse(is.na(short_percent_float),"N/A",paste0(round(short_percent_float*100,1),"%")),
         squeeze_tier = ifelse(is.null(squeeze_tier)|is.na(squeeze_tier),"No Signal",squeeze_tier),
         momentum_score = coalesce(momentum_score, 45),
         squeeze_score  = coalesce(squeeze_score,  28.5)
       ) %>%
-      select(Symbol=symbol, Company=company, Sector=sector, Score, Rating,
+      select(Symbol=symbol, Company=company_fmt, Sector=sector_fmt, Score, Rating,
              Fund=fundamental_score, Mom=momentum_score, Squeeze=squeeze_score,
              `P/E`=pe_fmt, `1M`=ret_1m_fmt, `3M`=ret_3m_fmt,
              `6M`=ret_6m_fmt, `1Y`=ret_1y_fmt,
@@ -2180,8 +2186,11 @@ server <- function(input, output, session) {
   squeeze_filtered <- reactive({
     req(master_data)
     df <- master_data
+    # Base-R subsetting on a column containing NA yields all-NA phantom rows.
+    # Harmless while every stock had a sector; now that sector is NA until
+    # Alpha Vantage enriches a ticker, filter() is required so those drop out.
     if (!is.null(input$squeeze_sector) && input$squeeze_sector != "All")
-      df <- df[df$sector == input$squeeze_sector, ]
+      df <- dplyr::filter(df, !is.na(sector), sector == input$squeeze_sector)
     df %>% arrange(desc(master_score))
   })
 

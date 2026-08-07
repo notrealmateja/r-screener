@@ -169,7 +169,7 @@ run_module1 <- function(tickers = NULL) {
   # newly added names would have no market_cap for ~9 days and the Unicorn
   # screen could not evaluate them.
   message("Fetching Yahoo quote fields (market cap, P/E, EPS)...")
-  fields <- yahooQF(c("Market Capitalization", "P/E Ratio", "Earnings/Share"))
+  fields <- yahooQF(c("Name", "Market Capitalization", "P/E Ratio", "Earnings/Share"))
   quote_rows <- list()
   chunks <- split(tickers, ceiling(seq_along(tickers) / 40))
   for (ch in chunks) {
@@ -177,6 +177,7 @@ run_module1 <- function(tickers = NULL) {
     if (!is.null(q) && nrow(q) > 0) {
       quote_rows[[length(quote_rows) + 1]] <- tibble(
         symbol           = rownames(q),
+        company_yahoo    = as.character(q[["Name"]]),
         market_cap_yahoo = suppressWarnings(as.numeric(q[["Market Capitalization"]])),
         pe_yahoo         = suppressWarnings(as.numeric(q[["P/E Ratio"]])),
         eps_yahoo        = suppressWarnings(as.numeric(q[["Earnings/Share"]]))
@@ -185,9 +186,10 @@ run_module1 <- function(tickers = NULL) {
     Sys.sleep(0.5)
   }
   quotes <- if (length(quote_rows) > 0) bind_rows(quote_rows) else
-    tibble(symbol = character(), market_cap_yahoo = numeric(),
-           pe_yahoo = numeric(), eps_yahoo = numeric())
-  message(glue::glue("  Quotes: {sum(!is.na(quotes$market_cap_yahoo))}/{length(tickers)} have market cap"))
+    tibble(symbol = character(), company_yahoo = character(),
+           market_cap_yahoo = numeric(), pe_yahoo = numeric(), eps_yahoo = numeric())
+  message(glue::glue("  Quotes: {sum(!is.na(quotes$market_cap_yahoo))}/{length(tickers)} market cap, ",
+                     "{sum(!is.na(quotes$company_yahoo))}/{length(tickers)} company name"))
 
   yahoo_data <- yahoo_data %>% left_join(quotes, by = "symbol")
 
@@ -231,8 +233,22 @@ run_module1 <- function(tickers = NULL) {
 
   # av_latest can be missing these columns entirely on a cold cache, which would
   # make the coalesce below fail rather than simply fall back to Yahoo.
-  for (col in c("pe_ratio", "eps", "market_cap", "high_52w_av", "low_52w_av")) {
+  # On a cold or lost av_cache.csv the join contributes no AV columns at all,
+  # and the scoring block below references them directly — Module 1 aborted with
+  # "object 'pb_ratio' not found".  Materialise every AV-derived column up front
+  # so a missing cache degrades to neutral scores instead of killing the run.
+  av_numeric <- c("market_cap","pe_ratio","pe_forward","pb_ratio","eps","eps_forward",
+                  "roe","roa","profit_margin","operating_margin","revenue",
+                  "revenue_per_share","ebitda","ev_ebitda","earningsGrowth",
+                  "revenue_growth","beta_av","analyst_target","analyst_strong_buy",
+                  "analyst_buy","analyst_hold","analyst_sell","analyst_strong_sell",
+                  "shares_outstanding","dividend_yield","peg_ratio","ev_revenue",
+                  "book_value","high_52w_av","low_52w_av")
+  for (col in av_numeric) {
     if (!col %in% names(merged)) merged[[col]] <- NA_real_
+  }
+  for (col in c("company_av", "sector_av", "industry")) {
+    if (!col %in% names(merged)) merged[[col]] <- NA_character_
   }
 
   merged <- merged %>%
@@ -241,6 +257,13 @@ run_module1 <- function(tickers = NULL) {
       pe_ratio      = dplyr::coalesce(pe_ratio,      pe_yahoo),
       eps           = dplyr::coalesce(eps,            eps_yahoo),
       market_cap    = dplyr::coalesce(market_cap,    market_cap_yahoo),
+
+      # Carry name and sector through instead of discarding them.  These were
+      # being dropped below, so the only source downstream was a hardcoded
+      # 50-ticker table in Module 4 and every other name rendered blank.
+      # Yahoo covers the full universe; AV is preferred where it has run.
+      company       = dplyr::coalesce(company_av, company_yahoo),
+      sector        = sector_av,
       high_52w      = dplyr::coalesce(high_52w_av,   high_52w),
       low_52w       = dplyr::coalesce(low_52w_av,    low_52w),
 
@@ -304,7 +327,7 @@ run_module1 <- function(tickers = NULL) {
         roe_score * 0.30 + margin_score * 0.15 +
         analyst_score * 0.10, 2)
     ) %>%
-    select(-any_of(c("pe_yahoo", "eps_yahoo", "market_cap_yahoo",
+    select(-any_of(c("pe_yahoo", "eps_yahoo", "market_cap_yahoo", "company_yahoo",
                       "high_52w_av", "low_52w_av",
                       "company_av", "sector_av"))) %>%
     arrange(desc(fundamental_score))

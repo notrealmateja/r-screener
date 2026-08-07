@@ -126,7 +126,17 @@ run_module4 <- function(fund_data = NULL) {
   }
 
   # Merge company/sector lookup
-  df <- left_join(df, ticker_meta, by = "symbol")
+  # ticker_meta only covers the original 50 tickers, so joining it as the sole
+  # source left every other name and sector blank in the screener.  Treat it as
+  # a fallback behind whatever Module 1 resolved (Yahoo name + AV sector).
+  if (!"company" %in% names(df)) df$company <- NA_character_
+  if (!"sector"  %in% names(df)) df$sector  <- NA_character_
+  df <- left_join(df, ticker_meta, by = "symbol", suffix = c("", "_static")) %>%
+    mutate(
+      company = dplyr::coalesce(company, company_static),
+      sector  = dplyr::coalesce(sector,  sector_static)
+    ) %>%
+    select(-any_of(c("company_static", "sector_static")))
 
   # Ensure all expected columns exist (handles first-run / empty-cache scenarios)
   ensure_col <- function(df, col, default) {
