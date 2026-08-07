@@ -67,3 +67,33 @@ test_that("alpha history merge prefers live rows, backfills gaps, refreshes toda
   expect_equal(sum(merged$symbol == "NEW"), 4)    # new ticker gets full history
   expect_equal(nrow(merged), nrow(distinct(merged, symbol, date)))
 })
+
+test_that("52-week high/low window is bounded to one year", {
+  # Regression: getSymbols defaults to from = 2007-01-01, so max/min over the
+  # whole series returned an all-time high labelled as a 52-week high. ACAD
+  # reported 57.00 against a true 28.80; AI reported 177.47 against 22.66.
+  src <- readLines("../../R/01_fundamentals.R")
+  i <- grep("get_yahoo_base <- function", src)
+  expect_length(i, 1)
+  body_txt <- paste(src[i:(i + 20)], collapse = "\n")
+  expect_match(body_txt, "from = Sys\\.Date\\(\\) - 365",
+               info = "the 52-week price pull must be explicitly bounded")
+})
+
+test_that("one-year return uses the bar nearest a year ago, not the first bar", {
+  # Regression: price_1y <- first(close) was only correct while the price pull
+  # happened to be exactly one year long. With a multi-year lookback it turns
+  # ret_1y into a multi-year return.
+  src <- paste(readLines("../../R/02_momentum.R"), collapse = "\n")
+  expect_no_match(src, "price_1y\\s*=\\s*first\\(close\\)")
+  expect_match(src, "price_1y\\s*=\\s*close\\[which\\.min\\(abs\\(date - d1y\\)\\)\\]")
+})
+
+test_that("alpha history keeps only the three columns anything reads", {
+  src <- paste(readLines("../../R/02_momentum.R"), collapse = "\n")
+  expect_match(src, "select\\(date, symbol, daily_alpha\\)")
+  # The retention window must cover the price pull or history is truncated
+  lb <- as.numeric(sub(".*PRICE_LOOKBACK_DAYS <- ([0-9]+).*", "\\1", src))
+  keep <- as.numeric(sub(".*HISTORY_KEEP_DAYS   <- ([0-9]+).*", "\\1", src))
+  expect_gte(keep, lb)
+})

@@ -25,6 +25,15 @@
 library(tidyquant); library(dplyr); library(tidyr)
 library(TTR); library(readr); library(glue); library(lubridate)
 
+# How far back to pull prices.  This sets how much alpha history exists, which
+# in turn sets how many independent rebalances the backtest gets: at a 63-day
+# formation window and 21-day holding period, one year yields ~8 rebalances and
+# three years yields ~32.  Statistical power scales with the square root of
+# that count, so the longer window roughly doubles the t-statistic available to
+# the validation in R/05_backtest.R.
+PRICE_LOOKBACK_DAYS <- 1095   # ~3 calendar years
+HISTORY_KEEP_DAYS   <- 1120   # slightly beyond the pull so nothing is truncated
+
 # Guard a TTR call: a series that is too short (or otherwise unusable) returns
 # an all-NA column instead of aborting the whole pipeline.  At file scope so it
 # is unit-testable.
@@ -48,7 +57,7 @@ run_module2 <- function(tickers = NULL) {
 
   prices_raw <- tq_get(all_syms,
                        get  = "stock.prices",
-                       from = Sys.Date() - 365,
+                       from = Sys.Date() - PRICE_LOOKBACK_DAYS,
                        to   = Sys.Date())
 
   spy_ret <- prices_raw %>%
@@ -127,7 +136,10 @@ run_module2 <- function(tickers = NULL) {
       price_1m    = close[which.min(abs(date - d1m))],
       price_3m    = close[which.min(abs(date - d3m))],
       price_6m    = close[which.min(abs(date - d6m))],
-      price_1y    = first(close),
+      # Must be the bar nearest one year ago, not first(close).  first() was
+      # equivalent only while the price pull was exactly one year long; with a
+      # multi-year lookback it silently turns ret_1y into a multi-year return.
+      price_1y    = close[which.min(abs(date - d1y))],
 
       # ---- returns ----
       ret_1m      = (price_now / price_1m) - 1,
@@ -213,28 +225,31 @@ run_module2 <- function(tickers = NULL) {
   # permanent hole in the series.  Backfilling from `tech` uses realized past
   # excess returns — no look-ahead — so the history self-heals and new tickers
   # are weighted on the same evidence as long-tracked ones.
+  # Schema is deliberately just date/symbol/daily_alpha.  The file previously
+  # also carried mean_daily_alpha, jensen_alpha_ann, info_ratio, beta, ret_1m,
+  # ret_3m and momentum_score, but nothing ever read them back — they are
+  # recomputed from the price pull on every run.  Those seven columns were 70%
+  # of a 4.7MB file that is rewritten and committed daily.  Dropping them is
+  # what makes a multi-year window affordable.
   message("Rebuilding alpha history from the full price window...")
   if (!dir.exists("data") ) dir.create("data", recursive = TRUE)
-
-  per_symbol <- summary_today %>%
-    select(symbol, mean_daily_alpha, jensen_alpha_ann, info_ratio, beta,
-           ret_1m, ret_3m, momentum_score)
 
   window_history <- tech %>%
     filter(!is.na(daily_alpha)) %>%
     select(date, symbol, daily_alpha) %>%
-    left_join(per_symbol, by = "symbol") %>%
     mutate(date = as.Date(date))
 
   history_path <- "data/alpha_history.csv"
   if (file.exists(history_path)) {
     existing <- tryCatch(
-      read_csv(history_path, show_col_types = FALSE) %>% mutate(date = as.Date(date)),
+      read_csv(history_path, show_col_types = FALSE) %>%
+        mutate(date = as.Date(date)) %>%
+        select(any_of(c("date", "symbol", "daily_alpha"))),   # migrate old wide files
       error = function(e) NULL)
-    if (!is.null(existing) && nrow(existing) > 0) {
-      # Rows recorded live carry that run's as-of metrics, so prefer them and
-      # backfill only the symbol/date pairs that are missing.  Today is always
-      # recomputed so a re-run picks up the latest prices.
+    if (!is.null(existing) && nrow(existing) > 0 &&
+        all(c("date","symbol","daily_alpha") %in% names(existing))) {
+      # Prefer rows already on disk and backfill only missing symbol/date pairs.
+      # Today is always recomputed so a re-run picks up the latest prices.
       existing <- existing %>% filter(date != today)
       alpha_history <- bind_rows(existing, window_history)
     } else {
@@ -246,7 +261,7 @@ run_module2 <- function(tickers = NULL) {
 
   alpha_history <- alpha_history %>%
     distinct(symbol, date, .keep_all = TRUE) %>%
-    filter(date >= Sys.Date() - 400) %>%   # bound file growth
+    filter(date >= Sys.Date() - HISTORY_KEEP_DAYS) %>%
     arrange(symbol, date)
 
   write_csv(alpha_history, history_path)

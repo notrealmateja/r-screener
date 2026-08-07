@@ -143,8 +143,15 @@ run_module1 <- function(tickers = NULL) {
   get_yahoo_base <- function(sym) {
     tryCatch({
       env <- new.env()
-      suppressWarnings(getSymbols(sym, src = "yahoo", env = env, auto.assign = TRUE))
+      # `from` matters: getSymbols defaults to 2007-01-01, so taking max/min over
+      # the whole series produced an all-time high labelled as a 52-week high.
+      # Measured before this fix: ACAD reported 57.00 against a true 52-week high
+      # of 28.80, and AI reported its 2020 peak of 177.47 against a true 22.66.
+      # Alpha Vantage's own 52-week fields masked it for enriched tickers only.
+      suppressWarnings(getSymbols(sym, src = "yahoo", env = env, auto.assign = TRUE,
+                                  from = Sys.Date() - 365))
       px    <- Cl(env[[sym]])
+      if (is.null(px) || length(px) == 0) stop("no price data returned")
       tibble(symbol   = sym,
              price    = round(as.numeric(last(px)), 2),
              high_52w = round(as.numeric(max(px, na.rm = TRUE)), 2),
