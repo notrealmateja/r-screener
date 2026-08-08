@@ -97,3 +97,22 @@ test_that("alpha history keeps only the three columns anything reads", {
   keep <- as.numeric(sub(".*HISTORY_KEEP_DAYS   <- ([0-9]+).*", "\\1", src))
   expect_gte(keep, lb)
 })
+
+test_that("disclaimer gate is present and blocks the page on load", {
+  src <- paste(readLines("../../app/app.R"), collapse = "\n")
+  expect_match(src, 'id="disclaimer-gate"')
+  # Must be static markup, not a Shiny output — it has to paint before the
+  # server connects, and must not depend on any reactive succeeding.
+  expect_no_match(src, 'uiOutput\\("disclaimer')
+  # Covers the page rather than sitting in a footer
+  expect_match(src, "#disclaimer-gate \\{[^}]*position:fixed")
+  expect_match(src, "#disclaimer-gate \\{[^}]*z-index:100000")
+  # States the null result rather than only generic boilerplate
+  expect_match(src, "information coefficient at")
+})
+
+test_that("UI does not claim predictive power the validation disproves", {
+  src <- paste(readLines("../../app/app.R"), collapse = "\n")
+  expect_no_match(src, "HIGHEST PREDICTED RETURN")
+  expect_no_match(src, "BACKTESTED CONFIDENCE")
+})

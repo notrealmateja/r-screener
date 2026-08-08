@@ -287,6 +287,56 @@ table.dataTable tbody tr:hover td { background:rgba(255,107,0,0.06) !important; 
 .st-bear  { color:#FF3D00; }
 .st-neut  { color:#666666; }
 
+/* ── DISCLAIMER GATE ── */
+/* Rendered as static markup so it paints before Shiny connects, and dismissed
+   by plain JS — it holds no reactive state and cannot affect any output. */
+#disclaimer-gate {
+  position:fixed; inset:0; z-index:100000;
+  background:rgba(6,6,6,0.97);
+  display:flex; align-items:center; justify-content:center;
+  padding:24px; overflow-y:auto;
+}
+#disclaimer-gate.hidden { display:none; }
+.dg-card {
+  background:var(--s1); border:1px solid var(--border2);
+  border-top:3px solid var(--orange);
+  max-width:620px; width:100%; padding:30px 32px 26px;
+  box-shadow:0 24px 70px rgba(0,0,0,0.75);
+}
+.dg-eyebrow {
+  font-family:var(--mono); font-size:9.5px; letter-spacing:2px;
+  text-transform:uppercase; color:var(--orange); margin-bottom:14px;
+}
+.dg-title {
+  font-family:var(--mono); font-size:19px; font-weight:600; color:var(--text);
+  letter-spacing:0.5px; margin-bottom:16px; line-height:1.3;
+}
+.dg-card p {
+  font-size:12.5px; line-height:1.65; color:var(--text2); margin-bottom:11px;
+}
+.dg-card strong { color:var(--text); font-weight:600; }
+.dg-flag {
+  border-left:3px solid var(--yellow); background:rgba(255,214,0,0.05);
+  padding:11px 14px; margin:14px 0 16px;
+}
+.dg-flag p { margin:0; font-size:12px; color:var(--text2); }
+.dg-btn {
+  display:block; width:100%; margin-top:20px; padding:13px;
+  background:var(--orange); color:#000; border:none; cursor:pointer;
+  font-family:var(--mono); font-size:12px; font-weight:600;
+  letter-spacing:1.5px; text-transform:uppercase; transition:background 0.15s;
+}
+.dg-btn:hover { background:var(--orange2); }
+.dg-btn:focus-visible { outline:2px solid var(--cyan); outline-offset:2px; }
+.dg-foot {
+  margin-top:14px; font-family:var(--mono); font-size:10px;
+  color:var(--muted); text-align:center; line-height:1.5;
+}
+@media (max-width:600px) {
+  .dg-card { padding:22px 20px 20px; }
+  .dg-title { font-size:16px; }
+}
+
 /* ── METHODOLOGY PAGE ── */
 .doc { max-width:1100px; }
 .doc h2 { font-family:var(--mono); font-size:13px; color:var(--orange); letter-spacing:1.5px;
@@ -670,6 +720,69 @@ ui <- fluidPage(
     tags$style(HTML(mobile_css))
   ),
 
+  # ── DISCLAIMER GATE ──────────────────────────────────────────────────────
+  # Static markup, shown once per browser session. Deliberately states the
+  # model's own null result: the dashboard labels stocks "Strong Buy" while the
+  # Methodology tab documents an information coefficient of ~0, and a visitor
+  # should meet that contradiction before the rankings, not after.
+  div(id="disclaimer-gate",
+    div(class="dg-card",
+      div(class="dg-eyebrow", "Before you continue"),
+      div(class="dg-title", "This is a research project, not investment advice."),
+      tags$p("EdgeScreener is a personal portfolio project demonstrating a quantitative ",
+             "data pipeline. The operator is ", tags$strong("not a broker-dealer, not an ",
+             "investment adviser"), ", and not licensed to give financial advice. Nothing ",
+             "here is a recommendation, solicitation or offer to buy or sell any security, ",
+             "and no advisory relationship is created by using this site."),
+      div(class="dg-flag",
+        tags$p(tags$strong("The model does not work, and that is the finding. "),
+               "Its own out-of-sample validation puts the information coefficient at ",
+               "roughly zero across 32 rebalances — no measurable ability to predict ",
+               "forward returns. Labels such as \"Strong Buy\" are raw model output, not ",
+               "endorsements. The Methodology tab shows the full evidence.")),
+      tags$p(tags$strong("Backtested results are hypothetical. "),
+             "They do not represent actual trading, were produced with the benefit of ",
+             "hindsight, and exclude trading costs, slippage and the effect of companies ",
+             "that were delisted. No representation is made that any account will achieve ",
+             "similar results. ", tags$strong("Past performance is not a guarantee of ",
+             "future results."), ""),
+      tags$p("Data comes from free public APIs, may be delayed, incomplete or inaccurate, ",
+             "and is provided \"as is\" with no warranty of any kind. Do your own research ",
+             "and consult a licensed financial professional before making any investment ",
+             "decision. You are solely responsible for anything you do with this ",
+             "information."),
+      tags$button(id="disclaimer-accept", class="dg-btn",
+                  onclick="dismissDisclaimer()", "I understand — continue"),
+      div(class="dg-foot",
+        "Shown once per session · Full disclosures on the Methodology tab · ",
+        "Not affiliated with any exchange or data provider")
+    )
+  ),
+  tags$script(HTML("
+    // Runs before Shiny connects. sessionStorage means a returning visitor is
+    // not nagged mid-session, but a fresh visit always sees it again.
+    (function () {
+      try {
+        if (sessionStorage.getItem('edgescreener_disclaimer_v1') === 'ack') {
+          var g = document.getElementById('disclaimer-gate');
+          if (g) g.classList.add('hidden');
+        }
+      } catch (e) { /* private mode: just show it */ }
+    })();
+    function dismissDisclaimer() {
+      var g = document.getElementById('disclaimer-gate');
+      if (g) g.classList.add('hidden');
+      try { sessionStorage.setItem('edgescreener_disclaimer_v1', 'ack'); } catch (e) {}
+      window.dispatchEvent(new Event('resize'));  // let plots size correctly
+    }
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === 'Escape') {
+        var g = document.getElementById('disclaimer-gate');
+        if (g && !g.classList.contains('hidden')) dismissDisclaimer();
+      }
+    });
+  ")),
+
   # ── TICKER TAPE ──────────────────────────────────────────────────────────
   div(class="ticker-wrap",
     div(class="ticker-label","▶ LIVE"),
@@ -731,7 +844,9 @@ ui <- fluidPage(
                 div(class="panel-head-title","TOP 20 — SWEET SPOT"),
                 uiOutput("regime_badge_ui")
               ),
-              div(class="panel-head-meta","HIGHEST PREDICTED RETURN · FAIR VALUATION · BACKTESTED CONFIDENCE")),
+              # Previously claimed predicted returns and backtested confidence,
+              # which is exactly what the Methodology tab disproves.
+              div(class="panel-head-meta","HIGHEST MODEL SCORE · RANKING OUTPUT, NOT A RECOMMENDATION")),
             div(class="panel-body ss-table-wrap", DTOutput("top15_table"))
           ),
           div(class="panel",
@@ -2187,6 +2302,64 @@ server <- function(input, output, session) {
                 "the workflow summary."),
         tags$li("Deploys retry three times, then fail the run loudly rather than reporting ",
                 "success while the live site goes stale.")),
+      tags$h2("Disclosures"),
+      tags$p(tags$strong("Not investment advice. "),
+             "EdgeScreener is a personal portfolio and educational project. The operator ",
+             "is not a broker-dealer, not a registered investment adviser, and not ",
+             "licensed to provide financial advice. Nothing on this site constitutes ",
+             "investment, financial, legal or tax advice, nor a recommendation, ",
+             "solicitation or offer to buy or sell any security. Using this site creates ",
+             "no advisory or fiduciary relationship."),
+      tags$p(tags$strong("Model output is not a recommendation. "),
+             "Ratings such as \"Strong Buy\", \"Buy\" and \"Avoid\" are mechanical labels ",
+             "produced by ranking a formula's output. They reflect no human judgment about ",
+             "any company and should not be read as endorsements. As documented above, ",
+             "this model shows no statistically significant ability to predict forward ",
+             "returns."),
+      # Language adapted from the CFTC Rule 4.41 hypothetical-performance
+      # statement. That rule governs commodity trading advisors rather than an
+      # equity screener, so it is not binding here — it is simply the industry
+      # standard for presenting backtested results, and worth meeting.
+      div(class="callout",
+        div(class="ct","Hypothetical performance"),
+        tags$p(style="font-family:var(--mono);font-size:11px;line-height:1.6;",
+          "HYPOTHETICAL OR SIMULATED PERFORMANCE RESULTS HAVE CERTAIN INHERENT ",
+          "LIMITATIONS. UNLIKE AN ACTUAL PERFORMANCE RECORD, SIMULATED RESULTS DO NOT ",
+          "REPRESENT ACTUAL TRADING. SINCE THE TRADES HAVE NOT BEEN EXECUTED, THE RESULTS ",
+          "MAY HAVE UNDER- OR OVER-COMPENSATED FOR THE IMPACT OF CERTAIN MARKET FACTORS ",
+          "SUCH AS LACK OF LIQUIDITY. SIMULATED PROGRAMS ARE ALSO SUBJECT TO THE FACT ",
+          "THAT THEY ARE DESIGNED WITH THE BENEFIT OF HINDSIGHT. NO REPRESENTATION IS ",
+          "BEING MADE THAT ANY ACCOUNT WILL OR IS LIKELY TO ACHIEVE PROFITS OR LOSSES ",
+          "SIMILAR TO THOSE SHOWN."),
+        tags$p(style="margin-top:10px;",
+          "Specific to this project: the backtest charges no commissions, spread or ",
+          "slippage; assumes positions fill at closing prices; and draws its universe from ",
+          "tickers listed today, so companies delisted or acquired during the test window ",
+          "are absent. Each of those biases results upward.")),
+      tags$p(tags$strong("Past performance is not a guarantee of future results. "),
+             "Any historical figure shown, whether realised or simulated, may bear no ",
+             "relationship to future outcomes. Investing involves risk, including the ",
+             "possible loss of principal."),
+      tags$p(tags$strong("No warranty. "),
+             "Data is sourced from free public APIs, may be delayed, incomplete, ",
+             "misattributed or simply wrong, and is provided \"as is\" and \"as available\" ",
+             "without warranty of any kind, express or implied. No representation is made ",
+             "as to accuracy, completeness, timeliness or fitness for any purpose."),
+      tags$p(tags$strong("Limitation of liability. "),
+             "To the maximum extent permitted by law, the operator accepts no liability ",
+             "for any loss or damage, direct or indirect, arising from use of or reliance ",
+             "on this site. You are solely responsible for your own investment decisions ",
+             "and should consult a licensed financial professional before acting on any ",
+             "information here."),
+      tags$p(tags$strong("Third-party data. "),
+             "Market data is retrieved from Yahoo Finance, Alpha Vantage, Polygon.io, ",
+             "FRED, ApeWisdom and StockTwits, each subject to its own terms of use. This ",
+             "project is not affiliated with, endorsed by, or sponsored by any of them, ",
+             "nor by any exchange. All trademarks belong to their respective owners."),
+      tags$p(tags$strong("No positions. "),
+             "The operator holds no position in, and receives no compensation from, any ",
+             "security displayed here, and receives no payment for its inclusion."),
+
       tags$p(style="margin-top:18px;color:#555;font-size:11px;font-family:var(--mono);",
              "Built in R — quantmod, dplyr, TTR, Shiny, plotly. CI/CD on GitHub Actions.")
     )

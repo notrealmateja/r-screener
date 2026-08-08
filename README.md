@@ -115,10 +115,12 @@ alpha_score = alpha_raw × w + 50 × (1 − w),   w = min(days_tracked / 63, 1)
 statistically meaningful. Below that the model deliberately refuses to express
 conviction, which is why a newly added ticker cannot immediately rank first.
 
-`data/alpha_history.csv` is rebuilt from the full one-year price window on every
+`data/alpha_history.csv` is rebuilt from the full three-year price window on every
 run rather than appended one row at a time. That makes the series self-healing —
 a missed or failed run is backfilled automatically — and means a ticker added to
-the universe is judged on the same evidence as one tracked since day one.
+the universe is judged on the same evidence as one tracked since day one. It also
+gives the backtest ~32 independent rebalances instead of the ~8 a one-year window
+allowed, which is what makes its significance testing worth anything.
 
 ---
 
@@ -235,3 +237,42 @@ data/                  pipeline output, committed each run
 tests/testthat/        unit tests for scoring math and parsers
 .github/workflows/     nightly pipeline + deploy
 ```
+
+---
+
+## Disclaimer
+
+**This is a personal portfolio and educational project. It is not investment advice.**
+
+The operator is not a broker-dealer, not a registered investment adviser, and not
+licensed to provide financial advice. Nothing in this repository or the deployed
+dashboard constitutes investment, financial, legal or tax advice, nor a
+recommendation, solicitation or offer to buy or sell any security. Using it
+creates no advisory relationship.
+
+Ratings such as "Strong Buy" and "Avoid" are mechanical labels produced by ranking
+a formula's output. They involve no human judgment about any company and are not
+endorsements. As documented above, **this model shows no statistically significant
+ability to predict forward returns.**
+
+Backtested results are hypothetical. Simulated results do not represent actual
+trading, are designed with the benefit of hindsight, and may under- or
+over-compensate for market factors such as lack of liquidity. This backtest
+charges no commissions, spread or slippage, assumes fills at closing prices, and
+draws its universe from tickers listed today — so companies delisted or acquired
+during the test window are absent. Each of those biases results upward. No
+representation is made that any account will achieve similar results. **Past
+performance is not a guarantee of future results.** Investing involves risk,
+including possible loss of principal.
+
+Data is sourced from free public APIs, may be delayed, incomplete or inaccurate,
+and is provided "as is" without warranty of any kind. To the maximum extent
+permitted by law, the operator accepts no liability for any loss arising from use
+of or reliance on this project. Do your own research and consult a licensed
+financial professional before making any investment decision.
+
+Market data comes from Yahoo Finance, Alpha Vantage, Polygon.io, FRED, ApeWisdom
+and StockTwits, each subject to its own terms of use. This project is not
+affiliated with, endorsed by, or sponsored by any of them or any exchange. The
+operator holds no position in, and receives no compensation from, any security
+shown.
