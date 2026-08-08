@@ -2039,6 +2039,48 @@ server <- function(input, output, session) {
              "could not have seen. The weights are the live model's, not fitted here."),
       validation,
 
+      # ── Per-component diagnostic ────────────────────────────────────────
+      if (!is.null(bt_components) && nrow(bt_components) > 0) {
+        rows <- lapply(seq_len(nrow(bt_components)), function(i) {
+          r <- bt_components[i, ]
+          sig <- isTRUE(r$significant)
+          tags$tr(
+            tags$td(r$label),
+            tags$td(class="num", sprintf("%+.4f", r$mean_ic)),
+            tags$td(class="num", sprintf("%.2f", r$t_stat)),
+            tags$td(class="num", sprintf("%.0f%%", r$pct_positive * 100)),
+            tags$td(style = if (sig) "color:#00C853;font-weight:600;" else "color:#666;",
+                    if (sig) "significant" else "no")
+          )
+        })
+        any_sig <- any(bt_components$significant, na.rm = TRUE)
+        tagList(
+          tags$p(tags$strong("Is the blend hiding a good signal? "),
+                 "The composite could look flat because one informative component is ",
+                 "being averaged away by four uninformative ones. Testing each ",
+                 "separately against forward alpha rules that out — or finds it."),
+          tags$table(class="dtable",
+            tags$thead(tags$tr(tags$th("Component"), tags$th("Mean IC"),
+                               tags$th("t"), tags$th("Correct sign"), tags$th("|t| > 2"))),
+            tags$tbody(do.call(tagList, rows))),
+          div(class="callout",
+            div(class="ct","What this settles"),
+            if (any_sig)
+              tags$p("At least one component clears the significance bar on its own, ",
+                     "which means the blend is diluting real signal and the weights ",
+                     "are worth revisiting.")
+            else tagList(
+              tags$p(tags$strong("No component carries signal either. "),
+                "Every measure sits within noise of zero, so the flat composite is not ",
+                "a weighting problem — trailing daily alpha simply does not predict ",
+                "forward excess return for this universe at a one-month horizon."),
+              tags$p("That is a real finding rather than a bug, and it is the honest ",
+                     "conclusion of the validation: a screener built on momentum in ",
+                     "risk-adjusted excess return does not, on this evidence, identify ",
+                     "stocks that go on to outperform.")))
+        )
+      },
+
       tags$h2("Data sources"),
       tags$table(class="dtable",
         tags$thead(tags$tr(tags$th("Source"), tags$th("Provides"), tags$th("Cadence"))),

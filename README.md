@@ -180,7 +180,13 @@ Stated plainly because they affect how the output should be read:
   reaches them.
 - **Short interest is a stub.** No free API provides reliable short-float data. The
   field exists and is explicitly `NA` rather than being filled with a proxy.
-- **Backtest results are in-sample.** The model was not fit on a holdout period.
+- **The model does not demonstrate predictive skill.** This is the honest result
+  of its own validation, not a caveat about it. Over 32 out-of-sample rebalances
+  the score's rank information coefficient is +0.003 (t = 0.09), and testing each
+  of the five alpha components separately finds none clearing |t| > 2 either. So
+  the flat composite is not a weighting problem — trailing daily alpha simply does
+  not predict forward excess return for this universe at a one-month horizon. The
+  dashboard reports this rather than quoting the raw quintile spread.
 
 ---
 

@@ -228,4 +228,126 @@ run_backtest <- function(history_path = "data/alpha_history.csv") {
   list(summary = summary_tbl, detail = detail, ic = ics, headline = headline)
 }
 
-if (!exists("SOURCED_BY_MASTER")) backtest_results <- run_backtest()
+# =============================================================================
+# COMPONENT DIAGNOSTIC
+#
+# run_backtest() measures the 5-way blend and finds an IC near zero.  That
+# leaves one question open: is the whole premise dead, or does one component
+# carry information the other four dilute away?
+#
+# This runs the identical walk-forward loop but correlates each RAW component
+# with forward alpha separately, instead of the blend.  Reuses
+# score_formation() so the components can never drift from the live model.
+#
+# Reading it: mean_ic is the average Spearman correlation between the component
+# and forward excess return.  t_stat tests whether that mean differs from zero
+# across rebalances — |t| > 2 is the conventional bar.  pct_positive is how
+# often the correlation had the expected sign, where 50% is a coin flip.
+# =============================================================================
+COMPONENTS <- c(
+  ann_alpha = "Annualised alpha",
+  ir        = "Information ratio",
+  hit_rate  = "Hit rate vs SPY",
+  alpha_63d = "Alpha, trailing 63d",
+  streak    = "Positive-alpha streak",
+  score     = "Blended score (baseline)"
+)
+
+run_component_diagnostic <- function(history_path = "data/alpha_history.csv") {
+  message("\n=== COMPONENT DIAGNOSTIC ===\n")
+
+  if (!file.exists(history_path)) {
+    message("No alpha history — skipping component diagnostic.")
+    return(NULL)
+  }
+  hist <- read_csv(history_path, show_col_types = FALSE) %>%
+    mutate(date = as.Date(date)) %>%
+    filter(!is.na(daily_alpha)) %>%
+    select(date, symbol, daily_alpha)
+
+  dates  <- sort(unique(hist$date))
+  starts <- seq(FORMATION_DAYS + 1, length(dates) - HOLD_DAYS, by = REBAL_DAYS)
+  if (length(starts) == 0) {
+    message("Not enough history for the component diagnostic.")
+    return(NULL)
+  }
+
+  rows <- list()
+  for (ix in starts) {
+    fm_dates <- dates[(ix - FORMATION_DAYS):(ix - 1)]
+    fw_dates <- dates[ix:min(ix + HOLD_DAYS - 1, length(dates))]
+
+    scored <- score_formation(hist %>% filter(date %in% fm_dates))
+    if (is.null(scored)) next
+
+    forward <- hist %>%
+      filter(date %in% fw_dates) %>%
+      group_by(symbol) %>%
+      summarize(fwd = mean(daily_alpha, na.rm = TRUE), .groups = "drop")
+
+    j <- inner_join(scored, forward, by = "symbol") %>% filter(!is.na(fwd))
+    if (nrow(j) < 20) next
+
+    for (cmp in names(COMPONENTS)) {
+      if (!cmp %in% names(j)) next
+      v <- j[[cmp]]
+      if (sum(!is.na(v)) < 20 || length(unique(v[!is.na(v)])) < 3) next
+      ic <- suppressWarnings(cor(v, j$fwd, method = "spearman", use = "complete.obs"))
+      if (!is.na(ic)) rows[[length(rows) + 1]] <-
+        tibble(rebalance_date = dates[ix], component = cmp, ic = ic)
+    }
+  }
+
+  if (length(rows) == 0) {
+    message("No usable rebalances for the component diagnostic.")
+    return(NULL)
+  }
+
+  per_rebal <- bind_rows(rows)
+  out <- per_rebal %>%
+    group_by(component) %>%
+    summarize(
+      rebalances   = n(),
+      mean_ic      = mean(ic, na.rm = TRUE),
+      ic_sd        = sd(ic, na.rm = TRUE),
+      t_stat       = {
+        s <- sd(ic, na.rm = TRUE)
+        if (is.na(s) || s == 0) NA_real_ else mean(ic, na.rm = TRUE) / (s / sqrt(n()))
+      },
+      pct_positive = mean(ic > 0, na.rm = TRUE),
+      .groups = "drop"
+    ) %>%
+    mutate(
+      label       = unname(COMPONENTS[component]),
+      significant = !is.na(t_stat) & abs(t_stat) > 2
+    ) %>%
+    arrange(desc(abs(mean_ic)))
+
+  if (!dir.exists("data")) dir.create("data", recursive = TRUE)
+  write_csv(out, "data/backtest_components.csv")
+
+  message(glue("Component ICs over {max(out$rebalances)} rebalances ",
+               "(formation {FORMATION_DAYS}d, hold {HOLD_DAYS}d):\n"))
+  for (i in seq_len(nrow(out))) {
+    r <- out[i, ]
+    message(glue("  {sprintf('%-26s', r$label)} IC {sprintf('%+.4f', r$mean_ic)}  ",
+                 "t {sprintf('%6.2f', r$t_stat)}  ",
+                 "pos {sprintf('%3.0f%%', r$pct_positive*100)}  ",
+                 "{ifelse(r$significant, '<-- SIGNIFICANT', '')}"))
+  }
+  if (any(out$significant)) {
+    hits <- out %>% filter(significant)
+    message(glue("\n  {nrow(hits)} component(s) clear |t| > 2 — the blend may be ",
+                 "diluting real signal."))
+  } else {
+    message("\n  No component clears |t| > 2. The signal is absent at the ",
+            "component level too, not merely diluted by the blend.")
+  }
+
+  out
+}
+
+if (!exists("SOURCED_BY_MASTER")) {
+  backtest_results   <- run_backtest()
+  component_results  <- run_component_diagnostic()
+}

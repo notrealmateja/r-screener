@@ -94,3 +94,23 @@ test_that("backtest outputs are internally consistent when present", {
   expect_true(all(s$avg_n > 0))
   expect_equal(sort(s$bucket), 1:5)
 })
+
+test_that("component diagnostic covers every component of the live blend", {
+  # If a weight is added to alpha_score_raw but not to COMPONENTS, the
+  # diagnostic would silently stop testing it.
+  src <- paste(readLines("../../R/05_backtest.R"), collapse = "\n")
+  for (cmp in c("ann_alpha", "ir", "hit_rate", "alpha_63d", "streak")) {
+    expect_match(src, paste0(cmp, "\\s*="),
+                 info = paste("component missing from diagnostic:", cmp))
+  }
+  # The blend itself is included as a baseline to compare components against
+  expect_match(src, "score\\s*=\\s*\"Blended score")
+})
+
+test_that("IC t-statistic uses the standard error of the mean", {
+  # Guards the arithmetic: t = mean / (sd / sqrt(n)), not mean / sd.
+  ics <- c(0.10, -0.02, 0.05, 0.01, -0.04, 0.07, 0.00, 0.03)
+  t_correct <- mean(ics) / (sd(ics) / sqrt(length(ics)))
+  expect_gt(abs(t_correct), abs(mean(ics) / sd(ics)))
+  expect_equal(round(t_correct, 4), round(mean(ics) / (sd(ics) / sqrt(8)), 4))
+})

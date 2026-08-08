@@ -91,10 +91,14 @@ jobs:
             run_module_polygon(fund_data$symbol)
             run_module3(fund_data$symbol)
             run_module4()
-            # Walk-forward validation of the score. Non-fatal: a backtest
-            # failure should never block the data refresh or the deploy.
+            # Walk-forward validation of the score, plus the per-component
+            # diagnostic. Both non-fatal: a validation failure must never block
+            # the data refresh or the deploy.
             tryCatch(run_backtest(),
                      error = function(e) message("Backtest skipped: ", conditionMessage(e)))
+            tryCatch(run_component_diagnostic(),
+                     error = function(e) message("Component diagnostic skipped: ",
+                                                 conditionMessage(e)))
 
             csv_files <- list.files("data", pattern="\\.csv$", full.names=TRUE)
             file.copy(csv_files, file.path("app", basename(csv_files)), overwrite=TRUE)
