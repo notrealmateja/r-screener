@@ -1,31 +1,31 @@
 symbol,title,watchlist_count,st_rank,trending_score,messages,bullish,bearish,sentiment_label,fetched_at
-INFQ,Infleqtion Inc.,15483,1,10.6421,2,0,0,Neutral,2026-08-07T22:13:40Z
-XRP.X,Ripple,234910,2,8.82934,3,0,1,Very Bearish,2026-08-07T22:13:40Z
-UAMY,United States Antimony Corp.,20021,3,7.81519,0,0,0,Neutral,2026-08-07T22:13:40Z
-ABCL,AbCellera Biologics Inc,8911,4,6.88598,1,0,0,Neutral,2026-08-07T22:13:40Z
-USAR,USA Rare Earth Inc,18821,5,6.80154,0,0,0,Neutral,2026-08-07T22:13:40Z
-SENS,Senseonics Holdings Inc,48245,6,6.46144,0,0,0,Neutral,2026-08-07T22:13:40Z
-CIFR,Cipher Digital Inc.,22575,7,5.62701,0,0,0,Neutral,2026-08-07T22:13:40Z
-GLD,SPDR Gold Shares ETF,95722,8,5.4556,0,0,0,Neutral,2026-08-07T22:13:40Z
-CRO.X,Crypto.com Coin,37098,9,5.37201,0,0,0,Neutral,2026-08-07T22:13:40Z
-AEVA,Aeva Technologies Inc,7558,10,4.94893,0,0,0,Neutral,2026-08-07T22:13:40Z
-WEN,Wendy's Co,15832,11,4.68014,1,0,0,Neutral,2026-08-07T22:13:40Z
-FISV,"Fiserv, Inc.",10121,12,4.65544,0,0,0,Neutral,2026-08-07T22:13:40Z
-AVAV,AeroVironment Inc.,12960,13,4.63889,1,1,0,Very Bullish,2026-08-07T22:13:40Z
-SLV,iShares Silver Trust,61426,14,4.63682,1,0,0,Neutral,2026-08-07T22:13:40Z
-LPTH,"Lightpath Technologies, Inc. - Ordinary Shares - Class A",8418,15,4.56817,1,0,0,Neutral,2026-08-07T22:13:40Z
-CRDO,Credo Technology Group Holding Ltd,11112,16,4.51309,0,0,0,Neutral,2026-08-07T22:13:40Z
-VG,Venture Global Inc,4585,17,4.391,0,0,0,Neutral,2026-08-07T22:13:40Z
-RKT,Rocket Companies Inc,58323,18,4.33162,0,0,0,Neutral,2026-08-07T22:13:40Z
-SEZL,Sezzle Inc.,4442,19,4.30618,0,0,0,Neutral,2026-08-07T22:13:40Z
-UMAC,Unusual Machines Inc,11879,20,4.18747,0,0,0,Neutral,2026-08-07T22:13:40Z
-CELH,Celsius Holdings Inc,30674,21,4.05985,2,0,0,Neutral,2026-08-07T22:13:40Z
-MP,MP Materials Corporation,34369,22,3.67759,2,0,0,Neutral,2026-08-07T22:13:40Z
-SPCX,SpaceX,100348,23,3.5993,8,4,0,Very Bullish,2026-08-07T22:13:40Z
-DAVE,Dave Inc,3983,24,3.56083,0,0,0,Neutral,2026-08-07T22:13:40Z
-WING,Wingstop Inc,4981,25,3.52093,0,0,0,Neutral,2026-08-07T22:13:40Z
-LULU,Lululemon Athletica Inc,48906,26,3.36039,0,0,0,Neutral,2026-08-07T22:13:40Z
-CBRS,Cerebras Systems Inc,11599,27,3.32907,1,0,0,Neutral,2026-08-07T22:13:40Z
-GILD,"Gilead Sciences, Inc.",77635,28,3.2508,0,0,0,Neutral,2026-08-07T22:13:40Z
-UBER,Uber Technologies Inc,130054,29,3.23307,0,0,0,Neutral,2026-08-07T22:13:40Z
-SGML,Sigma Lithium Corporation,3621,30,3.2307,0,0,0,Neutral,2026-08-07T22:13:40Z
+BRK.B,Berkshire Hathaway Inc. - Ordinary Shares - Class B,47262,1,6.82364,3,0,0,Neutral,2026-08-08T21:23:55Z
+BRK.A,Berkshire Hathaway Inc. - Ordinary Shares - Class A,12376,2,6.0699,2,0,0,Neutral,2026-08-08T21:23:55Z
+CIEN,CIENA Corp.,6836,3,4.8542,0,0,0,Neutral,2026-08-08T21:23:55Z
+COHR,Coherent Corp,9400,4,3.08716,0,0,0,Neutral,2026-08-08T21:23:55Z
+ICP.X,Internet Computer,11835,5,1.5824,2,0,0,Neutral,2026-08-08T21:23:55Z
+SONY,Sony Group Corporation,20429,6,2.8204,0,0,0,Neutral,2026-08-08T21:23:55Z
+AERO.X,Aerodrome Finance,4434,7,-0.358967,0,0,0,Neutral,2026-08-08T21:23:55Z
+PSFE,Paysafe Limited,37383,8,2.08572,1,0,0,Neutral,2026-08-08T21:23:55Z
+TOS.X,TokenOS AI,210,9,2.15595,0,0,0,Neutral,2026-08-08T21:23:55Z
+PEPE.X,Pepe,25076,10,1.951,1,0,1,Very Bearish,2026-08-08T21:23:55Z
+BX,Blackstone Inc,13976,11,2.01586,0,0,0,Neutral,2026-08-08T21:23:55Z
+LITE,Lumentum Holdings Inc,14130,12,2.25693,1,0,0,Neutral,2026-08-08T21:23:55Z
+SGOV,iShares 0-3 Month Treasury Bond ETF,1908,13,2.14513,1,0,0,Neutral,2026-08-08T21:23:55Z
+WRD,WeRide Inc. - ADR,4513,14,0.0718856,0,0,0,Neutral,2026-08-08T21:23:55Z
+XAGUSD,Silver US Dollar,3612,15,2.09566,0,0,0,Neutral,2026-08-08T21:23:55Z
+ZTS,Zoetis Inc - Ordinary Shares - Class A,4409,16,2.56861,1,1,0,Very Bullish,2026-08-08T21:23:55Z
+HYPE.X,Hype,2941,17,-1.07288,0,0,0,Neutral,2026-08-08T21:23:55Z
+AGQ,ProShares Ultra Silver,4572,18,1.80532,0,0,0,Neutral,2026-08-08T21:23:55Z
+SE,Sea Ltd - ADR,28221,19,-0.345535,0,0,0,Neutral,2026-08-08T21:23:55Z
+JNUG,Direxion Shares ETF Trust - Direxion Daily Junior Gold Miners Index Bull 2X ETF,78766,20,1.76104,0,0,0,Neutral,2026-08-08T21:23:55Z
+XLM.X,Stellar Lumens,70111,21,2.75857,2,0,0,Neutral,2026-08-08T21:23:55Z
+DOT.X,Polkadot,25040,22,-0.534999,0,0,0,Neutral,2026-08-08T21:23:55Z
+XLE,Energy Select Sector SPDR Fund,24399,23,-0.860221,0,0,0,Neutral,2026-08-08T21:23:55Z
+LMT,Lockheed Martin Corp.,37155,24,1.70111,0,0,0,Neutral,2026-08-08T21:23:55Z
+PENN,PENN Entertainment Inc.,36461,25,0.684482,0,0,0,Neutral,2026-08-08T21:23:55Z
+B,Barrick Mining Corp,32128,26,1.22894,0,0,0,Neutral,2026-08-08T21:23:55Z
+INTU,Intuit Inc,12159,27,1.18857,0,0,0,Neutral,2026-08-08T21:23:55Z
+SLV,iShares Silver Trust,61443,28,0.385219,0,0,0,Neutral,2026-08-08T21:23:55Z
+LHX,L3Harris Technologies Inc,4358,29,0.894517,0,0,0,Neutral,2026-08-08T21:23:55Z
+OMER,Omeros Corp,11528,30,0.708096,0,0,0,Neutral,2026-08-08T21:23:55Z
