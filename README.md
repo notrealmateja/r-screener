@@ -187,6 +187,13 @@ Stated plainly because they affect how the output should be read:
   the flat composite is not a weighting problem — trailing daily alpha simply does
   not predict forward excess return for this universe at a one-month horizon. The
   dashboard reports this rather than quoting the raw quintile spread.
+- **The opposite hypothesis fails too.** The component diagnostic showed the
+  positive-alpha streak carrying the largest magnitude and a negative sign,
+  pointing against the momentum premise, so short-term reversal was tested across
+  4 formation windows at a Bonferroni-adjusted |t| > 2.5. Nothing clears it; the
+  strongest is the 10-day window at t = -1.53. Every window does carry a negative
+  sign, but the windows overlap and read the same returns, so their agreement is
+  correlated by construction and is not independent confirmation.
 
 ---
 

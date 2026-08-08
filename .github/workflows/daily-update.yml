@@ -99,6 +99,9 @@ jobs:
             tryCatch(run_component_diagnostic(),
                      error = function(e) message("Component diagnostic skipped: ",
                                                  conditionMessage(e)))
+            tryCatch(run_reversal_test(),
+                     error = function(e) message("Reversal test skipped: ",
+                                                 conditionMessage(e)))
 
             csv_files <- list.files("data", pattern="\\.csv$", full.names=TRUE)
             file.copy(csv_files, file.path("app", basename(csv_files)), overwrite=TRUE)

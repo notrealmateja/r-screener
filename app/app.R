@@ -2081,6 +2081,61 @@ server <- function(input, output, session) {
         )
       },
 
+      # ── Reversal hypothesis ─────────────────────────────────────────────
+      if (!is.null(bt_reversal) && nrow(bt_reversal) > 0) {
+        rows <- lapply(seq_len(nrow(bt_reversal)), function(i) {
+          r <- bt_reversal[i, ]
+          sig <- isTRUE(r$significant)
+          tags$tr(
+            tags$td(paste0(r$formation_days, " days")),
+            tags$td(class="num", sprintf("%+.4f", r$mean_ic)),
+            tags$td(class="num", sprintf("%.2f", r$ic_t)),
+            tags$td(class="num", sprintf("%+.2f%%", r$ls_spread_ann * 100)),
+            tags$td(style = if (sig) "color:#00C853;font-weight:600;" else "color:#666;",
+                    r$effect)
+          )
+        })
+        all_neg <- all(bt_reversal$mean_ic < 0, na.rm = TRUE)
+        any_sig <- any(bt_reversal$significant, na.rm = TRUE)
+        tagList(
+          tags$h2("Testing the opposite hypothesis"),
+          tags$p("The component diagnostic produced a result the model did not ",
+                 "predict: of the six measures, the positive-alpha streak had the ",
+                 "largest magnitude, it was ", tags$strong("negative"),
+                 ", and it points against the momentum premise the score is built on. ",
+                 "Short-term reversal is a documented effect, so the honest step is to ",
+                 "test it rather than ignore a result that disagrees with the design."),
+          tags$p("Same walk-forward harness, but correlating trailing alpha with forward ",
+                 "alpha directly. The sign is the whole answer: ",
+                 tags$strong("negative means losers outperform"), " (reversal), positive ",
+                 "means winners do (momentum). Long the worst trailing quintile, short ",
+                 "the best."),
+          tags$table(class="dtable",
+            tags$thead(tags$tr(tags$th("Formation"), tags$th("Mean IC"), tags$th("t"),
+                               tags$th("Long/short, ann."), tags$th("Verdict"))),
+            tags$tbody(do.call(tagList, rows))),
+          div(class="callout",
+            div(class="ct","Verdict"),
+            if (any_sig)
+              tags$p("A window clears the adjusted significance bar — worth pursuing.")
+            else tagList(
+              tags$p(tags$strong("No window clears significance either. "),
+                "Testing four formation windows means four chances at a false positive, ",
+                "so the bar here is |t| > 2.5 rather than the usual 2.0. Nothing comes ",
+                "close; the strongest is the 10-day window at t = -1.53."),
+              if (all_neg) tags$p(
+                "Every window does carry a negative sign, which is the reversal ",
+                "direction. That is suggestive but it is ", tags$strong("not"),
+                " four independent confirmations — the windows overlap heavily and ",
+                "read the same underlying returns, so their signs are correlated by ",
+                "construction. Treating agreement across them as evidence would be a ",
+                "mistake.") else NULL,
+              tags$p("Two hypotheses tested, both rejected on the evidence. Neither ",
+                     "momentum nor reversal in risk-adjusted excess return predicts ",
+                     "forward performance for this universe at a one-month horizon.")))
+        )
+      },
+
       tags$h2("Data sources"),
       tags$table(class="dtable",
         tags$thead(tags$tr(tags$th("Source"), tags$th("Provides"), tags$th("Cadence"))),

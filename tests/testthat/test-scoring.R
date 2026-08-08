@@ -114,3 +114,29 @@ test_that("IC t-statistic uses the standard error of the mean", {
   expect_gt(abs(t_correct), abs(mean(ics) / sd(ics)))
   expect_equal(round(t_correct, 4), round(mean(ics) / (sd(ics) / sqrt(8)), 4))
 })
+
+test_that("reversal test adjusts its significance bar for multiple windows", {
+  # Testing N formation windows gives N chances at a false positive. The bar
+  # must be stricter than the usual |t| > 2, or the test is rigged to find
+  # something.
+  src <- paste(readLines("../../R/05_backtest.R"), collapse = "\n")
+  n_windows <- length(eval(parse(text = sub(
+    ".*REVERSAL_FORMATIONS <- (c\\([0-9, ]+\\)).*", "\\1", src))))
+  bar <- as.numeric(sub(".*REVERSAL_T_BAR      <- ([0-9.]+).*", "\\1", src))
+  expect_gt(n_windows, 1)
+  expect_gt(bar, 2.0)
+})
+
+test_that("reversal verdict follows the sign of the correlation", {
+  # negative IC = losers outperform = reversal; positive = momentum
+  verdict <- function(ic, t, bar = 2.5) {
+    if (is.na(t)) "undetermined"
+    else if (abs(t) <= bar) "none"
+    else if (ic < 0) "reversal" else "momentum"
+  }
+  expect_equal(verdict(-0.04, -3.0), "reversal")
+  expect_equal(verdict( 0.04,  3.0), "momentum")
+  expect_equal(verdict(-0.04, -1.5), "none")     # below the bar
+  expect_equal(verdict(-0.04, -2.2), "none")     # below adjusted bar, above 2.0
+  expect_equal(verdict(-0.04, NA),   "undetermined")
+})

@@ -347,7 +347,150 @@ run_component_diagnostic <- function(history_path = "data/alpha_history.csv") {
   out
 }
 
+# =============================================================================
+# REVERSAL TEST
+#
+# The component diagnostic turned up something the model did not predict: of
+# the six measures, `streak` had the largest magnitude, it was NEGATIVE
+# (IC -0.024, correct sign only 44% of the time), and it points against the
+# momentum premise the whole score is built on.  Short-term reversal is a
+# documented effect, so the honest next step is to test it rather than ignore
+# a result that disagrees with the design.
+#
+# Method: the same walk-forward harness, but correlating TRAILING alpha with
+# FORWARD alpha directly.  The sign of that correlation is the whole answer —
+#   negative => losers outperform      (reversal)
+#   positive => winners outperform     (momentum)
+# Several formation windows are tested because reversal and momentum operate
+# at different horizons; short windows are where reversal usually shows up.
+#
+# Rebalance dates are held constant across windows so the formation length is
+# the only thing that varies.
+#
+# Multiple testing is accounted for: testing 4 windows means 4 chances at a
+# false positive, so significance is judged against a Bonferroni-adjusted
+# |t| > 2.5 rather than the usual 2.0.
+# =============================================================================
+REVERSAL_FORMATIONS <- c(5, 10, 21, 63)   # trading days
+REVERSAL_T_BAR      <- 2.5                # Bonferroni-adjusted for 4 windows
+
+run_reversal_test <- function(history_path = "data/alpha_history.csv") {
+  message("\n=== REVERSAL TEST ===\n")
+
+  if (!file.exists(history_path)) {
+    message("No alpha history — skipping reversal test.")
+    return(NULL)
+  }
+  hist <- read_csv(history_path, show_col_types = FALSE) %>%
+    mutate(date = as.Date(date)) %>%
+    filter(!is.na(daily_alpha)) %>%
+    select(date, symbol, daily_alpha)
+
+  dates  <- sort(unique(hist$date))
+  longest <- max(REVERSAL_FORMATIONS)
+  starts <- seq(longest + 1, length(dates) - HOLD_DAYS, by = REBAL_DAYS)
+  if (length(starts) == 0) {
+    message("Not enough history for the reversal test.")
+    return(NULL)
+  }
+
+  rows <- list()
+  for (fdays in REVERSAL_FORMATIONS) {
+    for (ix in starts) {
+      fm_dates <- dates[(ix - fdays):(ix - 1)]
+      fw_dates <- dates[ix:min(ix + HOLD_DAYS - 1, length(dates))]
+
+      trailing <- hist %>%
+        filter(date %in% fm_dates) %>%
+        group_by(symbol) %>%
+        summarize(n_obs = n(),
+                  trail = prod(1 + daily_alpha) - 1, .groups = "drop") %>%
+        filter(n_obs >= max(3, floor(fdays * 0.6)))
+
+      forward <- hist %>%
+        filter(date %in% fw_dates) %>%
+        group_by(symbol) %>%
+        summarize(fwd = mean(daily_alpha, na.rm = TRUE), .groups = "drop")
+
+      j <- inner_join(trailing, forward, by = "symbol") %>%
+        filter(!is.na(trail), !is.na(fwd))
+      if (nrow(j) < N_BUCKETS * 4) next
+
+      ic <- suppressWarnings(cor(j$trail, j$fwd, method = "spearman",
+                                 use = "complete.obs"))
+      # Long the worst trailing performers, short the best.  Positive spread
+      # means the losers went on to beat the winners — reversal paying off.
+      j <- j %>% mutate(bucket = ntile(trail, N_BUCKETS))   # 1 = worst trailing
+      losers  <- mean(j$fwd[j$bucket == 1],         na.rm = TRUE)
+      winners <- mean(j$fwd[j$bucket == N_BUCKETS], na.rm = TRUE)
+
+      if (!is.na(ic)) rows[[length(rows) + 1]] <- tibble(
+        formation_days = fdays, rebalance_date = dates[ix],
+        ic = ic, ls_spread = losers - winners)
+    }
+  }
+
+  if (length(rows) == 0) {
+    message("No usable rebalances for the reversal test.")
+    return(NULL)
+  }
+
+  per_rebal <- bind_rows(rows)
+  tstat <- function(x) {
+    s <- sd(x, na.rm = TRUE)
+    if (is.na(s) || s == 0) NA_real_ else mean(x, na.rm = TRUE) / (s / sqrt(sum(!is.na(x))))
+  }
+
+  out <- per_rebal %>%
+    group_by(formation_days) %>%
+    summarize(
+      rebalances     = n(),
+      mean_ic        = mean(ic, na.rm = TRUE),
+      ic_t           = tstat(ic),
+      pct_negative   = mean(ic < 0, na.rm = TRUE),     # how often reversal held
+      ls_spread_ann  = mean(ls_spread, na.rm = TRUE) * 252,
+      ls_t           = tstat(ls_spread),
+      .groups = "drop"
+    ) %>%
+    mutate(
+      effect      = dplyr::case_when(
+        is.na(ic_t)                      ~ "undetermined",
+        abs(ic_t) <= REVERSAL_T_BAR      ~ "none",
+        mean_ic < 0                      ~ "reversal",
+        TRUE                             ~ "momentum"),
+      significant = !is.na(ic_t) & abs(ic_t) > REVERSAL_T_BAR
+    ) %>%
+    arrange(formation_days)
+
+  if (!dir.exists("data")) dir.create("data", recursive = TRUE)
+  write_csv(out, "data/reversal_results.csv")
+
+  message(glue("Trailing vs forward alpha, {max(out$rebalances)} rebalances, ",
+               "hold {HOLD_DAYS}d. Negative IC = reversal.\n"))
+  for (i in seq_len(nrow(out))) {
+    r <- out[i, ]
+    message(glue("  formation {sprintf('%2d', r$formation_days)}d: ",
+                 "IC {sprintf('%+.4f', r$mean_ic)} (t {sprintf('%5.2f', r$ic_t)})  ",
+                 "L/S {sprintf('%+6.2f%%', r$ls_spread_ann*100)} ",
+                 "(t {sprintf('%5.2f', r$ls_t)})  ",
+                 "{r$effect}{ifelse(r$significant, '  <-- SIGNIFICANT', '')}"))
+  }
+  message(glue("\n  Significance bar |t| > {REVERSAL_T_BAR} ",
+               "(Bonferroni-adjusted for {length(REVERSAL_FORMATIONS)} windows)."))
+  if (any(out$significant)) {
+    hit <- out %>% filter(significant) %>% slice(1)
+    message(glue("  -> {hit$effect} detected at the {hit$formation_days}-day ",
+                 "formation window."))
+  } else {
+    message("  -> No window shows a significant effect in either direction. ",
+            "The negative streak IC does not survive as a tradeable signal.")
+  }
+
+  out
+}
+
 if (!exists("SOURCED_BY_MASTER")) {
   backtest_results   <- run_backtest()
   component_results  <- run_component_diagnostic()
+  reversal_results   <- run_reversal_test()
 }
