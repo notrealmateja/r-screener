@@ -1,5 +1,10 @@
 # EdgeScreener
 
+![build](https://github.com/notrealmateja/r-screener/actions/workflows/daily-update.yml/badge.svg)
+![license](https://img.shields.io/badge/license-MIT-blue)
+![R](https://img.shields.io/badge/R-4.4-276DC3?logo=r)
+![tests](https://img.shields.io/badge/tests-104%20assertions-brightgreen)
+
 A quantitative equity screener that scores a 195-stock universe on risk-adjusted
 alpha, refreshes itself every night without human involvement, and publishes the
 result as a live dashboard.
@@ -9,6 +14,35 @@ result as a live dashboard.
 Every trading day at 21:30 UTC a GitHub Actions workflow pulls fresh market data,
 recomputes the model, commits the results, and redeploys the app. No local machine
 is involved at any point.
+
+![EdgeScreener dashboard](docs/dashboard-overview.png)
+
+---
+
+## The short version
+
+The interesting result here is a negative one, and it is the point rather than a
+footnote.
+
+The model ranks stocks by trailing risk-adjusted excess return. Validated
+out-of-sample with a walk-forward test — score on a 63-day formation window,
+measure realised alpha over the following 21 days, repeat across 32 rebalances —
+it shows **no statistically significant ability to predict forward returns**:
+
+| Metric | Value | |
+|---|---:|---|
+| Q1 − Q5 spread, annualised | +12.43% | looks encouraging in isolation |
+| Mean rank IC | +0.003 | |
+| t-statistic | **0.09** | needs \|t\| > 2 to be significant |
+
+Two follow-up tests confirm it. Every one of the five alpha components, measured
+separately, also comes in under the bar — so the flat result is not a weighting
+problem. And because one component (`streak`) leaned negative, short-term
+reversal was tested across four formation windows at a Bonferroni-adjusted
+\|t\| > 2.5; nothing cleared it either.
+
+Three hypotheses, tested honestly, all rejected. The dashboard opens by telling
+visitors exactly that before showing a single ranking.
 
 ---
 
@@ -223,6 +257,16 @@ Rscript -e 'testthat::test_dir("tests/testthat")'
 
 ---
 
+## Methodology & disclosures page
+
+Every claim above is rendered in the app itself, driven by the pipeline's own
+output rather than hardcoded — if a future run produces a significant result, the
+page rewrites its own conclusion.
+
+![Methodology and validation](docs/dashboard-methodology.png)
+
+---
+
 ## Repository layout
 
 ```
@@ -235,6 +279,8 @@ R/                     pipeline modules, run in numeric order
 app/                   Shiny dashboard (app.R, global.R) + deployed data
 data/                  pipeline output, committed each run
 tests/testthat/        unit tests for scoring math and parsers
+tools/                 local-only helpers (README screenshot capture)
+docs/                  screenshots used by this README
 .github/workflows/     nightly pipeline + deploy
 ```
 
