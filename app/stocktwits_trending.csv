@@ -1,31 +1,31 @@
 symbol,title,watchlist_count,st_rank,trending_score,messages,bullish,bearish,sentiment_label,fetched_at
-BRK.B,Berkshire Hathaway Inc. - Ordinary Shares - Class B,47266,1,2.0776,2,1,0,Very Bullish,2026-08-08T21:59:32Z
-BRK.A,Berkshire Hathaway Inc. - Ordinary Shares - Class A,12380,2,3.31882,1,0,0,Neutral,2026-08-08T21:59:32Z
-CIEN,CIENA Corp.,6839,3,-0.554185,0,0,0,Neutral,2026-08-08T21:59:32Z
-COHR,Coherent Corp,9406,4,-1.20358,0,0,0,Neutral,2026-08-08T21:59:32Z
-ICP.X,Internet Computer,11839,5,0.899597,0,0,0,Neutral,2026-08-08T21:59:32Z
-SONY,Sony Group Corporation,20432,6,0,0,0,0,Neutral,2026-08-08T21:59:32Z
-AERO.X,Aerodrome Finance,4437,7,0,0,0,0,Neutral,2026-08-08T21:59:32Z
-PSFE,Paysafe Limited,37388,8,3.2307,1,0,0,Neutral,2026-08-08T21:59:32Z
-TOS.X,TokenOS AI,213,9,-0.534999,0,0,0,Neutral,2026-08-08T21:59:32Z
-PEPE.X,Pepe,25079,10,4.3334,2,0,1,Very Bearish,2026-08-08T21:59:32Z
-BX,Blackstone Inc,13976,11,2.3249,0,0,0,Neutral,2026-08-08T21:59:32Z
-LITE,Lumentum Holdings Inc,14135,12,-1.3634,0,0,0,Neutral,2026-08-08T21:59:32Z
-SGOV,iShares 0-3 Month Treasury Bond ETF,1909,13,4.87396,1,0,0,Neutral,2026-08-08T21:59:32Z
-WRD,WeRide Inc. - ADR,4513,14,-0.284926,0,0,0,Neutral,2026-08-08T21:59:32Z
-XAGUSD,Silver US Dollar,3612,15,-0.554764,0,0,0,Neutral,2026-08-08T21:59:32Z
-ZTS,Zoetis Inc - Ordinary Shares - Class A,4411,16,-0.316508,0,0,0,Neutral,2026-08-08T21:59:32Z
-HYPE.X,Hype,2941,17,-1.11594,0,0,0,Neutral,2026-08-08T21:59:32Z
-AGQ,ProShares Ultra Silver,4572,18,-0.353524,0,0,0,Neutral,2026-08-08T21:59:32Z
-SE,Sea Ltd - ADR,28221,19,1.84016,0,0,0,Neutral,2026-08-08T21:59:32Z
-JNUG,Direxion Shares ETF Trust - Direxion Daily Junior Gold Miners Index Bull 2X ETF,78766,20,2.1669,0,0,0,Neutral,2026-08-08T21:59:32Z
-XLM.X,Stellar Lumens,70111,21,0.82229,0,0,0,Neutral,2026-08-08T21:59:32Z
-DOT.X,Polkadot,25040,22,-0.450863,0,0,0,Neutral,2026-08-08T21:59:32Z
-XLE,Energy Select Sector SPDR Fund,24400,23,-0.88486,0,0,0,Neutral,2026-08-08T21:59:32Z
-LMT,Lockheed Martin Corp.,37156,24,-0.56619,0,0,0,Neutral,2026-08-08T21:59:32Z
-PENN,PENN Entertainment Inc.,36461,25,-0.722648,0,0,0,Neutral,2026-08-08T21:59:32Z
-B,Barrick Mining Corp,32129,26,1.65775,0,0,0,Neutral,2026-08-08T21:59:32Z
-INTU,Intuit Inc,12160,27,1.07,0,0,0,Neutral,2026-08-08T21:59:32Z
-SLV,iShares Silver Trust,61443,28,0.93300399999999994,0,0,0,Neutral,2026-08-08T21:59:32Z
-LHX,L3Harris Technologies Inc,4358,29,-0.310678,0,0,0,Neutral,2026-08-08T21:59:32Z
-OMER,Omeros Corp,11528,30,0.571018,0,0,0,Neutral,2026-08-08T21:59:32Z
+CASHCAT.X,Cash Cat,247,1,8.03051,1,0,0,Neutral,2026-08-09T22:04:32Z
+MLTX,MoonLake Immunotherapeutics,6507,2,8.67497,5,2,0,Very Bullish,2026-08-09T22:04:32Z
+COHR,Coherent Corp,9453,3,5.50894,1,0,0,Neutral,2026-08-09T22:04:32Z
+OSCR,Oscar Health Inc - Ordinary Shares - Class A,16093,4,2.68635,0,0,0,Neutral,2026-08-09T22:04:32Z
+FLO,"Flowers Foods, Inc.",1464,5,0.00922689,0,0,0,Neutral,2026-08-09T22:04:32Z
+TSEM,Tower Semiconductor Ltd.,3942,6,4.52891,0,0,0,Neutral,2026-08-09T22:04:32Z
+SOL.X,Solana,79726,7,1.464,0,0,0,Neutral,2026-08-09T22:04:32Z
+ZIM,Zim Integrated Shipping Services Ltd,15341,8,-0.386266,0,0,0,Neutral,2026-08-09T22:04:32Z
+BTC,Grayscale Bitcoin Mini Trust ETF,4633,9,3.29214,0,0,0,Neutral,2026-08-09T22:04:32Z
+LITE,Lumentum Holdings Inc,14176,10,4.07368,0,0,0,Neutral,2026-08-09T22:04:32Z
+JASMY.X,JasmyCoin,25229,11,0.912151,0,0,0,Neutral,2026-08-09T22:04:32Z
+TOSHI.X,TOSHI,5578,12,3.18246,1,0,0,Neutral,2026-08-09T22:04:32Z
+ADUR,Aduro Clean Technologies Inc,4909,13,1.49477,0,0,0,Neutral,2026-08-09T22:04:32Z
+DVN,Devon Energy Corp.,14436,14,-0.433908,0,0,0,Neutral,2026-08-09T22:04:32Z
+PLAY,Dave & Buster's Entertainment,15202,15,-0.507476,0,0,0,Neutral,2026-08-09T22:04:32Z
+WMT,Walmart Inc,137355,16,0.145949,0,0,0,Neutral,2026-08-09T22:04:32Z
+GLD,SPDR Gold Shares ETF,95767,17,1.57033,1,0,0,Neutral,2026-08-09T22:04:32Z
+WING,Wingstop Inc,4992,18,0.0167974,0,0,0,Neutral,2026-08-09T22:04:32Z
+MA,Mastercard Inc,31880,19,-0.433908,0,0,0,Neutral,2026-08-09T22:04:32Z
+ALMU,Aeluma Inc,2988,20,1.84016,1,0,0,Neutral,2026-08-09T22:04:32Z
+WRD,WeRide Inc. - ADR,4514,21,2.8204,0,0,0,Neutral,2026-08-09T22:04:32Z
+XOM,Exxon Mobil Corp,99540,22,-1.11594,0,0,0,Neutral,2026-08-09T22:04:32Z
+CSCO,"Cisco Systems, Inc.",61289,23,2.0058,0,0,0,Neutral,2026-08-09T22:04:32Z
+KOLD,ProShares UltraShort Bloomberg Natural Gas,10359,24,-0.656158,0,0,0,Neutral,2026-08-09T22:04:32Z
+GDXU,Bank of Montreal - MicroSectors Gold Miners 3X Leveraged ETN,2073,25,-0.507476,0,0,0,Neutral,2026-08-09T22:04:32Z
+DOCN,DigitalOcean Holdings Inc,7248,26,-0.507476,0,0,0,Neutral,2026-08-09T22:04:32Z
+GDX,VanEck Gold Miners ETF,29953,27,1.4027,0,0,0,Neutral,2026-08-09T22:04:32Z
+SE,Sea Ltd - ADR,28223,28,4.12409,0,0,0,Neutral,2026-08-09T22:04:32Z
+CIEN,CIENA Corp.,6855,29,1.92979,0,0,0,Neutral,2026-08-09T22:04:32Z
+UNG,"United States Natural Gas Fund, LP",17626,30,-0.507476,0,0,0,Neutral,2026-08-09T22:04:32Z
