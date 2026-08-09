@@ -107,8 +107,11 @@ test_that("disclaimer gate is present and blocks the page on load", {
   # Covers the page rather than sitting in a footer
   expect_match(src, "#disclaimer-gate \\{[^}]*position:fixed")
   expect_match(src, "#disclaimer-gate \\{[^}]*z-index:100000")
-  # States the null result rather than only generic boilerplate
-  expect_match(src, "information coefficient at")
+  # States the null result rather than only generic boilerplate. Matches the
+  # metric name rather than a full sentence so rewording the gate does not
+  # break the test, but removing the disclosure entirely still does.
+  expect_match(src, "information coefficient")
+  expect_match(src, "no statistically significant relationship to forward returns")
 })
 
 test_that("UI does not claim predictive power the validation disproves", {
