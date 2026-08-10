@@ -1,31 +1,31 @@
 symbol,title,watchlist_count,st_rank,trending_score,messages,bullish,bearish,sentiment_label,fetched_at
-CASHCAT.X,Cash Cat,247,1,8.03051,1,0,0,Neutral,2026-08-09T22:04:32Z
-MLTX,MoonLake Immunotherapeutics,6507,2,8.67497,5,2,0,Very Bullish,2026-08-09T22:04:32Z
-COHR,Coherent Corp,9453,3,5.50894,1,0,0,Neutral,2026-08-09T22:04:32Z
-OSCR,Oscar Health Inc - Ordinary Shares - Class A,16093,4,2.68635,0,0,0,Neutral,2026-08-09T22:04:32Z
-FLO,"Flowers Foods, Inc.",1464,5,0.00922689,0,0,0,Neutral,2026-08-09T22:04:32Z
-TSEM,Tower Semiconductor Ltd.,3942,6,4.52891,0,0,0,Neutral,2026-08-09T22:04:32Z
-SOL.X,Solana,79726,7,1.464,0,0,0,Neutral,2026-08-09T22:04:32Z
-ZIM,Zim Integrated Shipping Services Ltd,15341,8,-0.386266,0,0,0,Neutral,2026-08-09T22:04:32Z
-BTC,Grayscale Bitcoin Mini Trust ETF,4633,9,3.29214,0,0,0,Neutral,2026-08-09T22:04:32Z
-LITE,Lumentum Holdings Inc,14176,10,4.07368,0,0,0,Neutral,2026-08-09T22:04:32Z
-JASMY.X,JasmyCoin,25229,11,0.912151,0,0,0,Neutral,2026-08-09T22:04:32Z
-TOSHI.X,TOSHI,5578,12,3.18246,1,0,0,Neutral,2026-08-09T22:04:32Z
-ADUR,Aduro Clean Technologies Inc,4909,13,1.49477,0,0,0,Neutral,2026-08-09T22:04:32Z
-DVN,Devon Energy Corp.,14436,14,-0.433908,0,0,0,Neutral,2026-08-09T22:04:32Z
-PLAY,Dave & Buster's Entertainment,15202,15,-0.507476,0,0,0,Neutral,2026-08-09T22:04:32Z
-WMT,Walmart Inc,137355,16,0.145949,0,0,0,Neutral,2026-08-09T22:04:32Z
-GLD,SPDR Gold Shares ETF,95767,17,1.57033,1,0,0,Neutral,2026-08-09T22:04:32Z
-WING,Wingstop Inc,4992,18,0.0167974,0,0,0,Neutral,2026-08-09T22:04:32Z
-MA,Mastercard Inc,31880,19,-0.433908,0,0,0,Neutral,2026-08-09T22:04:32Z
-ALMU,Aeluma Inc,2988,20,1.84016,1,0,0,Neutral,2026-08-09T22:04:32Z
-WRD,WeRide Inc. - ADR,4514,21,2.8204,0,0,0,Neutral,2026-08-09T22:04:32Z
-XOM,Exxon Mobil Corp,99540,22,-1.11594,0,0,0,Neutral,2026-08-09T22:04:32Z
-CSCO,"Cisco Systems, Inc.",61289,23,2.0058,0,0,0,Neutral,2026-08-09T22:04:32Z
-KOLD,ProShares UltraShort Bloomberg Natural Gas,10359,24,-0.656158,0,0,0,Neutral,2026-08-09T22:04:32Z
-GDXU,Bank of Montreal - MicroSectors Gold Miners 3X Leveraged ETN,2073,25,-0.507476,0,0,0,Neutral,2026-08-09T22:04:32Z
-DOCN,DigitalOcean Holdings Inc,7248,26,-0.507476,0,0,0,Neutral,2026-08-09T22:04:32Z
-GDX,VanEck Gold Miners ETF,29953,27,1.4027,0,0,0,Neutral,2026-08-09T22:04:32Z
-SE,Sea Ltd - ADR,28223,28,4.12409,0,0,0,Neutral,2026-08-09T22:04:32Z
-CIEN,CIENA Corp.,6855,29,1.92979,0,0,0,Neutral,2026-08-09T22:04:32Z
-UNG,"United States Natural Gas Fund, LP",17626,30,-0.507476,0,0,0,Neutral,2026-08-09T22:04:32Z
+RKLB,Rocket Lab USA Inc,65816,1,18.9207,11,2,1,Bullish,2026-08-10T22:11:46Z
+HIMS,Hims & Hers Health Inc,57474,2,14.985,3,1,0,Very Bullish,2026-08-10T22:11:46Z
+FRMI,Fermi LLC,5058,3,14.7216,1,0,0,Neutral,2026-08-10T22:11:46Z
+RUM,RUM Group Inc.,34314,4,13.2526,0,0,0,Neutral,2026-08-10T22:11:46Z
+ACHR,Archer Aviation Inc,37055,5,12.0311,2,0,0,Neutral,2026-08-10T22:11:46Z
+ASTS,AST SpaceMobile Inc,70360,6,11.7289,5,3,1,Very Bullish,2026-08-10T22:11:46Z
+BW,Babcock & Wilcox Enterprises Inc,6614,7,11.235,0,0,0,Neutral,2026-08-10T22:11:46Z
+USAR,USA Rare Earth Inc,19104,8,11.2017,0,0,0,Neutral,2026-08-10T22:11:46Z
+SLV,iShares Silver Trust,61524,9,10.6047,0,0,0,Neutral,2026-08-10T22:11:46Z
+RIOT,Riot Platforms Inc,129253,10,10.5124,3,0,1,Very Bearish,2026-08-10T22:11:46Z
+LUNR,Intuitive Machines Inc,38541,11,8.9225,0,0,0,Neutral,2026-08-10T22:11:46Z
+GME,GameStop Corp,307454,12,8.81481,1,0,0,Neutral,2026-08-10T22:11:46Z
+BKKT,Bakkt Inc. - Ordinary Shares - Class A,25385,13,7.99563,1,0,0,Neutral,2026-08-10T22:11:46Z
+QUBT,Quantum Computing Inc,33440,14,7.74574,0,0,0,Neutral,2026-08-10T22:11:46Z
+SOC,Sable Offshore Corp.,2309,15,7.58585,0,0,0,Neutral,2026-08-10T22:11:46Z
+UPWK,Upwork Inc,9759,16,7.42177,0,0,0,Neutral,2026-08-10T22:11:46Z
+GLD,SPDR Gold Shares ETF,95803,17,6.94951,0,0,0,Neutral,2026-08-10T22:11:46Z
+AMTM,Amentum Holdings Inc.,2005,18,6.667,1,0,0,Neutral,2026-08-10T22:11:46Z
+HROW,Harrow Health Inc,3457,19,6.16164,1,1,0,Very Bullish,2026-08-10T22:11:46Z
+MNDY,Monday.com Ltd,5573,20,5.52158,0,0,0,Neutral,2026-08-10T22:11:46Z
+BRK.B,Berkshire Hathaway Inc. - Ordinary Shares - Class B,47354,21,5.45827,0,0,0,Neutral,2026-08-10T22:11:46Z
+CIFR,Cipher Digital Inc.,22663,22,5.38755,0,0,0,Neutral,2026-08-10T22:11:46Z
+NASA,Tema Space Innovators ETF,5539,23,5.07048,0,0,0,Neutral,2026-08-10T22:11:46Z
+MARA,Marathon Digital Holdings Inc,158041,24,5.03067,0,0,0,Neutral,2026-08-10T22:11:46Z
+GDX,VanEck Gold Miners ETF,29966,25,5.02419,0,0,0,Neutral,2026-08-10T22:11:46Z
+B,Barrick Mining Corp,32212,26,4.6396,0,0,0,Neutral,2026-08-10T22:11:46Z
+ET,Energy Transfer LP Unit,22942,27,4.60343,1,1,0,Very Bullish,2026-08-10T22:11:46Z
+CSCO,"Cisco Systems, Inc.",61312,28,4.51852,0,0,0,Neutral,2026-08-10T22:11:46Z
+NUAI,New Era Energy & Digital Inc.,10090,29,4.33446,0,0,0,Neutral,2026-08-10T22:11:46Z
+XLE,Energy Select Sector SPDR Fund,24422,30,4.27206,0,0,0,Neutral,2026-08-10T22:11:46Z
