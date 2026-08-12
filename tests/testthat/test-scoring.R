@@ -157,3 +157,18 @@ test_that("band thresholds are unchanged by the relabelling", {
   # A high score with too little history still cannot reach the top band
   expect_equal(band(90, cw = 0.2), "Strong")
 })
+
+test_that("every KPI counter matches a band the pipeline actually emits", {
+  # The Buy tile kept counting rating == "Buy" after the relabelling and
+  # displayed 0 on the live site. Any counter must reference a current band.
+  lines <- readLines("../../app/app.R")
+  bands <- c("Very Strong", "Strong", "Neutral", "Weak", "Very Weak")
+
+  counters <- grep("master_data\\$rating", lines, value = TRUE)
+  expect_gt(length(counters), 0)
+  for (line in counters) {
+    quoted <- gsub('"', "", regmatches(line, gregexpr('"[^"]+"', line))[[1]])
+    expect_true(any(quoted %in% bands),
+                info = paste("KPI counter references no current band:", trimws(line)))
+  }
+})

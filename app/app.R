@@ -834,7 +834,7 @@ ui <- fluidPage(
       div(class="kpi-strip",
         div(class="kpi-cell", div(class="kpi-k","Universe"),     div(class="kpi-v", uiOutput("kpi_n")),   div(class="kpi-s","stocks scored")),
         div(class="kpi-cell", div(class="kpi-k","Very Strong"),  div(class="kpi-v", uiOutput("kpi_sb")),  div(class="kpi-s","top score band")),
-        div(class="kpi-cell", div(class="kpi-k","Buy"),          div(class="kpi-v", uiOutput("kpi_b")),   div(class="kpi-s","rated buy")),
+        div(class="kpi-cell", div(class="kpi-k","Strong"),       div(class="kpi-v", uiOutput("kpi_b")),   div(class="kpi-s","second band")),
         div(class="kpi-cell", div(class="kpi-k","Squeeze Setup"),div(class="kpi-v", uiOutput("kpi_sq")), div(class="kpi-s","candidates")),
         div(class="kpi-cell", div(class="kpi-k","Avg Score"),    div(class="kpi-v", uiOutput("kpi_avg")),div(class="kpi-s","universe avg")),
         div(class="kpi-cell", div(class="kpi-k","Golden Cross"), div(class="kpi-v", uiOutput("kpi_gc")), div(class="kpi-s","bullish MA signal"))
@@ -1256,7 +1256,7 @@ server <- function(input, output, session) {
   # ── KPIs ─────────────────────────────────────────────────────────────────
   output$kpi_n   <- renderUI({ if(!is.null(master_data)) nrow(master_data) else "—" })
   output$kpi_sb  <- renderUI({ if(!is.null(master_data)) sum(master_data$rating %in% c("Very Strong","Strong Buy"),na.rm=TRUE) else "—" })
-  output$kpi_b   <- renderUI({ if(!is.null(master_data)) sum(master_data$rating=="Buy",na.rm=TRUE) else "—" })
+  output$kpi_b   <- renderUI({ if(!is.null(master_data)) sum(master_data$rating %in% c("Strong","Buy"),na.rm=TRUE) else "—" })
   output$kpi_sq  <- renderUI({ if(!is.null(master_data)) sum(master_data$squeeze_candidate,na.rm=TRUE) else "—" })
   output$kpi_avg <- renderUI({ if(!is.null(master_data)) round(mean(master_data$master_score,na.rm=TRUE),1) else "—" })
   output$kpi_gc  <- renderUI({ if(!is.null(master_data)) sum(master_data$golden_cross_flag,na.rm=TRUE) else "—" })
