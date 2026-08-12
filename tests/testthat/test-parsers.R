@@ -91,3 +91,30 @@ test_that("sector subsetting drops NA rows instead of creating phantoms", {
   expect_equal(nrow(out), 1)
   expect_equal(out$symbol, "A")
 })
+
+test_that("earnings date parsing never aborts on a malformed response", {
+  # Bare as.Date() aborts two ways that suppressWarnings cannot catch:
+  #   logical/list column -> "do not know how to convert 'x' to class Date"
+  #   unparseable text    -> "character string is not in a standard format"
+  # Production hit the first and lost the whole fetch. An explicit format
+  # yields NA instead, so the response gets reported rather than crashing.
+  parse_date <- function(x) suppressWarnings(as.Date(as.character(x), format = "%Y-%m-%d"))
+
+  for (bad in list(c(TRUE, NA), I(list("x", "y")), c(NA, NA),
+                   c("n/a", "--"), c("<html>", "</html>"), character(0))) {
+    expect_no_error(parse_date(bad))
+    expect_true(all(is.na(parse_date(bad))))
+  }
+  # A well-formed response still parses
+  good <- parse_date(c("2026-09-01", "2026-09-02"))
+  expect_false(any(is.na(good)))
+  expect_equal(format(good[1]), "2026-09-01")
+})
+
+test_that("checkout fetches full history so file ages are real", {
+  # A shallow clone leaves one commit, so `git log -1 -- <file>` returns the
+  # same timestamp for every file and the health table reported 0.1h for all of
+  # them, including one six days stale.
+  yml <- paste(readLines("../../.github/workflows/daily-update.yml"), collapse = "\n")
+  expect_match(yml, "fetch-depth: 0")
+})

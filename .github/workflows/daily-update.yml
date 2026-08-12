@@ -19,6 +19,12 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          # Full history. The default shallow clone leaves a single commit, so
+          # `git log -1 -- <file>` returns the same timestamp for every file and
+          # the data-health table reports identical ages for all of them —
+          # making its STALE check unreachable.
+          fetch-depth: 0
 
       - name: Set up R
         uses: r-lib/actions/setup-r@v2

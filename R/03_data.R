@@ -122,8 +122,22 @@ get_earnings_calendar <- function() {
               paste(names(df), collapse = ", "))
       return(tibble())
     }
+    # Parse defensively.  Bare as.Date() aborts two different ways on a
+    # malformed response — "do not know how to convert 'x' to class Date" for a
+    # logical or list column, and "character string is not in a standard
+    # unambiguous format" for unparseable text — and neither is suppressible.
+    # An explicit format yields NA instead, so any shape AV sends is reported
+    # rather than crashing the fetch.
     df <- df %>%
-      mutate(date = as.Date(date)) %>%
+      mutate(date = suppressWarnings(as.Date(as.character(date), format = "%Y-%m-%d")))
+    if (all(is.na(df$date))) {
+      message("  AV earnings returned ", nrow(df), " rows but no parseable dates.")
+      message("    columns: ", paste(names(df), collapse = ", "))
+      message("    first row: ",
+              paste(utils::head(unlist(lapply(df[1, ], as.character)), 8), collapse = " | "))
+      return(tibble())
+    }
+    df <- df %>%
       filter(!is.na(date)) %>%
       arrange(date) %>%
       mutate(fetched_on = Sys.Date())   # stamps the cache so the TTL survives CI
