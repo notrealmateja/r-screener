@@ -1,51 +1,51 @@
 rank,ticker,name,mentions,upvotes,rank_24h_ago,mentions_24h_ago,mentions_chg,rank_chg,momentum
-1,HTZ,Hertz,547,989,1,659,-112,0,Steady
-2,NBIS,Nebius Group,446,2848,11,59,387,9,Surging
-3,SPY,SPDR S&amp;P 500 ETF Trust,304,663,2,361,-57,-1,Steady
-4,MU,Micron Technology,276,764,5,156,120,1,Steady
-5,SPCX,SpaceX,190,932,6,97,93,1,Steady
-6,SMCI,Supermicro,169,470,14,80,89,8,Surging
-7,CRWV,CoreWeave,131,419,12,71,60,5,Surging
-8,WEN,Wendy’s Company,128,480,43,16,112,35,Surging
-9,SNDK,Sandisk,93,224,9,79,14,0,Steady
-10,NVDA,NVIDIA,92,205,7,92,0,-3,Fading
-11,META,Meta Platforms (Facebook),76,170,15,43,33,4,Rising
-12,QQQ,Invesco QQQ ETF,75,133,17,58,17,5,Surging
-13,GOOG,Alphabet (Google),63,158,13,79,-16,0,Steady
-14,GOOGL,Alphabet (Google),53,148,10,84,-31,-4,Fading
-15,DTE,DTE Energy,52,292,16,36,16,1,Steady
-16,MSFT,Microsoft,50,112,8,74,-24,-8,Falling
-17,ONDS,Ondas Holdings,43,207,35,19,24,18,Surging
-18,AAPL,Apple,38,131,29,25,13,11,Surging
-19,PLTR,Palantir,36,1837,21,27,9,2,Rising
+1,HTZ,Hertz,539,981,1,660,-121,0,Steady
+2,NBIS,Nebius Group,432,2777,11,67,365,9,Surging
+3,SPY,SPDR S&amp;P 500 ETF Trust,300,658,2,353,-53,-1,Steady
+4,MU,Micron Technology,273,743,5,149,124,1,Steady
+5,SPCX,SpaceX,185,923,6,85,100,1,Steady
+6,SMCI,Supermicro,147,379,14,145,2,8,Surging
+7,WEN,Wendy’s Company,128,484,43,19,109,36,Surging
+8,CRWV,CoreWeave,113,310,12,111,2,4,Rising
+9,NVDA,NVIDIA,91,193,7,89,2,-2,Fading
+10,SNDK,Sandisk,91,222,9,79,12,-1,Steady
+11,META,Meta Platforms (Facebook),76,170,15,44,32,4,Rising
+12,QQQ,Invesco QQQ ETF,72,128,17,63,9,5,Surging
+13,GOOG,Alphabet (Google),62,161,13,87,-25,0,Steady
+14,DTE,DTE Energy,52,290,16,36,16,2,Rising
+15,GOOGL,Alphabet (Google),49,142,10,86,-37,-5,Falling
+16,MSFT,Microsoft,47,107,8,72,-25,-8,Falling
+17,ONDS,Ondas Holdings,43,206,35,22,21,18,Surging
+18,AAPL,Apple,38,134,29,23,15,11,Surging
+19,PLTR,Palantir,36,1839,21,25,11,2,Rising
 20,DNUT,Krispy Kreme,36,450,532,1,35,512,Surging
-21,TSLA,Tesla,32,52,24,19,13,3,Rising
-22,CSCO,Cisco,28,129,171,1,27,149,Surging
-23,RKLB,Rocket Lab USA,25,58,3,264,-239,-20,Falling
+21,TSLA,Tesla,32,53,24,16,16,3,Rising
+22,CSCO,Cisco,28,130,171,1,27,149,Surging
+23,RKLB,Rocket Lab USA,25,56,3,214,-189,-20,Falling
 24,CBRS,Cerebras Systems,25,40,690,1,24,666,Surging
-25,INFQ,Infleqtion,23,39,692,NA,NA,667,Surging
-26,LITE,Lumentum,21,41,33,19,2,7,Surging
-27,ASTS,AST SpaceMobile,21,44,4,180,-159,-23,Falling
-28,AMD,AMD,20,28,18,127,-107,-10,Falling
-29,AMZN,Amazon,19,30,41,12,7,12,Surging
-30,IT,Gartner,17,61,26,22,-5,-4,Fading
-31,USO,United States Commodity Funds LLC - United States Oil Fund,16,1212,25,17,-1,-6,Falling
-32,SOXL,Direxion Shares ETF Trust - Direxion Daily Semiconductor Bull 3X Share,16,36,56,7,9,24,Surging
-33,RDDT,Reddit,16,33,40,13,3,7,Surging
-34,YOU,CLEAR Secure,15,66,27,23,-8,-7,Falling
-35,ON,ON Semiconductor,14,126,60,8,6,25,Surging
-36,PUMP,ProPetro,14,42,503,1,13,467,Surging
-37,APLD,Applied Blockchain,13,28,602,1,12,565,Surging
+25,ASTS,AST SpaceMobile,21,45,4,149,-128,-21,Falling
+26,INFQ,Infleqtion,21,38,692,NA,NA,666,Surging
+27,AMD,AMD,19,26,18,126,-107,-9,Falling
+28,AMZN,Amazon,18,28,41,11,7,13,Surging
+29,IT,Gartner,16,60,26,22,-6,-3,Fading
+30,USO,United States Commodity Funds LLC - United States Oil Fund,16,1212,25,17,-1,-5,Falling
+31,RDDT,Reddit,16,34,40,13,3,9,Surging
+32,LITE,Lumentum,15,27,33,24,-9,1,Steady
+33,SOXL,Direxion Shares ETF Trust - Direxion Daily Semiconductor Bull 3X Share,15,33,56,6,9,23,Surging
+34,YOU,CLEAR Secure,15,66,27,22,-7,-7,Falling
+35,ON,ON Semiconductor,14,126,60,7,7,25,Surging
+36,PUMP,ProPetro,14,44,503,3,11,467,Surging
+37,APLD,Applied Blockchain,13,27,602,1,12,565,Surging
 38,UBER,Uber,12,17,139,1,11,101,Surging
-39,GLD,SSgA SPDR Gold Shares,12,32,22,19,-7,-17,Falling
-40,HOOD,Robinhood,12,30,53,11,1,13,Surging
-41,UP,Wheels Up,12,21,63,10,2,22,Surging
-42,APP,AppLovin,12,30,34,22,-10,-8,Falling
+39,UP,Wheels Up,12,21,63,11,1,24,Surging
+40,GLD,SSgA SPDR Gold Shares,11,29,22,15,-4,-18,Falling
+41,HOOD,Robinhood,11,27,53,11,0,12,Surging
+42,APP,AppLovin,11,31,34,22,-11,-8,Falling
 43,GO,Grocery Outlet,10,21,107,1,9,64,Surging
-44,AM,Antero Midstream,10,32,37,13,-3,-7,Falling
-45,SOFI,SoFi,10,18,121,5,5,76,Surging
-46,ACHR,Archer Aviation,10,11,39,8,2,-7,Falling
-47,CAVA,CAVA Group,10,22,161,6,4,114,Surging
-48,LINK,Interlink Electronics,10,23,97,3,7,49,Surging
-49,ES,Eversource Energy,9,15,59,4,5,10,Surging
-50,COHR,Coherent,9,13,50,9,0,0,Steady
+44,AM,Antero Midstream,10,33,37,12,-2,-7,Falling
+45,SOFI,SoFi,10,18,121,6,4,76,Surging
+46,ACHR,Archer Aviation,10,11,39,5,5,-7,Falling
+47,LINK,Interlink Electronics,10,23,97,2,8,50,Surging
+48,ES,Eversource Energy,9,15,59,4,5,11,Surging
+49,COHR,Coherent,9,13,50,8,1,1,Steady
+50,LUNR,Intuitive Machines,9,18,84,6,3,34,Surging
