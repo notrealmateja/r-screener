@@ -286,12 +286,17 @@ run_module4 <- function(fund_data = NULL) {
     # ── App expects these exact column names ──
     master_score = final_score,                            # app reads master_score
 
+    # Score bands, not recommendations.  These were "Strong Buy"/"Buy"/"Hold"/
+    # "Underperform"/"Avoid" — investment verbs on a model whose own validation
+    # puts its information coefficient at 0.003.  The bands are unchanged; only
+    # the wording is, so a label now describes where a stock sits in the score
+    # distribution rather than instructing anyone to trade it.
     rating = dplyr::case_when(                             # app reads rating
-      final_score >= 78 & confidence_weight >= 0.3 ~ "Strong Buy",
-      final_score >= 65                            ~ "Buy",
-      final_score >= 45                            ~ "Hold",
-      final_score >= 30                            ~ "Underperform",
-      TRUE                                         ~ "Avoid"
+      final_score >= 78 & confidence_weight >= 0.3 ~ "Very Strong",
+      final_score >= 65                            ~ "Strong",
+      final_score >= 45                            ~ "Neutral",
+      final_score >= 30                            ~ "Weak",
+      TRUE                                         ~ "Very Weak"
     ),
 
     signal = rating,                                       # keep signal too

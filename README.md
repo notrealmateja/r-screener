@@ -57,7 +57,7 @@ Five surfaces sit on top of that:
 | Tab | Purpose |
 |---|---|
 | **Overview** | Top 20 by composite score, top 15 small-cap growth ("Unicorns"), score distribution, sector heatmap |
-| **Screener** | Full 195-name universe, filterable by sector, rating and minimum score |
+| **Screener** | Full 195-name universe, filterable by sector, score band and minimum score |
 | **Short / Squeeze** | Squeeze setup ranking from short interest, options positioning and volume |
 | **Deep Dive** | Per-ticker price, MACD, RSI, Bollinger bands, valuation table, peer comps |
 | **Macro** | Treasury curve, Fed funds, 10Y–2Y spread from FRED |
@@ -296,7 +296,7 @@ dashboard constitutes investment, financial, legal or tax advice, nor a
 recommendation, solicitation or offer to buy or sell any security. Using it
 creates no advisory relationship.
 
-Ratings such as "Strong Buy" and "Avoid" are mechanical labels produced by ranking
+Score bands — Very Strong, Strong, Neutral, Weak, Very Weak — are produced mechanically by ranking
 a formula's output. They involve no human judgment about any company and are not
 endorsements. As documented above, **this model shows no statistically significant
 ability to predict forward returns.**

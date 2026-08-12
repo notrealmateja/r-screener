@@ -54,22 +54,6 @@ test_that("confidence shrinkage pulls a raw score toward neutral 50", {
   expect_true(blend(20, 0.5) > 20 && blend(20, 0.5) < 50)
 })
 
-test_that("rating thresholds are ordered and Strong Buy requires confidence", {
-  rate <- function(score, w) {
-    if (score >= 78 && w >= 0.3) "Strong Buy"
-    else if (score >= 65) "Buy"
-    else if (score >= 45) "Hold"
-    else if (score >= 30) "Underperform"
-    else "Avoid"
-  }
-  expect_equal(rate(82.9, 1.0), "Strong Buy")
-  expect_equal(rate(82.9, 0.1), "Buy")   # high score, too little history
-  expect_equal(rate(71.8, 1.0), "Buy")
-  expect_equal(rate(50.0, 1.0), "Hold")
-  expect_equal(rate(35.0, 1.0), "Underperform")
-  expect_equal(rate(10.0, 1.0), "Avoid")
-})
-
 test_that("unicorn screen requires genuinely small caps", {
   universe <- data.frame(
     symbol     = c("HON", "CRM", "PRPL", "LOVE", "SOUN"),
@@ -139,4 +123,37 @@ test_that("reversal verdict follows the sign of the correlation", {
   expect_equal(verdict(-0.04, -1.5), "none")     # below the bar
   expect_equal(verdict(-0.04, -2.2), "none")     # below adjusted bar, above 2.0
   expect_equal(verdict(-0.04, NA),   "undetermined")
+})
+
+test_that("score bands describe the score rather than recommend a trade", {
+  # These were "Strong Buy"/"Buy"/"Hold"/"Underperform"/"Avoid" — investment
+  # verbs on a model whose own validation puts its IC at 0.003. The bands are
+  # unchanged; only the wording is.
+  src <- paste(readLines("../../R/04_master_score.R"), collapse = "\n")
+  for (band in c("Very Strong", "Strong", "Neutral", "Weak", "Very Weak"))
+    expect_match(src, paste0('"', band, '"'), fixed = FALSE)
+  # The recommendation verbs must not come back in the label definitions
+  rating_block <- sub('.*rating = dplyr::case_when\\((.*?)\\),.*', "\\1", src)
+  for (verb in c("Strong Buy", "Underperform", "Avoid"))
+    expect_false(grepl(verb, rating_block, fixed = TRUE),
+                 info = paste("recommendation verb reintroduced:", verb))
+})
+
+test_that("band thresholds are unchanged by the relabelling", {
+  band <- function(score, cw = 1) {
+    if (score >= 78 && cw >= 0.3) "Very Strong"
+    else if (score >= 65) "Strong"
+    else if (score >= 45) "Neutral"
+    else if (score >= 30) "Weak"
+    else "Very Weak"
+  }
+  expect_equal(band(84.6), "Very Strong")
+  expect_equal(band(78),   "Very Strong")
+  expect_equal(band(77.9), "Strong")
+  expect_equal(band(65),   "Strong")
+  expect_equal(band(45),   "Neutral")
+  expect_equal(band(30),   "Weak")
+  expect_equal(band(29.9), "Very Weak")
+  # A high score with too little history still cannot reach the top band
+  expect_equal(band(90, cw = 0.2), "Strong")
 })

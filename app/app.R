@@ -722,7 +722,7 @@ ui <- fluidPage(
 
   # ── DISCLAIMER GATE ──────────────────────────────────────────────────────
   # Static markup, shown once per browser session. Deliberately states the
-  # model's own null result: the dashboard labels stocks "Strong Buy" while the
+  # model's own null result: the dashboard ranks stocks into score bands while the
   # Methodology tab documents an information coefficient of ~0, and a visitor
   # should meet that contradiction before the rankings, not after.
   div(id="disclaimer-gate",
@@ -738,8 +738,9 @@ ui <- fluidPage(
         tags$p(tags$strong("Rankings carry no demonstrated predictive power. "),
                "In out-of-sample testing across 32 rebalances, this model's rankings showed ",
                "no statistically significant relationship to forward returns (information ",
-               "coefficient +0.003, t = 0.09). Labels such as \"Strong Buy\" are mechanical ",
-               "output from a ranking formula — not forecasts, not endorsements, and not a ",
+               "coefficient +0.003, t = 0.09). Stocks are labelled by score band — Very ",
+               "Strong through Very Weak — describing where they sit in the model's own ",
+               "distribution. They are not forecasts, not endorsements, and not a ",
                "basis for any investment decision. The Methodology tab shows the full ",
                "evidence.")),
       tags$p(tags$strong("Backtested results are hypothetical. "),
@@ -832,7 +833,7 @@ ui <- fluidPage(
     div(class="tab-pane active", id="pane-overview",
       div(class="kpi-strip",
         div(class="kpi-cell", div(class="kpi-k","Universe"),     div(class="kpi-v", uiOutput("kpi_n")),   div(class="kpi-s","stocks scored")),
-        div(class="kpi-cell", div(class="kpi-k","Strong Buy"),   div(class="kpi-v", uiOutput("kpi_sb")),  div(class="kpi-s","top-rated")),
+        div(class="kpi-cell", div(class="kpi-k","Very Strong"),  div(class="kpi-v", uiOutput("kpi_sb")),  div(class="kpi-s","top score band")),
         div(class="kpi-cell", div(class="kpi-k","Buy"),          div(class="kpi-v", uiOutput("kpi_b")),   div(class="kpi-s","rated buy")),
         div(class="kpi-cell", div(class="kpi-k","Squeeze Setup"),div(class="kpi-v", uiOutput("kpi_sq")), div(class="kpi-s","candidates")),
         div(class="kpi-cell", div(class="kpi-k","Avg Score"),    div(class="kpi-v", uiOutput("kpi_avg")),div(class="kpi-s","universe avg")),
@@ -1254,7 +1255,7 @@ server <- function(input, output, session) {
 
   # ── KPIs ─────────────────────────────────────────────────────────────────
   output$kpi_n   <- renderUI({ if(!is.null(master_data)) nrow(master_data) else "—" })
-  output$kpi_sb  <- renderUI({ if(!is.null(master_data)) sum(master_data$rating=="Strong Buy",na.rm=TRUE) else "—" })
+  output$kpi_sb  <- renderUI({ if(!is.null(master_data)) sum(master_data$rating %in% c("Very Strong","Strong Buy"),na.rm=TRUE) else "—" })
   output$kpi_b   <- renderUI({ if(!is.null(master_data)) sum(master_data$rating=="Buy",na.rm=TRUE) else "—" })
   output$kpi_sq  <- renderUI({ if(!is.null(master_data)) sum(master_data$squeeze_candidate,na.rm=TRUE) else "—" })
   output$kpi_avg <- renderUI({ if(!is.null(master_data)) round(mean(master_data$master_score,na.rm=TRUE),1) else "—" })
@@ -1262,7 +1263,8 @@ server <- function(input, output, session) {
 
   # ── Rating pill HTML ──────────────────────────────────────────────────────
   pill <- function(r) {
-    cls <- switch(r, "Strong Buy"="r-sb","Buy"="r-b","Hold"="r-h","Underperform"="r-u","r-av")
+    cls <- switch(r, "Very Strong"="r-sb","Strong"="r-b","Neutral"="r-h","Weak"="r-u",
+                 "Strong Buy"="r-sb","Buy"="r-b","Hold"="r-h","Underperform"="r-u","r-av")
     as.character(tags$b(class=cls, r))
   }
   sbar <- function(s) {
@@ -1405,7 +1407,7 @@ server <- function(input, output, session) {
   output$rating_donut <- renderPlotly({
     if (is.null(master_data)) return(no_data())
     d <- master_data %>% count(rating) %>% filter(!is.na(rating))
-    clrs <- c("Strong Buy"="#00C853","Buy"="#64DD17","Hold"="#FFD600","Underperform"="#FF6D00","Avoid"="#FF3D00")
+    clrs <- c("Very Strong"="#00C853","Strong"="#64DD17","Neutral"="#FFD600","Weak"="#FF6D00","Very Weak"="#FF3D00")
     plot_ly(d, labels=~rating, values=~n, type="pie", hole=0.55,
       marker=list(colors=clrs[d$rating], line=list(color="#0A0A0A",width=2)),
       textfont=list(family="IBM Plex Mono",size=10), textinfo="label+percent") %>%
@@ -2313,9 +2315,10 @@ server <- function(input, output, session) {
              "solicitation or offer to buy or sell any security. Using this site creates ",
              "no advisory or fiduciary relationship."),
       tags$p(tags$strong("Model output is not a recommendation. "),
-             "Ratings such as \"Strong Buy\", \"Buy\" and \"Avoid\" are mechanical labels ",
-             "produced by ranking a formula's output. They reflect no human judgment about ",
-             "any company and should not be read as endorsements. As documented above, ",
+             "Score bands — Very Strong, Strong, Neutral, Weak, Very Weak — are produced ",
+             "mechanically by ranking a formula's output. They describe position in that ",
+             "distribution, involve no human judgment about any company, and are ",
+             "deliberately not phrased as buy or sell recommendations. As documented above, ",
              "this model shows no statistically significant ability to predict forward ",
              "returns."),
       # Language adapted from the CFTC Rule 4.41 hypothetical-performance

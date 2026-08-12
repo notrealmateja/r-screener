@@ -26,7 +26,7 @@ meta <- tryCatch(readRDS("meta.rds"),
                  error=function(e) list(last_updated="Not yet run", n_stocks=0))
 
 all_sectors <- c("All", if (!is.null(master_data)) sort(unique(na.omit(master_data$sector))) else character(0))
-all_ratings <- c("All","Strong Buy","Buy","Hold","Underperform","Avoid")
+all_ratings <- c("All","Very Strong","Strong","Neutral","Weak","Very Weak")
 
 ORANGE  <- "#FF6B00"
 ORANGE2 <- "#FF8C00"
