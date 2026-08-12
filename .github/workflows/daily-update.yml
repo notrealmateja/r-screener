@@ -11,6 +11,7 @@ on:
 
 permissions:
   contents: write
+  issues: write      # a failed run opens/updates a tracking issue
 
 jobs:
   update-and-deploy:
@@ -260,3 +261,67 @@ jobs:
             if (!isTRUE(ok)) stop("Deploy failed after 3 attempts")
             message("Deploy complete.")
           '
+
+      # The failure mode that actually cost time here was silence: the pipeline
+      # broke and nothing said so, so it stayed broken for days. A failed run
+      # now opens a tracking issue, which emails the repo owner. Repeat failures
+      # comment on the existing issue rather than opening one a night.
+      #
+      # Written as a Python file rather than inline shell: building JSON through
+      # nested shell quoting produced literal newlines inside string values,
+      # which is invalid JSON. Every failure path is swallowed so that reporting
+      # a failure can never itself fail the job.
+      - name: Report failure
+        if: failure()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          cat > /tmp/report_failure.py <<'PYSCRIPT'
+          import json, os, urllib.request, datetime
+
+          token = os.environ["GH_TOKEN"]
+          repo  = os.environ["REPO"]
+          run   = os.environ["RUN_URL"]
+          today = datetime.datetime.utcnow().strftime("%Y-%m-%d")
+          api   = "https://api.github.com/repos/" + repo
+
+          def call(url, payload=None):
+              data = json.dumps(payload).encode() if payload else None
+              req = urllib.request.Request(url, data=data)
+              req.add_header("Authorization", "Bearer " + token)
+              req.add_header("Accept", "application/vnd.github+json")
+              with urllib.request.urlopen(req, timeout=30) as r:
+                  body = r.read().decode()
+              return json.loads(body) if body.strip() else None
+
+          existing = None
+          try:
+              found = call(api + "/issues?state=open&labels=pipeline-failure&per_page=1")
+              if found:
+                  existing = found[0]["number"]
+          except Exception as e:
+              print("lookup failed:", e)
+
+          try:
+              if existing:
+                  call(api + "/issues/%d/comments" % existing,
+                       {"body": "Failed again on %s.\n\nRun: %s" % (today, run)})
+                  print("commented on issue #%d" % existing)
+              else:
+                  call(api + "/issues", {
+                      "title": "Daily pipeline failed (%s)" % today,
+                      "labels": ["pipeline-failure"],
+                      "body": ("The scheduled run failed.\n\n"
+                               "Run: %s\n\n"
+                               "The site is not down. Data files are preserved when a fetch "
+                               "returns empty and the deploy is skipped, so it keeps serving "
+                               "the last good data. This tracks the refresh being stalled.\n\n"
+                               "Close once a run goes green." % run)})
+                  print("opened a pipeline-failure issue")
+          except Exception as e:
+              print("report failed:", e)
+          PYSCRIPT
+          python3 /tmp/report_failure.py || true
+          exit 0
