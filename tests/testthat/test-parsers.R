@@ -118,3 +118,26 @@ test_that("checkout fetches full history so file ages are real", {
   yml <- paste(readLines("../../.github/workflows/daily-update.yml"), collapse = "\n")
   expect_match(yml, "fetch-depth: 0")
 })
+
+test_that("an AV notice is detected regardless of its framing", {
+  # The refusal does not always arrive as JSON. Checking only for a leading "{"
+  # missed a payload that read_csv then shredded character-by-character across
+  # the expected header — "I | n | NA | o | r | m | a", i.e. "Informa...", with
+  # the lone f typed as logical FALSE, which is what aborted as.Date().
+  is_notice <- function(raw) {
+    m <- regmatches(raw, regexpr("(?i)(information|note|error message|premium|thank you for using)",
+                                 raw, perl = TRUE))
+    length(m) > 0 && nchar(raw) < 2000
+  }
+  expect_true(is_notice('{"Information": "This is a premium endpoint."}'))
+  expect_true(is_notice("Information: premium endpoint"))
+  expect_true(is_notice('{"Note": "call frequency limit"}'))
+  expect_true(is_notice('{"Error Message": "invalid API call"}'))
+
+  # A genuine payload must pass through even if it contains a trigger word,
+  # which the size guard is there to ensure.
+  real <- paste0("symbol,name,reportDate,fiscalDateEnding,estimate,currency,timeOfTheDay\n",
+                 paste(rep("AAPL,Apple Inc,2026-09-01,2026-06-30,1.2,USD,post-market", 60),
+                       collapse = "\n"))
+  expect_false(is_notice(real))
+})

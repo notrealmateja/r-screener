@@ -101,12 +101,24 @@ get_earnings_calendar <- function() {
       message("  AV earnings returned empty response")
       return(tibble())
     }
-    # When the daily quota is spent AV answers this CSV endpoint with a JSON
-    # notice.  Feeding that to read_csv produced an opaque `as.Date(date)`
-    # failure instead of a usable message.
+    # AV answers this endpoint with a notice rather than data when it refuses
+    # the request.  Checking only for a leading { missed it: the payload can
+    # arrive without JSON framing, and read_csv then shreds it character by
+    # character across the expected header — the row came back as
+    # "I | n | NA | o | r | m | a", i.e. "Informa...", with the lone f typed as
+    # logical FALSE, which is what made as.Date() abort. Match on the notice
+    # keywords in the raw text instead of on the format.
+    notice <- regmatches(raw_text,
+      regexpr("(?i)(information|note|error message|premium|thank you for using)",
+              raw_text, perl = TRUE))
+    if (length(notice) > 0 && nchar(raw_text) < 2000) {
+      message("  AV earnings returned a notice, not data: ",
+              substr(gsub("\\s+", " ", raw_text), 1, 300))
+      return(tibble())
+    }
     if (grepl("^\\s*[{\\[]", raw_text)) {
-      message("  AV earnings returned a JSON notice, not CSV: ",
-              substr(gsub("\\s+", " ", raw_text), 1, 220))
+      message("  AV earnings returned JSON, not CSV: ",
+              substr(gsub("\\s+", " ", raw_text), 1, 300))
       return(tibble())
     }
     df <- read_csv(raw_text, show_col_types = FALSE)
@@ -135,6 +147,9 @@ get_earnings_calendar <- function() {
       message("    columns: ", paste(names(df), collapse = ", "))
       message("    first row: ",
               paste(utils::head(unlist(lapply(df[1, ], as.character)), 8), collapse = " | "))
+      # Parsed fields are unreliable here by definition, so show the response
+      # verbatim rather than leaving the shape to be inferred from them.
+      message("    raw response: ", substr(gsub("\\s+", " ", raw_text), 1, 300))
       return(tibble())
     }
     df <- df %>%
