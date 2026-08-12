@@ -67,14 +67,25 @@ get_earnings_calendar <- function() {
   # This endpoint returns a 3-month horizon, so refetching it daily spends a
   # scarce free-tier AV call on data that barely moves — and it was crowding
   # out the news call. Reuse the cached copy until it is EARN_TTL_DAYS old.
+  # Cache age must be read from a value stored INSIDE the file. Using
+  # Modification time silently disabled this cache: actions/checkout rewrites every
+  # file at checkout time, so in CI the cache always measured 0 days old and the
+  # calendar never refreshed once after the TTL was introduced. A file with no
+  # fetched_on column predates this fix and is treated as stale.
   if (file.exists(EARN_CACHE)) {
     cached <- tryCatch(read_csv(EARN_CACHE, show_col_types = FALSE),
                        error = function(e) tibble())
-    age <- as.numeric(difftime(Sys.time(), file.mtime(EARN_CACHE), units = "days"))
+    age <- if (nrow(cached) > 0 && "fetched_on" %in% names(cached)) {
+      f <- suppressWarnings(max(as.Date(cached$fetched_on), na.rm = TRUE))
+      if (is.finite(as.numeric(f))) as.numeric(Sys.Date() - f) else Inf
+    } else Inf
     if (nrow(cached) > 0 && age < EARN_TTL_DAYS) {
-      message(glue("Earnings calendar: reusing cache ({nrow(cached)} rows, {round(age,1)}d old)"))
+      message(glue("Earnings calendar: reusing cache ({nrow(cached)} rows, {age}d old)"))
       return(cached)
     }
+    if (nrow(cached) > 0)
+      message(glue("Earnings cache is {ifelse(is.finite(age), paste0(age,'d'), 'un-dated')} ",
+                   "— refetching."))
   }
 
   message("Pulling earnings calendar (Alpha Vantage)...")
@@ -114,7 +125,8 @@ get_earnings_calendar <- function() {
     df <- df %>%
       mutate(date = as.Date(date)) %>%
       filter(!is.na(date)) %>%
-      arrange(date)
+      arrange(date) %>%
+      mutate(fetched_on = Sys.Date())   # stamps the cache so the TTL survives CI
     message(glue("  Earnings: {nrow(df)} upcoming reports"))
     df
   }, error = function(e) {

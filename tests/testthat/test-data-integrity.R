@@ -119,3 +119,34 @@ test_that("UI does not claim predictive power the validation disproves", {
   expect_no_match(src, "HIGHEST PREDICTED RETURN")
   expect_no_match(src, "BACKTESTED CONFIDENCE")
 })
+
+test_that("cache age never depends on file mtime", {
+  # actions/checkout rewrites every file at checkout time, so file.mtime() in CI
+  # always reads ~0. This silently disabled the earnings TTL for six days and
+  # made the health table's STALE check unreachable. Age must come from data
+  # inside the file, or from git history.
+  r_src  <- paste(readLines("../../R/03_data.R"), collapse = "\n")
+  yml    <- paste(readLines("../../.github/workflows/daily-update.yml"), collapse = "\n")
+  expect_no_match(r_src, "file\\.mtime")
+  expect_no_match(yml,   "file\\.mtime")
+  # The earnings cache stamps itself and reads that stamp back
+  expect_match(r_src, "fetched_on = Sys\\.Date\\(\\)")
+  expect_match(r_src, '"fetched_on" %in% names\\(cached\\)')
+  # The health table derives age from git, using epoch seconds
+  expect_match(yml, "--format=%ct")
+})
+
+test_that("earnings TTL treats an un-stamped cache as stale", {
+  ttl <- 3
+  age_of <- function(cached) {
+    if (nrow(cached) > 0 && "fetched_on" %in% names(cached)) {
+      f <- suppressWarnings(max(as.Date(cached$fetched_on), na.rm = TRUE))
+      if (is.finite(as.numeric(f))) as.numeric(Sys.Date() - f) else Inf
+    } else Inf
+  }
+  reuse <- function(d) nrow(d) > 0 && age_of(d) < ttl
+  expect_false(reuse(data.frame(x = 1)))                                   # no stamp
+  expect_true (reuse(data.frame(x = 1, fetched_on = Sys.Date())))          # fresh
+  expect_false(reuse(data.frame(x = 1, fetched_on = Sys.Date() - 5)))      # expired
+  expect_false(reuse(data.frame(x = integer(0), fetched_on = as.Date(character(0)))))
+})

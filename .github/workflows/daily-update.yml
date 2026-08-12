@@ -133,12 +133,21 @@ jobs:
               }
               n <- tryCatch(nrow(suppressWarnings(read_csv(f, show_col_types = FALSE))),
                             error = function(e) NA_integer_)
-              age <- round(as.numeric(difftime(Sys.time(), file.mtime(f), units = "hours")), 1)
+              # Deliberately not modification time: actions/checkout rewrites every file at
+              # checkout time, so mtime is always ~0 here and STALE never fired.
+              # The last commit that touched the file is the real data age.
+              # %ct is epoch seconds — %cI emits a trailing "Z" that strptime %z
+              # will not parse, which silently produced NA for every file.
+              ts  <- suppressWarnings(system2("git", c("log","-1","--format=%ct","--",f),
+                                              stdout = TRUE, stderr = FALSE))
+              age <- if (length(ts) == 1 && nzchar(ts) && !is.na(suppressWarnings(as.numeric(ts))))
+                       round((as.numeric(Sys.time()) - as.numeric(ts)) / 3600, 1)
+                     else NA_real_
               status <- "OK"
               if (is.na(n) || n == 0) {
                 status <- "EMPTY"
                 problems <- c(problems, paste(basename(f), "empty"))
-              } else if (age > 36) {
+              } else if (!is.na(age) && age > 36) {
                 status <- "STALE"
                 problems <- c(problems, paste(basename(f), "stale"))
               }
