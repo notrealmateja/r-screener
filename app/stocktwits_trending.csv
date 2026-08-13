@@ -1,31 +1,31 @@
 symbol,title,watchlist_count,st_rank,trending_score,messages,bullish,bearish,sentiment_label,fetched_at
-INFQ,Infleqtion Inc.,15810,1,17.5836,2,1,1,Neutral,2026-08-12T22:44:31Z
-ONDS,Ondas Inc,35182,2,16.082,9,5,0,Very Bullish,2026-08-12T22:44:31Z
-WEN,Wendy's Co,16047,3,13.7927,3,1,0,Very Bullish,2026-08-12T22:44:31Z
-CBRS,Cerebras Systems Inc,11906,4,12.2454,1,0,0,Neutral,2026-08-12T22:44:31Z
-CSCO,"Cisco Systems, Inc.",61716,5,10.2645,0,0,0,Neutral,2026-08-12T22:44:31Z
-OMER,Omeros Corp,11593,6,9.93379,0,0,0,Neutral,2026-08-12T22:44:31Z
-NKE,Nike Inc,137197,7,9.43249,2,0,1,Very Bearish,2026-08-12T22:44:31Z
-COHR,Coherent Corp,10031,8,6.52008,0,0,0,Neutral,2026-08-12T22:44:31Z
-SLS,SELLAS Life Sciences Group Inc,59975,9,3.91066,3,3,0,Very Bullish,2026-08-12T22:44:31Z
-NBIS,Nebius Group N.V. ,50046,10,9.35755,5,2,0,Very Bullish,2026-08-12T22:44:31Z
-JACK,"Jack In The Box, Inc.",3786,11,6.54279,0,0,0,Neutral,2026-08-12T22:44:31Z
-SECZ,Securitize Corp.,480,12,5.8774,0,0,0,Neutral,2026-08-12T22:44:31Z
-NBIZ,Tradr 2X Short NBIS Daily ETF,302,13,6.86145,1,0,0,Neutral,2026-08-12T22:44:31Z
-JMIA,Jumia Technologies Ag - ADR,38668,14,3.9472,0,0,0,Neutral,2026-08-12T22:44:31Z
-NEGG,Newegg Commerce Inc,12204,15,0.0407608,0,0,0,Neutral,2026-08-12T22:44:31Z
-XRP.X,Ripple,235239,16,1.42142,0,0,0,Neutral,2026-08-12T22:44:31Z
-NNE,Nano Nuclear Energy Inc.,12823,17,2.68135,0,0,0,Neutral,2026-08-12T22:44:31Z
-DOGE.X,Dogecoin,349052,18,5.94635,1,0,0,Neutral,2026-08-12T22:44:31Z
-IWM,iShares Russell 2000 ETF,49526,19,2.48009,0,0,0,Neutral,2026-08-12T22:44:31Z
-OPEAZZX.P,OpenAI,2315,20,2.65055,0,0,0,Neutral,2026-08-12T22:44:31Z
-ZTS,Zoetis Inc - Ordinary Shares - Class A,4471,21,1.80547,0,0,0,Neutral,2026-08-12T22:44:31Z
-CAR,Avis Budget Group Inc,11409,22,3.94204,0,0,0,Neutral,2026-08-12T22:44:31Z
-PFE,Pfizer Inc,106251,23,3.91024,0,0,0,Neutral,2026-08-12T22:44:31Z
-LULU,Lululemon Athletica Inc,48954,24,2.18365,0,0,0,Neutral,2026-08-12T22:44:31Z
-LUNR,Intuitive Machines Inc,38555,25,1.74508,0,0,0,Neutral,2026-08-12T22:44:31Z
-HPE,Hewlett Packard Enterprise Co,12652,26,4.22357,0,0,0,Neutral,2026-08-12T22:44:31Z
-USDJPY,US Dollar / Japanese Yen,14996,27,0.00962432,0,0,0,Neutral,2026-08-12T22:44:31Z
-EQPT,EquipmentShare.com Inc ,500,28,4.3721,0,0,0,Neutral,2026-08-12T22:44:31Z
-AVEX,AEVEX Corp,1635,29,1.96198,0,0,0,Neutral,2026-08-12T22:44:31Z
-LMT,Lockheed Martin Corp.,37196,30,1.97339,0,0,0,Neutral,2026-08-12T22:44:31Z
+ONDS,Ondas Inc,35818,1,13.2638,8,5,0,Very Bullish,2026-08-13T22:22:00Z
+AMAT,Applied Materials Inc.,34963,2,13.0025,4,2,0,Very Bullish,2026-08-13T22:22:00Z
+RDDT,Reddit Inc,35956,3,12.806,6,2,0,Very Bullish,2026-08-13T22:22:00Z
+NU,Nu Holdings Ltd,16140,4,11.9678,1,0,0,Neutral,2026-08-13T22:22:00Z
+TSSI,TSS Inc,6152,5,9.77315,1,0,0,Neutral,2026-08-13T22:22:00Z
+VCX,Fundrise Innovation Fund ,6969,6,9.55178,2,0,1,Very Bearish,2026-08-13T22:22:00Z
+CADL,Candel Therapeutics Inc,9998,7,9.27077,1,0,0,Neutral,2026-08-13T22:22:00Z
+AIRJ,AirJoule Technologies Corp. - Ordinary Shares - Class A,1440,8,8.70975,0,0,0,Neutral,2026-08-13T22:22:00Z
+YSS,York Space Systems Inc,1015,9,7.84234,2,0,0,Neutral,2026-08-13T22:22:00Z
+POET,POET Technologies Inc,29296,10,7.79826,0,0,0,Neutral,2026-08-13T22:22:00Z
+QXO,QXO Inc.,4529,11,7.77017,0,0,0,Neutral,2026-08-13T22:22:00Z
+UMAC,Unusual Machines Inc,11935,12,7.66466,0,0,0,Neutral,2026-08-13T22:22:00Z
+WDAY,Workday Inc,15061,13,7.46383,0,0,0,Neutral,2026-08-13T22:22:00Z
+AVAV,AeroVironment Inc.,13015,14,7.08646,1,0,0,Neutral,2026-08-13T22:22:00Z
+S,SentinelOne Inc,31746,15,6.88517,0,0,0,Neutral,2026-08-13T22:22:00Z
+CRML,Critical Metals Corp.,13883,16,6.06198,0,0,0,Neutral,2026-08-13T22:22:00Z
+SPRY,ARS Pharmaceuticals Inc,2479,17,6.05992,0,0,0,Neutral,2026-08-13T22:22:00Z
+PATH,UiPath Inc,33015,18,5.71573,1,1,0,Very Bullish,2026-08-13T22:22:00Z
+CHTR,Charter Communications Inc. - Ordinary Shares - Class A,4206,19,5.41831,1,0,0,Neutral,2026-08-13T22:22:00Z
+BRK.B,Berkshire Hathaway Inc. - Ordinary Shares - Class B,47388,20,5.36991,0,0,0,Neutral,2026-08-13T22:22:00Z
+LINK.X,ChainLink,38099,21,5.36135,0,0,0,Neutral,2026-08-13T22:22:00Z
+HELP,Helus Pharma Inc.,8005,22,5.21456,0,0,0,Neutral,2026-08-13T22:22:00Z
+MSTR,Strategy,81454,23,4.94324,0,0,0,Neutral,2026-08-13T22:22:00Z
+MDB,MongoDB Inc,21155,24,4.78793,0,0,0,Neutral,2026-08-13T22:22:00Z
+BMY,Bristol-Myers Squibb Co.,20795,25,4.39494,0,0,0,Neutral,2026-08-13T22:22:00Z
+ALGO.X,Algorand,31978,26,4.15327,0,0,0,Neutral,2026-08-13T22:22:00Z
+OWL,Blue Owl Capital Inc - Ordinary Shares - Class A,3740,27,4.01216,0,0,0,Neutral,2026-08-13T22:22:00Z
+LPTH,"Lightpath Technologies, Inc. - Ordinary Shares - Class A",8498,28,3.91341,0,0,0,Neutral,2026-08-13T22:22:00Z
+CELC,Celcuity Inc,2218,29,3.86593,0,0,0,Neutral,2026-08-13T22:22:00Z
+SOFI,SoFi Technologies Inc,155677,30,3.8341,0,0,0,Neutral,2026-08-13T22:22:00Z
