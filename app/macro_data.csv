@@ -1,5 +1,4 @@
 date,price,series,ticker,value
-2024-08-15,3.92,10Y Treasury,DGS10,3.92
 2024-08-16,3.89,10Y Treasury,DGS10,3.89
 2024-08-19,3.86,10Y Treasury,DGS10,3.86
 2024-08-20,3.82,10Y Treasury,DGS10,3.82
@@ -520,7 +519,6 @@ date,price,series,ticker,value
 2026-08-11,4.7,10Y Treasury,DGS10,4.7
 2026-08-12,4.68,10Y Treasury,DGS10,4.68
 2026-08-13,4.63,10Y Treasury,DGS10,4.63
-2024-08-15,4.08,2Y Treasury,DGS2,4.08
 2024-08-16,4.06,2Y Treasury,DGS2,4.06
 2024-08-19,4.06,2Y Treasury,DGS2,4.06
 2024-08-20,3.99,2Y Treasury,DGS2,3.99
@@ -1041,7 +1039,6 @@ date,price,series,ticker,value
 2026-08-11,4.22,2Y Treasury,DGS2,4.22
 2026-08-12,4.2,2Y Treasury,DGS2,4.2
 2026-08-13,4.15,2Y Treasury,DGS2,4.15
-2024-08-15,5.34,3M Treasury,DGS3MO,5.34
 2024-08-16,5.33,3M Treasury,DGS3MO,5.33
 2024-08-19,5.31,3M Treasury,DGS3MO,5.31
 2024-08-20,5.29,3M Treasury,DGS3MO,5.29
@@ -1631,7 +1628,6 @@ date,price,series,ticker,value
 2026-05-01,3.63,Fed Funds Rate,FEDFUNDS,3.63
 2026-06-01,3.63,Fed Funds Rate,FEDFUNDS,3.63
 2026-07-01,3.63,Fed Funds Rate,FEDFUNDS,3.63
-2024-08-15,-0.16,Yield Curve Spread,T10Y2Y,-0.16
 2024-08-16,-0.17,Yield Curve Spread,T10Y2Y,-0.17
 2024-08-19,-0.2,Yield Curve Spread,T10Y2Y,-0.2
 2024-08-20,-0.17,Yield Curve Spread,T10Y2Y,-0.17
