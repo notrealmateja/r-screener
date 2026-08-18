@@ -1,31 +1,31 @@
 symbol,title,watchlist_count,st_rank,trending_score,messages,bullish,bearish,sentiment_label,fetched_at
-NKE,Nike Inc,137726,1,13.819,9,1,5,Very Bearish,2026-08-17T21:58:02Z
-FN,Fabrinet,2901,2,8.77444,1,0,0,Neutral,2026-08-17T21:58:02Z
-DUOT,Duos Technologies Group Inc,1738,3,9.15504,0,0,0,Neutral,2026-08-17T21:58:02Z
-LULU,Lululemon Athletica Inc,49012,4,9.12935,1,0,0,Neutral,2026-08-17T21:58:02Z
-GRRR,Gorilla Technology Group Inc,25298,5,11.2918,1,0,0,Neutral,2026-08-17T21:58:02Z
-KLAR,Klarna Group plc,6955,6,6.35178,1,1,0,Very Bullish,2026-08-17T21:58:02Z
-AEHR,Aehr Test Systems,14789,7,4.79706,0,0,0,Neutral,2026-08-17T21:58:02Z
-AMLX,Amylyx Pharmaceuticals Inc,2179,8,5.93977,1,0,0,Neutral,2026-08-17T21:58:02Z
-NLST,Netlist Inc,26753,9,5.31026,5,1,0,Very Bullish,2026-08-17T21:58:02Z
-TAO.X,Bittensor,2675,10,0.00643232,0,0,0,Neutral,2026-08-17T21:58:02Z
-AUR,Aurora Innovation Inc - Ordinary Shares - Class A,9308,11,7.0204,0,0,0,Neutral,2026-08-17T21:58:02Z
-BTC.X,Bitcoin,675633,12,-3.42387,0,0,0,Neutral,2026-08-17T21:58:02Z
-INTU,Intuit Inc,12204,13,-0.46236,0,0,0,Neutral,2026-08-17T21:58:02Z
-UVXY,ProShares Ultra VIX Short-Term Futures ETF,85200,14,2.30363,0,0,0,Neutral,2026-08-17T21:58:02Z
-HD,"Home Depot, Inc.",45804,15,4.4327,1,0,1,Very Bearish,2026-08-17T21:58:02Z
-ASST,Strive Inc.,19365,16,1.60911,0,0,0,Neutral,2026-08-17T21:58:02Z
-WEN,Wendy's Co,16070,17,2.77399,0,0,0,Neutral,2026-08-17T21:58:02Z
-RTX,Raytheon Technologies Corporation,24267,18,2.75612,0,0,0,Neutral,2026-08-17T21:58:02Z
-USO,United States Oil Fund,74518,19,0.931907,0,0,0,Neutral,2026-08-17T21:58:02Z
-MO,Altria Group Inc.,25052,20,-0.43333,0,0,0,Neutral,2026-08-17T21:58:02Z
-AVT.X,Aventus Network,3685,21,-0.0660661,0,0,0,Neutral,2026-08-17T21:58:02Z
-CADL,Candel Therapeutics Inc,10119,22,3.91558,0,0,0,Neutral,2026-08-17T21:58:02Z
-IWM,iShares Russell 2000 ETF,49585,23,-0.436668,0,0,0,Neutral,2026-08-17T21:58:02Z
-LKNCY,Luckin Coffee Inc - ADR,40144,24,-0.315128,0,0,0,Neutral,2026-08-17T21:58:02Z
-VTI,Vanguard Total Stock Market ETF,28649,25,1.89588,0,0,0,Neutral,2026-08-17T21:58:02Z
-TRUMP.X,Trump For President,12501,26,-0.235765,0,0,0,Neutral,2026-08-17T21:58:02Z
-GSAT,Globalstar Inc.,50685,27,-0.37512,0,0,0,Neutral,2026-08-17T21:58:02Z
-XRP,Bitwise XRP ETF,1499,28,-0.525138,0,0,0,Neutral,2026-08-17T21:58:02Z
-BETA,BETA Technologies Inc - Ordinary Shares - Class A,1193,29,1.48141,0,0,0,Neutral,2026-08-17T21:58:02Z
-WYFI,"WhiteFiber, Inc.",7004,30,-0.762737,0,0,0,Neutral,2026-08-17T21:58:02Z
+WYFI,"WhiteFiber, Inc.",7104,1,11.4366,2,1,0,Very Bullish,2026-08-18T21:55:50Z
+GME,GameStop Corp,307382,2,11.3667,7,3,0,Very Bullish,2026-08-18T21:55:50Z
+KLAR,Klarna Group plc,7500,3,8.95838,1,0,0,Neutral,2026-08-18T21:55:50Z
+AMLX,Amylyx Pharmaceuticals Inc,2572,4,8.54027,0,0,0,Neutral,2026-08-18T21:55:50Z
+NLST,Netlist Inc,26841,5,4.7715,4,2,0,Very Bullish,2026-08-18T21:55:50Z
+EYPT,EyePoint Pharmaceuticals Inc,9453,6,6.79666,1,1,0,Very Bullish,2026-08-18T21:55:50Z
+TGT,Target Corp,50121,7,6.59525,0,0,0,Neutral,2026-08-18T21:55:50Z
+BTC.X,Bitcoin,675766,8,9.41139,3,0,0,Neutral,2026-08-18T21:55:50Z
+GLD,SPDR Gold Shares ETF,95971,9,5.33727,0,0,0,Neutral,2026-08-18T21:55:50Z
+BRUN,Boost Run Inc.,2642,10,3.20607,0,0,0,Neutral,2026-08-18T21:55:50Z
+WULF,TeraWulf Inc,31006,11,4.146,1,0,0,Neutral,2026-08-18T21:55:50Z
+LOW,"Lowe's Companies, Inc.",19007,12,4.14201,0,0,0,Neutral,2026-08-18T21:55:50Z
+MSTR,Strategy,81604,13,3.82203,0,0,0,Neutral,2026-08-18T21:55:50Z
+VZ,Verizon Communications Inc.,56329,14,0.323859,0,0,0,Neutral,2026-08-18T21:55:50Z
+ASST,Strive Inc.,19372,15,-0.403542,0,0,0,Neutral,2026-08-18T21:55:50Z
+CRML,Critical Metals Corp.,13893,16,1.27025,0,0,0,Neutral,2026-08-18T21:55:50Z
+TGTX,TG Therapeutics Inc,21569,17,2.28078,0,0,0,Neutral,2026-08-18T21:55:50Z
+C,Citigroup Inc,39034,18,0.316484,0,0,0,Neutral,2026-08-18T21:55:50Z
+SCHW,Charles Schwab Corp.,11671,19,2.53738,0,0,0,Neutral,2026-08-18T21:55:50Z
+MARA,Marathon Digital Holdings Inc,158109,20,3.94407,1,0,0,Neutral,2026-08-18T21:55:50Z
+BB.TSX,BlackBerry Ltd,1014,21,1.79045,0,0,0,Neutral,2026-08-18T21:55:50Z
+AMGN,AMGEN Inc.,14894,22,2.22734,0,0,0,Neutral,2026-08-18T21:55:50Z
+ONDO.X,Ondo,6876,23,0.0540559,0,0,0,Neutral,2026-08-18T21:55:50Z
+VG,Venture Global Inc,4634,24,1.82442,0,0,0,Neutral,2026-08-18T21:55:50Z
+STOCKTWITS,Stocktwits Announcements and Contests,1572,25,0.0227817,0,0,0,Neutral,2026-08-18T21:55:50Z
+CVX,Chevron Corp.,36857,26,3.6741,0,0,0,Neutral,2026-08-18T21:55:50Z
+BIDU,Baidu Inc - ADR,66499,27,3.03372,0,0,0,Neutral,2026-08-18T21:55:50Z
+BMNR,BitMine Immersion Technologies Inc,28838,28,0.658673,0,0,0,Neutral,2026-08-18T21:55:50Z
+JASMY.X,JasmyCoin,25247,29,3.09531,0,0,0,Neutral,2026-08-18T21:55:50Z
+LEGN,Legend Biotech,1383,30,2.52065,0,0,0,Neutral,2026-08-18T21:55:50Z
