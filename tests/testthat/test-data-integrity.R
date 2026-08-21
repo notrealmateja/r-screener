@@ -150,3 +150,38 @@ test_that("earnings TTL treats an un-stamped cache as stale", {
   expect_false(reuse(data.frame(x = 1, fetched_on = Sys.Date() - 5)))      # expired
   expect_false(reuse(data.frame(x = integer(0), fetched_on = as.Date(character(0)))))
 })
+
+test_that("sentiment history records one row per symbol per day", {
+  # Re-running on the same day must replace that day, not duplicate it —
+  # otherwise a manual re-run silently doubles the observations and any future
+  # significance test on this series would be inflated.
+  library(dplyr)
+  today <- as.Date("2026-08-20")
+  snap  <- tibble::tibble(date = today, symbol = c("AAPL", "MSFT"), st_bull_ratio = c(0.8, 0.5))
+  prior <- tibble::tibble(date = c(today, today - 1), symbol = c("AAPL", "AAPL"),
+                          st_bull_ratio = c(0.99, 0.4))
+
+  merged <- bind_rows(prior %>% filter(date != today), snap) %>%
+    distinct(symbol, date, .keep_all = TRUE) %>%
+    arrange(symbol, date)
+
+  expect_equal(nrow(merged), nrow(distinct(merged, symbol, date)))
+  # today's stale 0.99 is replaced by the fresh 0.8
+  expect_equal(merged$st_bull_ratio[merged$symbol == "AAPL" & merged$date == today], 0.8)
+  # the prior day survives untouched
+  expect_equal(merged$st_bull_ratio[merged$symbol == "AAPL" & merged$date == today - 1], 0.4)
+})
+
+test_that("sentiment history is recorded but not yet scored", {
+  # It cannot be validated until roughly a quarter of observations exist, and an
+  # unvalidated signal must not enter the score — that is the whole premise of
+  # the project's own methodology page.
+  m3    <- paste(readLines("../../R/03_data.R"), collapse = "\n")
+  score <- paste(readLines("../../R/04_master_score.R"), collapse = "\n")
+
+  expect_match(m3, "append_sentiment_history")
+  expect_match(m3, "sentiment_history\\.csv")
+  # The scoring module must not consume it yet
+  expect_no_match(score, "sentiment_history")
+  expect_no_match(score, "st_bull_ratio")
+})

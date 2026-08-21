@@ -438,6 +438,96 @@ build_squeeze_score <- function(short_data, fund_data) {
     arrange(desc(squeeze_score))
 }
 
+# ── Sentiment history (accumulator) ────────────────────────────────────────
+# The three qualitative feeds — AV news, WSB, StockTwits — only ever serve the
+# present moment. Unlike prices, they cannot be re-fetched for a past date, so
+# there is no way to backtest a sentiment signal retroactively. The only route
+# to ever testing one is to start recording snapshots now.
+#
+# One row per symbol per day. Nothing consumes this yet by design: a signal
+# should not enter the score before it can be validated, and validation needs
+# roughly a quarter of observations to be worth anything.
+SENTIMENT_HISTORY <- "data/sentiment_history.csv"
+SENTIMENT_KEEP_DAYS <- 1120
+
+append_sentiment_history <- function(news, wsb, stwits) {
+  message("Recording sentiment snapshot...")
+  today <- Sys.Date()
+
+  num <- function(x) suppressWarnings(as.numeric(x))
+
+  # News: average sentiment score per ticker, plus article count
+  news_part <- if (is.data.frame(news) && nrow(news) > 0 &&
+                   all(c("symbol", "sentiment_score") %in% names(news))) {
+    news %>%
+      filter(!is.na(symbol)) %>%
+      group_by(symbol) %>%
+      summarize(news_sentiment = mean(num(sentiment_score), na.rm = TRUE),
+                news_articles  = n(), .groups = "drop")
+  } else tibble(symbol = character(), news_sentiment = numeric(),
+                news_articles = integer())
+
+  # WSB: mentions and how far the ticker moved up the board in 24h
+  wsb_part <- if (is.data.frame(wsb) && nrow(wsb) > 0 && "ticker" %in% names(wsb)) {
+    wsb %>%
+      transmute(symbol       = as.character(ticker),
+                wsb_mentions = num(mentions),
+                wsb_rank     = num(rank),
+                wsb_rank_chg = num(rank_24h_ago) - num(rank)) %>%
+      filter(!is.na(symbol))
+  } else tibble(symbol = character(), wsb_mentions = numeric(),
+                wsb_rank = numeric(), wsb_rank_chg = numeric())
+
+  # StockTwits: bull/bear split, normalised so it is comparable across days
+  stwits_part <- if (is.data.frame(stwits) && nrow(stwits) > 0 &&
+                     "symbol" %in% names(stwits)) {
+    stwits %>%
+      transmute(symbol      = as.character(symbol),
+                st_bullish  = num(bullish),
+                st_bearish  = num(bearish),
+                st_watchers = num(watchlist_count),
+                st_bull_ratio = ifelse((num(bullish) + num(bearish)) > 0,
+                                       num(bullish) / (num(bullish) + num(bearish)),
+                                       NA_real_)) %>%
+      filter(!is.na(symbol))
+  } else tibble(symbol = character(), st_bullish = numeric(), st_bearish = numeric(),
+                st_watchers = numeric(), st_bull_ratio = numeric())
+
+  snapshot <- full_join(news_part, wsb_part, by = "symbol") %>%
+    full_join(stwits_part, by = "symbol") %>%
+    mutate(date = today) %>%
+    select(date, symbol, everything()) %>%
+    filter(!is.na(symbol), symbol != "")
+
+  if (nrow(snapshot) == 0) {
+    message("  No sentiment data to record this run.")
+    return(invisible(NULL))
+  }
+
+  if (file.exists(SENTIMENT_HISTORY)) {
+    prior <- tryCatch(
+      read_csv(SENTIMENT_HISTORY, show_col_types = FALSE) %>%
+        mutate(date = as.Date(date)),
+      error = function(e) NULL)
+    # Re-running on the same day replaces that day rather than duplicating it
+    if (!is.null(prior) && nrow(prior) > 0)
+      snapshot <- bind_rows(prior %>% filter(date != today), snapshot)
+  }
+
+  snapshot <- snapshot %>%
+    distinct(symbol, date, .keep_all = TRUE) %>%
+    filter(date >= Sys.Date() - SENTIMENT_KEEP_DAYS) %>%
+    arrange(symbol, date)
+
+  write_csv(snapshot, SENTIMENT_HISTORY)
+  days <- dplyr::n_distinct(snapshot$date)
+  message(glue("  sentiment_history: {nrow(snapshot)} rows across {days} day(s), ",
+               "{dplyr::n_distinct(snapshot$symbol)} symbols"))
+  if (days < 63)
+    message(glue("  Not yet testable — needs ~63 trading days, has {days}."))
+  invisible(snapshot)
+}
+
 run_module3 <- function(tickers=NULL) {
   message("\n=== MODULE 3: SHORT INTEREST, MACRO, EARNINGS, NEWS ===\n")
   if (is.null(tickers)) {
@@ -474,6 +564,11 @@ run_module3 <- function(tickers=NULL) {
   write_or_keep(sector, "data/sector_performance.csv",  "sector")
   write_or_keep(wsb,    "data/wsb_trending.csv",        "wsb")
   write_or_keep(stwits, "data/stocktwits_trending.csv", "stocktwits")
+
+  # Accumulate the qualitative feeds into a testable series. Non-fatal: this is
+  # a recording step for future analysis and must never break the refresh.
+  tryCatch(append_sentiment_history(news, wsb, stwits),
+           error = function(e) message("Sentiment history skipped: ", conditionMessage(e)))
 
   message(glue("Saved: squeeze({nrow(squeeze)}), macro({nrow(macro)}), ",
                "earnings({nrow(earn)}), news({nrow(news)}), ",
