@@ -185,3 +185,37 @@ test_that("sentiment history is recorded but not yet scored", {
   expect_no_match(score, "sentiment_history")
   expect_no_match(score, "st_bull_ratio")
 })
+
+test_that("select() is never asked to evaluate an expression", {
+  # dplyr::select() accepts column selections, not expressions. Peer Comps did
+  # `select(Margin = coalesce(profitMargins, profit_margin))`, which aborts with
+  # "object 'profitMargins' not found" even though the column exists — so the
+  # panel rendered an error instead of a table. Computation belongs in mutate().
+  src <- readLines("../../app/app.R")
+  sel_lines <- grep("^\\s*select\\(", src, value = TRUE)
+  for (line in sel_lines) {
+    expect_false(grepl("coalesce(", line, fixed = TRUE),
+                 info = paste("coalesce() inside select():", trimws(line)))
+    expect_false(grepl("ifelse(", line, fixed = TRUE),
+                 info = paste("ifelse() inside select():", trimws(line)))
+  }
+})
+
+test_that("macro tab renders every FRED series the pipeline collects", {
+  # CPI and Unemployment were pulled from FRED nightly and never displayed.
+  app <- paste(readLines("../../app/app.R"), collapse = "\n")
+  m3  <- paste(readLines("../../R/03_data.R"), collapse = "\n")
+  for (series in c("10Y Treasury", "Fed Funds Rate", "Yield Curve Spread",
+                   "CPI", "Unemployment")) {
+    expect_match(m3, series, fixed = TRUE,
+                 info = paste("series no longer collected:", series))
+  }
+  expect_match(app, "cpi_yoy")
+  expect_match(app, "unemployment")
+})
+
+test_that("deep dive surfaces the qualitative data collected per ticker", {
+  app <- paste(readLines("../../app/app.R"), collapse = "\n")
+  expect_match(app, "dd_news")        # company news for the selected symbol
+  expect_match(app, "dd_sentiment")   # crowd sentiment for the selected symbol
+})

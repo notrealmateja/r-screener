@@ -1006,6 +1006,22 @@ ui <- fluidPage(
           div(class="panel-head", div(class="panel-head-title","PEER COMPS")),
           div(class="panel-body", DTOutput("dd_comps"))
         )
+      ),
+      # Deep Dive was entirely price, technicals and valuation. News is already
+      # collected tagged by ticker and social sentiment per symbol, but neither
+      # was ever connected to the stock being examined.
+      div(class="g64",
+        div(class="panel",
+          div(class="panel-head",
+            div(class="panel-head-title","COMPANY NEWS"),
+            div(class="panel-head-meta", uiOutput("dd_news_count"))),
+          div(class="panel-body", style="max-height:320px;overflow-y:auto;",
+            uiOutput("dd_news"))
+        ),
+        div(class="panel",
+          div(class="panel-head", div(class="panel-head-title","CROWD SENTIMENT")),
+          div(class="panel-body", uiOutput("dd_sentiment"))
+        )
       )
     ),
 
@@ -1033,6 +1049,23 @@ ui <- fluidPage(
         div(class="panel",
           div(class="panel-head", div(class="panel-head-title","YIELD CURVE SPREAD (10Y-2Y)")),
           div(class="panel-body", plotlyOutput("yield_spread", height="220px"))
+        )
+      ),
+      # CPI and unemployment were pulled from FRED on every run and never
+      # rendered. Rates alone are half a macro picture; inflation and employment
+      # are the other half.
+      div(class="g2",
+        div(class="panel",
+          div(class="panel-head",
+            div(class="panel-head-title","INFLATION (CPI, YEAR-OVER-YEAR)"),
+            div(class="panel-head-meta", uiOutput("cpi_latest"))),
+          div(class="panel-body", plotlyOutput("cpi_yoy", height="220px"))
+        ),
+        div(class="panel",
+          div(class="panel-head",
+            div(class="panel-head-title","UNEMPLOYMENT RATE"),
+            div(class="panel-head-meta", uiOutput("unrate_latest"))),
+          div(class="panel-body", plotlyOutput("unemployment", height="220px"))
         )
       )
     ),
@@ -1763,11 +1796,16 @@ server <- function(input, output, session) {
       head(8) %>%
       mutate(
         highlight = symbol == s$symbol[1],
-        `P/E` = pe_fmt, `3M` = ret_3m_fmt, Score = round(master_score,1)
+        `P/E` = pe_fmt, `3M` = ret_3m_fmt, Score = round(master_score,1),
+        # These were computed inside select(), which only accepts column
+        # selections and cannot evaluate coalesce(). The call aborted with
+        # "object 'profitMargins' not found" even though the column exists, so
+        # Peer Comps rendered an error rather than a table.
+        Margin = coalesce(profitMargins, profit_margin),
+        ROE    = coalesce(returnOnEquity, roe)
       ) %>%
       select(Symbol=symbol, Price=close, `Mkt Cap`=mktcap_fmt,
-             `P/E`, Margin=coalesce(profitMargins,profit_margin), ROE=coalesce(returnOnEquity,roe),
-             `3M`, Score)
+             `P/E`, Margin, ROE, `3M`, Score)
     dt <- datatable(peers, rownames=FALSE, selection="none",
       options=list(dom="t",pageLength=8,ordering=FALSE),
       callback=JS("table.rows().every(function(i) {
@@ -1831,6 +1869,145 @@ server <- function(input, output, session) {
       layout(xaxis=list(title=""), yaxis=list(title="Spread (%)")) %>% dk()
   })
 
+  # ── Deep Dive: company news ───────────────────────────────────────────────
+  dd_news_rows <- reactive({
+    req(input$dd_ticker)
+    if (is.null(news_data) || nrow(news_data) == 0) return(NULL)
+    if (!"symbol" %in% names(news_data)) return(NULL)
+    news_data %>% filter(!is.na(symbol), symbol == input$dd_ticker)
+  })
+
+  output$dd_news_count <- renderUI({
+    d <- dd_news_rows()
+    if (is.null(d) || nrow(d) == 0) return(div("—"))
+    div(glue("{nrow(d)} STORY{ifelse(nrow(d) == 1, '', 'S')}"))
+  })
+
+  output$dd_news <- renderUI({
+    d <- dd_news_rows()
+    if (is.null(d) || nrow(d) == 0)
+      return(div(glue("No recent stories tagged {input$dd_ticker}. The news feed ",
+                      "covers roughly 50 articles per day, so most tickers will be absent ",
+                      "on any given day."),
+                 style="color:#666;padding:18px;font-family:IBM Plex Mono;font-size:11px;line-height:1.5;"))
+
+    items <- lapply(seq_len(min(12, nrow(d))), function(i) {
+      r      <- d[i, ]
+      title  <- replace_na(r$title, "Untitled")
+      url    <- if ("url" %in% names(r)) replace_na(r$url, "#") else "#"
+      src    <- if ("source" %in% names(r)) replace_na(r$source, "") else ""
+      sent   <- if ("sentiment" %in% names(r)) replace_na(r$sentiment, "") else ""
+      score  <- if ("sentiment_score" %in% names(r)) suppressWarnings(as.numeric(r$sentiment_score)) else NA
+      when   <- if ("publishedDate" %in% names(r) && !is.na(r$publishedDate))
+                  format(as.POSIXct(r$publishedDate), "%b %d") else ""
+
+      col <- if (!is.na(score)) {
+        if (score >= 0.15) "#00C853" else if (score <= -0.15) "#FF3D00" else "#FFD600"
+      } else "#666666"
+
+      div(style=paste0("border-left:2px solid ", col, ";padding:8px 12px;margin-bottom:6px;background:#0D0D0D;"),
+        div(style="display:flex;justify-content:space-between;margin-bottom:4px;",
+          span(src, style="color:#666;font-size:9px;font-family:IBM Plex Mono;text-transform:uppercase;letter-spacing:1px;"),
+          span(paste(when, if (nzchar(sent)) paste0("· ", sent) else ""),
+               style=paste0("color:", col, ";font-size:9px;font-family:IBM Plex Mono;"))
+        ),
+        tags$a(href=url, target="_blank",
+          div(title, style="color:#E8E8E8;font-size:11px;line-height:1.4;"))
+      )
+    })
+    div(do.call(tagList, items))
+  })
+
+  # ── Deep Dive: crowd sentiment ────────────────────────────────────────────
+  output$dd_sentiment <- renderUI({
+    req(input$dd_ticker)
+    sym <- input$dd_ticker
+
+    st  <- if (!is.null(stwits_data) && "symbol" %in% names(stwits_data))
+             stwits_data %>% filter(symbol == sym) else NULL
+    wsb <- if (!is.null(wsb_data) && "ticker" %in% names(wsb_data))
+             wsb_data %>% filter(ticker == sym) else NULL
+
+    cell <- function(k, v, colour = "#E8E8E8") div(class="si-cell",
+      div(class="si-k", k),
+      div(class="si-v", style=paste0("color:", colour, ";font-size:15px;"), v))
+
+    has_st  <- !is.null(st)  && nrow(st)  > 0
+    has_wsb <- !is.null(wsb) && nrow(wsb) > 0
+
+    if (!has_st && !has_wsb)
+      return(div(glue("{sym} is not currently trending on StockTwits or r/wallstreetbets. ",
+                      "Those feeds cover the ~50 most-discussed tickers, so absence is ",
+                      "the normal state for most stocks."),
+                 style="color:#666;padding:18px;font-family:IBM Plex Mono;font-size:11px;line-height:1.5;"))
+
+    # stocktwits_trending stores raw bullish/bearish counts, not a ratio; the
+    # ratio only exists in sentiment_history, which this panel does not read.
+    num  <- function(x) suppressWarnings(as.numeric(x))
+    bull <- NA_real_
+    if (has_st) {
+      b <- num(st$bullish[1]); r <- num(st$bearish[1])
+      if (!is.na(b) && !is.na(r) && (b + r) > 0) bull <- b / (b + r)
+    }
+    tiles <- tagList(
+      if (has_st) cell("StockTwits watchers",
+                       formatC(num(st$watchlist_count[1]), format="d", big.mark=",")) else NULL,
+      if (has_st && !is.na(bull)) cell("Bullish share", sprintf("%.0f%%", bull * 100),
+                                       if (bull >= 0.6) "#00C853" else if (bull <= 0.4) "#FF3D00" else "#FFD600") else NULL,
+      if (has_wsb) cell("WSB mentions", formatC(num(wsb$mentions[1]), format="d", big.mark=",")) else NULL,
+      if (has_wsb) cell("WSB rank", paste0("#", wsb$rank[1])) else NULL
+    )
+
+    tagList(
+      div(class="si-grid", tiles),
+      div(style="color:#555;font-size:10px;font-family:IBM Plex Mono;line-height:1.5;margin-top:4px;",
+          "Retail chatter, shown for context. It carries no weight in the score — ",
+          "see Methodology.")
+    )
+  })
+
+  # CPI arrives as an index level near 300, which tells a reader nothing on its
+  # own. Year-over-year change is the number people mean by "inflation".
+  cpi_yoy_data <- reactive({
+    if (is.null(macro_data)) return(NULL)
+    d <- macro_data %>%
+      filter(series == "CPI", !is.na(price)) %>%
+      arrange(date)
+    if (nrow(d) < 13) return(NULL)
+    d %>% mutate(yoy = (price / dplyr::lag(price, 12) - 1) * 100) %>%
+      filter(!is.na(yoy))
+  })
+
+  output$cpi_latest <- renderUI({
+    d <- cpi_yoy_data()
+    if (is.null(d) || nrow(d) == 0) return(div("—"))
+    last <- tail(d, 1)
+    div(glue("{sprintf('%+.1f%%', last$yoy)} · {format(last$date, '%b %Y')}"))
+  })
+
+  output$cpi_yoy <- renderPlotly({
+    d <- cpi_yoy_data()
+    if (is.null(d) || nrow(d) == 0) return(no_data())
+    plot_ly(d, x = ~date, y = ~yoy, type = "scatter", mode = "lines",
+            line = list(color = "#00B8D9", width = 2),
+            fill = "tozeroy", fillcolor = "rgba(0,184,217,0.08)") %>%
+      # 2% is the Fed's stated target; the chart is far easier to read against it
+      add_lines(x = ~date, y = ~rep(2, nrow(d)), name = "2% target",
+                line = list(color = "#FFD600", width = 1, dash = "dot"),
+                showlegend = FALSE) %>%
+      layout(xaxis = list(title = ""), yaxis = list(title = "YoY (%)")) %>% dk()
+  })
+
+  output$unrate_latest <- renderUI({
+    if (is.null(macro_data)) return(div("—"))
+    d <- macro_data %>% filter(series == "Unemployment", !is.na(price)) %>% arrange(date)
+    if (nrow(d) == 0) return(div("—"))
+    last <- tail(d, 1)
+    div(glue("{sprintf('%.1f%%', last$price)} · {format(last$date, '%b %Y')}"))
+  })
+
+  output$unemployment <- renderPlotly({ make_macro_plot("Unemployment", "#64DD17") })
+
   # ── News & Events ──────────────────────────────────────────────────────────
   output$news_count <- renderUI({
     if (!is.null(news_data)) div(glue("{nrow(news_data)} STORIES")) else div("—")
@@ -1863,10 +2040,22 @@ server <- function(input, output, session) {
         "BBC Business"="#BB1919","Financial Times"="#FFA500",
         "#FF6B00"
       )
-      div(style="border-left:3px solid #1A1A1A;padding:10px 14px;margin-bottom:6px;background:#0D0D0D;",
+      # Mark stories about stocks in the tracked universe, the same way the
+      # earnings calendar already does. Without it a headline about a name you
+      # follow is indistinguishable from one about a company you do not.
+      sym      <- if ("symbol" %in% names(row)) replace_na(row$symbol, "") else ""
+      our_syms <- if (!is.null(master_data)) master_data$symbol else character(0)
+      in_univ  <- nzchar(sym) && sym %in% our_syms
+
+      div(style=paste0("border-left:3px solid ", if (in_univ) "#FF6B00" else "#1A1A1A",
+                       ";padding:10px 14px;margin-bottom:6px;background:",
+                       if (in_univ) "rgba(255,107,0,0.04)" else "#0D0D0D", ";"),
         div(style="display:flex;justify-content:space-between;margin-bottom:5px;",
           span(src, style=paste0("color:",src_color,";font-size:9px;font-weight:700;font-family:IBM Plex Mono;text-transform:uppercase;letter-spacing:1px;")),
-          span(category, style="color:#333;font-size:9px;font-family:IBM Plex Mono;")
+          div(style="display:flex;gap:8px;align-items:center;",
+            if (in_univ) span(sym, style="color:#FF6B00;font-size:9px;font-weight:700;font-family:IBM Plex Mono;border:1px solid #FF6B00;padding:1px 5px;") else NULL,
+            span(category, style="color:#333;font-size:9px;font-family:IBM Plex Mono;")
+          )
         ),
         tags$a(href=url, target="_blank",
           div(headline, style="color:#E8E8E8;font-size:11px;font-weight:600;line-height:1.4;margin-bottom:3px;")
