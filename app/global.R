@@ -504,7 +504,21 @@ TV_ID_TTL <- 300
 
 .tv_id_cache <- new.env(parent = emptyenv())
 
-tv_live_video_id <- function(channel) {
+# Verify a candidate against its own watch page. Reading which id is live off
+# the channel page's layout picked a recording in production twice.
+tv_video_is_live <- function(vid) {
+  tryCatch({
+    h <- curl::new_handle()
+    curl::handle_setheaders(h, `User-Agent` = "Mozilla/5.0",
+                            `Accept-Language` = "en-US,en;q=0.9")
+    txt <- rawToChar(curl::curl_fetch_memory(
+      paste0("https://www.youtube.com/watch?v=", vid), handle = h)$content)
+    len <- regmatches(txt, regexpr('"lengthSeconds":"[0-9]+"', txt))
+    length(len) > 0 && grepl('"lengthSeconds":"0"', len[1], fixed = TRUE)
+  }, error = function(e) FALSE)
+}
+
+tv_live_video_id <- function(channel, max_try = 4) {
   cid <- TV_CHANNELS[[channel]]
   if (is.null(cid)) return(NA_character_)
   hit <- .tv_id_cache[[cid]]
@@ -512,27 +526,15 @@ tv_live_video_id <- function(channel) {
   if (!is.null(hit) && (now - hit$at) < TV_ID_TTL) return(hit$id)
   id <- tryCatch({
     h <- curl::new_handle()
-    curl::handle_setheaders(h, `User-Agent` = "Mozilla/5.0")
+    curl::handle_setheaders(h, `User-Agent` = "Mozilla/5.0",
+                            `Accept-Language` = "en-US,en;q=0.9")
     txt <- rawToChar(curl::curl_fetch_memory(
       paste0("https://www.youtube.com/channel/", cid, "/live"), handle = h)$content)
-
-    # Take the canonical url, which is what YouTube resolved /live to. Reading
-    # the first "videoId" in the page instead picked up a sidebar recommendation:
-    # the deployed panel played a 3-hour Bloomberg *recording* rather than the
-    # live channel, complete with a scrub bar.
-    m <- regmatches(txt, regexpr(
-      'rel="canonical" href="https://www\\.youtube\\.com/watch\\?v=[A-Za-z0-9_-]{11}', txt))
-    if (!length(m)) {
-      NA_character_
-    } else {
-      vid <- sub('.*v=', '', m)
-      # A live stream reports lengthSeconds 0; a finished upload reports its
-      # real duration. This is what separates "currently live" from "the last
-      # thing this channel streamed".
-      len <- regmatches(txt, regexpr('"lengthSeconds":"[0-9]+"', txt))
-      is_live <- length(len) > 0 && grepl('"lengthSeconds":"0"', len[1], fixed = TRUE)
-      if (is_live) vid else NA_character_
-    }
+    ids <- unique(sub('"videoId":"', '', sub('"$', '',
+             regmatches(txt, gregexpr('"videoId":"[A-Za-z0-9_-]{11}"', txt))[[1]])))
+    found <- NA_character_
+    for (v in utils::head(ids, max_try)) if (tv_video_is_live(v)) { found <- v; break }
+    found
   }, error = function(e) NA_character_)
   .tv_id_cache[[cid]] <- list(at = now, id = id)
   id

@@ -1110,61 +1110,59 @@ TV_CHANNEL_IDS <- c(
   "Reuters"       = "UChqUTb7kYRX8-EiaN3XFrSQ"
 )
 
-resolve_live_video <- function(channel_id) {
+yt_get <- function(url) {
+  r <- GET(url, add_headers(
+    `User-Agent` = paste("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)",
+                         "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36"),
+    `Accept-Language` = "en-US,en;q=0.9"), timeout(30))
+  if (status_code(r) != 200) return(NA_character_)
+  content(r, as = "text", encoding = "UTF-8")
+}
+
+# Ask the video itself rather than reading the channel page's layout. A live
+# stream reports lengthSeconds 0; a finished upload reports its real duration.
+yt_video_is_live <- function(vid) {
+  txt <- tryCatch(yt_get(paste0("https://www.youtube.com/watch?v=", vid)),
+                  error = function(e) NA_character_)
+  if (is.na(txt)) return(FALSE)
+  len <- regmatches(txt, regexpr('"lengthSeconds":"[0-9]+"', txt))
+  length(len) > 0 && grepl('"lengthSeconds":"0"', len[1], fixed = TRUE)
+}
+
+# Two earlier attempts inferred which id was live from the channel page —
+# first by position, then by proximity to an isLive marker. Both were validated
+# against the page a home connection gets and both picked a recording on the
+# page a datacenter IP gets, which is the only one that matters in production
+# and the one that cannot be fetched from here to test against.
+#
+# So stop inferring. Collect the candidate ids, then verify each against its own
+# watch page. That is one extra request per candidate and it does not care how
+# the channel page is rendered.
+resolve_live_video <- function(channel_id, max_try = 6) {
   tryCatch({
-    r <- GET(glue("https://www.youtube.com/channel/{channel_id}/live"),
-             add_headers(`User-Agent` = paste("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)",
-                                              "AppleWebKit/537.36 (KHTML, like Gecko)",
-                                              "Chrome/120 Safari/537.36"),
-                         `Accept-Language` = "en-US,en;q=0.9"),
-             timeout(30))
-    if (status_code(r) != 200) {
-      message(glue("    {channel_id}: HTTP {status_code(r)}"))
+    txt <- yt_get(glue("https://www.youtube.com/channel/{channel_id}/live"))
+    if (is.na(txt)) {
+      message(glue("    {channel_id}: channel page unavailable"))
       return(list(id = NA_character_, live = FALSE))
     }
-    txt <- content(r, as = "text", encoding = "UTF-8")
-
-    # YouTube serves two different pages. A home connection gets one with a
-    # canonical link and a lengthSeconds field; a datacenter IP — which is what
-    # both shinyapps.io and GitHub runners are — gets one with neither, though
-    # it does carry isLive and the right video id. Handle both.
-    has_live_flag <- grepl('"isLive":true', txt, fixed = TRUE)
-    len <- regmatches(txt, gregexpr('"lengthSeconds":"[0-9]+"', txt))[[1]]
-    live <- if (length(len) > 0) {
-      # A live stream reports 0; a finished upload reports its real duration.
-      any(grepl('"lengthSeconds":"0"', len, fixed = TRUE))
-    } else {
-      has_live_flag
+    ids <- unique(sub('"videoId":"', '', sub('"$', '',
+             regmatches(txt, gregexpr('"videoId":"[A-Za-z0-9_-]{11}"', txt))[[1]])))
+    if (!length(ids)) {
+      message(glue("    {channel_id}: no video ids on page (bytes={nchar(txt)})"))
+      return(list(id = NA_character_, live = FALSE))
     }
-    if (!live) return(list(id = NA_character_, live = FALSE))
-
-    m <- regmatches(txt, regexpr(
-      'rel="canonical" href="https://www\\.youtube\\.com/watch\\?v=[A-Za-z0-9_-]{11}', txt))
-    vid <- if (length(m)) sub('.*v=', '', m) else NA_character_
-
-    if (is.na(vid)) {
-      # No canonical: take the video id sitting closest before an isLive marker.
-      # Simply taking the first id on the page picks a recommendation — the
-      # live stream was consistently the second id, but position is not a
-      # contract. Verified against canonical on all four channels, where this
-      # returns the same id, and the same NA for the channel that is off air.
-      vm <- gregexpr('"videoId":"[A-Za-z0-9_-]{11}"', txt)[[1]]
-      if (vm[1] == -1) return(list(id = NA_character_, live = FALSE))
-      vids <- sub('"videoId":"', '', sub('"$', '',
-                  regmatches(txt, gregexpr('"videoId":"[A-Za-z0-9_-]{11}"', txt))[[1]]))
-      lp <- gregexpr('"isLive":true', txt, fixed = TRUE)[[1]]
-      if (lp[1] == -1) return(list(id = NA_character_, live = FALSE))
-      hits <- vapply(lp, function(pos) {
-        before <- vm[vm <= pos]
-        if (!length(before)) return(NA_character_)
-        vids[which.max(before)]
-      }, character(1))
-      hits <- hits[!is.na(hits)]
-      if (!length(hits)) return(list(id = NA_character_, live = FALSE))
-      vid <- names(sort(table(hits), decreasing = TRUE))[1]
+    tried <- utils::head(ids, max_try)
+    for (v in tried) {
+      if (yt_video_is_live(v)) return(list(id = v, live = TRUE))
+      Sys.sleep(0.2)
     }
-    list(id = vid, live = TRUE)
-  }, error = function(e) list(id = NA_character_, live = FALSE))
+    message(glue("    {channel_id}: none of {length(tried)} candidates live ",
+                 "({paste(tried, collapse=' ')})"))
+    list(id = NA_character_, live = FALSE)
+  }, error = function(e) {
+    message(glue("    {channel_id}: {conditionMessage(e)}"))
+    list(id = NA_character_, live = FALSE)
+  })
 }
 
 get_tv_channels <- function() {

@@ -147,15 +147,30 @@ if (have_pkgs("dplyr", "tibble")) {
 }
 
 # ── the live-vs-recorded regression ─────────────────────────────────────────
-test_that("the resolver keys off the canonical url, not the first videoId", {
-  src <- paste(readLines(repo_path("app", "global.R")), collapse = "\n")
-  # Reading the first "videoId" in the /live page picked up a sidebar
-  # recommendation: the deployed panel played a three-hour Bloomberg recording,
-  # scrub bar and all, instead of the live channel.
-  expect_true(grepl('rel=\\\\"canonical\\\\"', src) || grepl('rel=\\\\\\\\"canonical', src) ||
-              grepl("canonical", src, fixed = TRUE))
-  # and it must prove liveness rather than assume it
-  expect_true(grepl("lengthSeconds", src, fixed = TRUE))
+test_that("the resolver verifies candidates instead of inferring from layout", {
+  for (f in c(repo_path("app", "global.R"), repo_path("R", "03_data.R"))) {
+    src <- paste(readLines(f), collapse = "\n")
+    # Two earlier attempts read which id was live off the channel page — first
+    # by position, then by proximity to an isLive marker. Both agreed with
+    # canonical on the page a home connection gets, and both picked a recording
+    # on the page a datacenter IP gets, which is the only one production sees.
+    # Each candidate is now checked against its own watch page instead.
+    expect_true(grepl("is_live|_video_is_live", src))
+    expect_true(grepl("watch\\?v=", src))
+    expect_true(grepl("lengthSeconds", src, fixed = TRUE))
+  }
+})
+
+test_that("a recording is rejected and a stream accepted by lengthSeconds", {
+  live_from_watch <- function(txt) {
+    len <- regmatches(txt, regexpr('"lengthSeconds":"[0-9]+"', txt))
+    length(len) > 0 && grepl('"lengthSeconds":"0"', len[1], fixed = TRUE)
+  }
+  # the exact pair from production: a 2239-second Bloomberg upload was served
+  # to viewers in place of the channel's live stream
+  expect_false(live_from_watch('{"videoId":"wTiYaWFP59Q","lengthSeconds":"2239"}'))
+  expect_true(live_from_watch('{"videoId":"QB5BNdBFujE","lengthSeconds":"0"}'))
+  expect_false(live_from_watch('{"videoId":"x","title":"no length field"}'))
 })
 
 test_that("a finished upload is rejected as not live", {
