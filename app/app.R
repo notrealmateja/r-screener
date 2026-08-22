@@ -172,16 +172,32 @@ table.dataTable thead th {
    read as 20 boxes. Rows are separated by alternating tone instead, which
    groups a row visually without ruling it off. */
 table.dataTable tbody td {
-  padding:10px 12px !important; border:0 !important;
+  padding:9px 12px !important; border:0 !important;
   background:transparent !important; font-family:var(--mono) !important;
   font-size:11px !important; vertical-align:middle !important;
+  /* Cells were wrapping: company names, rating labels and driver names each
+     broke onto two lines, and the signal list onto four, so every row rendered
+     as a ragged stack of 2-4 text lines at uneven heights. One line per cell
+     keeps rows uniform and scannable; the wide tables already scroll
+     horizontally, and anything too long is elided. */
+  white-space:nowrap !important;
+  overflow:hidden !important; text-overflow:ellipsis !important;
+  max-width:230px !important;
 }
+/* Signal lists are the longest field and the least essential to read in full. */
+table.dataTable tbody td:nth-last-child(3) { max-width:170px !important; }
 table.dataTable tbody tr { background:transparent !important; }
 table.dataTable tbody tr:nth-child(even) td { background:rgba(255,255,255,0.018) !important; }
 table.dataTable tbody tr td { transition:background .15s ease; }
 table.dataTable tbody tr:hover td { background:rgba(255,107,0,0.07) !important; }
 /* One hairline under the header keeps the columns anchored without a grid. */
-table.dataTable thead th { border-bottom:1px solid var(--border2) !important; }
+table.dataTable thead th {
+  border-bottom:1px solid var(--border2) !important;
+  white-space:nowrap !important;
+}
+/* Rating pills and badges must not break across lines inside their cell. */
+table.dataTable tbody td .pill,
+table.dataTable tbody td .unicorn-badge { white-space:nowrap !important; }
 /* Rows in the browse tables open that stock in Deep Dive, so they need to read
    as interactive rather than as static cells. */
 /* Live TV channel buttons */

@@ -145,3 +145,35 @@ if (have_pkgs("dplyr", "tibble")) {
     expect_false(grepl("`Wk Conf`\\s*=", src))
   })
 }
+
+# ── the live-vs-recorded regression ─────────────────────────────────────────
+test_that("the resolver keys off the canonical url, not the first videoId", {
+  src <- paste(readLines(repo_path("app", "global.R")), collapse = "\n")
+  # Reading the first "videoId" in the /live page picked up a sidebar
+  # recommendation: the deployed panel played a three-hour Bloomberg recording,
+  # scrub bar and all, instead of the live channel.
+  expect_true(grepl('rel=\\\\"canonical\\\\"', src) || grepl('rel=\\\\\\\\"canonical', src) ||
+              grepl("canonical", src, fixed = TRUE))
+  # and it must prove liveness rather than assume it
+  expect_true(grepl("lengthSeconds", src, fixed = TRUE))
+})
+
+test_that("a finished upload is rejected as not live", {
+  # A live stream reports lengthSeconds 0; a completed upload reports its real
+  # duration. That is the only field separating the two on the /live page.
+  is_live <- function(txt) {
+    len <- regmatches(txt, regexpr('"lengthSeconds":"[0-9]+"', txt))
+    length(len) > 0 && grepl('"lengthSeconds":"0"', len[1], fixed = TRUE)
+  }
+  expect_true(is_live('{"lengthSeconds":"0","title":"Bloomberg Live"}'))
+  expect_false(is_live('{"lengthSeconds":"10987","title":"US-Canada Tariffs"}'))
+  expect_false(is_live('{"title":"no length field"}'))
+})
+
+test_that("table rows are held to a single line", {
+  src <- paste(readLines(repo_path("app", "app.R")), collapse = "\n")
+  # Company names, rating labels and driver names each wrapped onto two lines
+  # and the signal list onto four, so rows rendered as ragged 2-4 line stacks.
+  expect_true(grepl("white-space:nowrap !important", src, fixed = TRUE))
+  expect_true(grepl("text-overflow:ellipsis !important", src, fixed = TRUE))
+})

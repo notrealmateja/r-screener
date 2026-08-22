@@ -514,11 +514,23 @@ tv_live_video_id <- function(channel) {
     curl::handle_setheaders(h, `User-Agent` = "Mozilla/5.0")
     txt <- rawToChar(curl::curl_fetch_memory(
       paste0("https://www.youtube.com/channel/", cid, "/live"), handle = h)$content)
-    if (!grepl('"isLive":true', txt, fixed = TRUE)) {
+
+    # Take the canonical url, which is what YouTube resolved /live to. Reading
+    # the first "videoId" in the page instead picked up a sidebar recommendation:
+    # the deployed panel played a 3-hour Bloomberg *recording* rather than the
+    # live channel, complete with a scrub bar.
+    m <- regmatches(txt, regexpr(
+      'rel="canonical" href="https://www\\.youtube\\.com/watch\\?v=[A-Za-z0-9_-]{11}', txt))
+    if (!length(m)) {
       NA_character_
     } else {
-      m <- regmatches(txt, regexpr('"videoId":"[A-Za-z0-9_-]{11}"', txt))
-      if (!length(m)) NA_character_ else sub('"videoId":"', '', sub('"$', '', m))
+      vid <- sub('.*v=', '', m)
+      # A live stream reports lengthSeconds 0; a finished upload reports its
+      # real duration. This is what separates "currently live" from "the last
+      # thing this channel streamed".
+      len <- regmatches(txt, regexpr('"lengthSeconds":"[0-9]+"', txt))
+      is_live <- length(len) > 0 && grepl('"lengthSeconds":"0"', len[1], fixed = TRUE)
+      if (is_live) vid else NA_character_
     }
   }, error = function(e) NA_character_)
   .tv_id_cache[[cid]] <- list(at = now, id = id)
