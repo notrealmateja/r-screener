@@ -1077,6 +1077,18 @@ ui <- fluidPage(
           div(class="panel-head-title","SEC FILINGS & INSIDER ACTIVITY"),
           div(class="panel-head-meta", uiOutput("dd_filings_meta"))),
         div(class="panel-body", uiOutput("dd_filings"))
+      ),
+      div(class="panel",
+        div(class="panel-head",
+          div(class="panel-head-title","LBO RETURN SENSITIVITY"),
+          div(class="panel-head-meta","EQUITY IRR")),
+        div(class="panel-body", uiOutput("dd_lbo"))
+      ),
+      div(class="panel",
+        div(class="panel-head",
+          div(class="panel-head-title","RESEARCH BRIEF"),
+          div(class="panel-head-meta","GENERATED")),
+        div(class="panel-body", uiOutput("dd_pitch"))
       )
     ),
 
@@ -2096,6 +2108,99 @@ server <- function(input, output, session) {
     )
   })
 
+  # ── Deep Dive: LBO return sensitivity ─────────────────────────────────────
+  output$dd_lbo <- renderUI({
+    s <- sel(); req(nrow(s) > 0)
+    l <- tryCatch(compute_lbo(s), error = function(e) NULL)
+    if (is.null(l))
+      return(div(paste0("No LBO view for ", input$dd_ticker, ": this needs positive EBITDA, ",
+                        "and a business already carrying more debt than the structure assumes ",
+                        "leaves no sponsor equity to return on."),
+                 style="color:#666;padding:18px;font-family:IBM Plex Mono;font-size:11px;line-height:1.6;"))
+
+    cell <- function(v) {
+      if (is.na(v)) return(tags$td("n/a", style="color:#444;text-align:right;padding:5px 10px;"))
+      col <- if (v >= 0.25) "#00C853" else if (v >= 0.15) "#8BC34A"
+             else if (v >= 0)   "#FFD600" else "#FF3D00"
+      tags$td(paste0(round(v * 100), "%"),
+              style=paste0("color:", col, ";text-align:right;padding:5px 10px;font-weight:600;"))
+    }
+
+    tbl <- tags$table(
+      style="width:100%;border-collapse:collapse;font-family:var(--mono);font-size:11px;",
+      tags$thead(tags$tr(
+        tags$th("Exit multiple", style="text-align:left;padding:5px 10px;color:#666;font-weight:400;"),
+        lapply(l$growth, function(g)
+          tags$th(paste0(round(g * 100), "% growth"),
+                  style="text-align:right;padding:5px 10px;color:#666;font-weight:400;")))),
+      tags$tbody(lapply(seq_along(l$exit_mults), function(i) {
+        xm <- l$exit_mults[i]
+        entry <- abs(xm - l$entry_mult) < 0.05
+        tags$tr(
+          tags$td(paste0(xm, "x", if (entry) "  (entry)" else ""),
+                  style=paste0("padding:5px 10px;color:", if (entry) "var(--orange)" else "var(--text2)",
+                               ";font-weight:", if (entry) "700" else "400", ";")),
+          lapply(l$grid[[i]], cell))
+      })))
+
+    tagList(
+      div(class="si-grid", style="grid-template-columns:repeat(3,1fr);margin-bottom:12px;",
+        div(class="si-cell", div(class="si-k","Entry EV / EBITDA"),
+            div(class="si-v", style="font-size:15px;", paste0(l$entry_mult, "x"))),
+        div(class="si-cell", div(class="si-k","Entry debt"),
+            div(class="si-v", style="font-size:15px;", fmt_mktcap(l$entry_debt))),
+        div(class="si-cell", div(class="si-k","Sponsor equity"),
+            div(class="si-v", style="font-size:15px;", fmt_mktcap(l$equity_in)))),
+      div(style="overflow-x:auto;", tbl),
+      div(style="color:#555;font-size:10px;font-family:IBM Plex Mono;margin-top:10px;line-height:1.6;",
+          paste0("Five-year hold at ", LBO_LEVERAGE, "x entry leverage, ", round(LBO_RATE*100),
+                 "% cost of debt, ", round(LBO_TAX*100), "% tax, and capex plus working capital at ",
+                 round(LBO_REINVEST*100), "% of EBITDA swept against the debt. Cells are equity IRR. ",
+                 "The grid exists because the answer is dominated by two guesses — what you pay ",
+                 "and what you sell for — so a single IRR would be false precision."))
+    )
+  })
+
+  # ── Deep Dive: generated research brief ───────────────────────────────────
+  output$dd_pitch <- renderUI({
+    s <- sel(); req(nrow(s) > 0)
+    sym <- input$dd_ticker
+    f  <- dd_filings()
+    nn <- tryCatch({ d <- dd_news_rows(); if (is.null(d)) NA else nrow(d) }, error = function(e) NA)
+    w  <- if (!is.null(wsb_data) && "ticker" %in% names(wsb_data))
+            wsb_data %>% filter(ticker == sym) else NULL
+    p  <- tryCatch(pitch_bullets(s, f, nn, w), error = function(e) NULL)
+    if (is.null(p))
+      return(div("Brief unavailable for this name.",
+                 style="color:#666;padding:18px;font-family:IBM Plex Mono;font-size:11px;"))
+
+    side <- function(title, items, colour) {
+      if (length(items) == 0)
+        items <- list("Nothing in the current data argues this side.")
+      div(style="flex:1;min-width:260px;",
+        div(style=paste0("font-family:var(--mono);font-size:10px;letter-spacing:1px;",
+                         "text-transform:uppercase;color:", colour, ";margin-bottom:8px;"), title),
+        tags$ul(style="margin:0;padding-left:16px;",
+          lapply(items, function(x)
+            tags$li(x, style="color:var(--text2);font-size:12px;line-height:1.65;margin-bottom:7px;"))))
+    }
+
+    tagList(
+      div(style="font-size:13px;color:var(--text);line-height:1.6;margin-bottom:14px;",
+        tags$strong(p$company), glue(" ({p$symbol}) — {tolower(p$sector)}. ",
+          "What follows is assembled from the same filings, prices and sentiment shown on this ",
+          "page. It is a summary of the evidence, not advice, and it deliberately argues both ",
+          "directions.")),
+      div(style="display:flex;gap:26px;flex-wrap:wrap;",
+        side("What supports the name", p$supports, "#00C853"),
+        side("What argues against it", p$against,  "#FF3D00")),
+      div(style="color:#555;font-size:10px;font-family:IBM Plex Mono;margin-top:14px;line-height:1.6;",
+          paste0("Generated from this page's data at render time — no forecast, no price target, ",
+                 "and no position. Every figure above appears in the panels on this page; read ",
+                 "the linked filings and stories before relying on any of it."))
+    )
+  })
+
   output$dd_news_count <- renderUI({
     d <- dd_news_rows()
     if (is.null(d) || nrow(d) == 0) return(div("—"))
@@ -2204,6 +2309,8 @@ server <- function(input, output, session) {
   outputOptions(output, "dd_news", suspendWhenHidden = FALSE)
   outputOptions(output, "dd_sentiment", suspendWhenHidden = FALSE)
   outputOptions(output, "dd_filings", suspendWhenHidden = FALSE)
+  outputOptions(output, "dd_lbo", suspendWhenHidden = FALSE)
+  outputOptions(output, "dd_pitch", suspendWhenHidden = FALSE)
   outputOptions(output, "dd_filings_meta", suspendWhenHidden = FALSE)
 
   # CPI arrives as an index level near 300, which tells a reader nothing on its
