@@ -147,12 +147,38 @@ test_that("an AV notice is detected regardless of its framing", {
 # so a longer notice fell through to the CSV parser, produced one unparseable
 # row, and the only log line was "no parseable dates" — which left the calendar
 # 17 days stale with no way to tell why.
+# The live CI log showed what AV actually sends when it refuses: a valid CSV
+# header, then the notice shredded one character per column —
+#   symbol,name,reportDate,...
+#   I,n,f,o,r,m,a,t,i,o,n
+# Keying the guard on the header bypassed detection on every run, because AV
+# always sends the header. Strip it, strip separators, then look at the rest.
 av_is_notice <- function(raw) {
-  notice <- regmatches(raw, regexpr("(?i)(information|note|error message|premium|thank you for using)",
-                                    raw, perl = TRUE))
-  looks_like_csv <- grepl("^\\s*symbol\\s*,", raw)
-  length(notice) > 0 && !looks_like_csv
+  body <- sub("^[^\n]*\n", "", raw)
+  # A real earnings row always carries ISO dates; a refusal notice never does.
+  # This is a sharper discriminator than counting rows, which false-positived on
+  # a genuine one-row CSV for a company named NOTEWORTHY INFORMATION CORP.
+  has_dates <- grepl("[0-9]{4}-[0-9]{2}-[0-9]{2}", body)
+  flat <- tolower(gsub("[[:space:],\"{}]", "", body))
+  notice <- grepl("information|errormessage|premium|thankyouforusing|apikey|note:", flat)
+  notice && !has_dates
 }
+
+AV_HDR <- "symbol,name,reportDate,fiscalDateEnding,estimate,currency,timeOfTheDay\n"
+
+test_that("the shredded notice AV actually sends is detected", {
+  expect_true(av_is_notice(paste0(AV_HDR, "I,n,f,o,r,m,a,t,i,o,n\n")))
+})
+
+test_that("a notice sitting after a valid CSV header is detected", {
+  expect_true(av_is_notice(paste0(AV_HDR, '{"Information": "premium endpoint"}')))
+})
+
+test_that("a full earnings CSV is never mistaken for a notice", {
+  real <- paste0(AV_HDR, paste(sprintf("AAPL,APPLE,2026-08-%02d,2026-06-30,1.2,USD,pre-market", 1:20),
+                               collapse = "\n"))
+  expect_false(av_is_notice(real))
+})
 
 test_that("a short AV notice is detected", {
   expect_true(av_is_notice('{"Information": "Thank you for using Alpha Vantage"}'))

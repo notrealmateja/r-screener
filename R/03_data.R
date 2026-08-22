@@ -234,12 +234,19 @@ get_earnings_calendar <- function() {
     notice <- regmatches(raw_text,
       regexpr("(?i)(information|note|error message|premium|thank you for using)",
               raw_text, perl = TRUE))
-    # A notice is a notice regardless of length. The 2000-char guard existed to
-    # avoid false positives on real CSV, but real CSV for this endpoint is tens
-    # of thousands of characters and carries the expected header, so key off
-    # that instead.
-    looks_like_csv <- grepl("^\\s*symbol\\s*,", raw_text)
-    if (length(notice) > 0 && !looks_like_csv) {
+    # Alpha Vantage sends a valid CSV header and *then* the refusal notice, so
+    # keying the guard on the header — as this did — bypassed detection on every
+    # run. The notice also arrives shredded one character per column
+    # ("I,n,f,o,r,m,a,t,i,o,n"), which is why matching the raw text failed too.
+    # Strip the header, strip separators, then look at what is left.
+    body <- sub("^[^\n]*\n", "", raw_text)
+    # A real earnings row always carries ISO dates; a refusal notice never does.
+    # Sharper than counting rows, which false-positived on a genuine one-row CSV
+    # for a company named NOTEWORTHY INFORMATION CORP.
+    has_dates <- grepl("[0-9]{4}-[0-9]{2}-[0-9]{2}", body)
+    flat <- tolower(gsub("[[:space:],\"{}]", "", body))
+    notice <- grepl("information|errormessage|premium|thankyouforusing|apikey|note:", flat)
+    if (notice && !has_dates) {
       message("  AV earnings returned a notice, not data: ",
               substr(gsub("\\s+", " ", raw_text), 1, 300))
       return(tibble())
@@ -1111,11 +1118,27 @@ resolve_live_video <- function(channel_id) {
                                               "Chrome/120 Safari/537.36"),
                          `Accept-Language` = "en-US,en;q=0.9"),
              timeout(30))
-    if (status_code(r) != 200) return(list(id = NA_character_, live = FALSE))
+    if (status_code(r) != 200) {
+      message(glue("    {channel_id}: HTTP {status_code(r)}"))
+      return(list(id = NA_character_, live = FALSE))
+    }
     txt <- content(r, as = "text", encoding = "UTF-8")
     m <- regmatches(txt, regexpr(
       'rel="canonical" href="https://www\\.youtube\\.com/watch\\?v=[A-Za-z0-9_-]{11}', txt))
-    if (!length(m)) return(list(id = NA_character_, live = FALSE))
+    if (!length(m)) {
+      # YouTube serves datacenter IPs a different page than a home connection:
+      # this resolved fine from a laptop and returned nothing from both
+      # shinyapps.io and GitHub runners. Report what actually arrived instead of
+      # guessing at the shape a fourth time.
+      ids <- unique(regmatches(txt, gregexpr('"videoId":"[A-Za-z0-9_-]{11}"', txt))[[1]])
+      message(glue("    {channel_id}: no canonical. bytes={nchar(txt)} ",
+                   "videoIds={length(ids)} isLive={grepl('\"isLive\":true', txt, fixed=TRUE)} ",
+                   "lenSecs={length(regmatches(txt, gregexpr('\"lengthSeconds\":\"[0-9]+\"', txt))[[1]])} ",
+                   "consent={grepl('consent.youtube.com', txt, fixed=TRUE)} ",
+                   "captcha={grepl('recaptcha|unusual traffic', txt)}"))
+      if (length(ids)) message(glue("      first ids: {paste(utils::head(ids,3), collapse=' ')}"))
+      return(list(id = NA_character_, live = FALSE))
+    }
     vid <- sub('.*v=', '', m)
     # A live stream reports lengthSeconds 0; a finished upload reports its real
     # duration. Without this the resolver returned the channel's last upload.
