@@ -5,6 +5,7 @@
 library(shiny); library(dplyr); library(tidyr); library(ggplot2)
 library(plotly); library(DT); library(quantmod); library(scales)
 library(glue); library(readr); library(lubridate); library(TTR); library(zoo)
+library(tibble); library(xml2)   # xml2: live RSS news polling
 
 load_csv <- function(p) if (file.exists(p)) read_csv(p, show_col_types=FALSE) else NULL
 
@@ -390,4 +391,107 @@ pitch_bullets <- function(s, filings = NULL, news_n = NA, wsb = NULL, stwits = N
 
   list(symbol = sym, company = comp, sector = sector,
        supports = supports, against = against, dcf = dcf, lbo = lbo)
+}
+
+# ── Live market news ────────────────────────────────────────────────────────
+# The news CSV is regenerated nightly, so re-reading it on a timer would show
+# the same stories all day. This pulls the RSS feeds directly so the panel is
+# genuinely live. Results are cached for LIVE_NEWS_TTL seconds and shared across
+# sessions, so twenty viewers polling every 30s still produce one fetch.
+LIVE_NEWS_TTL <- 60
+# Yahoo's site-wide news index answers 429 to server-side polling, so it is not
+# in this list — its per-ticker feed is still used by the nightly pipeline. A
+# feed that fails is dropped for that cycle rather than blanking the panel.
+LIVE_NEWS_FEEDS <- c(
+  "CNBC"        = "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=100003114",
+  "MarketWatch" = "https://feeds.content.dowjones.io/public/rss/mw_topstories",
+  "Investing"   = "https://www.investing.com/rss/news_25.rss"
+)
+# WSJ's markets feed is deliberately absent: it still serves, but its newest
+# item is dated January 2025, so every story it returns sorts to the bottom and
+# is dropped anyway. A stale feed is worse than no feed — it looks like coverage.
+
+# Feeds do not agree on a date format. RFC-822 is the RSS standard, but
+# Investing.com emits plain "2026-08-22 17:04:56". Parsing only the standard
+# left those items with no timestamp, so they sorted last and were cut by the
+# item cap — the feed looked broken when it was simply mis-parsed.
+LIVE_NEWS_DATE_FORMATS <- c("%a, %d %b %Y %H:%M:%S", "%Y-%m-%d %H:%M:%S",
+                            "%Y-%m-%dT%H:%M:%S", "%d %b %Y %H:%M:%S")
+
+parse_feed_time <- function(x) {
+  out <- as.POSIXct(rep(NA_real_, length(x)), origin = "1970-01-01", tz = "GMT")
+  for (f in LIVE_NEWS_DATE_FORMATS) {
+    miss <- is.na(out)
+    if (!any(miss)) break
+    out[miss] <- suppressWarnings(as.POSIXct(x[miss], format = f, tz = "GMT"))
+  }
+  out
+}
+
+.live_news_cache <- new.env(parent = emptyenv())
+.live_news_cache$at <- NULL
+.live_news_cache$df <- NULL
+
+live_news_parse <- function(url, source) {
+  tryCatch({
+    if (!requireNamespace("xml2", quietly = TRUE)) return(NULL)
+    doc <- xml2::read_xml(url)
+    items <- xml2::xml_find_all(doc, "//item")
+    if (length(items) == 0) return(NULL)
+    pick <- function(node, tag) {
+      v <- xml2::xml_text(xml2::xml_find_first(node, tag))
+      if (length(v) == 0 || is.na(v)) NA_character_ else trimws(v)
+    }
+    tibble::tibble(
+      title     = vapply(items, pick, character(1), "title"),
+      url       = vapply(items, pick, character(1), "link"),
+      published = vapply(items, pick, character(1), "pubDate"),
+      source    = source
+    )
+  }, error = function(e) NULL)
+}
+
+get_live_news <- function(limit = 40, force = FALSE) {
+  now <- as.numeric(Sys.time())
+  if (!force && !is.null(.live_news_cache$at) &&
+      (now - .live_news_cache$at) < LIVE_NEWS_TTL && !is.null(.live_news_cache$df)) {
+    return(.live_news_cache$df)
+  }
+  out <- lapply(seq_along(LIVE_NEWS_FEEDS), function(i)
+    live_news_parse(unname(LIVE_NEWS_FEEDS[i]), names(LIVE_NEWS_FEEDS)[i]))
+  out <- out[!vapply(out, is.null, logical(1))]
+  if (length(out) == 0) {
+    # Never blank the panel on a transient failure — keep whatever is cached.
+    return(.live_news_cache$df)
+  }
+  df <- dplyr::bind_rows(out)
+  df <- df %>%
+    dplyr::filter(!is.na(title), nzchar(title)) %>%
+    dplyr::mutate(ts = parse_feed_time(published)) %>%
+    dplyr::distinct(title, .keep_all = TRUE) %>%
+    dplyr::arrange(dplyr::desc(ts)) %>%
+    utils::head(limit)
+  .live_news_cache$at <- now
+  .live_news_cache$df <- df
+  df
+}
+
+# ── Live television ─────────────────────────────────────────────────────────
+# Channel-based embed URLs, not video IDs: a live stream's video ID changes
+# every time the broadcaster restarts it, so a hardcoded ID goes dead within
+# days. /embed/live_stream?channel=<id> always resolves to whatever that
+# channel is airing now. All four IDs verified against the live channel pages.
+TV_CHANNELS <- c(
+  "Bloomberg TV"  = "UCIALMKvObZNtJ6AmdCLP7Lg",
+  "Yahoo Finance" = "UCEAZeUIeJs0IjQiqTCdVSIg",
+  "CNBC"          = "UCvJJ_dzjViJCoLf5uKUTwoA",
+  "Reuters"       = "UChqUTb7kYRX8-EiaN3XFrSQ"
+)
+
+tv_embed_url <- function(channel) {
+  id <- TV_CHANNELS[[channel]]
+  # mute=1 because browsers block autoplay with sound; playsinline keeps it in
+  # the panel on mobile rather than going fullscreen.
+  paste0("https://www.youtube.com/embed/live_stream?channel=", id,
+         "&autoplay=1&mute=1&playsinline=1")
 }

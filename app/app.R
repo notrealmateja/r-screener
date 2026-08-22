@@ -177,6 +177,26 @@ table.dataTable tbody tr { background:transparent !important; }
 table.dataTable tbody tr:hover td { background:rgba(255,107,0,0.06) !important; }
 /* Rows in the browse tables open that stock in Deep Dive, so they need to read
    as interactive rather than as static cells. */
+/* Live TV channel buttons */
+.tv-btn {
+  background:#141414 !important; color:var(--text2) !important;
+  border:1px solid var(--border) !important; border-radius:0 !important;
+  font-family:var(--mono) !important; font-size:10px !important;
+  letter-spacing:1px; text-transform:uppercase; padding:8px 16px !important;
+  transition:background .18s ease, border-color .18s ease, color .18s ease;
+}
+.tv-btn:hover {
+  background:#1C1608 !important; border-color:var(--orange) !important;
+  color:var(--orange) !important;
+}
+/* Live wire rows */
+.wire-item {
+  padding:9px 0; border-bottom:1px solid var(--border);
+  transition:background .16s ease, padding-left .16s ease;
+}
+.wire-item:hover { background:rgba(255,107,0,0.05); padding-left:6px; }
+.wire-item a { text-decoration:none; }
+
 table.dataTable.row-clickable tbody tr { cursor:pointer; }
 table.dataTable.row-clickable tbody tr:hover td {
   background:rgba(255,107,0,0.10) !important;
@@ -853,6 +873,7 @@ ui <- fluidPage(
       div(class="topbar-nav-item",        id="nav-deepdive",  onclick="showPane('deepdive')",  "Deep Dive"),
       div(class="topbar-nav-item",        id="nav-macro",     onclick="showPane('macro')",     "Macro"),
       div(class="topbar-nav-item",        id="nav-news",      onclick="showPane('news')",      "News & Events"),
+      div(class="topbar-nav-item",        id="nav-tv",        onclick="showPane('tv')",        "Live TV"),
       div(class="topbar-nav-item",        id="nav-about",     onclick="showPane('about')",     "Methodology")
     ),
     div(class="topbar-right",
@@ -872,6 +893,7 @@ ui <- fluidPage(
     div(class="mobile-nav-item",        id="mnav-deepdive",  onclick="showPane('deepdive')",  "▸ Deep Dive"),
     div(class="mobile-nav-item",        id="mnav-macro",     onclick="showPane('macro')",     "▸ Macro"),
     div(class="mobile-nav-item",        id="mnav-news",      onclick="showPane('news')",      "▸ News & Events"),
+    div(class="mobile-nav-item",        id="mnav-tv",        onclick="showPane('tv')",        "▸ Live TV"),
     div(class="mobile-nav-item",        id="mnav-about",     onclick="showPane('about')",     "▸ Methodology")
   ),
 
@@ -1156,9 +1178,16 @@ ui <- fluidPage(
         div(
           div(class="panel",
             div(class="panel-head",
+              div(class="panel-head-title","LIVE WIRE"),
+              div(class="panel-head-meta", uiOutput("live_news_meta"))),
+            div(class="panel-body", style="max-height:420px;overflow-y:auto;",
+              uiOutput("live_news_feed"))
+          ),
+          div(class="panel",
+            div(class="panel-head",
               div(class="panel-head-title","MARKET NEWS FEED"),
               div(class="panel-head-meta", uiOutput("news_count"))),
-            div(class="panel-body", style="max-height:760px;overflow-y:auto;",
+            div(class="panel-body", style="max-height:420px;overflow-y:auto;",
               uiOutput("news_feed"))
           )
         ),
@@ -1182,6 +1211,27 @@ ui <- fluidPage(
     ),
 
     # ── METHODOLOGY ────────────────────────────────────────────────────────
+    div(class="tab-pane", id="pane-tv",
+      div(class="panel",
+        div(class="panel-head",
+          div(class="panel-head-title","LIVE BUSINESS TELEVISION"),
+          div(class="panel-head-meta", uiOutput("tv_meta"))),
+        div(class="panel-body",
+          div(style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;",
+            lapply(names(TV_CHANNELS), function(n)
+              actionButton(paste0("tv_", make.names(n)), n, class="tv-btn"))),
+          # The stream is only mounted once a channel is chosen, so opening the
+          # tab does not start a video the viewer did not ask for.
+          uiOutput("tv_player"),
+          div(style="color:#555;font-size:10px;font-family:IBM Plex Mono;margin-top:12px;line-height:1.6;",
+              "Streams are embedded from each broadcaster's official YouTube channel and ",
+              "resolve to whatever that channel is airing now. If a channel is not ",
+              "currently live, YouTube shows its latest upload instead. Playback starts ",
+              "muted — browsers block autoplay with sound.")
+        )
+      )
+    ),
+
     div(class="tab-pane", id="pane-about",
       div(class="panel",
         div(class="panel-head",
@@ -1198,6 +1248,16 @@ ui <- fluidPage(
       document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
       document.querySelectorAll('.topbar-nav-item').forEach(n => n.classList.remove('active'));
       document.querySelectorAll('.mobile-nav-item').forEach(n => n.classList.remove('active'));
+      // Stop any embedded stream when leaving the TV pane. The panes are hidden
+      // with CSS rather than unmounted, so without this the video keeps playing
+      // (and keeps making sound) on every other tab.
+      if (name !== 'tv') {
+        var f = document.querySelector('#pane-tv iframe');
+        if (f && f.src) { f.dataset.src = f.src; f.src = 'about:blank'; }
+      } else {
+        var f2 = document.querySelector('#pane-tv iframe');
+        if (f2 && f2.src === 'about:blank' && f2.dataset.src) f2.src = f2.dataset.src;
+      }
       var pane = document.getElementById('pane-' + name);
       pane.classList.add('active');
       // Guarded: these only exist once motion.dev has loaded successfully, so a
@@ -1281,15 +1341,34 @@ server <- function(input, output, session) {
   })
 
   # Dark plotly base
-  dk <- function(p, ml=60, mr=20, mt=20, mb=40) {
+  # Shared hover styling. The price chart used hovermode="x unified", which
+  # stacks every trace — price, three moving averages and both Bollinger bands —
+  # into one tall tooltip that jumps around as the cursor moves. A single
+  # readout plus a thin vertical crosshair tracks the cursor smoothly instead.
+  HOVER_LABEL <- list(bgcolor="#14140F", bordercolor="#FF6B00",
+                      font=list(color="#E8E8E8", family="IBM Plex Mono", size=11))
+
+  dk <- function(p, ml=60, mr=20, mt=20, mb=40, spike=FALSE) {
+    xa <- list(gridcolor="#2A2A2A", zerolinecolor="#2A2A2A", color="#666",
+               tickfont=list(size=10))
+    if (spike) {
+      xa$showspikes  <- TRUE
+      xa$spikemode   <- "across"
+      xa$spikethickness <- 1
+      xa$spikecolor  <- "rgba(255,107,0,0.45)"
+      xa$spikedash   <- "solid"
+      xa$spikesnap   <- "cursor"
+    }
     p %>%
       layout(
         paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
         font=list(color="#666", family="IBM Plex Mono", size=10),
-        xaxis=list(gridcolor="#2A2A2A", zerolinecolor="#2A2A2A", color="#666", tickfont=list(size=10)),
+        xaxis=xa,
         yaxis=list(gridcolor="#2A2A2A", zerolinecolor="#2A2A2A", color="#666", tickfont=list(size=10)),
         margin=list(t=mt, b=mb, l=ml, r=mr),
-        legend=list(font=list(color="#666", size=10), bgcolor="rgba(0,0,0,0)")
+        legend=list(font=list(color="#666", size=10), bgcolor="rgba(0,0,0,0)"),
+        hoverlabel=HOVER_LABEL,
+        transition=list(duration=250, easing="cubic-in-out")
       ) %>% config(displayModeBar=FALSE)
   }
 
@@ -1760,17 +1839,22 @@ server <- function(input, output, session) {
     if (is.null(p) || nrow(p) == 0) return(no_data("No price data available"))
     
     plt <- plot_ly(p) %>%
-      add_lines(x=~date, y=~close, name="Price", line=list(color="#FF6B00",width=2))
-    if ("ma20"  %in% names(p)) plt <- plt %>% add_lines(x=~date, y=~ma20,  name="MA20",  line=list(color="#FFD600",width=1,dash="dot"))
-    if ("ma50"  %in% names(p)) plt <- plt %>% add_lines(x=~date, y=~ma50,  name="MA50",  line=list(color="#00B8D9",width=1.5,dash="dash"))
-    if ("ma200" %in% names(p)) plt <- plt %>% add_lines(x=~date, y=~ma200, name="MA200", line=list(color="#FF3D00",width=1.5,dash="dash"))
+      add_lines(x=~date, y=~close, name="Price",
+        line=list(color="#FF6B00", width=2, shape="spline", smoothing=0.5),
+        hovertemplate="%{x|%b %d, %Y}   <b>$%{y:.2f}</b><extra></extra>")
+    # hoverinfo="skip" on the overlays: they are visual context, and including
+    # them in the tooltip is what produced the six-line block.
+    if ("ma20"  %in% names(p)) plt <- plt %>% add_lines(x=~date, y=~ma20,  name="MA20",  hoverinfo="skip", line=list(color="#FFD600",width=1,dash="dot"))
+    if ("ma50"  %in% names(p)) plt <- plt %>% add_lines(x=~date, y=~ma50,  name="MA50",  hoverinfo="skip", line=list(color="#00B8D9",width=1.5,dash="dash"))
+    if ("ma200" %in% names(p)) plt <- plt %>% add_lines(x=~date, y=~ma200, name="MA200", hoverinfo="skip", line=list(color="#FF3D00",width=1.5,dash="dash"))
     if (all(c("bb_lower","bb_upper") %in% names(p)))
-      plt <- plt %>% add_ribbons(x=~date, ymin=~bb_lower, ymax=~bb_upper,
+      plt <- plt %>% add_ribbons(x=~date, ymin=~bb_lower, ymax=~bb_upper, hoverinfo="skip",
         fillcolor="rgba(255,107,0,0.06)", line=list(color="rgba(255,107,0,0.15)",width=1), name="BB")
     plt %>%
       layout(xaxis=list(title="",rangeslider=list(visible=FALSE)),
-             yaxis=list(title="Price ($)"), hovermode="x unified",
-             legend=list(orientation="h",y=-0.05)) %>% dk(mb=20)
+             yaxis=list(title="Price ($)"),
+             hovermode="x", hoverdistance=-1,
+             legend=list(orientation="h",y=-0.05)) %>% dk(mb=20, spike=TRUE)
   })
 
   output$dd_volume <- renderPlotly({
@@ -2201,6 +2285,75 @@ server <- function(input, output, session) {
     )
   })
 
+  # ── Live TV ───────────────────────────────────────────────────────────────
+  tv_choice <- reactiveVal(NULL)
+  lapply(names(TV_CHANNELS), function(n) {
+    observeEvent(input[[paste0("tv_", make.names(n))]], { tv_choice(n) }, ignoreInit = TRUE)
+  })
+
+  output$tv_meta <- renderUI({
+    ch <- tv_choice()
+    div(if (is.null(ch)) "SELECT A CHANNEL" else toupper(ch))
+  })
+
+  output$tv_player <- renderUI({
+    ch <- tv_choice()
+    if (is.null(ch))
+      return(div(style=paste0("border:1px solid var(--border);background:#0D0D0D;",
+                              "aspect-ratio:16/9;display:flex;align-items:center;",
+                              "justify-content:center;color:#555;font-family:IBM Plex Mono;",
+                              "font-size:12px;text-align:center;padding:20px;"),
+                 "Pick a channel above to start the stream."))
+    tags$div(style="position:relative;width:100%;aspect-ratio:16/9;border:1px solid var(--border);background:#000;",
+      tags$iframe(src = tv_embed_url(ch),
+        style = "position:absolute;inset:0;width:100%;height:100%;border:0;",
+        allow = "autoplay; encrypted-media; picture-in-picture",
+        allowfullscreen = NA, referrerpolicy = "strict-origin-when-cross-origin"))
+  })
+
+  # ── Live wire: re-polls the RSS feeds on a timer ──────────────────────────
+  # The nightly CSV cannot change during the day, so refreshing the panel from
+  # it would redraw identical rows. This re-fetches the feeds instead. The
+  # fetch itself is cached in global.R for LIVE_NEWS_TTL seconds and shared
+  # across sessions, so many viewers polling still produce one request per TTL.
+  live_news_tick <- reactiveTimer(30000)
+
+  live_news <- reactive({
+    live_news_tick()
+    tryCatch(get_live_news(), error = function(e) NULL)
+  })
+
+  output$live_news_meta <- renderUI({
+    d <- live_news()
+    if (is.null(d) || nrow(d) == 0) return(div("—"))
+    div(glue("{nrow(d)} · {format(Sys.time(), '%H:%M:%S')}"))
+  })
+
+  output$live_news_feed <- renderUI({
+    d <- live_news()
+    if (is.null(d) || nrow(d) == 0)
+      return(div("Live feeds unreachable right now. The nightly news panel below is unaffected.",
+                 style="color:#666;padding:18px;font-family:IBM Plex Mono;font-size:11px;line-height:1.6;"))
+
+    ago <- function(ts) {
+      if (is.na(ts)) return("")
+      m <- as.numeric(difftime(Sys.time(), ts, units = "mins"))
+      if (m < 1) "just now" else if (m < 60) paste0(round(m), "m ago")
+      else if (m < 1440) paste0(round(m / 60), "h ago") else paste0(round(m / 1440), "d ago")
+    }
+
+    items <- lapply(seq_len(min(25, nrow(d))), function(i) {
+      r <- d[i, ]
+      div(class="wire-item",
+        div(style="display:flex;justify-content:space-between;gap:10px;margin-bottom:3px;",
+          span(toupper(r$source), style="color:var(--orange);font-size:9px;font-family:IBM Plex Mono;letter-spacing:1px;"),
+          span(ago(r$ts), style="color:#555;font-size:9px;font-family:IBM Plex Mono;")),
+        tags$a(href=r$url, target="_blank",
+          div(r$title, style="color:#E8E8E8;font-size:11px;line-height:1.45;")))
+    })
+    div(do.call(tagList, items))
+  })
+
   output$dd_news_count <- renderUI({
     d <- dd_news_rows()
     if (is.null(d) || nrow(d) == 0) return(div("—"))
@@ -2309,6 +2462,8 @@ server <- function(input, output, session) {
   outputOptions(output, "dd_news", suspendWhenHidden = FALSE)
   outputOptions(output, "dd_sentiment", suspendWhenHidden = FALSE)
   outputOptions(output, "dd_filings", suspendWhenHidden = FALSE)
+  outputOptions(output, "tv_player", suspendWhenHidden = FALSE)
+  outputOptions(output, "tv_meta", suspendWhenHidden = FALSE)
   outputOptions(output, "dd_lbo", suspendWhenHidden = FALSE)
   outputOptions(output, "dd_pitch", suspendWhenHidden = FALSE)
   outputOptions(output, "dd_filings_meta", suspendWhenHidden = FALSE)
