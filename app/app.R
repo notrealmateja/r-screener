@@ -2820,34 +2820,10 @@ server <- function(input, output, session) {
     head(df, 50)
   })
 
-  output$news_feed <- renderUI({
-    req(filtered_news())
-    df <- filtered_news()
-    if (nrow(df) == 0) return(div("No news available for this filter.", style="color:#666;padding:20px;"))
-    
-    items <- lapply(1:nrow(df), function(i) {
-      row <- df[i,]
-      src_color <- switch(row$source,
-        "CNBC Markets"="#E00000", "CNBC Finance"="#E00000",
-        "Reuters"="#FF8C00", "WSJ Markets"="#0080FF",
-        "MarketWatch"="#00AA44", "Reddit /r/stocks"="#FF4500",
-        "Reddit /r/investing"="#FF4500", "Reddit WSB"="#FF4500",
-        "BBC Business"="#BB1919", "Financial Times"="#FFA500",
-        "#FF6B00"
-      )
-      div(class="news-item", style="border-left:3px solid #222;padding:12px 16px;margin-bottom:8px;background:#0D0D0D;border-radius:4px;",
-        div(style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;",
-          span(row$source, style=paste0("color:",src_color,";font-size:0.7em;font-weight:700;text-transform:uppercase;letter-spacing:1px;")),
-          span(row$category, style="color:#444;font-size:0.7em;background:#1A1A1A;padding:2px 8px;border-radius:10px;")
-        ),
-        a(href=row$link, target="_blank",
-          div(row$headline, style="color:#E8E8E8;font-size:0.95em;font-weight:600;margin-bottom:4px;line-height:1.4;")
-        ),
-        div(row$summary, style="color:#666;font-size:0.8em;line-height:1.5;")
-      )
-    })
-    div(items)
-  })
+  # An orphaned duplicate of output$news_feed used to sit here, shadowing the
+  # real definition in the News & Events section above — so the universe
+  # highlighting added there never took effect. This whole region is leftover
+  # outputs the UI no longer references.
 
   output$sector_perf_plot <- renderPlotly({
     req(master_data)

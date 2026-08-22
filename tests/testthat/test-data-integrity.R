@@ -219,3 +219,29 @@ test_that("deep dive surfaces the qualitative data collected per ticker", {
   expect_match(app, "dd_news")        # company news for the selected symbol
   expect_match(app, "dd_sentiment")   # crowd sentiment for the selected symbol
 })
+
+test_that("no output is assigned twice in the server function", {
+  # There were two output$news_feed definitions. The later one silently won, so
+  # an edit to the first — the universe highlighting — had no effect at all and
+  # looked like a feature that simply did not work.
+  e <- parse("../../app/app.R")
+  srv <- NULL
+  for (x in e) {
+    if (is.call(x) && as.character(x[[1]])[1] %in% c("<-", "=") &&
+        identical(as.character(x[[2]]), "server")) srv <- x[[3]]
+  }
+  expect_false(is.null(srv))
+
+  body_exprs <- as.list(body(eval(srv)))[-1]
+  assigns <- character(0)
+  for (st in body_exprs) {
+    if (is.call(st) && as.character(st[[1]])[1] %in% c("<-", "=")) {
+      lhs <- st[[2]]
+      if (is.call(lhs) && as.character(lhs[[1]])[1] == "$" &&
+          identical(as.character(lhs[[2]]), "output"))
+        assigns <- c(assigns, as.character(lhs[[3]]))
+    }
+  }
+  expect_gt(length(assigns), 50)
+  expect_equal(assigns[duplicated(assigns)], character(0))
+})
