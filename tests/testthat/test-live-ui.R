@@ -177,3 +177,35 @@ test_that("table rows are held to a single line", {
   expect_true(grepl("white-space:nowrap !important", src, fixed = TRUE))
   expect_true(grepl("text-overflow:ellipsis !important", src, fixed = TRUE))
 })
+
+# ── the production fallback ─────────────────────────────────────────────────
+# shinyapps.io's outbound requests to YouTube do not come back parseable, so
+# every channel resolved as unavailable there and the panel told the viewer
+# that four broadcasters were simultaneously off air. Ids are resolved nightly
+# in CI and shipped; the app falls back to that file.
+if (have_pkgs("dplyr", "readr", "tibble")) {
+  test_that("liveness is tri-state, so unreachable is not reported as off air", {
+    skip_if_not(have_ui, "global.R live section missing")
+    src <- paste(readLines(repo_path("app", "global.R")), collapse = "\n")
+    expect_true(grepl("tv_live_state", src, fixed = TRUE))
+    # the player must only refuse to mount on a positive off-air determination
+    app <- paste(readLines(repo_path("app", "app.R")), collapse = "\n")
+    expect_true(grepl('identical(tryCatch(tv_live_state(ch)', app, fixed = TRUE))
+  })
+
+  test_that("the nightly channel file carries what the fallback needs", {
+    p <- repo_path("data", "tv_channels.csv")
+    skip_if_not(file.exists(p), "tv_channels.csv not generated yet")
+    d <- readr::read_csv(p, show_col_types = FALSE)
+    expect_true(all(c("channel", "video_id", "is_live", "resolved_at") %in% names(d)))
+    expect_gt(nrow(d), 0)
+    # every row flagged live must carry a real 11-character video id
+    live <- d[!is.na(d$is_live) & as.logical(d$is_live), ]
+    if (nrow(live) > 0) {
+      expect_true(all(!is.na(live$video_id)))
+      expect_true(all(grepl("^[A-Za-z0-9_-]{11}$", live$video_id)))
+    }
+    # several of these channels stream 24/7, so none live means the resolver broke
+    expect_gt(sum(as.logical(d$is_live), na.rm = TRUE), 0)
+  })
+}

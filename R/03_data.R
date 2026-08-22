@@ -1046,6 +1046,8 @@ run_module3 <- function(tickers=NULL) {
                         error = function(e) { message("Stock news skipped: ", conditionMessage(e)); tibble() })
   secfil    <- tryCatch(get_sec_filings(tickers),
                         error = function(e) { message("SEC filings skipped: ", conditionMessage(e)); tibble() })
+  tvch      <- tryCatch(get_tv_channels(),
+                        error = function(e) { message("TV channels skipped: ", conditionMessage(e)); tibble() })
   secfin    <- tryCatch(get_sec_financials(tickers),
                         error = function(e) { message("SEC financials skipped: ", conditionMessage(e)); tibble() })
 
@@ -1068,6 +1070,7 @@ run_module3 <- function(tickers=NULL) {
   write_or_keep(stocknews, "data/stock_news.csv",   "stock news")
   write_or_keep(secfil,    "data/sec_filings.csv",  "sec filings")
   write_or_keep(secfin,    "data/sec_financials.csv", "sec financials")
+  write_or_keep(tvch,      "data/tv_channels.csv",    "tv channels")
 
   # Accumulate the qualitative feeds into a testable series. Non-fatal: this is
   # a recording step for future analysis and must never break the refresh.
@@ -1085,3 +1088,54 @@ run_module3 <- function(tickers=NULL) {
 }
 
 if (!exists("SOURCED_BY_MASTER")) module3_data <- run_module3()
+
+# ── Live TV channel resolution ─────────────────────────────────────────────
+# The app resolves each channel's current live video id at render time, but
+# shinyapps.io's outbound requests to YouTube do not come back parseable — every
+# channel resolved as unavailable there while all four were reachable from a
+# laptop. GitHub's runners reach YouTube fine, so the ids are resolved here each
+# night and shipped with the data. The app prefers a live runtime resolution and
+# falls back to this file, so the panel keeps working either way.
+TV_CHANNEL_IDS <- c(
+  "Bloomberg TV"  = "UCIALMKvObZNtJ6AmdCLP7Lg",
+  "Yahoo Finance" = "UCEAZeUIeJs0IjQiqTCdVSIg",
+  "CNBC"          = "UCvJJ_dzjViJCoLf5uKUTwoA",
+  "Reuters"       = "UChqUTb7kYRX8-EiaN3XFrSQ"
+)
+
+resolve_live_video <- function(channel_id) {
+  tryCatch({
+    r <- GET(glue("https://www.youtube.com/channel/{channel_id}/live"),
+             add_headers(`User-Agent` = paste("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)",
+                                              "AppleWebKit/537.36 (KHTML, like Gecko)",
+                                              "Chrome/120 Safari/537.36"),
+                         `Accept-Language` = "en-US,en;q=0.9"),
+             timeout(30))
+    if (status_code(r) != 200) return(list(id = NA_character_, live = FALSE))
+    txt <- content(r, as = "text", encoding = "UTF-8")
+    m <- regmatches(txt, regexpr(
+      'rel="canonical" href="https://www\\.youtube\\.com/watch\\?v=[A-Za-z0-9_-]{11}', txt))
+    if (!length(m)) return(list(id = NA_character_, live = FALSE))
+    vid <- sub('.*v=', '', m)
+    # A live stream reports lengthSeconds 0; a finished upload reports its real
+    # duration. Without this the resolver returned the channel's last upload.
+    len <- regmatches(txt, regexpr('"lengthSeconds":"[0-9]+"', txt))
+    live <- length(len) > 0 && grepl('"lengthSeconds":"0"', len[1], fixed = TRUE)
+    list(id = vid, live = live)
+  }, error = function(e) list(id = NA_character_, live = FALSE))
+}
+
+get_tv_channels <- function() {
+  message("Resolving live TV streams...")
+  rows <- lapply(names(TV_CHANNEL_IDS), function(n) {
+    res <- resolve_live_video(TV_CHANNEL_IDS[[n]])
+    Sys.sleep(0.4)
+    tibble(channel = n, channel_id = TV_CHANNEL_IDS[[n]],
+           video_id = res$id, is_live = res$live,
+           resolved_at = as.character(Sys.time()))
+  })
+  df <- bind_rows(rows)
+  message(glue("  TV: {sum(df$is_live)}/{nrow(df)} channels live ",
+               "({paste(df$channel[df$is_live], collapse=', ')})"))
+  df
+}

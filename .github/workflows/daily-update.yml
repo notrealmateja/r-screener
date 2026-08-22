@@ -131,7 +131,7 @@ jobs:
                        "data/wsb_trending.csv","data/stocktwits_trending.csv",
                        "data/macro_data.csv","data/sector_performance.csv",
                        "data/stock_news.csv","data/sec_filings.csv",
-                       "data/sec_financials.csv")
+                       "data/sec_financials.csv","data/tv_channels.csv")
             # Age is measured from the last commit that CHANGED the file, so a
             # legitimately slow-moving file would otherwise trip STALE every day.
             # Company financials only move when a 10-Q or 10-K lands.
@@ -186,6 +186,18 @@ jobs:
                 if (cov < 100)
                   problems <- c(problems,
                                 sprintf("DCF free-cash-flow coverage collapsed to %d/%d", cov, nrow(sfin)))
+              }
+            }
+
+            if (file.exists("data/tv_channels.csv")) {
+              tv <- tryCatch(read_csv("data/tv_channels.csv", show_col_types = FALSE),
+                             error = function(e) NULL)
+              if (!is.null(tv) && "is_live" %in% names(tv)) {
+                nlive <- sum(as.logical(tv$is_live), na.rm = TRUE)
+                out <- c(out, "", sprintf("**Live TV:** %d/%d channels streaming.", nlive, nrow(tv)))
+                # Several major broadcasters run 24/7, so zero live means the
+                # resolver broke rather than everyone going off air at once.
+                if (nlive == 0) problems <- c(problems, "no live TV channels resolved")
               }
             }
 

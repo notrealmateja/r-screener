@@ -24,6 +24,7 @@ bt_components  <- load_csv("backtest_components.csv")
 bt_reversal    <- load_csv("reversal_results.csv")
 stock_news     <- load_csv("stock_news.csv")
 sec_filings    <- load_csv("sec_filings.csv")
+tv_channels    <- load_csv("tv_channels.csv")
 
 meta <- tryCatch(readRDS("meta.rds"),
                  error=function(e) list(last_updated="Not yet run", n_stocks=0))
@@ -537,17 +538,44 @@ tv_live_video_id <- function(channel) {
   id
 }
 
-tv_is_live <- function(channel) !is.na(tv_live_video_id(channel))
+# Three sources, best first. Runtime resolution is ideal but shinyapps.io's
+# requests to YouTube do not come back parseable, so the nightly file resolved
+# in CI is what actually carries the panel in production.
+tv_baked <- function(channel) {
+  # exists() as well as is.null(): the table is absent entirely before the first
+  # pipeline run writes it, and referencing an undefined name would error rather
+  # than degrade.
+  if (!exists("tv_channels", inherits = TRUE)) return(NULL)
+  if (is.null(tv_channels) || !"channel" %in% names(tv_channels)) return(NULL)
+  r <- tv_channels[tv_channels$channel == channel, , drop = FALSE]
+  if (nrow(r) == 0) NULL else r[1, ]
+}
 
-# The first channel actually streaming, so the panel never opens on a dead
-# player. Falls back to the configured default if nothing resolves.
+# TRUE, FALSE, or NA for "could not determine". The distinction matters: an
+# unreachable YouTube is not the same as a channel being off air, and the panel
+# previously reported the former as the latter on every channel at once.
+tv_live_state <- function(channel) {
+  if (!is.na(tv_live_video_id(channel))) return(TRUE)
+  b <- tv_baked(channel)
+  if (!is.null(b) && !is.na(b$is_live)) return(isTRUE(as.logical(b$is_live)))
+  NA
+}
+
+tv_is_live <- function(channel) !identical(tv_live_state(channel), FALSE)
+
+# The first channel known to be streaming, so the panel never opens on a dead
+# player. Falls back to the configured default if nothing can be determined.
 tv_first_live <- function() {
-  for (n in names(TV_CHANNELS)) if (tv_is_live(n)) return(n)
+  for (n in names(TV_CHANNELS)) if (isTRUE(tv_live_state(n))) return(n)
   TV_DEFAULT
 }
 
 tv_embed_url <- function(channel) {
   vid <- tv_live_video_id(channel)
+  if (is.na(vid)) {
+    b <- tv_baked(channel)
+    if (!is.null(b) && !is.na(b$video_id) && nzchar(b$video_id)) vid <- b$video_id
+  }
   # mute=1 because browsers block autoplay with sound; playsinline keeps it in
   # the panel on mobile rather than going fullscreen.
   if (is.na(vid))

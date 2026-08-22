@@ -2328,7 +2328,9 @@ server <- function(input, output, session) {
     # Always mounts a channel. An empty "pick a channel" placeholder meant the
     # panel opened as a dead grey box on the landing tab.
     ch <- tv_choice() %||% TV_DEFAULT
-    if (!isTRUE(tryCatch(tv_is_live(ch), error = function(e) TRUE)))
+    # Only refuse to mount when the channel is positively known to be off air.
+    # Treating an unreachable YouTube as off air blanked every channel at once.
+    if (identical(tryCatch(tv_live_state(ch), error = function(e) NA), FALSE))
       return(div(style=paste0("border:1px solid var(--border);background:#0D0D0D;",
                               "aspect-ratio:16/9;display:flex;align-items:center;",
                               "justify-content:center;color:#666;font-family:IBM Plex Mono;",
