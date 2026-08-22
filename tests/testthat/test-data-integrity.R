@@ -245,3 +245,28 @@ test_that("no output is assigned twice in the server function", {
   expect_gt(length(assigns), 50)
   expect_equal(assigns[duplicated(assigns)], character(0))
 })
+
+test_that("JS() callbacks are built as a single string", {
+  # JS() joins its arguments with newlines. Interpolating a value mid-string
+  # split the quoted JS literal across lines and produced invalid JavaScript.
+  # Shiny threw "Invalid or unexpected token" evaluating it, and that
+  # client-side error aborted rendering for every other output delivered in the
+  # same batch — the entire Deep Dive tab was blank while the server computed it
+  # all correctly. Server logs showed nothing; only the browser console did.
+  src <- readLines("../../app/app.R")
+
+  # Any JS( that opens without closing on the same line is a multi-line
+  # construction, which is what produced the broken literal.
+  bad <- character(0)
+  for (line in grep("JS\\(", src, value = TRUE)) {
+    opens  <- lengths(regmatches(line, gregexpr("\\(", line)))
+    closes <- lengths(regmatches(line, gregexpr("\\)", line)))
+    if (opens > closes && !grepl("sprintf|paste0|paste\\(", line))
+      bad <- c(bad, trimws(line))
+  }
+  expect_equal(bad, character(0))
+
+  # And the peer-comps callback specifically must build its string in one piece
+  joined <- paste(src, collapse = "\n")
+  expect_match(joined, "callback=JS\\(sprintf\\(")
+})

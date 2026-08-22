@@ -1808,9 +1808,16 @@ server <- function(input, output, session) {
              `P/E`, Margin, ROE, `3M`, Score)
     dt <- datatable(peers, rownames=FALSE, selection="none",
       options=list(dom="t",pageLength=8,ordering=FALSE),
-      callback=JS("table.rows().every(function(i) {
-        if(this.data()[0] === '",s$symbol[1],"') $(this.node()).addClass('comp-highlight');
-      })")) %>%
+      # JS() joins its arguments with newlines, so interpolating the ticker
+      # mid-string split the quoted literal across three lines and produced
+      # invalid JavaScript. Shiny threw "Invalid or unexpected token" when it
+      # evaluated this, and that client-side error aborted rendering for every
+      # other output delivered in the same batch — which is why the entire Deep
+      # Dive tab was blank while the server computed all of it correctly.
+      # Built as one string so the result is always valid.
+      callback=JS(sprintf(
+        "table.rows().every(function(i){ if(this.data()[0] === '%s') $(this.node()).addClass('comp-highlight'); })",
+        s$symbol[1]))) %>%
       formatPercentage(c("Margin","ROE"),1)
     dt
   })
@@ -1965,6 +1972,27 @@ server <- function(input, output, session) {
           "see Methodology.")
     )
   })
+
+  # Panes are toggled by a CSS class rather than Shiny's own tab widgets, so
+  # Shiny never learns a pane became visible and keeps its outputs suspended.
+  outputOptions(output, "dd_header", suspendWhenHidden = FALSE)
+  outputOptions(output, "dd_v_master", suspendWhenHidden = FALSE)
+  outputOptions(output, "dd_v_fund", suspendWhenHidden = FALSE)
+  outputOptions(output, "dd_v_mom", suspendWhenHidden = FALSE)
+  outputOptions(output, "dd_v_squeeze", suspendWhenHidden = FALSE)
+  outputOptions(output, "dd_chart_title", suspendWhenHidden = FALSE)
+  outputOptions(output, "dd_price", suspendWhenHidden = FALSE)
+  outputOptions(output, "dd_volume", suspendWhenHidden = FALSE)
+  outputOptions(output, "dd_macd", suspendWhenHidden = FALSE)
+  outputOptions(output, "dd_rsi", suspendWhenHidden = FALSE)
+  outputOptions(output, "dd_metrics", suspendWhenHidden = FALSE)
+  outputOptions(output, "dd_short", suspendWhenHidden = FALSE)
+  outputOptions(output, "dd_radar", suspendWhenHidden = FALSE)
+  outputOptions(output, "dd_dcf", suspendWhenHidden = FALSE)
+  outputOptions(output, "dd_comps", suspendWhenHidden = FALSE)
+  outputOptions(output, "dd_news_count", suspendWhenHidden = FALSE)
+  outputOptions(output, "dd_news", suspendWhenHidden = FALSE)
+  outputOptions(output, "dd_sentiment", suspendWhenHidden = FALSE)
 
   # CPI arrives as an index level near 300, which tells a reader nothing on its
   # own. Year-over-year change is the number people mean by "inflation".
@@ -2820,10 +2848,9 @@ server <- function(input, output, session) {
     head(df, 50)
   })
 
-  # An orphaned duplicate of output$news_feed used to sit here, shadowing the
-  # real definition in the News & Events section above — so the universe
-  # highlighting added there never took effect. This whole region is leftover
-  # outputs the UI no longer references.
+  # An orphaned duplicate of output$news_feed used to sit here, shadowing
+  # the real definition in the News & Events section above, so the universe
+  # highlighting added there never took effect.
 
   output$sector_perf_plot <- renderPlotly({
     req(master_data)
