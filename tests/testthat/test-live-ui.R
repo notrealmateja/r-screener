@@ -213,3 +213,48 @@ if (have_pkgs("dplyr", "readr", "tibble")) {
     expect_true(is.logical(as.logical(d$is_live)))
   })
 }
+
+# ── the two page shapes YouTube serves ──────────────────────────────────────
+# A home connection gets a page with a canonical link and lengthSeconds; a
+# datacenter IP gets one with neither, though it carries isLive and the right
+# video id. Both shinyapps.io and GitHub runners are datacenter IPs, which is
+# why the resolver returned nothing in production while working from a laptop.
+test_that("the live id is found on a page with no canonical link", {
+  pick <- function(txt) {
+    vm <- gregexpr('"videoId":"[A-Za-z0-9_-]{11}"', txt)[[1]]
+    if (vm[1] == -1) return(NA_character_)
+    vids <- sub('"videoId":"', '', sub('"$', '',
+                regmatches(txt, gregexpr('"videoId":"[A-Za-z0-9_-]{11}"', txt))[[1]]))
+    lp <- gregexpr('"isLive":true', txt, fixed = TRUE)[[1]]
+    if (lp[1] == -1) return(NA_character_)
+    hits <- vapply(lp, function(p) {
+      before <- vm[vm <= p]
+      if (!length(before)) return(NA_character_)
+      vids[which.max(before)]
+    }, character(1))
+    hits <- hits[!is.na(hits)]
+    if (!length(hits)) NA_character_ else names(sort(table(hits), decreasing = TRUE))[1]
+  }
+  # a recommendation first, then the live entry — the shape seen in CI, where
+  # taking the first id gave a recorded video
+  page <- paste0('{"videoId":"wTiYaWFP59Q","title":"a recommendation"},',
+                 '{"videoId":"QB5BNdBFujE","isLive":true,"title":"the live stream"},',
+                 '{"videoId":"iEpJwprxDdk","title":"another upload"}')
+  expect_equal(pick(page), "QB5BNdBFujE")
+  # and nothing when no entry is marked live
+  expect_true(is.na(pick('{"videoId":"wDfAQOsPbDo","title":"off air channel"}')))
+})
+
+test_that("liveness falls back to isLive when lengthSeconds is absent", {
+  live_from <- function(txt) {
+    len <- regmatches(txt, gregexpr('"lengthSeconds":"[0-9]+"', txt))[[1]]
+    if (length(len) > 0) any(grepl('"lengthSeconds":"0"', len, fixed = TRUE))
+    else grepl('"isLive":true', txt, fixed = TRUE)
+  }
+  # home-connection shape
+  expect_true(live_from('{"lengthSeconds":"0"}'))
+  expect_false(live_from('{"lengthSeconds":"10987"}'))
+  # datacenter shape: no lengthSeconds at all
+  expect_true(live_from('{"isLive":true,"videoId":"QB5BNdBFujE"}'))
+  expect_false(live_from('{"videoId":"wDfAQOsPbDo"}'))
+})

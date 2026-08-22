@@ -1123,28 +1123,47 @@ resolve_live_video <- function(channel_id) {
       return(list(id = NA_character_, live = FALSE))
     }
     txt <- content(r, as = "text", encoding = "UTF-8")
+
+    # YouTube serves two different pages. A home connection gets one with a
+    # canonical link and a lengthSeconds field; a datacenter IP — which is what
+    # both shinyapps.io and GitHub runners are — gets one with neither, though
+    # it does carry isLive and the right video id. Handle both.
+    has_live_flag <- grepl('"isLive":true', txt, fixed = TRUE)
+    len <- regmatches(txt, gregexpr('"lengthSeconds":"[0-9]+"', txt))[[1]]
+    live <- if (length(len) > 0) {
+      # A live stream reports 0; a finished upload reports its real duration.
+      any(grepl('"lengthSeconds":"0"', len, fixed = TRUE))
+    } else {
+      has_live_flag
+    }
+    if (!live) return(list(id = NA_character_, live = FALSE))
+
     m <- regmatches(txt, regexpr(
       'rel="canonical" href="https://www\\.youtube\\.com/watch\\?v=[A-Za-z0-9_-]{11}', txt))
-    if (!length(m)) {
-      # YouTube serves datacenter IPs a different page than a home connection:
-      # this resolved fine from a laptop and returned nothing from both
-      # shinyapps.io and GitHub runners. Report what actually arrived instead of
-      # guessing at the shape a fourth time.
-      ids <- unique(regmatches(txt, gregexpr('"videoId":"[A-Za-z0-9_-]{11}"', txt))[[1]])
-      message(glue("    {channel_id}: no canonical. bytes={nchar(txt)} ",
-                   "videoIds={length(ids)} isLive={grepl('\"isLive\":true', txt, fixed=TRUE)} ",
-                   "lenSecs={length(regmatches(txt, gregexpr('\"lengthSeconds\":\"[0-9]+\"', txt))[[1]])} ",
-                   "consent={grepl('consent.youtube.com', txt, fixed=TRUE)} ",
-                   "captcha={grepl('recaptcha|unusual traffic', txt)}"))
-      if (length(ids)) message(glue("      first ids: {paste(utils::head(ids,3), collapse=' ')}"))
-      return(list(id = NA_character_, live = FALSE))
+    vid <- if (length(m)) sub('.*v=', '', m) else NA_character_
+
+    if (is.na(vid)) {
+      # No canonical: take the video id sitting closest before an isLive marker.
+      # Simply taking the first id on the page picks a recommendation — the
+      # live stream was consistently the second id, but position is not a
+      # contract. Verified against canonical on all four channels, where this
+      # returns the same id, and the same NA for the channel that is off air.
+      vm <- gregexpr('"videoId":"[A-Za-z0-9_-]{11}"', txt)[[1]]
+      if (vm[1] == -1) return(list(id = NA_character_, live = FALSE))
+      vids <- sub('"videoId":"', '', sub('"$', '',
+                  regmatches(txt, gregexpr('"videoId":"[A-Za-z0-9_-]{11}"', txt))[[1]]))
+      lp <- gregexpr('"isLive":true', txt, fixed = TRUE)[[1]]
+      if (lp[1] == -1) return(list(id = NA_character_, live = FALSE))
+      hits <- vapply(lp, function(pos) {
+        before <- vm[vm <= pos]
+        if (!length(before)) return(NA_character_)
+        vids[which.max(before)]
+      }, character(1))
+      hits <- hits[!is.na(hits)]
+      if (!length(hits)) return(list(id = NA_character_, live = FALSE))
+      vid <- names(sort(table(hits), decreasing = TRUE))[1]
     }
-    vid <- sub('.*v=', '', m)
-    # A live stream reports lengthSeconds 0; a finished upload reports its real
-    # duration. Without this the resolver returned the channel's last upload.
-    len <- regmatches(txt, regexpr('"lengthSeconds":"[0-9]+"', txt))
-    live <- length(len) > 0 && grepl('"lengthSeconds":"0"', len[1], fixed = TRUE)
-    list(id = vid, live = live)
+    list(id = vid, live = TRUE)
   }, error = function(e) list(id = NA_character_, live = FALSE))
 }
 
