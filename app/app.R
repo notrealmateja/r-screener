@@ -1064,6 +1064,12 @@ ui <- fluidPage(
           div(class="panel-head", div(class="panel-head-title","CROWD SENTIMENT")),
           div(class="panel-body", uiOutput("dd_sentiment"))
         )
+      ),
+      div(class="panel",
+        div(class="panel-head",
+          div(class="panel-head-title","SEC FILINGS & INSIDER ACTIVITY"),
+          div(class="panel-head-meta", uiOutput("dd_filings_meta"))),
+        div(class="panel-body", uiOutput("dd_filings"))
       )
     ),
 
@@ -1928,25 +1934,125 @@ server <- function(input, output, session) {
   })
 
   # ── Deep Dive: company news ───────────────────────────────────────────────
+  # Prefer the per-ticker RSS feed. The market-wide Alpha Vantage feed carries
+  # ~50 articles for the entire market, so it covered roughly 6 of 195 stocks on
+  # any given day and most tickers showed nothing. RSS is per-symbol, so it
+  # covers essentially the whole universe; AV remains the fallback.
   dd_news_rows <- reactive({
     req(input$dd_ticker)
+    sym <- input$dd_ticker
+    if (!is.null(stock_news) && nrow(stock_news) > 0 && "symbol" %in% names(stock_news)) {
+      rss <- stock_news %>% filter(!is.na(symbol), symbol == sym)
+      if (nrow(rss) > 0) {
+        return(rss %>%
+          transmute(title,
+                    url,
+                    source    = if ("publisher" %in% names(rss)) publisher else "Yahoo Finance",
+                    sentiment = NA_character_,
+                    sentiment_score = NA_real_,
+                    publishedDate = if ("published_parsed" %in% names(rss))
+                                      suppressWarnings(as.POSIXct(published_parsed)) else as.POSIXct(NA)))
+      }
+    }
     if (is.null(news_data) || nrow(news_data) == 0) return(NULL)
     if (!"symbol" %in% names(news_data)) return(NULL)
-    news_data %>% filter(!is.na(symbol), symbol == input$dd_ticker)
+    news_data %>% filter(!is.na(symbol), symbol == sym)
+  })
+
+  # ── Deep Dive: SEC filings ────────────────────────────────────────────────
+  dd_filings <- reactive({
+    req(input$dd_ticker)
+    sym <- input$dd_ticker
+    if (is.null(sec_filings) || nrow(sec_filings) == 0) return(NULL)
+    if (!"symbol" %in% names(sec_filings)) return(NULL)
+    f <- sec_filings %>% filter(symbol == sym)
+    if (nrow(f) == 0) NULL else f
+  })
+
+  output$dd_filings_meta <- renderUI({
+    f <- dd_filings()
+    if (is.null(f)) return(div("—"))
+    div(glue("{nrow(f)} RECENT"))
+  })
+
+  output$dd_filings <- renderUI({
+    f <- dd_filings()
+    if (is.null(f))
+      return(div(glue("No recent SEC filings found for {input$dd_ticker}."),
+                 style="color:#666;padding:18px;font-family:IBM Plex Mono;font-size:11px;"))
+
+    ins   <- suppressWarnings(as.numeric(f$insider_filings_90d[1]))
+    mna   <- isTRUE(as.logical(f$merger_activity_1y[1]))
+    evts  <- suppressWarnings(as.numeric(f$material_events_1y[1]))
+
+    # Form 4 is an insider transaction report — the closest a free source gets
+    # to "what has this company been buying". S-4 signals a merger; SC 13D/G a
+    # large stake being built.
+    flags <- tagList(
+      div(class="si-cell",
+        div(class="si-k", "Insider filings, 90d"),
+        div(class="si-v", style="font-size:15px;", ifelse(is.na(ins), "—", ins))),
+      div(class="si-cell",
+        div(class="si-k", "M&A activity, 1y"),
+        div(class="si-v", style=paste0("font-size:15px;color:", if (mna) "#00C853" else "#666", ";"),
+            if (mna) "S-4 filed" else "none")),
+      div(class="si-cell",
+        div(class="si-k", "Material events, 1y"),
+        div(class="si-v", style="font-size:15px;", ifelse(is.na(evts), "—", evts)))
+    )
+
+    form_label <- function(form, desc) {
+      # EDGAR often echoes the form back as the description, sometimes prefixed
+      # ("FORM 8-K"), which rendered as a redundant second copy of the code.
+      norm <- gsub("^FORM\\s+", "", toupper(trimws(ifelse(is.na(desc), "", desc))))
+      if (nzchar(norm) && norm != toupper(form)) return(desc)
+      switch(as.character(form),
+        "10-K"    = "Annual report",
+        "10-Q"    = "Quarterly report",
+        "8-K"     = "Material event disclosure",
+        "4"       = "Insider transaction",
+        "S-4"     = "Merger / acquisition registration",
+        "SC 13D"  = "Activist stake above 5%",
+        "SC 13G"  = "Passive stake above 5%",
+        "DEF 14A" = "Proxy statement",
+        "S-1"     = "Securities registration",
+        "S-3"     = "Shelf registration",
+        as.character(form))
+    }
+
+    rows <- lapply(seq_len(nrow(f)), function(i) {
+      r <- f[i, ]
+      form_col <- switch(as.character(r$form),
+        "8-K" = "#FFD600", "S-4" = "#00C853", "10-K" = "#00B8D9", "10-Q" = "#00B8D9", "#FF6B00")
+      div(style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:11px;",
+        div(style=paste0("min-width:56px;font-weight:700;color:", form_col, ";"), r$form),
+        div(style="min-width:80px;color:var(--muted);", format(as.Date(r$filed), "%b %d, %Y")),
+        div(style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;",
+            tags$a(href = r$url, target = "_blank",
+                   style="color:var(--text2);text-decoration:none;",
+                   form_label(r$form, r$description)))
+      )
+    })
+
+    tagList(
+      div(class="si-grid", style="grid-template-columns:repeat(3,1fr);", flags),
+      div(style="margin-top:10px;", do.call(tagList, rows)),
+      div(style="color:#555;font-size:10px;font-family:IBM Plex Mono;margin-top:8px;line-height:1.5;",
+          "Source: SEC EDGAR. Form 4 reports insider transactions; S-4 accompanies a ",
+          "merger; 8-K discloses a material event. Counts are filings, not dollar amounts.")
+    )
   })
 
   output$dd_news_count <- renderUI({
     d <- dd_news_rows()
     if (is.null(d) || nrow(d) == 0) return(div("—"))
-    div(glue("{nrow(d)} STORY{ifelse(nrow(d) == 1, '', 'S')}"))
+    div(glue("{nrow(d)} {ifelse(nrow(d) == 1, 'STORY', 'STORIES')}"))
   })
 
   output$dd_news <- renderUI({
     d <- dd_news_rows()
     if (is.null(d) || nrow(d) == 0)
-      return(div(glue("No recent stories tagged {input$dd_ticker}. The news feed ",
-                      "covers roughly 50 articles per day, so most tickers will be absent ",
-                      "on any given day."),
+      return(div(glue("No recent stories found for {input$dd_ticker}."),
                  style="color:#666;padding:18px;font-family:IBM Plex Mono;font-size:11px;line-height:1.5;"))
 
     items <- lapply(seq_len(min(12, nrow(d))), function(i) {
@@ -2044,6 +2150,8 @@ server <- function(input, output, session) {
   outputOptions(output, "dd_news_count", suspendWhenHidden = FALSE)
   outputOptions(output, "dd_news", suspendWhenHidden = FALSE)
   outputOptions(output, "dd_sentiment", suspendWhenHidden = FALSE)
+  outputOptions(output, "dd_filings", suspendWhenHidden = FALSE)
+  outputOptions(output, "dd_filings_meta", suspendWhenHidden = FALSE)
 
   # CPI arrives as an index level near 300, which tells a reader nothing on its
   # own. Year-over-year change is the number people mean by "inflation".

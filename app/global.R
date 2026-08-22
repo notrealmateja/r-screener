@@ -21,6 +21,8 @@ bt_headline    <- load_csv("backtest_headline.csv")
 bt_ic          <- load_csv("backtest_ic.csv")
 bt_components  <- load_csv("backtest_components.csv")
 bt_reversal    <- load_csv("reversal_results.csv")
+stock_news     <- load_csv("stock_news.csv")
+sec_filings    <- load_csv("sec_filings.csv")
 
 meta <- tryCatch(readRDS("meta.rds"),
                  error=function(e) list(last_updated="Not yet run", n_stocks=0))

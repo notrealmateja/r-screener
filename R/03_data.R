@@ -8,6 +8,8 @@
 #   Sector perf       — computed from Module 1 fundamentals (self-sourced)
 #   WSB trending      — ApeWisdom API (free, no key needed)
 #   StockTwits        — StockTwits API (free, no key needed)
+#   Per-ticker news   — Yahoo Finance RSS (free, no key, per symbol)
+#   SEC filings       — EDGAR submissions API (official, free, no key)
 #   Short interest    — FINRA consolidated (all venues, no key), with Yahoo
 #                       used only to refine the float denominator
 # =============================================================================
@@ -524,6 +526,182 @@ write_or_keep <- function(df, path, label = basename(path)) {
   invisible(NULL)
 }
 
+# ── Per-ticker news (Yahoo Finance RSS) ────────────────────────────────────
+# The Alpha Vantage news feed returns ~50 articles a day for the whole market,
+# so on a typical day only about 6 of 195 stocks get any coverage at all. RSS
+# is per-ticker, needs no key, and is designed for exactly this kind of polling
+# — stable schema, no cookies, no blocking.
+NEWS_RSS_PER_TICKER <- 6
+
+fetch_rss_items <- function(url, max_items) {
+  tryCatch({
+    r <- GET(url, add_headers(`User-Agent` = "EdgeScreener/1.0"), timeout(20))
+    if (status_code(r) != 200) return(NULL)
+    txt <- content(r, as = "text", encoding = "UTF-8")
+    if (!nzchar(txt) || !grepl("<item", txt, fixed = TRUE)) return(NULL)
+    doc   <- xml2::read_xml(txt)
+    items <- xml2::xml_find_all(doc, ".//item")
+    if (length(items) == 0) return(NULL)
+    items <- utils::head(items, max_items)
+    pick <- function(node, tag) {
+      v <- xml2::xml_text(xml2::xml_find_first(node, tag))
+      if (length(v) == 0 || is.na(v)) NA_character_ else trimws(v)
+    }
+    bind_rows(lapply(items, function(it) tibble(
+      title     = pick(it, "./title"),
+      url       = pick(it, "./link"),
+      published = pick(it, "./pubDate"),
+      publisher = pick(it, "./source"))))
+  }, error = function(e) NULL)
+}
+
+# Yahoo's per-ticker feed mixes in general market stories: a Nvidia earnings
+# preview showed up under both AAPL and AMZN. Keep a story when the headline
+# names the ticker or the company, but fall back to the unfiltered feed if that
+# would leave the stock with nothing — a strict filter is worse than a little
+# noise when the alternative is an empty panel.
+news_is_relevant <- function(title, sym, company) {
+  if (is.na(title) || !nzchar(title)) return(FALSE)
+  t <- toupper(title)
+  if (grepl(paste0("\\b", sym, "\\b"), t)) return(TRUE)
+  if (!is.na(company) && nzchar(company)) {
+    # match the distinctive first word ("Apple" from "Apple Inc.") and skip
+    # generic leaders that would match half the market
+    w <- toupper(gsub("[^A-Za-z ].*$", "", company))
+    w <- strsplit(trimws(w), " ")[[1]][1]
+    if (!is.na(w) && nchar(w) >= 3 &&
+        !w %in% c("THE", "FIRST", "GENERAL", "AMERICAN", "NATIONAL", "GLOBAL", "UNITED")) {
+      if (grepl(paste0("\\b", w, "\\b"), t)) return(TRUE)
+    }
+  }
+  FALSE
+}
+
+get_stock_news <- function(tickers, fundamentals = NULL) {
+  message(glue("Pulling per-ticker news (Yahoo RSS) for {length(tickers)} stocks..."))
+  names_map <- if (!is.null(fundamentals) && all(c("symbol", "company") %in% names(fundamentals)))
+                 setNames(fundamentals$company, fundamentals$symbol) else character(0)
+  out <- vector("list", length(tickers))
+  for (i in seq_along(tickers)) {
+    sym <- tickers[i]
+    d <- fetch_rss_items(
+      glue("https://feeds.finance.yahoo.com/rss/2.0/headline?s={sym}&region=US&lang=en-US"),
+      NEWS_RSS_PER_TICKER)
+    if (!is.null(d) && nrow(d) > 0) {
+      comp <- if (sym %in% names(names_map)) names_map[[sym]] else NA_character_
+      d$relevant <- vapply(d$title, news_is_relevant, logical(1), sym = sym, company = comp)
+      keep <- if (any(d$relevant)) d[d$relevant, , drop = FALSE] else d
+      out[[i]] <- keep %>% mutate(symbol = sym)
+    }
+    Sys.sleep(0.25)
+    if (i %% 50 == 0) message(glue("    {i}/{length(tickers)}"))
+  }
+  df <- bind_rows(out)
+  if (nrow(df) == 0) {
+    message("  No per-ticker news returned.")
+    return(tibble())
+  }
+  df <- df %>%
+    mutate(published_parsed = suppressWarnings(
+             as.POSIXct(published, format = "%a, %d %b %Y %H:%M:%S", tz = "GMT")),
+           publisher = ifelse(is.na(publisher) | !nzchar(publisher), "Yahoo Finance", publisher)) %>%
+    filter(!is.na(title), nzchar(title)) %>%
+    distinct(symbol, title, .keep_all = TRUE) %>%
+    select(symbol, title, url, publisher, published, published_parsed)
+  message(glue("  Stock news: {nrow(df)} articles across ",
+               "{dplyr::n_distinct(df$symbol)}/{length(tickers)} tickers"))
+  df
+}
+
+# ── SEC EDGAR filings ──────────────────────────────────────────────────────
+# Official, free, no key. SEC asks for a User-Agent identifying the requester
+# and caps traffic at 10 requests/second.
+#
+# Form 4 is an insider transaction, which is the closest honest answer to "what
+# has this company been buying" that a free source provides. S-4 and SC 13D
+# signal merger activity and large stake-building respectively.
+SEC_UA <- "EdgeScreener research (jackmateja@icloud.com)"
+SEC_NOTABLE <- c("8-K", "10-K", "10-Q", "S-4", "DEF 14A")
+
+sec_cik_map <- function() {
+  tryCatch({
+    r <- GET("https://www.sec.gov/files/company_tickers.json",
+             add_headers(`User-Agent` = SEC_UA), timeout(30))
+    if (status_code(r) != 200) return(NULL)
+    d <- fromJSON(content(r, as = "text", encoding = "UTF-8"), simplifyVector = FALSE)
+    m <- vapply(d, function(x) as.character(x$cik_str), character(1))
+    names(m) <- vapply(d, function(x) as.character(x$ticker), character(1))
+    m
+  }, error = function(e) NULL)
+}
+
+sec_filings_for <- function(sym, cik) {
+  tryCatch({
+    padded <- sprintf("CIK%010d", as.integer(cik))
+    r <- GET(glue("https://data.sec.gov/submissions/{padded}.json"),
+             add_headers(`User-Agent` = SEC_UA), timeout(30))
+    if (status_code(r) != 200) return(NULL)
+    d <- fromJSON(content(r, as = "text", encoding = "UTF-8"))
+    rec <- d$filings$recent
+    if (is.null(rec) || length(rec$form) == 0) return(NULL)
+
+    f <- tibble(form = as.character(rec$form),
+                filed = suppressWarnings(as.Date(rec$filingDate)),
+                accession = as.character(rec$accessionNumber),
+                doc = as.character(rec$primaryDocument),
+                description = as.character(rec$primaryDocDescription)) %>%
+      filter(!is.na(filed))
+
+    insider_90d <- sum(f$form == "4" & f$filed >= Sys.Date() - 90, na.rm = TRUE)
+    merger_flag <- any(f$form %in% c("S-4") & f$filed >= Sys.Date() - 365, na.rm = TRUE)
+    events_1y   <- sum(f$form == "8-K" & f$filed >= Sys.Date() - 365, na.rm = TRUE)
+
+    notable <- f %>%
+      filter(form %in% SEC_NOTABLE) %>%
+      arrange(desc(filed)) %>%
+      utils::head(5) %>%
+      mutate(symbol = sym,
+             url = glue("https://www.sec.gov/Archives/edgar/data/{as.integer(cik)}/",
+                        "{gsub('-', '', accession)}/{doc}"),
+             insider_filings_90d = insider_90d,
+             merger_activity_1y  = merger_flag,
+             material_events_1y  = events_1y) %>%
+      select(symbol, form, filed, description, url,
+             insider_filings_90d, merger_activity_1y, material_events_1y)
+    if (nrow(notable) == 0) return(NULL)
+    notable
+  }, error = function(e) NULL)
+}
+
+get_sec_filings <- function(tickers) {
+  message(glue("Pulling SEC EDGAR filings for {length(tickers)} stocks..."))
+  cik <- sec_cik_map()
+  if (is.null(cik)) {
+    message("  SEC ticker map unavailable — skipping filings.")
+    return(tibble())
+  }
+  message(glue("  CIK map: {length(cik)} tickers; ",
+               "{sum(tickers %in% names(cik))}/{length(tickers)} of the universe matched"))
+
+  out <- vector("list", length(tickers))
+  for (i in seq_along(tickers)) {
+    sym <- tickers[i]
+    if (!sym %in% names(cik)) next
+    out[[i]] <- sec_filings_for(sym, cik[[sym]])
+    Sys.sleep(0.15)   # SEC caps at 10 req/sec
+    if (i %% 50 == 0) message(glue("    {i}/{length(tickers)}"))
+  }
+  df <- bind_rows(out)
+  if (nrow(df) == 0) {
+    message("  No filings returned.")
+    return(tibble())
+  }
+  message(glue("  SEC filings: {nrow(df)} rows across ",
+               "{dplyr::n_distinct(df$symbol)} tickers; ",
+               "{sum(df$merger_activity_1y[!duplicated(df$symbol)], na.rm=TRUE)} with M&A activity"))
+  df
+}
+
 # ── Squeeze Scoring ─────────────────────────────────────────────────────────
 build_squeeze_score <- function(short_data, fund_data) {
   message("Building squeeze scores...")
@@ -668,6 +846,12 @@ run_module3 <- function(tickers=NULL) {
   sector  <- get_sector_performance()
   wsb     <- get_wsb_trending(50)
   stwits  <- get_stocktwits_trending()
+  # Per-ticker coverage. The market-wide AV feed reaches only ~6 of 195 stocks
+  # on a given day; RSS and EDGAR are per-symbol and need no key.
+  stocknews <- tryCatch(get_stock_news(tickers, fund_data),
+                        error = function(e) { message("Stock news skipped: ", conditionMessage(e)); tibble() })
+  secfil    <- tryCatch(get_sec_filings(tickers),
+                        error = function(e) { message("SEC filings skipped: ", conditionMessage(e)); tibble() })
 
   # ── Data validation ──────────────────────────────────────────────────────
   if (nrow(earn) == 0)   warning("WARN: Earnings calendar is EMPTY — AV API may be rate-limited")
@@ -685,6 +869,8 @@ run_module3 <- function(tickers=NULL) {
   write_or_keep(sector, "data/sector_performance.csv",  "sector")
   write_or_keep(wsb,    "data/wsb_trending.csv",        "wsb")
   write_or_keep(stwits, "data/stocktwits_trending.csv", "stocktwits")
+  write_or_keep(stocknews, "data/stock_news.csv",   "stock news")
+  write_or_keep(secfil,    "data/sec_filings.csv",  "sec filings")
 
   # Accumulate the qualitative feeds into a testable series. Non-fatal: this is
   # a recording step for future analysis and must never break the refresh.
@@ -694,9 +880,11 @@ run_module3 <- function(tickers=NULL) {
   message(glue("Saved: squeeze({nrow(squeeze)}), macro({nrow(macro)}), ",
                "earnings({nrow(earn)}), news({nrow(news)}), ",
                "sector({nrow(sector)}), wsb({nrow(wsb)}), ",
-               "stocktwits({nrow(stwits)})"))
+               "stocktwits({nrow(stwits)}), stock_news({nrow(stocknews)}), ",
+               "sec_filings({nrow(secfil)})"))
   list(squeeze=squeeze, macro=macro, earnings=earn, news=news,
-       sector=sector, wsb=wsb, stocktwits=stwits)
+       sector=sector, wsb=wsb, stocktwits=stwits,
+       stock_news=stocknews, sec_filings=secfil)
 }
 
 if (!exists("SOURCED_BY_MASTER")) module3_data <- run_module3()
