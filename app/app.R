@@ -87,7 +87,20 @@ html, body { background:var(--bg); color:var(--text); font-family:var(--sans);
 }
 .topbar-logo span { color:var(--text2); font-size:11px; font-weight:300;
                     margin-left:12px; letter-spacing:1px; }
-.topbar-nav { display:flex; gap:0; height:100%; }
+.topbar-nav { display:flex; gap:0; height:100%; min-width:0; }
+/* The bar needs 1075px for the brand, seven nav items and the clock, so it
+   spilled past the viewport on a 1024-wide laptop and forced the whole page
+   to scroll sideways. Tighten it rather than letting it push the layout. */
+@media (max-width:1200px) {
+  .topbar { padding:0 12px; }
+  .topbar-nav-item { padding:0 10px; font-size:10px; letter-spacing:0.2px; }
+  .topbar-sub { display:none; }
+  .topbar-time { font-size:10px; }
+}
+@media (max-width:1080px) {
+  .topbar-nav-item { padding:0 7px; font-size:9px; }
+  .topbar-logo { font-size:13px; }
+}
 .topbar-nav-item {
   display:flex; align-items:center; padding:0 18px;
   font-family:var(--mono); font-size:11px; font-weight:500;
@@ -155,6 +168,23 @@ html, body { background:var(--bg); color:var(--text); font-family:var(--sans);
 .g55 { display:grid; grid-template-columns:5fr 5fr;         gap:16px; }
 .g345 { display:grid; grid-template-columns:3fr 4fr 5fr;    gap:16px; }
 .g442 { display:grid; grid-template-columns:4fr 4fr 2fr;    gap:16px; }
+/* Grid items default to min-width:auto, so a column refuses to shrink below
+   its content and a wide table pushes the whole grid past the viewport — the
+   body measured 1778px inside a 1275px window, forcing a horizontal scroll on
+   the page itself. min-width:0 lets the column shrink, which is what finally
+   lets overflow-x on the inner wrapper do its job. */
+.g2 > *, .g3 > *, .g73 > *, .g64 > *, .g84 > *, .g55 > *, .g345 > *, .g442 > * {
+  min-width:0;
+}
+.panel { min-width:0; }
+/* Anything that can be wider than its column scrolls inside itself. */
+.panel-body { min-width:0; }
+.ss-table-wrap, .panel-body .dataTables_wrapper { overflow-x:auto; max-width:100%; }
+.panel-head { gap:10px; }
+.panel-head-title { white-space:nowrap; }
+.panel-head-meta {
+  min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
 
 /* ── DATA TABLE OVERRIDES ── */
 .dataTables_wrapper { font-size:11px; }
@@ -892,7 +922,8 @@ ui <- fluidPage(
 
   # ── TOPBAR ───────────────────────────────────────────────────────────────
   div(class="topbar",
-    div(class="topbar-logo", "EdgeScreener", tags$span("EQUITY TERMINAL")),
+    div(class="topbar-logo", "EdgeScreener",
+        tags$span(class="topbar-sub", "EQUITY TERMINAL")),
     div(class="topbar-nav", id="topbar-nav-desktop",
       div(class="topbar-nav-item active", id="nav-overview",  onclick="showPane('overview')",  "Overview"),
       div(class="topbar-nav-item",        id="nav-screener",  onclick="showPane('screener')",  "Screener"),
