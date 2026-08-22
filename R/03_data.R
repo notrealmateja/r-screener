@@ -234,7 +234,12 @@ get_earnings_calendar <- function() {
     notice <- regmatches(raw_text,
       regexpr("(?i)(information|note|error message|premium|thank you for using)",
               raw_text, perl = TRUE))
-    if (length(notice) > 0 && nchar(raw_text) < 2000) {
+    # A notice is a notice regardless of length. The 2000-char guard existed to
+    # avoid false positives on real CSV, but real CSV for this endpoint is tens
+    # of thousands of characters and carries the expected header, so key off
+    # that instead.
+    looks_like_csv <- grepl("^\\s*symbol\\s*,", raw_text)
+    if (length(notice) > 0 && !looks_like_csv) {
       message("  AV earnings returned a notice, not data: ",
               substr(gsub("\\s+", " ", raw_text), 1, 300))
       return(tibble())
@@ -266,7 +271,14 @@ get_earnings_calendar <- function() {
     df <- df %>%
       mutate(date = suppressWarnings(as.Date(as.character(date), format = "%Y-%m-%d")))
     if (all(is.na(df$date))) {
+      # Log what actually arrived. Without this the failure is undiagnosable:
+      # the calendar sat 17 days stale reporting only "no parseable dates",
+      # which does not say whether AV sent a notice, changed the date format,
+      # or returned something else entirely.
       message("  AV earnings returned ", nrow(df), " rows but no parseable dates.")
+      message("    columns: ", paste(names(df), collapse = ", "))
+      message("    raw response (first 400 chars): ",
+              substr(gsub("\\s+", " ", raw_text), 1, 400))
       message("    columns: ", paste(names(df), collapse = ", "))
       message("    first row: ",
               paste(utils::head(unlist(lapply(df[1, ], as.character)), 8), collapse = " | "))

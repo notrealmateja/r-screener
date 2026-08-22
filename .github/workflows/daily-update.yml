@@ -129,7 +129,13 @@ jobs:
                        "data/top15_unicorns.csv","data/alpha_history.csv",
                        "data/market_news.csv","data/earnings_calendar.csv",
                        "data/wsb_trending.csv","data/stocktwits_trending.csv",
-                       "data/macro_data.csv","data/sector_performance.csv")
+                       "data/macro_data.csv","data/sector_performance.csv",
+                       "data/stock_news.csv","data/sec_filings.csv",
+                       "data/sec_financials.csv")
+            # Age is measured from the last commit that CHANGED the file, so a
+            # legitimately slow-moving file would otherwise trip STALE every day.
+            # Company financials only move when a 10-Q or 10-K lands.
+            max_age <- c("data/sec_financials.csv" = 24 * 120)
             out <- c("## Data health", "",
                      "| File | Rows | Age (h) | Status |", "|---|---:|---:|---|")
             problems <- character(0)
@@ -155,12 +161,34 @@ jobs:
               if (is.na(n) || n == 0) {
                 status <- "EMPTY"
                 problems <- c(problems, paste(basename(f), "empty"))
-              } else if (!is.na(age) && age > 36) {
+              } else if (!is.na(age) && age > (if (f %in% names(max_age)) max_age[[f]] else 36)) {
                 status <- "STALE"
                 problems <- c(problems, paste(basename(f), "stale"))
               }
               out <- c(out, sprintf("| `%s` | %s | %s | %s |", basename(f), n, age, status))
             }
+            # A row count cannot catch the failure that matters for the valuation
+            # inputs: if SEC renames an XBRL concept the fetch still returns one
+            # row per ticker with every value NA, write_or_keep sees a non-empty
+            # frame and overwrites the good data. Check coverage, not row count.
+            if (file.exists("data/sec_financials.csv")) {
+              sfin <- tryCatch(read_csv("data/sec_financials.csv", show_col_types = FALSE),
+                               error = function(e) NULL)
+              if (is.null(sfin) || !"fcf_sec" %in% names(sfin)) {
+                problems <- c(problems, "sec_financials unreadable or missing fcf_sec")
+                out <- c(out, "", "**DCF inputs:** unreadable.")
+              } else {
+                cov <- sum(!is.na(sfin$fcf_sec))
+                cagr <- if ("rev_cagr_sec" %in% names(sfin)) sum(!is.na(sfin$rev_cagr_sec)) else 0
+                out <- c(out, "",
+                         sprintf("**DCF inputs:** free cash flow %d/%d, revenue CAGR %d/%d.",
+                                 cov, nrow(sfin), cagr, nrow(sfin)))
+                if (cov < 100)
+                  problems <- c(problems,
+                                sprintf("DCF free-cash-flow coverage collapsed to %d/%d", cov, nrow(sfin)))
+              }
+            }
+
             out <- c(out, "")
             if (length(problems) > 0) {
               out <- c(out, sprintf("**%d issue(s):** %s", length(problems),

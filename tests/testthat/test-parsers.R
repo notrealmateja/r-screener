@@ -141,3 +141,36 @@ test_that("an AV notice is detected regardless of its framing", {
                        collapse = "\n"))
   expect_false(is_notice(real))
 })
+
+# Alpha Vantage answers EARNINGS_CALENDAR with a notice rather than CSV when it
+# refuses. The detector was gated on the response being under 2000 characters,
+# so a longer notice fell through to the CSV parser, produced one unparseable
+# row, and the only log line was "no parseable dates" — which left the calendar
+# 17 days stale with no way to tell why.
+av_is_notice <- function(raw) {
+  notice <- regmatches(raw, regexpr("(?i)(information|note|error message|premium|thank you for using)",
+                                    raw, perl = TRUE))
+  looks_like_csv <- grepl("^\\s*symbol\\s*,", raw)
+  length(notice) > 0 && !looks_like_csv
+}
+
+test_that("a short AV notice is detected", {
+  expect_true(av_is_notice('{"Information": "Thank you for using Alpha Vantage"}'))
+  expect_true(av_is_notice('{"Note": "call frequency exceeded"}'))
+})
+
+test_that("a notice longer than the old 2000-char guard is still detected", {
+  long <- paste0('{"Information": "', paste(rep("padding text ", 300), collapse = ""), 'premium"}')
+  expect_gt(nchar(long), 2000)
+  expect_true(av_is_notice(long))
+})
+
+test_that("a genuine earnings CSV is not mistaken for a notice", {
+  real <- paste0("symbol,name,reportDate,fiscalDateEnding,estimate,currency,timeOfTheDay\n",
+                 "AAPL,APPLE INCORPORATED,2026-08-21,2026-06-30,1.2,USD,pre-market")
+  expect_false(av_is_notice(real))
+  # even when a row legitimately contains one of the keywords
+  withnote <- paste0("symbol,name,reportDate,fiscalDateEnding,estimate,currency,timeOfTheDay\n",
+                     "NOTE,NOTEWORTHY INFORMATION CORP,2026-08-21,2026-06-30,1.2,USD,")
+  expect_false(av_is_notice(withnote))
+})
