@@ -1,51 +1,51 @@
 rank,ticker,name,mentions,upvotes,rank_24h_ago,mentions_24h_ago,mentions_chg,rank_chg,momentum
-1,SPY,SPDR S&amp;P 500 ETF Trust,207,494,2,295,-88,1,Steady
-2,NVDA,NVIDIA,135,354,9,76,59,7,Surging
-3,MU,Micron Technology,109,240,4,149,-40,1,Steady
-4,MRNA,Moderna,106,189,1,301,-195,-3,Fading
-5,TSLA,Tesla,80,185,21,24,56,16,Surging
-6,SNDK,Sandisk,76,142,7,94,-18,1,Steady
-7,SLS,Sellas Life Sciences,66,147,19,29,37,12,Surging
-8,QQQ,Invesco QQQ ETF,65,108,6,116,-51,-2,Fading
-9,HOOD,Robinhood,64,880,18,35,29,9,Surging
-10,DTE,DTE Energy,62,235,17,43,19,7,Surging
-11,MSTR,MicroStrategy,46,136,12,60,-14,1,Steady
-12,META,Meta Platforms (Facebook),44,555,8,95,-51,-4,Fading
-13,RDDT,Reddit,40,102,3,177,-137,-10,Falling
-14,HTZ,Hertz,30,8,24,22,8,10,Surging
-15,WMT,Walmart,29,56,5,143,-114,-10,Falling
-16,PLTR,Palantir,27,65,44,9,18,28,Surging
-17,GLD,SSgA SPDR Gold Shares,26,64,28,19,7,11,Surging
-18,IREN,Iris Energy,26,48,46,9,17,28,Surging
-19,SPCX,SpaceX,21,34,10,71,-50,-9,Falling
-20,AAOI,Applied Optoelectronics,21,35,703,1,20,683,Surging
-21,GOOG,Alphabet (Google),20,25,13,47,-27,-8,Falling
-22,MRVL,Marvell Technology Group,18,58,27,18,0,5,Surging
-23,GOOGL,Alphabet (Google),18,32,15,44,-26,-8,Falling
-24,NBIS,Nebius Group,17,52,14,45,-28,-10,Falling
-25,AMZN,Amazon,16,25,35,14,2,10,Surging
-26,AVGO,Broadcom,16,26,36,13,3,10,Surging
-27,RNA,Avidity Biosciences,16,27,16,39,-23,-11,Falling
-28,AM,Antero Midstream,15,41,32,17,-2,4,Rising
-29,USO,United States Commodity Funds LLC - United States Oil Fund,15,109,34,15,0,5,Surging
-30,ASTS,AST SpaceMobile,15,33,23,24,-9,-7,Falling
-31,ONDS,Ondas Holdings,15,25,40,13,2,9,Surging
-32,MSFT,Microsoft,14,47,30,19,-5,-2,Fading
-33,NOW,ServiceNow,14,69,66,5,9,33,Surging
-34,IT,Gartner,14,28,51,7,7,17,Surging
-35,BULL,Webull,14,27,11,57,-43,-24,Falling
-36,SOFI,SoFi,12,14,49,8,4,13,Surging
-37,INTC,Intel,11,15,38,11,0,1,Steady
-38,KEEL,Keel Infrastructure,10,13,55,8,2,17,Surging
-39,CRM,Salesforce,9,47,230,1,8,191,Surging
-40,SOXL,Direxion Shares ETF Trust - Direxion Daily Semiconductor Bull 3X Share,9,16,33,15,-6,-7,Falling
-41,VOO,Vanguard S&amp;P 500 ETF,9,36,37,12,-3,-4,Fading
-42,RKLB,Rocket Lab USA,9,19,20,27,-18,-22,Falling
-43,CRCL,Circle Internet Group,9,35,89,4,5,46,Surging
-44,TLT,BlackRock Institutional Trust Company N.A. - BTC iShares 20+ Year Trea,8,18,39,12,-4,-5,Falling
-45,AMD,AMD,7,12,22,24,-17,-23,Falling
-46,BABA,Alibaba,7,13,52,7,0,6,Surging
-47,IOVA,Iovance Biotherapeutics,7,13,42,9,-2,-5,Falling
-48,CRWD,CrowdStrike,7,20,126,2,5,78,Surging
-49,BE,Bloom Energy,7,10,43,10,-3,-6,Falling
-50,FOR,Forestar Group,7,35,107,3,4,57,Surging
+1,SPY,SPDR S&amp;P 500 ETF Trust,85,263,1,243,-158,0,Steady
+2,NVDA,NVIDIA,84,275,8,103,-19,6,Surging
+3,MRNA,Moderna,38,238,2,150,-112,-1,Steady
+4,SLS,Sellas Life Sciences,32,72,34,29,3,30,Surging
+5,MU,Micron Technology,30,63,3,160,-130,-2,Fading
+6,SNDK,Sandisk,29,55,6,89,-60,0,Steady
+7,DTE,DTE Energy,28,240,12,48,-20,5,Surging
+8,TSLA,Tesla,23,45,14,64,-41,6,Surging
+9,AAOI,Applied Optoelectronics,23,39,666,2,21,657,Surging
+10,HOOD,Robinhood,21,54,11,58,-37,1,Steady
+11,QQQ,Invesco QQQ ETF,18,38,5,104,-86,-6,Falling
+12,IREN,Iris Energy,18,42,31,16,2,19,Surging
+13,VOO,Vanguard S&amp;P 500 ETF,14,185,42,3,11,29,Surging
+14,META,Meta Platforms (Facebook),13,35,7,83,-70,-7,Falling
+15,WMT,Walmart,10,26,9,55,-45,-6,Falling
+16,USO,United States Commodity Funds LLC - United States Oil Fund,10,135,37,13,-3,21,Surging
+17,NOW,ServiceNow,9,80,50,8,1,33,Surging
+18,SPCX,SpaceX,9,24,13,44,-35,-5,Falling
+19,GLD,SSgA SPDR Gold Shares,9,39,24,25,-16,5,Surging
+20,MSTR,MicroStrategy,9,13,10,61,-52,-10,Falling
+21,MRVL,Marvell Technology Group,8,23,28,21,-13,7,Surging
+22,CRM,Salesforce,7,63,229,1,6,207,Surging
+23,RNA,Avidity Biosciences,6,20,19,28,-22,-4,Fading
+24,RDDT,Reddit,6,23,4,96,-90,-20,Falling
+25,OI,O-I Glass,5,27,360,1,4,335,Surging
+26,NBIS,Nebius Group,5,20,17,26,-21,-9,Falling
+27,CRCL,Circle Internet Group,5,49,73,4,1,46,Surging
+28,INFQ,Infleqtion,5,11,702,2,3,674,Surging
+29,MSFT,Microsoft,4,7,22,17,-13,-7,Falling
+30,GOOG,Alphabet (Google),4,5,15,28,-24,-15,Falling
+31,AM,Antero Midstream,4,50,25,21,-17,-6,Falling
+32,ASTS,AST SpaceMobile,4,8,29,18,-14,-3,Fading
+33,FOR,Forestar Group,4,23,83,3,1,50,Surging
+34,EU,enCore Energy,4,6,144,2,2,110,Surging
+35,TEM,Tempus AI,4,11,57,5,-1,22,Surging
+36,INTC,Intel,3,6,49,13,-10,13,Surging
+37,MO,Altria Group,3,5,166,1,2,129,Surging
+38,TTWO,Take 2 Interactive,3,9,217,1,2,179,Surging
+39,WDC,Western Digital,3,4,219,2,1,180,Surging
+40,IT,Gartner,3,-7,40,11,-8,0,Steady
+41,WEN,Wendy’s Company,3,8,120,4,-1,79,Surging
+42,IQ,iQIYI,3,12,61,5,-2,19,Surging
+43,BE,Bloom Energy,3,5,47,3,0,4,Rising
+44,SNOW,Snowflake,3,5,413,1,2,369,Surging
+45,PLTR,Palantir,3,8,45,26,-23,0,Steady
+46,UAE,BlackRock Institutional Trust Company N.A. - iShares MSCI UAE ETF,3,14,421,1,2,375,Surging
+47,JUST,Goldman Sachs ETF Trust - Goldman Sachs Just Us Large Cap Equity ETF,3,36,424,1,2,377,Surging
+48,GDX,VanEck Vectors ETF Trust - VanEck Vectors Gold Miners ETF,3,10,78,4,-1,30,Surging
+49,RKLB,Rocket Lab USA,3,11,21,16,-13,-28,Falling
+50,DV,DoubleVerify,3,4,0,NA,NA,-50,Falling
