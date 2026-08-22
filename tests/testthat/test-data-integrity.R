@@ -255,16 +255,57 @@ test_that("JS() callbacks are built as a single string", {
   # all correctly. Server logs showed nothing; only the browser console did.
   src <- readLines("../../app/app.R")
 
-  # Any JS( that opens without closing on the same line is a multi-line
-  # construction, which is what produced the broken literal.
+  # Multi-line JS() is safe on its own — the hazard is a *string literal split
+  # across arguments*, which is what the original callback did:
+  #     JS("... === '", s$symbol[1], "') ...")
+  # The first argument leaves a single-quoted JS literal open, so the newline
+  # JS() inserts lands inside it. Assert instead that every argument of a
+  # multi-line JS() is a self-contained, quote-balanced string.
   bad <- character(0)
-  for (line in grep("JS\\(", src, value = TRUE)) {
-    opens  <- lengths(regmatches(line, gregexpr("\\(", line)))
-    closes <- lengths(regmatches(line, gregexpr("\\)", line)))
-    if (opens > closes && !grepl("sprintf|paste0|paste\\(", line))
-      bad <- c(bad, trimws(line))
+  in_js <- FALSE
+  depth <- 0
+  for (line in src) {
+    trimmed <- trimws(line)
+    if (!in_js && grepl("JS\\(", line)) {
+      opens  <- lengths(regmatches(line, gregexpr("\\(", line)))
+      closes <- lengths(regmatches(line, gregexpr("\\)", line)))
+      if (opens > closes) {
+        # sprintf/paste build the string in one piece before JS() sees it
+        if (grepl("sprintf|paste0|paste\\(", line)) next
+        in_js <- TRUE
+        depth <- opens - closes
+        next
+      }
+    }
+    if (in_js) {
+      opens  <- lengths(regmatches(line, gregexpr("\\(", line)))
+      closes <- lengths(regmatches(line, gregexpr("\\)", line)))
+      depth  <- depth + opens - closes
+      arg <- sub(",$", "", trimmed)
+      if (nzchar(arg) && !grepl("^\\)", arg)) {
+        # each argument must be a complete double-quoted string...
+        complete <- grepl('^".*"$', arg)
+        # ...with balanced single quotes inside it
+        sq <- lengths(regmatches(arg, gregexpr("'", arg)))
+        if (!complete || sq %% 2 != 0) bad <- c(bad, arg)
+      }
+      if (depth <= 0) in_js <- FALSE
+    }
   }
   expect_equal(bad, character(0))
+
+  # The exact shape of the original bug must still be rejected.
+  broken <- c('JS(', '"... === \'",', 's$symbol[1],', '"\') ..."', ')')
+  detect <- function(lines) {
+    out <- character(0)
+    for (l in lines[-c(1, length(lines))]) {
+      a <- sub(",$", "", trimws(l))
+      sq <- lengths(regmatches(a, gregexpr("'", a)))
+      if (!grepl('^".*"$', a) || sq %% 2 != 0) out <- c(out, a)
+    }
+    out
+  }
+  expect_gt(length(detect(broken)), 0)
 
   # And the peer-comps callback specifically must build its string in one piece
   joined <- paste(src, collapse = "\n")

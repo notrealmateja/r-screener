@@ -175,6 +175,13 @@ table.dataTable tbody td {
 }
 table.dataTable tbody tr { background:transparent !important; }
 table.dataTable tbody tr:hover td { background:rgba(255,107,0,0.06) !important; }
+/* Rows in the browse tables open that stock in Deep Dive, so they need to read
+   as interactive rather than as static cells. */
+table.dataTable.row-clickable tbody tr { cursor:pointer; }
+table.dataTable.row-clickable tbody tr:hover td {
+  background:rgba(255,107,0,0.10) !important;
+  box-shadow:inset 2px 0 0 var(--orange);
+}
 .dataTables_info, .dataTables_length, .dataTables_filter, .dataTables_paginate {
   color:var(--muted) !important; font-size:10px !important;
   font-family:var(--mono) !important; margin-top:10px !important;
@@ -1198,6 +1205,18 @@ ui <- fluidPage(
       window.scrollTo(0, 0);
       setTimeout(function(){ window.dispatchEvent(new Event('resize')); }, 80);
     }
+    // Opens a stock in Deep Dive from any table row. Setting the value through
+    // selectize is what notifies Shiny; assigning to .value alone does not.
+    window.openDeepDive = function(sym) {
+      if (!sym) return;
+      var sel = document.getElementById('dd_ticker');
+      if (sel && sel.selectize) {
+        sel.selectize.setValue(sym, false);
+      } else if (window.Shiny) {
+        Shiny.setInputValue('dd_ticker', sym, {priority: 'event'});
+      }
+      showPane('deepdive');
+    };
     function toggleMobileMenu() {
       var menu = document.getElementById('mobile-nav');
       var btn  = document.getElementById('hamburger-btn');
@@ -1396,6 +1415,26 @@ server <- function(input, output, session) {
       paste0(pfx, round(ret, 2), "%")))
   }
 
+  # Clicking a row opens that stock in Deep Dive. The symbol column is located by
+  # its header text rather than a fixed index, because it sits in a different
+  # position in each table (first in the screener, third in the unicorn table).
+  # JS() joins its arguments with newlines, so every line here must stand alone
+  # as a complete statement.
+  dd_click <- function() JS(
+    "table.on('click', 'tbody tr', function() {",
+    "  var idx = -1;",
+    "  table.columns().header().each(function(h, i) {",
+    "    if ($(h).text().trim() === 'Symbol') idx = i;",
+    "  });",
+    "  if (idx < 0) return;",
+    "  var d = table.row(this).data();",
+    "  if (!d) return;",
+    "  var sym = $('<div>').html(String(d[idx])).text().trim();",
+    "  if (sym && window.openDeepDive) window.openDeepDive(sym);",
+    "});",
+    "$(table.table().node()).addClass('row-clickable');"
+  )
+
   # ── Top 20 Sweet Spot Table ───────────────────────────────────────────────
   output$top15_table <- renderDT({
     if (is.null(top15_data) || nrow(top15_data) == 0)
@@ -1432,7 +1471,7 @@ server <- function(input, output, session) {
              Percentile, Driver, `Sig Matches`=Signals,
              `P/E`=pe_fmt, `Mkt Cap`=mktcap_fmt)
 
-    datatable(df, escape=FALSE, rownames=FALSE, selection="none",
+    datatable(df, escape=FALSE, rownames=FALSE, selection="none", callback=dd_click(),
       options=list(dom="t", pageLength=20, ordering=FALSE, autoWidth=TRUE,
                    columnDefs=list(list(className="dt-left", targets="_all"))))
   })
@@ -1482,7 +1521,7 @@ server <- function(input, output, session) {
              `1M`=ret_1m_fmt, `3M`=ret_3m_fmt,
              `Rev Growth`=rev_g_fmt, `Mkt Cap`=mktcap_fmt, `P/E`=pe_fmt)
 
-    datatable(df, escape=FALSE, rownames=FALSE, selection="none",
+    datatable(df, escape=FALSE, rownames=FALSE, selection="none", callback=dd_click(),
       options=list(dom="t", pageLength=15, ordering=FALSE, autoWidth=TRUE,
                    columnDefs=list(list(className="dt-left", targets="_all"))))
   })
@@ -1570,7 +1609,7 @@ server <- function(input, output, session) {
              `P/E`=pe_fmt, `1M`=ret_1m_fmt, `3M`=ret_3m_fmt,
              `6M`=ret_6m_fmt, `1Y`=ret_1y_fmt,
              `Mkt Cap`=mktcap_fmt, `Short Float`=short_float_pct, Tier=squeeze_tier)
-    datatable(df, escape=FALSE, rownames=FALSE,
+    datatable(df, escape=FALSE, rownames=FALSE, callback=dd_click(),
       options=list(pageLength=25, scrollX=TRUE,
                    columnDefs=list(list(className="dt-left",targets="_all"))))
   })
@@ -1618,7 +1657,7 @@ server <- function(input, output, session) {
     master_data %>% filter(squeeze_tier=="High Conviction") %>%
       select(Symbol=symbol, Score=squeeze_score, `Short Float`=short_float_pct, Trend=short_trend) %>%
       head(8) %>%
-      datatable(rownames=FALSE, selection="none",
+      datatable(rownames=FALSE, selection="none", callback=dd_click(),
         options=list(dom="t",pageLength=8,ordering=FALSE))
   })
 
@@ -1835,12 +1874,26 @@ server <- function(input, output, session) {
       lapply(list(
         c("Current Price",   paste0("$",round(price,2))),
         c("Intrinsic Value", ifelse(is.na(dcf$intrinsic_value),"N/A",paste0("$",dcf$intrinsic_value))),
-        c("DCF Rating",      dcf$dcf_rating),
-        c("WACC Used",       "10.0%"),
-        c("Terminal Growth", "2.5%"),
-        c("EPS Growth (est)",fmt_pct(s$earningsGrowth)),
-        c("Rev Growth (est)",fmt_pct(s$revenueGrowth))
-      ), function(r) div(class="dcf-row", div(class="dcf-lbl",r[1]), div(class="dcf-val",r[2])))
+        c("Valuation",       dcf$dcf_rating),
+        # These were hardcoded strings sitting next to a permanently-N/A
+        # valuation. They now report what the model actually used.
+        c("WACC Used",       fmt_pct(dcf$wacc)),
+        c("Risk-Free (10Y)", fmt_pct(dcf$rf)),
+        c("Terminal Growth", fmt_pct(dcf$terminal_growth)),
+        c("Rev Growth Used", fmt_pct(dcf$growth)),
+        c("Free Cash Flow",  fmt_mktcap(s$fcf))
+      ), function(r) div(class="dcf-row", div(class="dcf-lbl",r[1]), div(class="dcf-val",r[2]))),
+      div(style="color:#555;font-size:9px;font-family:IBM Plex Mono;margin-top:10px;line-height:1.5;",
+        if (is.na(dcf$intrinsic_value))
+          paste0("No valuation: this model needs positive free cash flow, share count ",
+                 "and price. Names with negative or unreported FCF are left blank ",
+                 "rather than estimated.")
+        else
+          paste0("Ten-year two-stage model: growth held five years, then fading to ",
+                 "terminal, discounted at a CAPM-derived WACC. Free cash flow is ",
+                 "averaged across available filing years to smooth the capex cycle; ",
+                 "cash flow, debt and cash come from SEC XBRL filings. A DCF is ",
+                 "highly sensitive to its assumptions — see Methodology."))
     )
   })
 
@@ -2642,7 +2695,38 @@ server <- function(input, output, session) {
           tags$tr(tags$td("FRED"), tags$td("Treasury curve, CPI, unemployment, Fed funds"), tags$td("Daily")),
           tags$tr(tags$td("ApeWisdom"), tags$td("r/wallstreetbets mentions and rank deltas"), tags$td("Daily")),
           tags$tr(tags$td("StockTwits"), tags$td("Trending symbols, bull/bear sentiment"), tags$td("Daily")),
-          tags$tr(tags$td("Polygon.io"), tags$td("Options positioning, SEC financials"), tags$td("See limitations")))),
+          tags$tr(tags$td("SEC EDGAR (XBRL frames)"), tags$td("Free cash flow, debt, cash, revenue — the valuation inputs"), tags$td("Daily, whole universe")),
+          tags$tr(tags$td("SEC EDGAR (submissions)"), tags$td("Recent filings, insider Form 4 counts, M&A flags"), tags$td("Daily, whole universe")),
+          tags$tr(tags$td("Yahoo Finance RSS"), tags$td("Per-ticker company news"), tags$td("Daily, whole universe")),
+          tags$tr(tags$td("Polygon.io"), tags$td("Options positioning, share counts"), tags$td("See limitations")))),
+
+      tags$h2("Valuation model"),
+      tags$p("The Deep Dive carries a discounted cash flow estimate. It is a ",
+             tags$strong("ten-year, two-stage model"), ": free cash flow grows at the ",
+             "observed rate for five years, then fades linearly to a 2.5% terminal rate, ",
+             "with a Gordon terminal value. Cash flows are discounted at a WACC built from ",
+             "CAPM — the live 10-year Treasury as the risk-free rate, a 5% equity risk ",
+             "premium, the stock's beta, and an after-tax cost of debt at the risk-free ",
+             "rate plus 200bp."),
+      tags$p("Free cash flow is operating cash flow less capital expenditure, taken from ",
+             "SEC XBRL filings and ", tags$strong("averaged across the available filing years"),
+             ". A single year is misleading for any company in a heavy investment cycle: ",
+             "Amazon's most recent year nets to roughly $8B against a share price in the ",
+             "hundreds, while its three-year average is around $24B."),
+      tags$p(tags$strong("What it will not do. "),
+             "Companies with negative or unreported free cash flow are left blank rather ",
+             "than estimated — a DCF on negative cash flow has no meaningful terminal ",
+             "value. Growth is capped at 20% no matter what the filings show, because no ",
+             "company compounds its trailing rate for a decade. Banks and insurers are ",
+             "shown but should be ignored: a free-cash-flow DCF does not describe a ",
+             "balance-sheet business."),
+      tags$p(tags$strong("Treat the output as one input, not an answer. "),
+             "A DCF is extremely sensitive to its assumptions — moving the discount rate ",
+             "or terminal growth by a point moves the value by tens of percent. The ",
+             "figure shown is what this specific set of conservative assumptions implies, ",
+             "and on those assumptions most large-cap technology names screen well above ",
+             "their computed value. That is a property of the method as much as a ",
+             "statement about the companies."),
 
       tags$h2("Known limitations"),
       tags$p("Stated plainly, because they change how the output should be read."),

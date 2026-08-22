@@ -125,6 +125,31 @@ run_module4 <- function(fund_data = NULL) {
     )
   }
 
+  # Merge SEC XBRL financials. These are the DCF inputs: Polygon's financials
+  # endpoint returned nothing for any ticker, so fcf, debt_equity and gross_margin
+  # were empty for all 195 names. SEC values take precedence where both exist.
+  secfin_path <- "data/sec_financials.csv"
+  if (file.exists(secfin_path)) {
+    sf <- read_csv(secfin_path, show_col_types = FALSE) %>%
+      select(symbol, any_of(c("fcf_sec", "debt_equity_sec", "gross_margin_sec",
+                              "revenue_sec", "total_debt_sec", "cash_sec",
+                              "rev_cagr_sec", "equity_sec")))
+    df <- left_join(df, sf, by = "symbol")
+    for (c in c("fcf", "debt_equity", "gross_margin")) {
+      if (!c %in% names(df)) df[[c]] <- NA_real_
+    }
+    df <- df %>% mutate(
+      fcf          = dplyr::coalesce(fcf_sec,          fcf),
+      debt_equity  = dplyr::coalesce(debt_equity_sec,  debt_equity),
+      gross_margin = dplyr::coalesce(gross_margin_sec, gross_margin),
+      total_debt   = total_debt_sec,
+      cash         = cash_sec,
+      rev_cagr     = rev_cagr_sec
+    )
+  } else {
+    df <- df %>% mutate(total_debt = NA_real_, cash = NA_real_, rev_cagr = NA_real_)
+  }
+
   # Merge company/sector lookup
   # ticker_meta only covers the original 50 tickers, so joining it as the sole
   # source left every other name and sector blank in the screener.  Treat it as
@@ -319,7 +344,11 @@ run_module4 <- function(fund_data = NULL) {
     # Enriched columns for tables
     master_percentile  = round(percent_rank(final_score) * 100, 1),
     expected_return_1d = round(ifelse(is.finite(hist_alpha_ann), hist_alpha_ann / 252, NA_real_), 6),
-    revenue_growth     = earningsGrowth,   # best proxy available
+    # Was aliased to earningsGrowth (quarterly YoY EPS growth) as a stand-in.
+    # That is far too volatile to stand for revenue growth — it ranged to 4672%
+    # across the universe — so prefer the two-year revenue CAGR computed from
+    # SEC XBRL filings, keeping the old proxy only where SEC has no figure.
+    revenue_growth     = dplyr::coalesce(rev_cagr, earningsGrowth),
 
     primary_driver = dplyr::case_when(
       p_ann_alpha >= 70 & days_tracked >= 20          ~ "Alpha Leader",

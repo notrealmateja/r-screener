@@ -673,6 +673,188 @@ sec_filings_for <- function(sym, cik) {
   }, error = function(e) NULL)
 }
 
+# ── SEC XBRL financials (DCF inputs) ────────────────────────────────────────
+# The DCF panel had no data behind it: fcf and debt_equity were empty for all
+# 195 names and compute_dcf() was never defined anywhere, so the panel rendered
+# a permanent "N/A" next to a hardcoded "WACC Used 10.0%". Polygon's financials
+# endpoint returned nothing for any ticker.
+#
+# SEC's XBRL "frames" API answers one concept for every filer in a single
+# request, so the whole universe costs ~30 requests rather than 195 downloads of
+# 3-4 MB companyfacts each.
+SEC_FRAMES <- "https://data.sec.gov/api/xbrl/frames/us-gaap"
+
+sec_frame <- function(concept, frame) {
+  tryCatch({
+    r <- GET(glue("{SEC_FRAMES}/{concept}/USD/{frame}.json"),
+             add_headers(`User-Agent` = SEC_UA), timeout(60))
+    if (status_code(r) != 200) return(NULL)
+    d <- fromJSON(content(r, as = "text", encoding = "UTF-8"), simplifyVector = FALSE)
+    if (is.null(d$data) || length(d$data) == 0) return(NULL)
+    ciks <- vapply(d$data, function(x) as.character(x$cik), character(1))
+    vals <- vapply(d$data, function(x) suppressWarnings(as.numeric(x$val)), numeric(1))
+    v <- vals[!duplicated(ciks)]
+    names(v) <- ciks[!duplicated(ciks)]
+    v
+  }, error = function(e) NULL)
+}
+
+# Filers have different fiscal year ends, so no single calendar frame covers
+# everyone. Walk the frames most-recent-first and keep the first value found for
+# each company.
+sec_frame_merge <- function(concept, frames) {
+  out <- numeric(0)
+  for (f in frames) {
+    v <- sec_frame(concept, f)
+    Sys.sleep(0.15)
+    if (is.null(v)) next
+    new <- setdiff(names(v), names(out))
+    out <- c(out, v[new])
+  }
+  out
+}
+
+# The current year's annual frame is not complete until well after year end.
+sec_annual_frames <- function(n = 3) {
+  y <- as.integer(format(Sys.Date(), "%Y"))
+  paste0("CY", seq(y - 1, y - n))
+}
+
+sec_instant_frames <- function(n = 5) {
+  d <- Sys.Date()
+  q <- (as.integer(format(d, "%m")) - 1) %/% 3 + 1
+  y <- as.integer(format(d, "%Y"))
+  out <- character(0)
+  for (i in seq_len(n)) {
+    q <- q - 1
+    if (q < 1) { q <- 4; y <- y - 1 }
+    out <- c(out, sprintf("CY%dQ%dI", y, q))
+  }
+  out
+}
+
+# Companies tag the same line item differently, so each figure has fallbacks.
+sec_pick <- function(ciks, ...) {
+  srcs <- list(...)
+  out <- rep(NA_real_, length(ciks))
+  for (v in srcs) {
+    if (is.null(v) || length(v) == 0) next
+    hit <- is.na(out) & ciks %in% names(v)
+    if (any(hit)) out[hit] <- unname(v[ciks[hit]])
+  }
+  out
+}
+
+get_sec_financials <- function(tickers) {
+  message(glue("Pulling SEC XBRL financials for {length(tickers)} stocks..."))
+  cikmap <- sec_cik_map()
+  if (is.null(cikmap)) {
+    message("  SEC ticker map unavailable - skipping financials.")
+    return(tibble())
+  }
+  have <- tickers[tickers %in% names(cikmap)]
+  if (length(have) == 0) return(tibble())
+  # frames key on the bare integer CIK, not the zero-padded form
+  ciks <- as.character(as.integer(cikmap[have]))
+
+  af <- sec_annual_frames()
+  qf <- sec_instant_frames()
+
+  # Free cash flow year by year rather than a single snapshot. A company in a
+  # heavy investment cycle has temporarily depressed FCF — Amazon's latest year
+  # nets to ~$8B against a $259 share price — so valuing off one year produces a
+  # meaningless number. Averaging the available years normalises the capex cycle.
+  #
+  # Amazon and other large filers tag capex as PaymentsToAcquireProductiveAssets
+  # rather than the more common PP&E tag; without that fallback capex read as
+  # zero and free cash flow came out as roughly operating cash flow.
+  fcf_years <- lapply(af, function(f) {
+    o  <- sec_frame("NetCashProvidedByUsedInOperatingActivities", f); Sys.sleep(0.15)
+    ca <- sec_frame("PaymentsToAcquirePropertyPlantAndEquipment", f); Sys.sleep(0.15)
+    cb <- sec_frame("PaymentsToAcquireProductiveAssets", f);          Sys.sleep(0.15)
+    ov <- sec_pick(ciks, o)
+    cv <- sec_pick(ciks, ca, cb)
+    ifelse(is.na(ov) | is.na(cv), NA_real_, ov - abs(cv))
+  })
+  fcf_mat <- do.call(cbind, fcf_years)
+
+  ocf    <- sec_frame_merge("NetCashProvidedByUsedInOperatingActivities", af)
+  capex_a <- sec_frame_merge("PaymentsToAcquirePropertyPlantAndEquipment", af)
+  capex_b <- sec_frame_merge("PaymentsToAcquireProductiveAssets", af)
+  gp     <- sec_frame_merge("GrossProfit", af)
+  rev_a  <- sec_frame_merge("Revenues", af)
+  rev_b  <- sec_frame_merge("RevenueFromContractWithCustomerExcludingAssessedTax", af)
+  eq_a   <- sec_frame_merge("StockholdersEquity", qf)
+  eq_b   <- sec_frame_merge("StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest", qf)
+  ltd_nc <- sec_frame_merge("LongTermDebtNoncurrent", qf)
+  ltd_cu <- sec_frame_merge("LongTermDebtCurrent", qf)
+  ltd_b  <- sec_frame_merge("LongTermDebt", qf)
+  ltd_c  <- sec_frame_merge("LongTermDebtAndCapitalLeaseObligations", qf)
+  ltd_d  <- sec_frame_merge("DebtLongtermAndShorttermCombinedAmount", qf)
+  cash_a <- sec_frame_merge("CashAndCashEquivalentsAtCarryingValue", qf)
+
+  # Revenue for the two most recent complete years, to derive a real growth rate
+  # instead of reusing quarterly EPS growth as a revenue proxy.
+  y <- as.integer(format(Sys.Date(), "%Y"))
+  rev_now  <- sec_pick(ciks, sec_frame_merge("Revenues", paste0("CY", y - 1)),
+                             sec_frame_merge("RevenueFromContractWithCustomerExcludingAssessedTax",
+                                             paste0("CY", y - 1)))
+  rev_prev <- sec_pick(ciks, sec_frame_merge("Revenues", paste0("CY", y - 3)),
+                             sec_frame_merge("RevenueFromContractWithCustomerExcludingAssessedTax",
+                                             paste0("CY", y - 3)))
+
+  ocf_v   <- sec_pick(ciks, ocf)
+  capex_v <- sec_pick(ciks, capex_a, capex_b)
+  rev_v   <- sec_pick(ciks, rev_a, rev_b)
+  gp_v    <- sec_pick(ciks, gp)
+  eq_v    <- sec_pick(ciks, eq_a, eq_b)
+  cash_v  <- sec_pick(ciks, cash_a)
+
+  # Total long-term debt: the non-current balance plus any current portion,
+  # falling back to whichever combined tag the filer used.
+  nc_v <- sec_pick(ciks, ltd_nc)
+  cu_v <- sec_pick(ciks, ltd_cu)
+  debt_split <- ifelse(is.na(nc_v), NA_real_, nc_v + ifelse(is.na(cu_v), 0, cu_v))
+  debt_v <- sec_pick(ciks, setNames(debt_split, ciks), ltd_b, ltd_c, ltd_d)
+
+  # Capex is reported as a positive outflow, so subtract its magnitude. When
+  # capex is genuinely unavailable leave FCF missing rather than defaulting it
+  # to zero, which would silently report operating cash flow as free cash flow.
+  fcf_latest <- ifelse(is.na(ocf_v) | is.na(capex_v), NA_real_, ocf_v - abs(capex_v))
+  fcf_v <- apply(fcf_mat, 1, function(r)
+    if (all(is.na(r))) NA_real_ else mean(r, na.rm = TRUE))
+  fcf_n <- apply(fcf_mat, 1, function(r) sum(!is.na(r)))
+  fcf_v <- ifelse(is.na(fcf_v), fcf_latest, fcf_v)
+
+  # Two-year revenue CAGR, only where both endpoints are real and positive.
+  cagr <- ifelse(!is.na(rev_now) & !is.na(rev_prev) & rev_prev > 0 & rev_now > 0,
+                 (rev_now / rev_prev)^(1/2) - 1, NA_real_)
+
+  df <- tibble(
+    symbol            = have,
+    fcf_sec           = fcf_v,          # normalised: mean of available years
+    fcf_latest_sec    = fcf_latest,
+    fcf_years_sec     = fcf_n,
+    ocf_sec           = ocf_v,
+    capex_sec         = capex_v,
+    revenue_sec       = rev_v,
+    gross_margin_sec  = ifelse(!is.na(gp_v) & !is.na(rev_v) & rev_v != 0,
+                               round(gp_v / rev_v, 4), NA_real_),
+    equity_sec        = eq_v,
+    total_debt_sec    = debt_v,
+    cash_sec          = cash_v,
+    debt_equity_sec   = ifelse(!is.na(debt_v) & !is.na(eq_v) & eq_v > 0,
+                               round(debt_v / eq_v, 4), NA_real_),
+    rev_cagr_sec      = round(cagr, 4)
+  )
+
+  message(glue("  SEC financials: fcf {sum(!is.na(df$fcf_sec))}/{nrow(df)} ",
+               "(mean {round(mean(df$fcf_years_sec),1)} yrs), ",
+               "debt/equity {sum(!is.na(df$debt_equity_sec))}/{nrow(df)}, ",
+               "rev CAGR {sum(!is.na(df$rev_cagr_sec))}/{nrow(df)}"))
+  df
+}
+
 get_sec_filings <- function(tickers) {
   message(glue("Pulling SEC EDGAR filings for {length(tickers)} stocks..."))
   cik <- sec_cik_map()
@@ -852,6 +1034,8 @@ run_module3 <- function(tickers=NULL) {
                         error = function(e) { message("Stock news skipped: ", conditionMessage(e)); tibble() })
   secfil    <- tryCatch(get_sec_filings(tickers),
                         error = function(e) { message("SEC filings skipped: ", conditionMessage(e)); tibble() })
+  secfin    <- tryCatch(get_sec_financials(tickers),
+                        error = function(e) { message("SEC financials skipped: ", conditionMessage(e)); tibble() })
 
   # ── Data validation ──────────────────────────────────────────────────────
   if (nrow(earn) == 0)   warning("WARN: Earnings calendar is EMPTY — AV API may be rate-limited")
@@ -871,6 +1055,7 @@ run_module3 <- function(tickers=NULL) {
   write_or_keep(stwits, "data/stocktwits_trending.csv", "stocktwits")
   write_or_keep(stocknews, "data/stock_news.csv",   "stock news")
   write_or_keep(secfil,    "data/sec_filings.csv",  "sec filings")
+  write_or_keep(secfin,    "data/sec_financials.csv", "sec financials")
 
   # Accumulate the qualitative feeds into a testable series. Non-fatal: this is
   # a recording step for future analysis and must never break the refresh.
@@ -881,10 +1066,10 @@ run_module3 <- function(tickers=NULL) {
                "earnings({nrow(earn)}), news({nrow(news)}), ",
                "sector({nrow(sector)}), wsb({nrow(wsb)}), ",
                "stocktwits({nrow(stwits)}), stock_news({nrow(stocknews)}), ",
-               "sec_filings({nrow(secfil)})"))
+               "sec_filings({nrow(secfil)}), sec_financials({nrow(secfin)})"))
   list(squeeze=squeeze, macro=macro, earnings=earn, news=news,
        sector=sector, wsb=wsb, stocktwits=stwits,
-       stock_news=stocknews, sec_filings=secfil)
+       stock_news=stocknews, sec_filings=secfil, sec_financials=secfin)
 }
 
 if (!exists("SOURCED_BY_MASTER")) module3_data <- run_module3()
