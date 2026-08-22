@@ -168,13 +168,20 @@ table.dataTable thead th {
   font-weight:600 !important; padding:8px 10px !important;
   white-space:nowrap !important;
 }
+/* A rule under every cell drew a full grid across the table and made 20 rows
+   read as 20 boxes. Rows are separated by alternating tone instead, which
+   groups a row visually without ruling it off. */
 table.dataTable tbody td {
-  padding:7px 10px !important; border-bottom:1px solid var(--border) !important;
+  padding:10px 12px !important; border:0 !important;
   background:transparent !important; font-family:var(--mono) !important;
-  font-size:11px !important;
+  font-size:11px !important; vertical-align:middle !important;
 }
 table.dataTable tbody tr { background:transparent !important; }
-table.dataTable tbody tr:hover td { background:rgba(255,107,0,0.06) !important; }
+table.dataTable tbody tr:nth-child(even) td { background:rgba(255,255,255,0.018) !important; }
+table.dataTable tbody tr td { transition:background .15s ease; }
+table.dataTable tbody tr:hover td { background:rgba(255,107,0,0.07) !important; }
+/* One hairline under the header keeps the columns anchored without a grid. */
+table.dataTable thead th { border-bottom:1px solid var(--border2) !important; }
 /* Rows in the browse tables open that stock in Deep Dive, so they need to read
    as interactive rather than as static cells. */
 /* Live TV channel buttons */
@@ -184,6 +191,10 @@ table.dataTable tbody tr:hover td { background:rgba(255,107,0,0.06) !important; 
   font-family:var(--mono) !important; font-size:10px !important;
   letter-spacing:1px; text-transform:uppercase; padding:8px 16px !important;
   transition:background .18s ease, border-color .18s ease, color .18s ease;
+}
+.tv-btn.tv-on {
+  background:#1C1608 !important; border-color:var(--orange) !important;
+  color:var(--orange) !important;
 }
 .tv-btn:hover {
   background:#1C1608 !important; border-color:var(--orange) !important;
@@ -873,7 +884,6 @@ ui <- fluidPage(
       div(class="topbar-nav-item",        id="nav-deepdive",  onclick="showPane('deepdive')",  "Deep Dive"),
       div(class="topbar-nav-item",        id="nav-macro",     onclick="showPane('macro')",     "Macro"),
       div(class="topbar-nav-item",        id="nav-news",      onclick="showPane('news')",      "News & Events"),
-      div(class="topbar-nav-item",        id="nav-tv",        onclick="showPane('tv')",        "Live TV"),
       div(class="topbar-nav-item",        id="nav-about",     onclick="showPane('about')",     "Methodology")
     ),
     div(class="topbar-right",
@@ -893,7 +903,6 @@ ui <- fluidPage(
     div(class="mobile-nav-item",        id="mnav-deepdive",  onclick="showPane('deepdive')",  "▸ Deep Dive"),
     div(class="mobile-nav-item",        id="mnav-macro",     onclick="showPane('macro')",     "▸ Macro"),
     div(class="mobile-nav-item",        id="mnav-news",      onclick="showPane('news')",      "▸ News & Events"),
-    div(class="mobile-nav-item",        id="mnav-tv",        onclick="showPane('tv')",        "▸ Live TV"),
     div(class="mobile-nav-item",        id="mnav-about",     onclick="showPane('about')",     "▸ Methodology")
   ),
 
@@ -931,6 +940,17 @@ ui <- fluidPage(
           )
         ),
         div(
+          div(class="panel",
+            div(class="panel-head",
+              div(class="panel-head-title","LIVE TV"),
+              div(class="panel-head-meta", uiOutput("tv_meta"))),
+            div(class="panel-body",
+              uiOutput("tv_player"),
+              div(style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;",
+                lapply(names(TV_CHANNELS), function(n)
+                  actionButton(paste0("tv_", make.names(n)), n, class="tv-btn")))
+            )
+          ),
           div(class="panel",
             div(class="panel-head", div(class="panel-head-title","SCORE DISTRIBUTION")),
             div(class="panel-body", plotlyOutput("score_dist", height="200px"))
@@ -1211,27 +1231,6 @@ ui <- fluidPage(
     ),
 
     # ── METHODOLOGY ────────────────────────────────────────────────────────
-    div(class="tab-pane", id="pane-tv",
-      div(class="panel",
-        div(class="panel-head",
-          div(class="panel-head-title","LIVE BUSINESS TELEVISION"),
-          div(class="panel-head-meta", uiOutput("tv_meta"))),
-        div(class="panel-body",
-          div(style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;",
-            lapply(names(TV_CHANNELS), function(n)
-              actionButton(paste0("tv_", make.names(n)), n, class="tv-btn"))),
-          # The stream is only mounted once a channel is chosen, so opening the
-          # tab does not start a video the viewer did not ask for.
-          uiOutput("tv_player"),
-          div(style="color:#555;font-size:10px;font-family:IBM Plex Mono;margin-top:12px;line-height:1.6;",
-              "Streams are embedded from each broadcaster's official YouTube channel and ",
-              "resolve to whatever that channel is airing now. If a channel is not ",
-              "currently live, YouTube shows its latest upload instead. Playback starts ",
-              "muted — browsers block autoplay with sound.")
-        )
-      )
-    ),
-
     div(class="tab-pane", id="pane-about",
       div(class="panel",
         div(class="panel-head",
@@ -1248,14 +1247,14 @@ ui <- fluidPage(
       document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
       document.querySelectorAll('.topbar-nav-item').forEach(n => n.classList.remove('active'));
       document.querySelectorAll('.mobile-nav-item').forEach(n => n.classList.remove('active'));
-      // Stop any embedded stream when leaving the TV pane. The panes are hidden
-      // with CSS rather than unmounted, so without this the video keeps playing
-      // (and keeps making sound) on every other tab.
-      if (name !== 'tv') {
-        var f = document.querySelector('#pane-tv iframe');
-        if (f && f.src) { f.dataset.src = f.src; f.src = 'about:blank'; }
+      // The stream lives on the Overview pane now. Panes are hidden with CSS
+      // rather than unmounted, so without this the video keeps playing — and
+      // keeps making sound — while the viewer is on another tab.
+      if (name !== 'overview') {
+        var f = document.querySelector('#pane-overview iframe');
+        if (f && f.src && f.src !== 'about:blank') { f.dataset.src = f.src; f.src = 'about:blank'; }
       } else {
-        var f2 = document.querySelector('#pane-tv iframe');
+        var f2 = document.querySelector('#pane-overview iframe');
         if (f2 && f2.src === 'about:blank' && f2.dataset.src) f2.src = f2.dataset.src;
       }
       var pane = document.getElementById('pane-' + name);
@@ -1289,6 +1288,11 @@ ui <- fluidPage(
       }
       showPane('deepdive');
     };
+    Shiny.addCustomMessageHandler('tvActive', function(m) {
+      document.querySelectorAll('.tv-btn').forEach(function(b) { b.classList.remove('tv-on'); });
+      var el = document.getElementById(m.id);
+      if (el) el.classList.add('tv-on');
+    });
     function toggleMobileMenu() {
       var menu = document.getElementById('mobile-nav');
       var btn  = document.getElementById('hamburger-btn');
@@ -1486,6 +1490,10 @@ server <- function(input, output, session) {
   })
 
   # ── Confidence bar HTML helper ────────────────────────────────────────────
+  # Currently unused. The confidence columns were dropped from both overview
+  # tables because every row scored exactly 100 — one distinct value across the
+  # whole universe — so the bar drew an identical green line on every row and
+  # told the reader nothing. Kept for when confidence becomes a real spread.
   conf_bar_html <- function(conf) {
     conf <- round(replace_na(as.numeric(conf), 0), 1)
     col  <- if (conf >= 75) "#00C853" else if (conf >= 55) "#FFD600" else "#FF3D00"
@@ -1539,7 +1547,6 @@ server <- function(input, output, session) {
         `#`          = row_number(),
         Score        = sapply(sweet_spot_score, sbar),
         Rating       = sapply(rating, pill),
-        Confidence   = sapply(sweet_spot_confidence, conf_bar_html),
         `Exp Return` = sapply(expected_return_1d, exp_ret_html),
         Percentile   = paste0(round(master_percentile, 1), "th"),
         Driver       = primary_driver,
@@ -1557,7 +1564,7 @@ server <- function(input, output, session) {
         sector_fmt   = coalesce(sector, "—")
       ) %>%
       select(`#`, Symbol=symbol, Company=company_fmt, Sector=sector_fmt,
-             Score, Rating, Confidence, `Exp Ret/D`=`Exp Return`,
+             Score, Rating, `Exp Ret/D`=`Exp Return`,
              `1M`=ret_1m_fmt, `3M`=ret_3m_fmt,
              Percentile, Driver, `Sig Matches`=Signals,
              `P/E`=pe_fmt, `Mkt Cap`=mktcap_fmt)
@@ -1589,8 +1596,6 @@ server <- function(input, output, session) {
         Badge        = as.character(tags$span(class="unicorn-badge","UNICORN")),
         Score        = sapply(if(has_uscore) unicorn_score else master_score, sbar),
         Rating       = sapply(rating, pill),
-        `Wk Conf`    = if(has_uconf) sapply(unicorn_confidence, conf_bar_html) else
-                       if(has_exp5d) sapply(confidence_5d,      conf_bar_html) else "—",
         Driver       = if(has_driver) primary_driver else "—",
         mktcap_fmt   = case_when(
           is.na(market_cap)  ~ "N/A",
@@ -1608,7 +1613,7 @@ server <- function(input, output, session) {
         sector_fmt   = coalesce(sector, "—")
       ) %>%
       select(`#`, Badge, Symbol=symbol, Company=company_fmt, Sector=sector_fmt,
-             Score, Rating, `Wk Conf`, Driver,
+             Score, Rating, Driver,
              `1M`=ret_1m_fmt, `3M`=ret_3m_fmt,
              `Rev Growth`=rev_g_fmt, `Mkt Cap`=mktcap_fmt, `P/E`=pe_fmt)
 
@@ -2286,24 +2291,33 @@ server <- function(input, output, session) {
   })
 
   # ── Live TV ───────────────────────────────────────────────────────────────
-  tv_choice <- reactiveVal(NULL)
+  # Resolved once per session: opening on a channel that happens to be off air
+  # is the dead-player case this panel exists to avoid.
+  tv_choice <- reactiveVal(tryCatch(tv_first_live(), error = function(e) TV_DEFAULT))
   lapply(names(TV_CHANNELS), function(n) {
     observeEvent(input[[paste0("tv_", make.names(n))]], { tv_choice(n) }, ignoreInit = TRUE)
   })
 
   output$tv_meta <- renderUI({
     ch <- tv_choice()
-    div(if (is.null(ch)) "SELECT A CHANNEL" else toupper(ch))
+    div(toupper(ch %||% TV_DEFAULT))
+  })
+
+  observe({
+    ch <- tv_choice() %||% TV_DEFAULT
+    session$sendCustomMessage("tvActive", list(id = paste0("tv_", make.names(ch))))
   })
 
   output$tv_player <- renderUI({
-    ch <- tv_choice()
-    if (is.null(ch))
+    # Always mounts a channel. An empty "pick a channel" placeholder meant the
+    # panel opened as a dead grey box on the landing tab.
+    ch <- tv_choice() %||% TV_DEFAULT
+    if (!isTRUE(tryCatch(tv_is_live(ch), error = function(e) TRUE)))
       return(div(style=paste0("border:1px solid var(--border);background:#0D0D0D;",
                               "aspect-ratio:16/9;display:flex;align-items:center;",
-                              "justify-content:center;color:#555;font-family:IBM Plex Mono;",
-                              "font-size:12px;text-align:center;padding:20px;"),
-                 "Pick a channel above to start the stream."))
+                              "justify-content:center;color:#666;font-family:IBM Plex Mono;",
+                              "font-size:11px;text-align:center;padding:20px;line-height:1.6;"),
+                 paste0(ch, " is not streaming live right now. Pick another channel.")))
     tags$div(style="position:relative;width:100%;aspect-ratio:16/9;border:1px solid var(--border);background:#000;",
       tags$iframe(src = tv_embed_url(ch),
         style = "position:absolute;inset:0;width:100%;height:100%;border:0;",

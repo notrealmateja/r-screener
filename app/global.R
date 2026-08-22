@@ -488,10 +488,58 @@ TV_CHANNELS <- c(
   "Reuters"       = "UChqUTb7kYRX8-EiaN3XFrSQ"
 )
 
+# Shown on load, so the panel is never a dead grey box.
+TV_DEFAULT <- "Bloomberg TV"
+
+`%||%` <- function(a, b) if (is.null(a)) b else a
+
+# /embed/live_stream?channel= is the documented way to embed "whatever this
+# channel is airing", but it renders "This video is unavailable" even while the
+# channel is demonstrably live. Resolving the current live video id and
+# embedding that directly does play. Ids change whenever the broadcaster
+# restarts the stream, so this is resolved at render time and cached briefly
+# rather than pinned in source.
+TV_ID_TTL <- 300
+
+.tv_id_cache <- new.env(parent = emptyenv())
+
+tv_live_video_id <- function(channel) {
+  cid <- TV_CHANNELS[[channel]]
+  if (is.null(cid)) return(NA_character_)
+  hit <- .tv_id_cache[[cid]]
+  now <- as.numeric(Sys.time())
+  if (!is.null(hit) && (now - hit$at) < TV_ID_TTL) return(hit$id)
+  id <- tryCatch({
+    h <- curl::new_handle()
+    curl::handle_setheaders(h, `User-Agent` = "Mozilla/5.0")
+    txt <- rawToChar(curl::curl_fetch_memory(
+      paste0("https://www.youtube.com/channel/", cid, "/live"), handle = h)$content)
+    if (!grepl('"isLive":true', txt, fixed = TRUE)) {
+      NA_character_
+    } else {
+      m <- regmatches(txt, regexpr('"videoId":"[A-Za-z0-9_-]{11}"', txt))
+      if (!length(m)) NA_character_ else sub('"videoId":"', '', sub('"$', '', m))
+    }
+  }, error = function(e) NA_character_)
+  .tv_id_cache[[cid]] <- list(at = now, id = id)
+  id
+}
+
+tv_is_live <- function(channel) !is.na(tv_live_video_id(channel))
+
+# The first channel actually streaming, so the panel never opens on a dead
+# player. Falls back to the configured default if nothing resolves.
+tv_first_live <- function() {
+  for (n in names(TV_CHANNELS)) if (tv_is_live(n)) return(n)
+  TV_DEFAULT
+}
+
 tv_embed_url <- function(channel) {
-  id <- TV_CHANNELS[[channel]]
+  vid <- tv_live_video_id(channel)
   # mute=1 because browsers block autoplay with sound; playsinline keeps it in
   # the panel on mobile rather than going fullscreen.
-  paste0("https://www.youtube.com/embed/live_stream?channel=", id,
-         "&autoplay=1&mute=1&playsinline=1")
+  if (is.na(vid))
+    return(paste0("https://www.youtube.com/embed/live_stream?channel=",
+                  TV_CHANNELS[[channel]], "&autoplay=1&mute=1&playsinline=1"))
+  paste0("https://www.youtube.com/embed/", vid, "?autoplay=1&mute=1&playsinline=1")
 }

@@ -56,24 +56,48 @@ if (have_pkgs("dplyr", "tibble")) {
   })
 
   # ── live TV ──────────────────────────────────────────────────────────────
-  test_that("embeds are channel-based, never a hardcoded video id", {
+  # tv_embed_url resolves the current live video id over the network, so these
+  # stub the resolver: the URL shape is the thing under test, not YouTube.
+  with_stub_id <- function(id, expr) {
+    orig <- tv_live_video_id
+    assign("tv_live_video_id", function(channel) id, envir = environment(tv_embed_url))
+    on.exit(assign("tv_live_video_id", orig, envir = environment(tv_embed_url)), add = TRUE)
+    force(expr)
+  }
+
+  test_that("a live channel embeds its resolved video id", {
     skip_if_not(have_ui, "global.R live section missing")
-    # A live stream's video id changes each time the broadcaster restarts it, so
-    # a pinned id goes dead within days. The channel form always resolves to
-    # whatever that channel is airing.
-    for (ch in names(TV_CHANNELS)) {
-      u <- tv_embed_url(ch)
-      expect_match(u, "^https://www\\.youtube\\.com/embed/live_stream\\?channel=")
-      expect_match(u, TV_CHANNELS[[ch]], fixed = TRUE)
-      # "live_stream" is itself 11 characters, so exclude it before checking
-      # that no 11-character video id was pinned in its place.
-      expect_false(grepl("/embed/(?!live_stream)[A-Za-z0-9_-]{11}\\?", u, perl = TRUE))
-    }
+    # /embed/live_stream?channel= is the documented form, but it renders "This
+    # video is unavailable" even while the channel is demonstrably live, so the
+    # current video id is resolved and embedded directly instead.
+    with_stub_id("QB5BNdBFujE", {
+      u <- tv_embed_url("Bloomberg TV")
+      expect_match(u, "^https://www\\.youtube\\.com/embed/QB5BNdBFujE\\?")
+      expect_false(grepl("live_stream", u, fixed = TRUE))
+    })
+  })
+
+  test_that("an unresolvable channel falls back rather than erroring", {
+    skip_if_not(have_ui, "global.R live section missing")
+    with_stub_id(NA_character_, {
+      u <- tv_embed_url("Bloomberg TV")
+      expect_match(u, "live_stream\\?channel=")
+      expect_match(u, TV_CHANNELS[["Bloomberg TV"]], fixed = TRUE)
+    })
+  })
+
+  test_that("no video id is hardcoded in source", {
+    skip_if_not(have_ui, "global.R live section missing")
+    # Ids change whenever the broadcaster restarts the stream, so a pinned id
+    # dies within days. Only the channel ids may live in source.
+    src <- paste(readLines(repo_path("app", "global.R")), collapse = "\n")
+    expect_false(grepl('embed/[A-Za-z0-9_-]{11}\\?autoplay', src))
   })
 
   test_that("streams start muted, since browsers block autoplay with sound", {
     skip_if_not(have_ui, "global.R live section missing")
-    for (ch in names(TV_CHANNELS)) expect_match(tv_embed_url(ch), "mute=1", fixed = TRUE)
+    with_stub_id("QB5BNdBFujE", expect_match(tv_embed_url("Bloomberg TV"), "mute=1", fixed = TRUE))
+    with_stub_id(NA_character_,  expect_match(tv_embed_url("Bloomberg TV"), "mute=1", fixed = TRUE))
   })
 
   test_that("channel ids look like real YouTube channel ids", {
@@ -101,11 +125,23 @@ if (have_pkgs("dplyr", "tibble")) {
     expect_true(grepl('name="MA200",\\s*hoverinfo="skip"', src))
   })
 
-  test_that("leaving the TV pane stops the embedded stream", {
+  test_that("leaving the overview stops the embedded stream", {
     src <- app_code()
-    # Panes are hidden with CSS rather than unmounted, so without this the
-    # video keeps playing, and keeps making sound, on every other tab.
+    # The player lives on the Overview pane. Panes are hidden with CSS rather
+    # than unmounted, so without this the video keeps playing, and keeps making
+    # sound, while the viewer is on another tab.
     expect_true(grepl("about:blank", src, fixed = TRUE))
-    expect_true(grepl("pane-tv iframe", src, fixed = TRUE))
+    expect_true(grepl("pane-overview iframe", src, fixed = TRUE))
+    # the standalone TV tab was folded into Overview
+    expect_false(grepl('id="pane-tv"', src, fixed = TRUE))
+  })
+
+  test_that("the all-100% confidence columns are gone from the tables", {
+    src <- app_code()
+    # sweet_spot_confidence and unicorn_confidence each had exactly one
+    # distinct value across the universe, so the bar drew an identical green
+    # line on every row and told the reader nothing.
+    expect_false(grepl("Confidence\\s*=\\s*sapply", src))
+    expect_false(grepl("`Wk Conf`\\s*=", src))
   })
 }
