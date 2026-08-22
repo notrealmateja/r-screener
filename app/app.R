@@ -111,18 +111,6 @@ html, body { background:var(--bg); color:var(--text); font-family:var(--sans);
 .tab-pane.active { display:block; }
 
 /* ── SECTION HEADER ── */
-.sec-header {
-  display:flex; align-items:center; justify-content:space-between;
-  margin-bottom:14px;
-}
-.sec-title {
-  font-family:var(--mono); font-size:13px; font-weight:600;
-  color:var(--orange); text-transform:uppercase; letter-spacing:1px;
-}
-.sec-meta {
-  font-family:var(--mono); font-size:10px; color:var(--muted); letter-spacing:0.5px;
-}
-
 /* ── KPI STRIP ── */
 .kpi-strip {
   display:grid; grid-template-columns:repeat(6,1fr);
@@ -249,15 +237,12 @@ table.dataTable tbody tr:hover td { background:rgba(255,107,0,0.06) !important; 
 .sq-ls  { color:var(--cyan);   border-color:var(--cyan);   background:rgba(0,184,217,0.1); }
 .sq-ns  { color:var(--muted);  border-color:var(--border); background:var(--s2); }
 
-/* ── NEWS FEED ── */
-.news-item { padding:10px 0; border-bottom:1px solid var(--border); }
-.news-item:last-child { border:none; }
-.news-headline { font-size:12px; color:var(--text); line-height:1.4; margin-bottom:4px; }
-.news-headline a { color:var(--text); text-decoration:none; }
-.news-headline a:hover { color:var(--orange); }
-.news-meta { font-family:var(--mono); font-size:10px; color:var(--muted); display:flex; gap:12px; }
-.news-ticker { color:var(--orange); font-weight:600; }
+/* Classes below are generated at runtime by DataTables, ionRangeSlider and
+   selectize, and by the DT row callback (.comp-highlight) and the regime badge
+   (.regime-*, built with paste0). They appear unused to a naive grep of this
+   file — they are not. */
 
+/* ── NEWS FEED ── */
 /* ── WSB TRENDING ── */
 .wsb-item { display:flex; align-items:center; gap:10px; padding:8px 12px; border-bottom:1px solid var(--border); font-family:var(--mono); font-size:11px; transition:background 0.15s; }
 .wsb-item:hover { background:rgba(255,107,0,0.04); }
@@ -381,7 +366,6 @@ table.dataTable tbody tr:hover td { background:rgba(255,107,0,0.06) !important; 
 .earn-item { display:flex; align-items:center; gap:10px; padding:7px 0; border-bottom:1px solid var(--border); font-family:var(--mono); font-size:11px; }
 .earn-item:last-child { border:none; }
 .earn-date   { color:var(--muted); min-width:80px; }
-.earn-sym    { color:var(--orange); font-weight:600; min-width:55px; }
 .earn-time   { color:var(--text2); font-size:10px; }
 .earn-eps    { margin-left:auto; color:var(--text); }
 
@@ -717,7 +701,65 @@ ui <- fluidPage(
     tags$meta(name="viewport", content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"),
     tags$link(rel="stylesheet", href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap"),
     tags$style(HTML(bloomberg_css)),
-    tags$style(HTML(mobile_css))
+    tags$style(HTML(mobile_css)),
+
+    # Motion One (motion.dev) — loaded as an ES module from a CDN.
+    #
+    # Deliberately additive: nothing starts hidden in CSS. Elements are animated
+    # FROM opacity 0 in JS only once the library has actually loaded, so a
+    # blocked CDN, an offline user or a failed import costs the animation and
+    # nothing else. Starting them hidden in CSS would leave the page blank in
+    # exactly those cases.
+    #
+    # Restrained on purpose: a terminal that bounces reads as a toy. Short
+    # durations, small distances, no easing overshoot.
+    tags$script(HTML("
+      window.__motionReady = false;
+      window.__reduceMotion =
+        window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    ")),
+    tags$script(type = "module", HTML("
+      if (!window.__reduceMotion) {
+        try {
+          const m = await import('https://cdn.jsdelivr.net/npm/motion@11.11.13/+esm');
+          window.__motion = m;
+          window.__motionReady = true;
+
+          // Panels enter on tab switch, staggered so the eye follows the page
+          window.animatePane = function (pane) {
+            if (!window.__motionReady || !pane) return;
+            const items = pane.querySelectorAll('.panel, .kpi-cell, .statcell');
+            if (!items.length) return;
+            m.animate(items,
+              { opacity: [0, 1], transform: ['translateY(6px)', 'translateY(0px)'] },
+              { duration: 0.28, delay: m.stagger(0.025), easing: 'ease-out' });
+          };
+
+          // Count numeric KPI values up rather than snapping to them
+          window.animateCounters = function (root) {
+            if (!window.__motionReady) return;
+            (root || document).querySelectorAll('.kpi-v, .statcell .v').forEach(function (el) {
+              const txt = (el.textContent || '').trim();
+              const match = txt.match(/^([+-]?)(\\d[\\d,]*\\.?\\d*)(.*)$/);
+              if (!match) return;
+              const sign = match[1], suffix = match[3];
+              const target = parseFloat(match[2].replace(/,/g, ''));
+              if (!isFinite(target)) return;
+              const decimals = (match[2].split('.')[1] || '').length;
+              m.animate(function (p) {
+                el.textContent = sign + (target * p).toFixed(decimals) + suffix;
+              }, { duration: 0.5, easing: 'ease-out' });
+            });
+          };
+
+          window.animatePane(document.querySelector('.tab-pane.active'));
+          window.animateCounters(document.querySelector('.tab-pane.active'));
+        } catch (e) {
+          // CDN unreachable or import failed — leave the page exactly as-is
+          window.__motionReady = false;
+        }
+      }
+    "))
   ),
 
   # ── DISCLAIMER GATE ──────────────────────────────────────────────────────
@@ -1131,7 +1173,12 @@ ui <- fluidPage(
       document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
       document.querySelectorAll('.topbar-nav-item').forEach(n => n.classList.remove('active'));
       document.querySelectorAll('.mobile-nav-item').forEach(n => n.classList.remove('active'));
-      document.getElementById('pane-' + name).classList.add('active');
+      var pane = document.getElementById('pane-' + name);
+      pane.classList.add('active');
+      // Guarded: these only exist once motion.dev has loaded successfully, so a
+      // blocked CDN or reduced-motion preference simply skips the animation.
+      if (window.animatePane) window.animatePane(pane);
+      if (window.animateCounters) window.animateCounters(pane);
       var desktopNav = document.getElementById('nav-' + name);
       if (desktopNav) desktopNav.classList.add('active');
       var mobileNav = document.getElementById('mnav-' + name);
@@ -1165,7 +1212,11 @@ ui <- fluidPage(
       var now = new Date();
       var timeStr = now.toLocaleTimeString('en-US', {hour12:false, hour:'2-digit', minute:'2-digit', second:'2-digit'});
       var dateStr = now.toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric', year:'numeric'});
-      Shiny.setInputValue('clock_tick', timeStr + '|' + dateStr, {priority:'event'});
+      // The interval starts before Shiny has initialised, so the first tick threw
+      // an uncaught TypeError on every page load. Guarded so it waits quietly.
+      if (window.Shiny && typeof Shiny.setInputValue === 'function') {
+        Shiny.setInputValue('clock_tick', timeStr + '|' + dateStr, {priority:'event'});
+      }
     }
     setInterval(updateClock, 1000);
     updateClock();

@@ -308,3 +308,27 @@ test_that("float basis falls back conservatively", {
   pct_out   <- shares_short / outstanding
   expect_lt(pct_out, pct_float)
 })
+
+test_that("motion is additive and cannot leave the page invisible", {
+  # Elements are animated FROM opacity 0 in JS only after the library loads.
+  # Hiding them in CSS instead would leave the page blank whenever the CDN is
+  # blocked, the user is offline, or the import fails.
+  src <- paste(readLines("../../app/app.R"), collapse = "\n")
+  expect_match(src, "__motionReady")
+  expect_match(src, "prefers-reduced-motion")
+  # The animation entry points must be called defensively
+  expect_match(src, "if \\(window\\.animatePane\\)")
+  expect_match(src, "if \\(window\\.animateCounters\\)")
+  # No CSS rule may pre-hide the animated elements
+  i <- regexpr("bloomberg_css <- \"", src)
+  css <- substr(src, i, i + 20000)
+  expect_no_match(css, "\\.panel\\s*\\{[^}]*opacity:\\s*0")
+  expect_no_match(css, "\\.kpi-cell\\s*\\{[^}]*opacity:\\s*0")
+})
+
+test_that("browser globals are guarded before use", {
+  # A clock interval called Shiny.setInputValue before Shiny had initialised,
+  # throwing an uncaught TypeError on every page load.
+  src <- paste(readLines("../../app/app.R"), collapse = "\n")
+  expect_match(src, "typeof Shiny\\.setInputValue === 'function'")
+})
