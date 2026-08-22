@@ -8,8 +8,8 @@
 #   Sector perf       — computed from Module 1 fundamentals (self-sourced)
 #   WSB trending      — ApeWisdom API (free, no key needed)
 #   StockTwits        — StockTwits API (free, no key needed)
-#   Short interest    — stub (no reliable free API; squeeze scores use
-#                       options data from Polygon in Module 2b instead)
+#   Short interest    — FINRA consolidated (all venues, no key), with Yahoo
+#                       used only to refine the float denominator
 # =============================================================================
 library(quantmod); library(dplyr); library(tidyr); library(readr)
 library(glue); library(httr); library(jsonlite); library(lubridate)
@@ -17,16 +17,137 @@ library(glue); library(httr); library(jsonlite); library(lubridate)
 AV_KEY   <- Sys.getenv("AV_KEY")
 AV_BASE  <- "https://www.alphavantage.co/query"
 
-# ── Short Interest (stub — no reliable free source) ────────────────────────
-get_short_interest <- function(tickers) {
-  message("Building short interest stubs (no reliable free API)...")
-  tibble(
-    symbol             = tickers,
-    short_percent_float = NA_real_,
-    short_ratio        = NA_real_,
-    shares_short       = NA_real_,
-    short_trend        = "Unknown"
-  )
+# ── Short Interest ─────────────────────────────────────────────────────────
+# Short interest used to be a stub returning all-NA on the assumption that no
+# free source exists. Three do. Because the inputs were NA, every squeeze score
+# defaulted to 50 and all 195 stocks read "No Signal" — real data revives that
+# module.
+#
+# FINRA is the primary source and is strictly better than the alternatives:
+#   FINRA   — every US venue, no auth, 100% universe coverage in ~5 paginated
+#             calls, and carries the prior period so the trend is real
+#   Nasdaq  — no auth but only covers Nasdaq-listed names (NYSE returns empty)
+#   Yahoo   — the only free source for true float, but needs a cookie+crumb
+#             handshake and rate-limits under load
+#
+# Yahoo is used solely to refine the denominator. Where it fails, shares
+# outstanding stands in; float is a subset of outstanding, so that understates
+# the percentage and errs toward calling a stock less squeezed, never more.
+FINRA_SHORT_URL <- paste0("https://api.finra.org/data/group/otcMarket/name/",
+                          "consolidatedShortInterest")
+
+finra_post <- function(body) {
+  tryCatch({
+    r <- POST(FINRA_SHORT_URL, body = body, encode = "json",
+              add_headers(`User-Agent` = "EdgeScreener/1.0", Accept = "application/json"),
+              timeout(90))
+    if (status_code(r) != 200) return(NULL)
+    out <- fromJSON(content(r, as = "text", encoding = "UTF-8"))
+    if (!is.data.frame(out) || nrow(out) == 0) return(NULL)
+    out
+  }, error = function(e) NULL)
+}
+
+# Sorting requires settlementDate as an EQUAL filter, so the newest date is
+# found by pulling one liquid symbol's history and taking its maximum.
+finra_latest_settlement <- function(probe = "AAPL") {
+  d <- finra_post(list(limit = 5000,
+        compareFilters = list(list(fieldName = "symbolCode",
+                                   fieldValue = probe, compareType = "EQUAL"))))
+  if (is.null(d) || !"settlementDate" %in% names(d)) return(NULL)
+  max(d$settlementDate, na.rm = TRUE)
+}
+
+finra_short_bulk <- function(settle_date, page = 5000, max_pages = 8) {
+  pages <- list()
+  for (i in seq_len(max_pages)) {
+    d <- finra_post(list(limit = page, offset = (i - 1) * page,
+          compareFilters = list(list(fieldName = "settlementDate",
+                                     fieldValue = settle_date, compareType = "EQUAL"))))
+    if (is.null(d)) break
+    pages[[length(pages) + 1]] <- d
+    if (nrow(d) < page) break
+  }
+  if (length(pages) == 0) return(NULL)
+  bind_rows(pages)
+}
+
+get_short_interest <- function(tickers, fundamentals = NULL) {
+  message("Pulling short interest (FINRA consolidated)...")
+  num <- function(x) suppressWarnings(as.numeric(x))
+
+  settle <- finra_latest_settlement()
+  finra <- if (!is.null(settle)) finra_short_bulk(settle) else NULL
+
+  if (is.null(finra)) {
+    message("  FINRA unavailable — short interest will be empty this run.")
+    df <- tibble(symbol = tickers, shares_short = NA_real_, shares_short_prior = NA_real_,
+                 short_ratio = NA_real_, float_shares = NA_real_,
+                 short_percent_float = NA_real_, short_source = "none",
+                 settlement_date = NA_character_)
+  } else {
+    message(glue("  FINRA settlement {settle}: {nrow(finra)} securities"))
+    df <- tibble(symbol = tickers) %>%
+      left_join(
+        finra %>%
+          transmute(symbol             = as.character(symbolCode),
+                    shares_short       = num(currentShortPositionQuantity),
+                    shares_short_prior = num(previousShortPositionQuantity),
+                    short_ratio        = num(daysToCoverQuantity),
+                    settlement_date    = as.character(settlementDate)) %>%
+          distinct(symbol, .keep_all = TRUE),
+        by = "symbol") %>%
+      mutate(float_shares = NA_real_, short_percent_float = NA_real_,
+             short_source = ifelse(is.na(shares_short), "none", "finra"))
+  }
+
+  # Optional: refine the denominator with Yahoo's true float. Failure here only
+  # costs precision, never the metric.
+  auth <- tryCatch(yahoo_handle(), error = function(e) NULL)
+  if (!is.null(auth)) {
+    message("  Yahoo crumb acquired — refining float where possible.")
+    for (i in which(!is.na(df$shares_short))) {
+      y <- short_from_yahoo(df$symbol[i], auth)
+      if (!is.null(y)) {
+        if (!is.na(y$float_shares))        df$float_shares[i]        <- y$float_shares
+        if (!is.na(y$short_percent_float)) df$short_percent_float[i] <- y$short_percent_float
+      }
+      Sys.sleep(0.3)
+    }
+  } else {
+    message("  No Yahoo crumb — using shares outstanding as the denominator.")
+  }
+
+  if (!is.null(fundamentals) && "shares_outstanding" %in% names(fundamentals)) {
+    df <- df %>% left_join(
+      fundamentals %>% select(symbol, shares_outstanding) %>% distinct(symbol, .keep_all = TRUE),
+      by = "symbol")
+  } else df$shares_outstanding <- NA_real_
+
+  df <- df %>%
+    mutate(
+      short_pct_basis = case_when(
+        !is.na(short_percent_float)                                               ~ "float",
+        !is.na(shares_short) & !is.na(float_shares) & float_shares > 0            ~ "float",
+        !is.na(shares_short) & !is.na(shares_outstanding) & shares_outstanding > 0 ~ "shares outstanding",
+        TRUE                                                                      ~ "unavailable"),
+      short_percent_float = case_when(
+        !is.na(short_percent_float)                                               ~ short_percent_float,
+        !is.na(shares_short) & !is.na(float_shares) & float_shares > 0            ~ shares_short / float_shares,
+        !is.na(shares_short) & !is.na(shares_outstanding) & shares_outstanding > 0 ~ shares_short / shares_outstanding,
+        TRUE                                                                      ~ NA_real_),
+      # A real trend now, rather than the constant "Unknown" the stub returned
+      short_trend = case_when(
+        is.na(shares_short) | is.na(shares_short_prior) ~ "Unknown",
+        shares_short > shares_short_prior * 1.05        ~ "Increasing",
+        shares_short < shares_short_prior * 0.95        ~ "Decreasing",
+        TRUE                                            ~ "Stable"))
+
+  got <- sum(!is.na(df$shares_short)); pf <- sum(!is.na(df$short_percent_float))
+  message(glue("  Short interest: {got}/{nrow(df)} tickers, {pf} with a usable percentage"))
+  message(glue("  Basis: {paste(names(table(df$short_pct_basis)), table(df$short_pct_basis), sep='=', collapse=', ')}"))
+  if (got == 0) warning("WARN: short interest empty - squeeze scores will be neutral")
+  df
 }
 
 # ── Macro Data via FRED (quantmod, not tidyquant) ──────────────────────────
@@ -536,7 +657,7 @@ run_module3 <- function(tickers=NULL) {
   }
   fund_data <- read_csv("data/fundamentals_scored.csv", show_col_types=FALSE)
 
-  short   <- get_short_interest(tickers)
+  short   <- get_short_interest(tickers, fund_data)
   squeeze <- build_squeeze_score(short, fund_data)
   macro   <- get_macro_data()
   # News before earnings: both draw on the same Alpha Vantage daily quota that

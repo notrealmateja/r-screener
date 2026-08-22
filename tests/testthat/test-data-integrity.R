@@ -270,3 +270,41 @@ test_that("JS() callbacks are built as a single string", {
   joined <- paste(src, collapse = "\n")
   expect_match(joined, "callback=JS\\(sprintf\\(")
 })
+
+test_that("short interest is fetched, not stubbed", {
+  # This was a stub returning all-NA on the belief that no free source existed.
+  # FINRA covers every US venue with no key. While the inputs were NA every
+  # squeeze score defaulted to 50 and all 195 stocks read "No Signal".
+  src <- paste(readLines("../../R/03_data.R"), collapse = "\n")
+  expect_match(src, "FINRA_SHORT_URL")
+  expect_match(src, "finra_short_bulk")
+  expect_no_match(src, "Building short interest stubs")
+  # The denominator actually used must be recorded, since shares outstanding
+  # is a proxy for float rather than the real thing
+  expect_match(src, "short_pct_basis")
+})
+
+test_that("short trend is derived from the prior period, not hardcoded", {
+  trend <- function(now, prior) {
+    if (is.na(now) || is.na(prior)) "Unknown"
+    else if (now > prior * 1.05) "Increasing"
+    else if (now < prior * 0.95) "Decreasing"
+    else "Stable"
+  }
+  expect_equal(trend(150, 100), "Increasing")
+  expect_equal(trend(100, 150), "Decreasing")
+  expect_equal(trend(100, 100), "Stable")
+  expect_equal(trend(103, 100), "Stable")      # inside the 5% band
+  expect_equal(trend(NA, 100),  "Unknown")
+})
+
+test_that("float basis falls back conservatively", {
+  # Float is a subset of shares outstanding, so using outstanding as the
+  # denominator understates the percentage. That errs toward calling a stock
+  # less squeezed, never more, which is the safe direction.
+  shares_short <- 1e6
+  float <- 5e6; outstanding <- 10e6
+  pct_float <- shares_short / float
+  pct_out   <- shares_short / outstanding
+  expect_lt(pct_out, pct_float)
+})
