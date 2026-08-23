@@ -60,6 +60,12 @@ fmt_chg <- function(x) {
 }
 price_data <- price_history
 
+# Shared by the <title> and the link-preview meta tags.
+PAGE_URL  <- "https://r-codescreener.shinyapps.io/r-codescreener/"
+PAGE_DESC <- paste("Nightly quantitative screener ranking 195 US equities on risk-adjusted",
+                   "excess return versus the S&P 500, with DCF and LBO modelling from SEC",
+                   "XBRL filings, short interest, and walk-forward validation.")
+
 # ── Discounted cash flow ────────────────────────────────────────────────────
 # compute_dcf() was called by the Deep Dive panel but never defined anywhere in
 # the repo, so its tryCatch caught "could not find function" on every render and

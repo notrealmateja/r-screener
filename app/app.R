@@ -782,6 +782,19 @@ mobile_css <- "
 # =============================================================================
 ui <- fluidPage(
   tags$head(
+    # The app shipped with no title at all, so the browser tab showed the raw
+    # URL and nothing could build a link preview — LinkedIn, Slack and Twitter
+    # all got a blank card, which is what made the URL look invalid when pasted.
+    tags$title("EdgeScreener — Quantitative Equity Terminal"),
+    tags$meta(name="description", content=PAGE_DESC),
+    tags$meta(property="og:type",        content="website"),
+    tags$meta(property="og:site_name",   content="EdgeScreener"),
+    tags$meta(property="og:title",       content="EdgeScreener — Quantitative Equity Terminal"),
+    tags$meta(property="og:description", content=PAGE_DESC),
+    tags$meta(property="og:url",         content=PAGE_URL),
+    tags$meta(name="twitter:card",        content="summary"),
+    tags$meta(name="twitter:title",       content="EdgeScreener — Quantitative Equity Terminal"),
+    tags$meta(name="twitter:description", content=PAGE_DESC),
     tags$meta(name="viewport", content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"),
     tags$link(rel="stylesheet", href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap"),
     tags$style(HTML(bloomberg_css)),
