@@ -217,6 +217,33 @@ jobs:
             if (nzchar(sf)) writeLines(out, sf)
           '
 
+      # Connect Cloud deploys from the repo and validates each file against a
+      # checksum in manifest.json. The pipeline rewrites every CSV nightly, so
+      # a manifest committed once would be stale by the next run and the
+      # deployed app would not match what the manifest claims.
+      - name: Refresh Connect Cloud manifest
+        if: always()
+        continue-on-error: true
+        run: |
+          Rscript -e '
+            if (!requireNamespace("rsconnect", quietly = TRUE)) {
+              message("rsconnect unavailable — leaving manifest untouched.")
+            } else if (!file.exists("app/app.R")) {
+              message("app/app.R missing — leaving manifest untouched.")
+            } else {
+              ok <- tryCatch({
+                rsconnect::writeManifest(appDir = "app", appPrimaryDoc = "app.R")
+                TRUE
+              }, error = function(e) { message("Manifest refresh failed: ",
+                                               conditionMessage(e)); FALSE })
+              if (ok) {
+                m <- jsonlite::fromJSON("app/manifest.json")
+                message(sprintf("Manifest refreshed: %d files, %d packages.",
+                                length(m$files), length(m$packages)))
+              }
+            }
+          '
+
       - name: Clean stale files and commit updated data
         if: always()
         run: |
@@ -230,7 +257,8 @@ jobs:
           fi
 
           git add data/alpha_history.csv data/av_cache.csv data/polygon_cache.csv \
-                  data/*.csv data/*.rds app/*.csv app/*.rds app/data/*.rds || true
+                  data/*.csv data/*.rds app/*.csv app/*.rds app/data/*.rds \
+                  app/manifest.json || true
           git diff --quiet && git diff --staged --quiet || \
             git commit -m "Auto-update: Daily alpha refresh $(date +'%Y-%m-%d')"
           git push || true
