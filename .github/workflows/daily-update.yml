@@ -82,6 +82,10 @@ jobs:
         env:
           AV_KEY: ${{ secrets.AV_KEY }}
           POLY_KEY: ${{ secrets.POLY_KEY }}
+          # Resolves each channel's current live video id. Without it the
+          # pipeline holds whatever ids are already committed rather than
+          # blanking the panel.
+          YT_KEY: ${{ secrets.YT_KEY }}
         run: |
           Rscript -e '
             # Prevent modules from auto-running on source()
