@@ -504,41 +504,11 @@ TV_ID_TTL <- 300
 
 .tv_id_cache <- new.env(parent = emptyenv())
 
-# Verify a candidate against its own watch page. Reading which id is live off
-# the channel page's layout picked a recording in production twice.
-tv_video_is_live <- function(vid) {
-  tryCatch({
-    h <- curl::new_handle()
-    curl::handle_setheaders(h, `User-Agent` = "Mozilla/5.0",
-                            `Accept-Language` = "en-US,en;q=0.9")
-    txt <- rawToChar(curl::curl_fetch_memory(
-      paste0("https://www.youtube.com/watch?v=", vid), handle = h)$content)
-    len <- regmatches(txt, regexpr('"lengthSeconds":"[0-9]+"', txt))
-    length(len) > 0 && grepl('"lengthSeconds":"0"', len[1], fixed = TRUE)
-  }, error = function(e) FALSE)
-}
-
-tv_live_video_id <- function(channel, max_try = 4) {
-  cid <- TV_CHANNELS[[channel]]
-  if (is.null(cid)) return(NA_character_)
-  hit <- .tv_id_cache[[cid]]
-  now <- as.numeric(Sys.time())
-  if (!is.null(hit) && (now - hit$at) < TV_ID_TTL) return(hit$id)
-  id <- tryCatch({
-    h <- curl::new_handle()
-    curl::handle_setheaders(h, `User-Agent` = "Mozilla/5.0",
-                            `Accept-Language` = "en-US,en;q=0.9")
-    txt <- rawToChar(curl::curl_fetch_memory(
-      paste0("https://www.youtube.com/channel/", cid, "/live"), handle = h)$content)
-    ids <- unique(sub('"videoId":"', '', sub('"$', '',
-             regmatches(txt, gregexpr('"videoId":"[A-Za-z0-9_-]{11}"', txt))[[1]])))
-    found <- NA_character_
-    for (v in utils::head(ids, max_try)) if (tv_video_is_live(v)) { found <- v; break }
-    found
-  }, error = function(e) NA_character_)
-  .tv_id_cache[[cid]] <- list(at = now, id = id)
-  id
-}
+# The app does no live resolution. Every server-side approach failed from
+# shinyapps.io, and a wrong guess is worse than none: an unverified runtime
+# lookup once overrode a correct committed id and served viewers a recording.
+# Ids come from data/tv_channels.csv, refreshed by the pipeline.
+tv_live_video_id <- function(channel) NA_character_
 
 # Three sources, best first. Runtime resolution is ideal but shinyapps.io's
 # requests to YouTube do not come back parseable, so the nightly file resolved
@@ -553,13 +523,15 @@ tv_baked <- function(channel) {
   if (nrow(r) == 0) NULL else r[1, ]
 }
 
-# TRUE, FALSE, or NA for "could not determine". The distinction matters: an
-# unreachable YouTube is not the same as a channel being off air, and the panel
-# previously reported the former as the latter on every channel at once.
+# TRUE, FALSE, or NA for "could not determine". A channel is only reported off
+# air when the table says so AND carries no id to try. Reporting "not streaming"
+# off a failed lookup told viewers four broadcasters had stopped at once.
 tv_live_state <- function(channel) {
-  if (!is.na(tv_live_video_id(channel))) return(TRUE)
   b <- tv_baked(channel)
-  if (!is.null(b) && !is.na(b$is_live)) return(isTRUE(as.logical(b$is_live)))
+  if (is.null(b)) return(NA)
+  has_id <- !is.na(b$video_id) && nzchar(b$video_id) && b$video_id != "NA"
+  if (has_id) return(TRUE)
+  if (!is.na(b$is_live)) return(isTRUE(as.logical(b$is_live)))
   NA
 }
 

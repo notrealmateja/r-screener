@@ -147,18 +147,39 @@ if (have_pkgs("dplyr", "tibble")) {
 }
 
 # ── the live-vs-recorded regression ─────────────────────────────────────────
-test_that("the resolver verifies candidates instead of inferring from layout", {
-  for (f in c(repo_path("app", "global.R"), repo_path("R", "03_data.R"))) {
-    src <- paste(readLines(f), collapse = "\n")
-    # Two earlier attempts read which id was live off the channel page — first
-    # by position, then by proximity to an isLive marker. Both agreed with
-    # canonical on the page a home connection gets, and both picked a recording
-    # on the page a datacenter IP gets, which is the only one production sees.
-    # Each candidate is now checked against its own watch page instead.
-    expect_true(grepl("is_live|_video_is_live", src))
-    expect_true(grepl("watch\\?v=", src))
-    expect_true(grepl("lengthSeconds", src, fixed = TRUE))
+test_that("resolution goes through the Data API, not page scraping", {
+  src <- paste(readLines(repo_path("R", "03_data.R")), collapse = "\n")
+  # Three scraping variants failed. YouTube serves datacenter IPs — both
+  # shinyapps.io and GitHub runners — pages stripped of the fields that identify
+  # the live stream, while a home connection gets them, so anything validated
+  # locally proved nothing about production. The Data API is authenticated
+  # rather than scraped and answers the same way from any IP.
+  expect_true(grepl("googleapis.com/youtube/v3/search", src, fixed = TRUE))
+  expect_true(grepl("eventType", src, fixed = TRUE))
+  expect_true(grepl("YT_KEY", src, fixed = TRUE))
+})
+
+test_that("the app does no runtime resolution of its own", {
+  src <- paste(readLines(repo_path("app", "global.R")), collapse = "\n")
+  # An unverified runtime lookup once overrode a correct committed id and
+  # served viewers a 2239-second recording. A wrong guess is worse than none.
+  expect_false(grepl("youtube.com/channel/", src, fixed = TRUE))
+  expect_true(grepl("tv_live_video_id <- function(channel) NA_character_", src, fixed = TRUE))
+})
+
+test_that("a channel with a usable id is never reported off air", {
+  # The panel told viewers four broadcasters had stopped at once, because a
+  # failed lookup was treated as a positive off-air finding.
+  state <- function(video_id, is_live) {
+    has_id <- !is.na(video_id) && nzchar(video_id) && video_id != "NA"
+    if (has_id) return(TRUE)
+    if (!is.na(is_live)) return(isTRUE(as.logical(is_live)))
+    NA
   }
+  expect_true(state("QB5BNdBFujE", TRUE))
+  expect_true(state("QB5BNdBFujE", FALSE))   # an id present still gets a try
+  expect_false(state(NA_character_, FALSE))  # only this is a real off-air call
+  expect_true(is.na(state(NA_character_, NA)))
 })
 
 test_that("a recording is rejected and a stream accepted by lengthSeconds", {

@@ -1110,59 +1110,40 @@ TV_CHANNEL_IDS <- c(
   "Reuters"       = "UChqUTb7kYRX8-EiaN3XFrSQ"
 )
 
-yt_get <- function(url) {
-  r <- GET(url, add_headers(
-    `User-Agent` = paste("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)",
-                         "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36"),
-    `Accept-Language` = "en-US,en;q=0.9"), timeout(30))
-  if (status_code(r) != 200) return(NA_character_)
-  content(r, as = "text", encoding = "UTF-8")
-}
-
-# Ask the video itself rather than reading the channel page's layout. A live
-# stream reports lengthSeconds 0; a finished upload reports its real duration.
-yt_video_is_live <- function(vid) {
-  txt <- tryCatch(yt_get(paste0("https://www.youtube.com/watch?v=", vid)),
-                  error = function(e) NA_character_)
-  if (is.na(txt)) return(FALSE)
-  len <- regmatches(txt, regexpr('"lengthSeconds":"[0-9]+"', txt))
-  length(len) > 0 && grepl('"lengthSeconds":"0"', len[1], fixed = TRUE)
-}
-
-# Two earlier attempts inferred which id was live from the channel page —
-# first by position, then by proximity to an isLive marker. Both were validated
-# against the page a home connection gets and both picked a recording on the
-# page a datacenter IP gets, which is the only one that matters in production
-# and the one that cannot be fetched from here to test against.
+# Resolving the current live video without a key is not achievable from a
+# server. Three page-scraping variants were tried; YouTube serves datacenter
+# IPs — both shinyapps.io and GitHub runners — pages stripped of the fields
+# that identify the live stream, while a home connection gets them. The
+# documented /embed/live_stream?channel= form renders "This video is
+# unavailable" even in a residential browser, and oEmbed 404s on channel URLs.
 #
-# So stop inferring. Collect the candidate ids, then verify each against its own
-# watch page. That is one extra request per candidate and it does not care how
-# the channel page is rendered.
-resolve_live_video <- function(channel_id, max_try = 6) {
+# The Data API is authenticated rather than scraped, so it answers the same way
+# from any IP. A search costs 100 units against a 10,000/day free quota, so four
+# channels nightly uses 400. Without a key the pipeline keeps whatever ids are
+# already committed rather than blanking the panel.
+YT_KEY <- Sys.getenv("YT_KEY")
+
+yt_api_live_id <- function(channel_id) {
+  if (!nzchar(YT_KEY)) return(NA_character_)
   tryCatch({
-    txt <- yt_get(glue("https://www.youtube.com/channel/{channel_id}/live"))
-    if (is.na(txt)) {
-      message(glue("    {channel_id}: channel page unavailable"))
-      return(list(id = NA_character_, live = FALSE))
+    r <- GET("https://www.googleapis.com/youtube/v3/search",
+             query = list(part = "id", channelId = channel_id, eventType = "live",
+                          type = "video", maxResults = 1, key = YT_KEY),
+             timeout(30))
+    if (status_code(r) != 200) {
+      message(glue("    {channel_id}: Data API HTTP {status_code(r)}"))
+      return(NA_character_)
     }
-    ids <- unique(sub('"videoId":"', '', sub('"$', '',
-             regmatches(txt, gregexpr('"videoId":"[A-Za-z0-9_-]{11}"', txt))[[1]])))
-    if (!length(ids)) {
-      message(glue("    {channel_id}: no video ids on page (bytes={nchar(txt)})"))
-      return(list(id = NA_character_, live = FALSE))
-    }
-    tried <- utils::head(ids, max_try)
-    for (v in tried) {
-      if (yt_video_is_live(v)) return(list(id = v, live = TRUE))
-      Sys.sleep(0.2)
-    }
-    message(glue("    {channel_id}: none of {length(tried)} candidates live ",
-                 "({paste(tried, collapse=' ')})"))
-    list(id = NA_character_, live = FALSE)
-  }, error = function(e) {
-    message(glue("    {channel_id}: {conditionMessage(e)}"))
-    list(id = NA_character_, live = FALSE)
-  })
+    d <- fromJSON(content(r, as = "text", encoding = "UTF-8"), simplifyVector = FALSE)
+    if (is.null(d$items) || length(d$items) == 0) return(NA_character_)
+    as.character(d$items[[1]]$id$videoId)
+  }, error = function(e) NA_character_)
+}
+
+resolve_live_video <- function(channel_id) {
+  id <- yt_api_live_id(channel_id)
+  if (!is.na(id)) return(list(id = id, live = TRUE))
+  list(id = NA_character_, live = FALSE)
 }
 
 get_tv_channels <- function() {
@@ -1175,6 +1156,13 @@ get_tv_channels <- function() {
            resolved_at = as.character(Sys.time()))
   })
   df <- bind_rows(rows)
+  if (!nzchar(YT_KEY)) {
+    message("  TV: no YT_KEY set — keeping the committed channel ids.")
+    prev <- tryCatch(read_csv("data/tv_channels.csv", show_col_types = FALSE),
+                     error = function(e) NULL)
+    if (!is.null(prev) && nrow(prev) > 0) return(prev)
+    return(df)
+  }
   message(glue("  TV: {sum(df$is_live)}/{nrow(df)} channels live ",
                "({paste(df$channel[df$is_live], collapse=', ')})"))
   df
