@@ -1,51 +1,51 @@
 rank,ticker,name,mentions,upvotes,rank_24h_ago,mentions_24h_ago,mentions_chg,rank_chg,momentum
-1,NVDA,NVIDIA,59,320,2,84,-25,1,Steady
-2,SPY,SPDR S&amp;P 500 ETF Trust,37,152,1,96,-59,-1,Steady
-3,AMD,AMD,22,267,46,1,21,43,Surging
-4,DTE,DTE Energy,19,112,8,34,-15,4,Rising
-5,SNDK,Sandisk,14,30,7,32,-18,2,Rising
-6,WMT,Walmart,12,91,14,11,1,8,Surging
-7,AAOI,Applied Optoelectronics,10,101,12,23,-13,5,Surging
-8,MU,Micron Technology,10,25,4,35,-25,-4,Fading
-9,EU,enCore Energy,9,138,574,2,7,565,Surging
-10,MSTR,MicroStrategy,9,18,23,9,0,13,Surging
-11,META,Meta Platforms (Facebook),8,37,11,15,-7,0,Steady
-12,SLS,Sellas Life Sciences,8,20,3,47,-39,-9,Falling
-13,MRNA,Moderna,7,1194,5,42,-35,-8,Falling
+1,NVDA,NVIDIA,64,324,2,84,-20,1,Steady
+2,SPY,SPDR S&amp;P 500 ETF Trust,38,152,1,85,-47,-1,Steady
+3,AMD,AMD,22,270,46,2,20,43,Surging
+4,DTE,DTE Energy,19,115,8,28,-9,4,Rising
+5,SNDK,Sandisk,13,27,7,29,-16,2,Rising
+6,WMT,Walmart,12,91,14,10,2,8,Surging
+7,AAOI,Applied Optoelectronics,11,111,12,23,-12,5,Surging
+8,MU,Micron Technology,10,24,4,30,-20,-4,Fading
+9,EU,enCore Energy,9,137,574,4,5,565,Surging
+10,META,Meta Platforms (Facebook),8,37,11,13,-5,1,Steady
+11,MSTR,MicroStrategy,8,14,23,9,-1,12,Surging
+12,SLS,Sellas Life Sciences,8,19,3,32,-24,-9,Falling
+13,MRNA,Moderna,7,1194,5,38,-31,-8,Falling
 14,CBRS,Cerebras Systems,6,122,644,NA,NA,630,Surging
-15,GOOGL,Alphabet (Google),6,99,30,4,2,15,Surging
-16,IREN,Iris Energy,6,22,16,17,-11,0,Steady
-17,QQQ,Invesco QQQ ETF,6,11,9,20,-14,-8,Falling
-18,MRVL,Marvell Technology Group,6,24,17,12,-6,-1,Steady
-19,SMCI,Supermicro,6,11,206,1,5,187,Surging
-20,YOU,CLEAR Secure,5,9,69,1,4,49,Surging
-21,SPCX,SpaceX,5,40,18,9,-4,-3,Fading
-22,USO,United States Commodity Funds LLC - United States Oil Fund,5,24,21,8,-3,-1,Steady
-23,TDS,Telephone and Data Systems,5,-45,278,NA,NA,255,Surging
-24,MSFT,Microsoft,5,128,31,6,-1,7,Surging
-25,RDDT,Reddit,4,6,26,6,-2,1,Steady
-26,FCF,First Commonwealth Financial Corp,4,74,468,1,3,442,Surging
-27,VOO,Vanguard S&amp;P 500 ETF,4,16,22,14,-10,-5,Falling
-28,WEN,Wendy’s Company,4,44,49,3,1,21,Surging
-29,HOOD,Robinhood,3,10,10,24,-21,-19,Falling
-30,PLTR,Palantir,3,25,13,5,-2,-17,Falling
-31,AM,Antero Midstream,3,5,33,5,-2,2,Rising
-32,IBKR,Interactive Brokers,3,39,259,1,2,227,Surging
-33,IT,Gartner,3,16,32,3,0,-1,Steady
-34,TTWO,Take 2 Interactive,3,6,77,3,0,43,Surging
-35,AVGO,Broadcom,3,22,27,2,1,-8,Falling
-36,GOOG,Alphabet (Google),3,24,25,4,-1,-11,Falling
-37,NBIS,Nebius Group,2,12,36,6,-4,-1,Steady
+15,GOOGL,Alphabet (Google),6,106,30,3,3,15,Surging
+16,QQQ,Invesco QQQ ETF,6,11,9,18,-12,-7,Falling
+17,MRVL,Marvell Technology Group,6,23,17,8,-2,0,Steady
+18,SMCI,Supermicro,6,12,206,1,5,188,Surging
+19,IREN,Iris Energy,5,17,16,18,-13,-3,Fading
+20,YOU,CLEAR Secure,5,10,69,1,4,49,Surging
+21,SPCX,SpaceX,5,39,18,9,-4,-3,Fading
+22,TDS,Telephone and Data Systems,5,-45,278,NA,NA,256,Surging
+23,MSFT,Microsoft,5,134,31,4,1,8,Surging
+24,RDDT,Reddit,4,6,26,6,-2,2,Rising
+25,FCF,First Commonwealth Financial Corp,4,74,468,1,3,443,Surging
+26,VOO,Vanguard S&amp;P 500 ETF,4,17,22,14,-10,-4,Fading
+27,WEN,Wendy’s Company,4,44,49,3,1,22,Surging
+28,TTWO,Take 2 Interactive,4,8,77,3,1,49,Surging
+29,AVGO,Broadcom,4,22,27,2,2,-2,Fading
+30,NVTS,Navitas Semiconductor,3,6,534,1,2,504,Surging
+31,USO,United States Commodity Funds LLC - United States Oil Fund,3,20,21,10,-7,-10,Falling
+32,PLTR,Palantir,3,25,13,3,0,-19,Falling
+33,AM,Antero Midstream,3,5,33,4,-1,0,Steady
+34,IBKR,Interactive Brokers,3,37,259,1,2,225,Surging
+35,IT,Gartner,3,16,32,3,0,-3,Fading
+36,GOOG,Alphabet (Google),3,26,25,4,-1,-11,Falling
+37,NBIS,Nebius Group,2,11,36,5,-3,-1,Steady
 38,DJT,Trump Media &amp; Technology Group,2,13,599,1,1,561,Surging
 39,LINK,Interlink Electronics,2,3,95,1,1,56,Surging
-40,PR,Permian Resources,2,3,567,1,1,527,Surging
-41,HTZ,Hertz,2,4,19,2,0,-22,Falling
-42,CLFD,Clearfield,2,2,86,2,0,44,Surging
-43,AGI,Alamos Gold,2,12,352,1,1,309,Surging
-44,RTX,Raytheon Technologies,2,24,296,1,1,252,Surging
-45,RE,Everest Re,2,4,60,1,1,15,Surging
-46,NOW,ServiceNow,2,5,24,9,-7,-22,Falling
-47,AMZN,Amazon,2,65,34,3,-1,-13,Falling
-48,GLND,Greenland Energy Company,1,0,650,1,0,602,Surging
-49,HERE,Here Group Limited,1,10,649,1,0,600,Surging
-50,HONA,Honeywell Aerospace,1,1,648,1,0,598,Surging
+40,ASST,Asset Entities,2,4,575,1,1,535,Surging
+41,PR,Permian Resources,2,4,567,1,1,526,Surging
+42,HTZ,Hertz,2,4,19,1,1,-23,Falling
+43,CLFD,Clearfield,2,2,86,2,0,43,Surging
+44,AGI,Alamos Gold,2,14,352,1,1,308,Surging
+45,RTX,Raytheon Technologies,2,25,296,1,1,251,Surging
+46,RE,Everest Re,2,4,60,1,1,14,Surging
+47,NOW,ServiceNow,2,5,24,9,-7,-23,Falling
+48,AMZN,Amazon,2,73,34,2,0,-14,Falling
+49,GLND,Greenland Energy Company,1,0,650,1,0,601,Surging
+50,HERE,Here Group Limited,1,9,649,1,0,599,Surging
