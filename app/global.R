@@ -7,7 +7,25 @@ library(plotly); library(DT); library(quantmod); library(scales)
 library(glue); library(readr); library(lubridate); library(TTR); library(zoo)
 library(tibble); library(xml2)   # xml2: live RSS news polling
 
-load_csv <- function(p) if (file.exists(p)) read_csv(p, show_col_types=FALSE) else NULL
+# Data files sit beside this file. shinyapps.io runs with the app directory as
+# the working directory so a bare filename resolved; Connect Cloud deploys from
+# the repo root, where it does not — every load_csv returned NULL and the app
+# rendered a complete UI with no data behind it. Resolve against whichever
+# directory actually holds the data.
+if (!exists("%||%")) `%||%` <- function(a, b) if (is.null(a)) b else a
+
+APP_DATA_DIR <- local({
+  probe <- "master_scored.csv"
+  for (d in c(".", "app", dirname(sys.frames()[[1]]$ofile %||% ""))) {
+    if (nzchar(d) && file.exists(file.path(d, probe))) return(d)
+  }
+  "."
+})
+
+load_csv <- function(p) {
+  f <- file.path(APP_DATA_DIR, p)
+  if (file.exists(f)) read_csv(f, show_col_types = FALSE) else NULL
+}
 
 master_data    <- load_csv("master_scored.csv")
 price_history  <- load_csv("price_history.csv")
@@ -26,7 +44,7 @@ stock_news     <- load_csv("stock_news.csv")
 sec_filings    <- load_csv("sec_filings.csv")
 tv_channels    <- load_csv("tv_channels.csv")
 
-meta <- tryCatch(readRDS("meta.rds"),
+meta <- tryCatch(readRDS(file.path(APP_DATA_DIR, "meta.rds")),
                  error=function(e) list(last_updated="Not yet run", n_stocks=0))
 
 all_sectors <- c("All", if (!is.null(master_data)) sort(unique(na.omit(master_data$sector))) else character(0))

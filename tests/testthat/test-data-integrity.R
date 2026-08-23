@@ -373,3 +373,22 @@ test_that("browser globals are guarded before use", {
   src <- paste(readLines("../../app/app.R"), collapse = "\n")
   expect_match(src, "typeof Shiny\\.setInputValue === 'function'")
 })
+
+test_that("data loads regardless of working directory", {
+  # shinyapps.io runs with the app directory as the working directory, so a
+  # bare filename resolved. Connect Cloud deploys from the repo root, where it
+  # does not: every load_csv returned NULL and the app rendered a complete UI
+  # with no data behind it.
+  skip_if_not(file.exists(repo_path("app", "global.R")), "global.R missing")
+  src <- paste(readLines(repo_path("app", "global.R")), collapse = "\n")
+  expect_true(grepl("APP_DATA_DIR", src, fixed = TRUE))
+  # nothing may read a bare filename any more
+  expect_false(grepl('readRDS\\("meta\\.rds"\\)', src))
+  expect_true(grepl("file.path(APP_DATA_DIR", src, fixed = TRUE))
+})
+
+test_that("the app directory really holds the data it will be asked for", {
+  need <- c("master_scored.csv", "price_history.csv", "macro_data.csv",
+            "tv_channels.csv", "meta.rds")
+  for (f in need) expect_true(file.exists(repo_path("app", f)), info = f)
+})
