@@ -2682,7 +2682,9 @@ server <- function(input, output, session) {
       eps_est   <- if (!is.na(row$epsEstimated)) paste0("Est $", round(row$epsEstimated, 2)) else ""
       rev_est   <- if ("revenueEstimated" %in% names(row) && !is.na(row$revenueEstimated))
                      paste0(" · Rev ", fmt_mktcap(row$revenueEstimated)) else ""
-      time_str  <- replace_na(row$time, "")
+      # An all-NA column round-trips through CSV as logical, and replace_na
+      # cannot put a character into a logical vector. Coerce before defaulting.
+      time_str  <- replace_na(as.character(row$time), "")
       time_icon <- switch(time_str,
         "bmo" = "Pre-Market",
         "amc" = "After-Close",
@@ -3428,12 +3430,13 @@ server <- function(input, output, session) {
   # ── NEWS TAB ───────────────────────────────────────────────────────────────
   output$news_source_tabs <- renderUI({
     req(news_data)
-    sources <- c("All", sort(unique(news_data$source)))
-    tabsetPanel(id="news_source_tab",
-      lapply(sources, function(src) {
-        tabPanel(src)
-      })
-    )
+    sources <- c("All", sort(unique(as.character(news_data$source))))
+    sources <- sources[!is.na(sources) & nzchar(sources)]
+    # tabsetPanel takes panels as separate arguments; handing it a single list
+    # from lapply makes it reject the lot as not being tabPanels.
+    do.call(tabsetPanel,
+            c(list(id = "news_source_tab"),
+              lapply(sources, function(src) tabPanel(src))))
   })
 
   filtered_news <- reactive({
@@ -3639,6 +3642,17 @@ server <- function(input, output, session) {
     )
   })
 
+  # The tab panes are plain divs toggled with a CSS class, so Shiny is never
+  # told an output became visible and leaves it suspended — it renders nothing
+  # and the panel looks broken while the server is perfectly healthy. That has
+  # now caused three separate bugs, each patched by adding one more name to a
+  # hand-maintained list: the Deep Dive tab, the live news wire, and the
+  # earnings calendar. Cover every output instead of remembering to add the
+  # next one. The explicit calls above are left in place as documentation of
+  # which panels were hit.
+  for (nm in names(outputOptions(output))) {
+    try(outputOptions(output, nm, suspendWhenHidden = FALSE), silent = TRUE)
+  }
 }
 
 shinyApp(ui=ui, server=server)

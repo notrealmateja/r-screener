@@ -1053,6 +1053,33 @@ run_module3 <- function(tickers=NULL) {
                         error = function(e) { message("Stock news skipped: ", conditionMessage(e)); tibble() })
   secfil    <- tryCatch(get_sec_filings(tickers),
                         error = function(e) { message("SEC filings skipped: ", conditionMessage(e)); tibble() })
+  # SEC-derived dates are the source of truth; Alpha Vantage contributes only
+  # the consensus EPS estimate, which SEC does not publish. When AV is refusing
+  # requests — as it has since 5 August — the calendar still works, just without
+  # estimates, instead of freezing entirely.
+  earn_sec  <- tryCatch(get_earnings_sec(tickers, fund_data),
+                        error = function(e) { message("SEC earnings skipped: ", conditionMessage(e)); tibble() })
+  if (nrow(earn_sec) > 0) {
+    if (nrow(earn) > 0 && all(c("symbol","date","epsEstimated") %in% names(earn))) {
+      av_est <- earn %>%
+        filter(!is.na(epsEstimated)) %>%
+        transmute(symbol, av_date = as.Date(date), av_eps = epsEstimated)
+      earn_sec <- earn_sec %>%
+        left_join(av_est, by = "symbol", relationship = "many-to-many") %>%
+        # only trust an estimate that refers to the same release
+        mutate(keep = !is.na(av_date) & abs(as.numeric(date - av_date)) <= 10) %>%
+        group_by(symbol, date) %>%
+        summarise(across(-c(av_date, av_eps, keep), dplyr::first),
+                  epsEstimated = {
+                    v <- av_eps[keep]
+                    if (length(v)) v[1] else NA_real_
+                  }, .groups = "drop")
+      matched <- sum(!is.na(earn_sec$epsEstimated))
+      message(glue("  Earnings: {matched}/{nrow(earn_sec)} enriched with an AV estimate"))
+    }
+    earn <- earn_sec
+  }
+
   tvch      <- tryCatch(get_tv_channels(),
                         error = function(e) { message("TV channels skipped: ", conditionMessage(e)); tibble() })
   secfin    <- tryCatch(get_sec_financials(tickers),
@@ -1165,5 +1192,127 @@ get_tv_channels <- function() {
   }
   message(glue("  TV: {sum(df$is_live)}/{nrow(df)} channels live ",
                "({paste(df$channel[df$is_live], collapse=', ')})"))
+  df
+}
+
+# ── Earnings dates from SEC filings ────────────────────────────────────────
+# Alpha Vantage has refused EARNINGS_CALENDAR on this key since 5 August,
+# answering with a CSV header followed by an "Information" notice, so the
+# calendar froze. SEC is a better source anyway for the dates themselves: an
+# 8-K tagged Item 2.02 ("Results of Operations and Financial Condition") is the
+# earnings release, the submissions API exposes those item codes, and it needs
+# no key and works from a datacenter IP — the property that decided the live-TV
+# problem after four attempts at sources that did not.
+#
+# What SEC cannot give is the consensus EPS estimate, so that column stays
+# empty unless Alpha Vantage starts answering again and supplies it.
+EARN_ITEM        <- "2.02"
+EARN_MIN_HISTORY <- 2      # need at least two releases to measure a cadence
+EARN_LOOKAHEAD   <- 2      # project this many future dates per company
+EARN_SAME_QUARTER <- 45    # releases closer than this belong to one quarter
+EARN_OVERDUE_GRACE <- 35   # a projection this recently passed is due, not next quarter
+
+earnings_dates_for <- function(sym, cik) {
+  tryCatch({
+    padded <- sprintf("CIK%010d", as.integer(cik))
+    r <- GET(glue("https://data.sec.gov/submissions/{padded}.json"),
+             add_headers(`User-Agent` = SEC_UA), timeout(30))
+    if (status_code(r) != 200) return(NULL)
+    d <- fromJSON(content(r, as = "text", encoding = "UTF-8"))
+    rec <- d$filings$recent
+    if (is.null(rec) || length(rec$form) == 0) return(NULL)
+    items <- if (!is.null(rec$items)) as.character(rec$items) else rep("", length(rec$form))
+
+    hits <- which(as.character(rec$form) == "8-K" &
+                  grepl(EARN_ITEM, items, fixed = TRUE))
+    if (length(hits) < EARN_MIN_HISTORY) return(NULL)
+
+    dates <- suppressWarnings(as.Date(as.character(rec$filingDate[hits])))
+    dates <- sort(dates[!is.na(dates)], decreasing = TRUE)
+
+    # Some companies file more than one 8-K tagged 2.02 per quarter — a results
+    # release and a follow-up — which halves the measured cadence and would put
+    # every projected date weeks early. Honeywell measured 63 days that way
+    # against a real 91. Keep one release per quarter.
+    keep <- dates[1]
+    for (dt in dates[-1]) {
+      if (as.numeric(keep[length(keep)] - dt) >= EARN_SAME_QUARTER) keep <- c(keep, dt)
+    }
+    dates <- keep
+    if (length(dates) < EARN_MIN_HISTORY) return(NULL)
+
+    # Median gap over recent releases rather than the mean: one delayed filing
+    # would drag a mean and push every projected date with it.
+    gaps <- as.numeric(utils::head(dates, 6)[-length(utils::head(dates, 6))] -
+                       utils::head(dates, 6)[-1])
+    gaps <- gaps[gaps >= 60 & gaps <= 200]        # a real quarterly rhythm, not an amendment
+    cadence <- if (length(gaps)) stats::median(gaps) else 91
+
+    # A projection that has only just passed means the release is due about now,
+    # not a quarter away: NVIDIA last filed 20 May, which projects to 19 August,
+    # and rolling that forward showed 18 November when the real date was days
+    # out. Treat a recently-passed projection as imminent, and only roll a full
+    # cadence for a company that has genuinely gone quiet.
+    nxt <- dates[1] + cadence
+    if (nxt < Sys.Date()) {
+      overdue <- as.numeric(Sys.Date() - nxt)
+      if (overdue <= EARN_OVERDUE_GRACE) {
+        nxt <- Sys.Date()
+      } else {
+        while (nxt < Sys.Date()) nxt <- nxt + cadence
+      }
+    }
+
+    tibble(symbol = sym,
+           date = nxt + cadence * (seq_len(EARN_LOOKAHEAD) - 1),
+           last_report = dates[1],
+           cadence_days = cadence,
+           reports_seen = length(dates))
+  }, error = function(e) NULL)
+}
+
+get_earnings_sec <- function(tickers, fundamentals = NULL) {
+  message(glue("Deriving earnings dates from SEC filings for {length(tickers)} stocks..."))
+  cikmap <- sec_cik_map()
+  if (is.null(cikmap)) {
+    message("  SEC ticker map unavailable - skipping earnings.")
+    return(tibble())
+  }
+  have <- tickers[tickers %in% names(cikmap)]
+  out <- vector("list", length(have))
+  for (i in seq_along(have)) {
+    out[[i]] <- earnings_dates_for(have[i], cikmap[[have[i]]])
+    Sys.sleep(0.12)
+    if (i %% 50 == 0) message(glue("    {i}/{length(have)}"))
+  }
+  df <- bind_rows(out)
+  if (nrow(df) == 0) {
+    message("  No earnings dates derived.")
+    return(tibble())
+  }
+
+  names_map <- if (!is.null(fundamentals) && all(c("symbol","company") %in% names(fundamentals)))
+                 setNames(fundamentals$company, fundamentals$symbol) else character(0)
+
+  df <- df %>%
+    mutate(
+      name = if (length(names_map)) unname(names_map[symbol]) else NA_character_,
+      name = ifelse(is.na(name), symbol, name),
+      # Empty strings rather than NA: a column that is entirely NA is read back
+      # from CSV as logical, and downstream code that expects character then
+      # fails on it.
+      fiscalDateEnding = "",
+      # SEC publishes no consensus estimate; the panel renders this blank.
+      epsEstimated = NA_real_,
+      currency = "USD",
+      time = "",
+      source = "SEC 8-K Item 2.02") %>%
+    arrange(date) %>%
+    select(symbol, name, date, fiscalDateEnding, epsEstimated, currency, time,
+           last_report, cadence_days, reports_seen, source)
+
+  message(glue("  Earnings: {nrow(df)} projected dates across ",
+               "{dplyr::n_distinct(df$symbol)}/{length(tickers)} tickers ",
+               "(median cadence {stats::median(df$cadence_days)}d)"))
   df
 }
