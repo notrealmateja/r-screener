@@ -1348,6 +1348,19 @@ ui <- fluidPage(
       }
       showPane('deepdive');
     };
+    // shinyapps.io bills active hours per connected session, and a timer that
+    // keeps firing keeps a session active forever — a backgrounded tab was
+    // burning the monthly allowance while nobody looked at it. Report
+    // visibility so the server can stop scheduling work for hidden tabs.
+    function reportVisible() {
+      if (window.Shiny && Shiny.setInputValue) {
+        Shiny.setInputValue('tab_visible', document.visibilityState === 'visible',
+                            {priority: 'event'});
+      }
+    }
+    document.addEventListener('visibilitychange', reportVisible);
+    $(document).on('shiny:connected', reportVisible);
+
     Shiny.addCustomMessageHandler('tvActive', function(m) {
       document.querySelectorAll('.tv-btn').forEach(function(b) { b.classList.remove('tv-on'); });
       var el = document.getElementById(m.id);
@@ -1460,10 +1473,14 @@ server <- function(input, output, session) {
 
   # ── LIVE TICKER TAPE ────────────────────────────────────────────────────
   # Refresh live quotes every 60 seconds via quantmod::getQuote (Yahoo Finance)
-  ticker_timer <- reactiveTimer(60000)
+  # invalidateLater rather than reactiveTimer: it only schedules the next tick
+  # when this reactive runs, so a hidden tab stops rescheduling and the session
+  # can finally go idle. Becoming visible again re-runs it and restarts polling.
+  # Absent input (before the first client message) counts as visible.
+  tab_is_visible <- function() !identical(input$tab_visible, FALSE)
 
   live_quotes <- reactive({
-    ticker_timer()
+    if (tab_is_visible()) invalidateLater(60000)
     if (is.null(master_data)) return(NULL)
     top_syms <- master_data %>%
       arrange(desc(master_score)) %>%
@@ -2392,10 +2409,8 @@ server <- function(input, output, session) {
   # it would redraw identical rows. This re-fetches the feeds instead. The
   # fetch itself is cached in global.R for LIVE_NEWS_TTL seconds and shared
   # across sessions, so many viewers polling still produce one request per TTL.
-  live_news_tick <- reactiveTimer(30000)
-
   live_news <- reactive({
-    live_news_tick()
+    if (tab_is_visible()) invalidateLater(30000)
     tryCatch(get_live_news(), error = function(e) NULL)
   })
 
@@ -2539,6 +2554,10 @@ server <- function(input, output, session) {
   outputOptions(output, "dd_sentiment", suspendWhenHidden = FALSE)
   outputOptions(output, "dd_filings", suspendWhenHidden = FALSE)
   outputOptions(output, "tv_player", suspendWhenHidden = FALSE)
+  # The custom CSS panes never tell Shiny an output became visible, so without
+  # this the live wire stays suspended and renders nothing.
+  outputOptions(output, "live_news_feed", suspendWhenHidden = FALSE)
+  outputOptions(output, "live_news_meta", suspendWhenHidden = FALSE)
   outputOptions(output, "tv_meta", suspendWhenHidden = FALSE)
   outputOptions(output, "dd_lbo", suspendWhenHidden = FALSE)
   outputOptions(output, "dd_pitch", suspendWhenHidden = FALSE)
