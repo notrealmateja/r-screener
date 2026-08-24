@@ -1,5 +1,4 @@
 date,price,series,ticker,value
-2024-08-23,3.81,10Y Treasury,DGS10,3.81
 2024-08-26,3.82,10Y Treasury,DGS10,3.82
 2024-08-27,3.83,10Y Treasury,DGS10,3.83
 2024-08-28,3.84,10Y Treasury,DGS10,3.84
@@ -519,7 +518,7 @@ date,price,series,ticker,value
 2026-08-18,4.71,10Y Treasury,DGS10,4.71
 2026-08-19,4.65,10Y Treasury,DGS10,4.65
 2026-08-20,4.69,10Y Treasury,DGS10,4.69
-2024-08-23,3.9,2Y Treasury,DGS2,3.9
+2026-08-21,4.74,10Y Treasury,DGS10,4.74
 2024-08-26,3.91,2Y Treasury,DGS2,3.91
 2024-08-27,3.83,2Y Treasury,DGS2,3.83
 2024-08-28,3.83,2Y Treasury,DGS2,3.83
@@ -1039,7 +1038,7 @@ date,price,series,ticker,value
 2026-08-18,4.19,2Y Treasury,DGS2,4.19
 2026-08-19,4.19,2Y Treasury,DGS2,4.19
 2026-08-20,4.19,2Y Treasury,DGS2,4.19
-2024-08-23,5.25,3M Treasury,DGS3MO,5.25
+2026-08-21,4.24,2Y Treasury,DGS2,4.24
 2024-08-26,5.24,3M Treasury,DGS3MO,5.24
 2024-08-27,5.23,3M Treasury,DGS3MO,5.23
 2024-08-28,5.21,3M Treasury,DGS3MO,5.21
@@ -1559,6 +1558,7 @@ date,price,series,ticker,value
 2026-08-18,3.86,3M Treasury,DGS3MO,3.86
 2026-08-19,3.86,3M Treasury,DGS3MO,3.86
 2026-08-20,3.87,3M Treasury,DGS3MO,3.87
+2026-08-21,3.88,3M Treasury,DGS3MO,3.88
 2024-09-01,314.732,CPI,CPIAUCSL,314.732
 2024-10-01,315.631,CPI,CPIAUCSL,315.631
 2024-11-01,316.528,CPI,CPIAUCSL,316.528
@@ -1628,7 +1628,6 @@ date,price,series,ticker,value
 2026-05-01,3.63,Fed Funds Rate,FEDFUNDS,3.63
 2026-06-01,3.63,Fed Funds Rate,FEDFUNDS,3.63
 2026-07-01,3.63,Fed Funds Rate,FEDFUNDS,3.63
-2024-08-23,-0.09,Yield Curve Spread,T10Y2Y,-0.09
 2024-08-26,-0.09,Yield Curve Spread,T10Y2Y,-0.09
 2024-08-27,0,Yield Curve Spread,T10Y2Y,0
 2024-08-28,0.01,Yield Curve Spread,T10Y2Y,0.01
@@ -2149,3 +2148,4 @@ date,price,series,ticker,value
 2026-08-19,0.46,Yield Curve Spread,T10Y2Y,0.46
 2026-08-20,0.5,Yield Curve Spread,T10Y2Y,0.5
 2026-08-21,0.5,Yield Curve Spread,T10Y2Y,0.5
+2026-08-24,0.46,Yield Curve Spread,T10Y2Y,0.46
