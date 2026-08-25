@@ -1,31 +1,31 @@
 symbol,title,watchlist_count,st_rank,trending_score,messages,bullish,bearish,sentiment_label,fetched_at
-INTU,Intuit Inc,12438,1,16.3278,6,1,1,Neutral,2026-08-25T21:22:56Z
-DKS,"Dicks Sporting Goods, Inc.",8907,2,14.4728,3,0,0,Neutral,2026-08-25T21:22:56Z
-CRML,Critical Metals Corp.,14127,3,12.9554,1,1,0,Very Bullish,2026-08-25T21:22:56Z
-IBRX,ImmunityBio Inc,30080,4,11.6447,1,0,0,Neutral,2026-08-25T21:22:56Z
-ZM,Zoom Communications Inc. - Ordinary Shares - Class A,64682,5,9.90356,1,0,0,Neutral,2026-08-25T21:22:56Z
-NVDA,NVIDIA Corp,661833,6,5.32114,6,2,2,Neutral,2026-08-25T21:22:56Z
-USO,United States Oil Fund,74541,7,5.48621,1,0,0,Neutral,2026-08-25T21:22:56Z
-NUVB,Nuvation Bio Inc - Ordinary Shares - Class A,3485,8,4.54269,0,0,0,Neutral,2026-08-25T21:22:56Z
-HELP,Helus Pharma Inc.,8062,9,5.81284,0,0,0,Neutral,2026-08-25T21:22:56Z
-CCL,Carnival Corp,89286,10,5.73251,0,0,0,Neutral,2026-08-25T21:22:56Z
-TLT,iShares 20+ Year Treasury Bond ETF,30686,11,4.86869,0,0,0,Neutral,2026-08-25T21:22:56Z
-ONON,On Holding AG,6923,12,6.34678,0,0,0,Neutral,2026-08-25T21:22:56Z
-XLF,Financial Select Sector SPDR Fund,18439,13,1.86114,0,0,0,Neutral,2026-08-25T21:22:56Z
-GLD,SPDR Gold Shares ETF,96216,14,4.0865,1,0,0,Neutral,2026-08-25T21:22:56Z
-CRM,Salesforce Inc,70564,15,3.06032,0,0,0,Neutral,2026-08-25T21:22:56Z
-BTC.X,Bitcoin,677402,16,5.10945,4,3,0,Very Bullish,2026-08-25T21:22:56Z
-FCX,Freeport-McMoRan Inc,28382,17,4.68808,0,0,0,Neutral,2026-08-25T21:22:56Z
-ALOY,REalloys Inc.,12107,18,2.59157,0,0,0,Neutral,2026-08-25T21:22:56Z
-CRWD,Crowdstrike Holdings Inc,62152,19,6.49668,0,0,0,Neutral,2026-08-25T21:22:56Z
-IMMX,Immix Biopharma Inc,4635,20,3.57267,0,0,0,Neutral,2026-08-25T21:22:56Z
-OPEAZZX.P,OpenAI,2351,21,4.32419,0,0,0,Neutral,2026-08-25T21:22:56Z
-ARKK,ARK Innovation ETF,49716,22,4.16915,0,0,0,Neutral,2026-08-25T21:22:56Z
-NKE,Nike Inc,138489,23,2.23824,0,0,0,Neutral,2026-08-25T21:22:56Z
-TTWO,"Take-Two Interactive Software, Inc.",23385,24,3.41201,0,0,0,Neutral,2026-08-25T21:22:56Z
-SQD.X,SQD,425,25,4.79483,0,0,0,Neutral,2026-08-25T21:22:56Z
-LPTH,"Lightpath Technologies, Inc. - Ordinary Shares - Class A",8645,26,1.43261,0,0,0,Neutral,2026-08-25T21:22:56Z
-AVGO,Broadcom Inc,72109,27,2.65987,0,0,0,Neutral,2026-08-25T21:22:56Z
-UVXY,ProShares Ultra VIX Short-Term Futures ETF,85188,28,2.83039,0,0,0,Neutral,2026-08-25T21:22:56Z
-JASMY.X,JasmyCoin,25284,29,2.67247,0,0,0,Neutral,2026-08-25T21:22:56Z
-PURR,Hyperliquid Strategies Inc.,25952,30,3.42913,0,0,0,Neutral,2026-08-25T21:22:56Z
+INTU,Intuit Inc,12445,1,15.6241,3,0,0,Neutral,2026-08-25T21:38:10Z
+DKS,"Dicks Sporting Goods, Inc.",8926,2,13.6899,5,2,0,Very Bullish,2026-08-25T21:38:10Z
+CRML,Critical Metals Corp.,14135,3,13.2723,3,0,0,Neutral,2026-08-25T21:38:10Z
+IBRX,ImmunityBio Inc,30080,4,8.65275,2,2,0,Very Bullish,2026-08-25T21:38:10Z
+ZM,Zoom Communications Inc. - Ordinary Shares - Class A,64683,5,10.1619,2,0,0,Neutral,2026-08-25T21:38:10Z
+NVDA,NVIDIA Corp,661841,6,4.78862,3,1,0,Very Bullish,2026-08-25T21:38:10Z
+USO,United States Oil Fund,74541,7,1.05935,0,0,0,Neutral,2026-08-25T21:38:10Z
+NUVB,Nuvation Bio Inc - Ordinary Shares - Class A,3487,8,4.30759,0,0,0,Neutral,2026-08-25T21:38:10Z
+HELP,Helus Pharma Inc.,8064,9,5.34609,0,0,0,Neutral,2026-08-25T21:38:10Z
+CCL,Carnival Corp,89287,10,1.18608,0,0,0,Neutral,2026-08-25T21:38:10Z
+TLT,iShares 20+ Year Treasury Bond ETF,30687,11,4.39407,0,0,0,Neutral,2026-08-25T21:38:10Z
+ONON,On Holding AG,6923,12,6.30353,0,0,0,Neutral,2026-08-25T21:38:10Z
+XLF,Financial Select Sector SPDR Fund,18439,13,1.78409,0,0,0,Neutral,2026-08-25T21:38:10Z
+GLD,SPDR Gold Shares ETF,96216,14,3.45314,0,0,0,Neutral,2026-08-25T21:38:10Z
+CRM,Salesforce Inc,70563,15,1.91642,0,0,0,Neutral,2026-08-25T21:38:10Z
+BTC.X,Bitcoin,677406,16,3.54836,9,2,1,Bullish,2026-08-25T21:38:10Z
+FCX,Freeport-McMoRan Inc,28383,17,4.66359,0,0,0,Neutral,2026-08-25T21:38:10Z
+ALOY,REalloys Inc.,12108,18,2.51004,0,0,0,Neutral,2026-08-25T21:38:10Z
+CRWD,Crowdstrike Holdings Inc,62154,19,4.02736,0,0,0,Neutral,2026-08-25T21:38:10Z
+IMMX,Immix Biopharma Inc,4635,20,3.61544,0,0,0,Neutral,2026-08-25T21:38:10Z
+OPEAZZX.P,OpenAI,2351,21,4.13729,0,0,0,Neutral,2026-08-25T21:38:10Z
+ARKK,ARK Innovation ETF,49717,22,4.16915,0,0,0,Neutral,2026-08-25T21:38:10Z
+NKE,Nike Inc,138492,23,2.187,0,0,0,Neutral,2026-08-25T21:38:10Z
+TTWO,"Take-Two Interactive Software, Inc.",23385,24,1.95893,0,0,0,Neutral,2026-08-25T21:38:10Z
+SQD.X,SQD,425,25,4.98196,0,0,0,Neutral,2026-08-25T21:38:10Z
+LPTH,"Lightpath Technologies, Inc. - Ordinary Shares - Class A",8645,26,1.77742,0,0,0,Neutral,2026-08-25T21:38:10Z
+AVGO,Broadcom Inc,72109,27,2.8718,0,0,0,Neutral,2026-08-25T21:38:10Z
+UVXY,ProShares Ultra VIX Short-Term Futures ETF,85188,28,2.66341,0,0,0,Neutral,2026-08-25T21:38:10Z
+JASMY.X,JasmyCoin,25285,29,2.00922,0,0,0,Neutral,2026-08-25T21:38:10Z
+PURR,Hyperliquid Strategies Inc.,25952,30,3.7725,0,0,0,Neutral,2026-08-25T21:38:10Z

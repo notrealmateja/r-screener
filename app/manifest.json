@@ -535,7 +535,7 @@
         "Maintainer": "Jeroen Ooms <jeroenooms@gmail.com>",
         "Repository": "CRAN",
         "Date/Publication": "2026-08-25 16:40:02 UTC",
-        "Built": "R 4.4.0; x86_64-pc-linux-gnu; 2026-08-25 21:19:24 UTC; unix"
+        "Built": "R 4.4.0; x86_64-pc-linux-gnu; 2026-08-25 21:33:21 UTC; unix"
       }
     },
     "data.table": {
@@ -2575,7 +2575,7 @@
       "checksum": "165aa567b2075aa695a1d55ba19aec2e"
     },
     "data/meta.rds": {
-      "checksum": "92d70d45c25d4252c25408a77dd0c870"
+      "checksum": "c32af92f538358c1baa057267d3b4a15"
     },
     "data/price_series_cache.rds": {
       "checksum": "266a1b7cfa8bbf9180380a4969dbc886"
@@ -2587,7 +2587,7 @@
       "checksum": "b9260e096fb89fc630076a716d838da7"
     },
     "earnings_calendar.csv": {
-      "checksum": "3141a2a486c24f57cf96d149e88f5519"
+      "checksum": "10c723396d6e08c636b4a5373dce0960"
     },
     "fundamentals_scored.csv": {
       "checksum": "afdb66ee5b39174e921f37f3f1d97d6b"
@@ -2599,13 +2599,13 @@
       "checksum": "1894d69b959fd6f1be856fc9d82c50f1"
     },
     "market_news.csv": {
-      "checksum": "5b9debccd648c6990c72ea9221e6739c"
+      "checksum": "6ca29e3b1eb511faad62b27ab5df5edb"
     },
     "master_scored.csv": {
       "checksum": "e17557ade4d91ac9e634a6562b413a2f"
     },
     "meta.rds": {
-      "checksum": "92d70d45c25d4252c25408a77dd0c870"
+      "checksum": "c32af92f538358c1baa057267d3b4a15"
     },
     "momentum_scored.csv": {
       "checksum": "944afbd7e6a7f33be8f9359eb0992e25"
@@ -2632,16 +2632,16 @@
       "checksum": "c9c814bb241dee8a5527c2171f649e17"
     },
     "sentiment_history.csv": {
-      "checksum": "fa561616a416ddcd656f06595f03cd45"
+      "checksum": "6facea224502c361c757addcf8ae0fdb"
     },
     "squeeze_scored.csv": {
       "checksum": "f585fd0bc94fac6284a6048b44555bd6"
     },
     "stock_news.csv": {
-      "checksum": "999c9322706368f4d4d3ab98592cd0a0"
+      "checksum": "3e6608a47e6180f50f462ea2628a4b9a"
     },
     "stocktwits_trending.csv": {
-      "checksum": "7e29c97d54391abbf3ba86633ddd57e8"
+      "checksum": "e5f13703d0b5496d9797de7fc9009fa8"
     },
     "top15_sweetspot.csv": {
       "checksum": "1d8989407b4d3bc583304dd9e16d7b3e"
@@ -2650,10 +2650,10 @@
       "checksum": "1b6a5cacef6f81aa52cf331294ea61eb"
     },
     "tv_channels.csv": {
-      "checksum": "8a920ced92a725526b8233654c141827"
+      "checksum": "a09655b0c533621ba772400eb399c505"
     },
     "wsb_trending.csv": {
-      "checksum": "79eb23c7e959123f27e635a3291cb869"
+      "checksum": "3460e22f60dab9b345569a8c6fe09480"
     }
   },
   "users": null

@@ -1,51 +1,51 @@
 rank,ticker,name,mentions,upvotes,rank_24h_ago,mentions_24h_ago,mentions_chg,rank_chg,momentum
-1,NVDA,NVIDIA,310,1845,1,306,4,0,Steady
-2,SPY,SPDR S&amp;P 500 ETF Trust,160,411,2,209,-49,0,Steady
-3,MU,Micron Technology,109,214,3,150,-41,0,Steady
-4,DKS,Dick's Sporting Goods,94,243,84,3,91,80,Surging
-5,SNDK,Sandisk,86,322,4,103,-17,-1,Steady
-6,MSTR,MicroStrategy,68,134,5,92,-24,-1,Steady
-7,QQQ,Invesco QQQ ETF,60,123,7,55,5,0,Steady
-8,AVGO,Broadcom,54,110,18,23,31,10,Surging
-9,MRNA,Moderna,50,437,10,49,1,1,Steady
+1,NVDA,NVIDIA,309,1449,1,313,-4,0,Steady
+2,SPY,SPDR S&amp;P 500 ETF Trust,157,410,2,212,-55,0,Steady
+3,MU,Micron Technology,111,227,3,158,-47,0,Steady
+4,DKS,Dick's Sporting Goods,94,249,84,3,91,80,Surging
+5,SNDK,Sandisk,86,349,4,103,-17,-1,Steady
+6,MSTR,MicroStrategy,68,135,5,92,-24,-1,Steady
+7,QQQ,Invesco QQQ ETF,60,124,7,54,6,0,Steady
+8,AVGO,Broadcom,54,111,18,23,31,10,Surging
+9,MRNA,Moderna,49,441,10,49,0,1,Steady
 10,INTU,Intuit,40,77,179,6,34,169,Surging
-11,DTE,DTE Energy,36,67,11,41,-5,0,Steady
-12,ASTS,AST SpaceMobile,33,89,30,33,0,18,Surging
-13,NBIS,Nebius Group,33,622,9,44,-11,-4,Fading
-14,RDDT,Reddit,32,78,20,20,12,6,Surging
-15,SPCX,SpaceX,31,344,8,48,-17,-7,Falling
-16,RKLB,Rocket Lab USA,31,95,42,20,11,26,Surging
-17,META,Meta Platforms (Facebook),31,59,13,32,-1,-4,Fading
-18,GOOGL,Alphabet (Google),31,72,14,25,6,-4,Fading
-19,HOOD,Robinhood,27,52,51,8,19,32,Surging
+11,DTE,DTE Energy,36,68,11,41,-5,0,Steady
+12,ASTS,AST SpaceMobile,32,85,30,33,-1,18,Surging
+13,RDDT,Reddit,32,78,20,20,12,7,Surging
+14,NBIS,Nebius Group,32,618,9,45,-13,-5,Falling
+15,RKLB,Rocket Lab USA,31,95,42,20,11,27,Surging
+16,META,Meta Platforms (Facebook),31,59,13,34,-3,-3,Fading
+17,GOOGL,Alphabet (Google),31,72,14,25,6,-3,Fading
+18,SPCX,SpaceX,30,345,8,48,-18,-10,Falling
+19,HOOD,Robinhood,27,51,51,8,19,32,Surging
 20,AMZN,Amazon,24,43,52,7,17,32,Surging
-21,TSLA,Tesla,24,34,29,31,-7,8,Surging
+21,TSLA,Tesla,24,35,29,31,-7,8,Surging
 22,NKE,Nike,24,39,185,NA,NA,163,Surging
 23,MRVL,Marvell Technology Group,23,51,22,20,3,-1,Steady
-24,ZM,Zoom,21,28,0,NA,NA,-24,Falling
-25,SOXL,Direxion Shares ETF Trust - Direxion Daily Semiconductor Bull 3X Share,21,41,12,29,-8,-13,Falling
-26,AMD,AMD,20,27,32,15,5,6,Surging
-27,GOOG,Alphabet (Google),19,44,24,25,-6,-3,Fading
-28,BE,Bloom Energy,19,46,17,22,-3,-11,Falling
-29,MSFT,Microsoft,18,34,16,23,-5,-13,Falling
-30,INTC,Intel,18,37,25,25,-7,-5,Falling
-31,AGI,Alamos Gold,18,64,119,2,16,88,Surging
-32,SLS,Sellas Life Sciences,16,23,6,73,-57,-26,Falling
-33,AAPL,Apple,15,24,28,19,-4,-5,Falling
+24,ZM,Zoom,22,29,0,NA,NA,-24,Falling
+25,AMD,AMD,21,28,32,12,9,7,Surging
+26,SOXL,Direxion Shares ETF Trust - Direxion Daily Semiconductor Bull 3X Share,21,41,12,29,-8,-14,Falling
+27,GOOG,Alphabet (Google),19,46,24,25,-6,-3,Fading
+28,BE,Bloom Energy,19,48,17,22,-3,-11,Falling
+29,MSFT,Microsoft,17,33,16,23,-6,-13,Falling
+30,INTC,Intel,17,35,25,24,-7,-5,Falling
+31,AGI,Alamos Gold,17,61,119,2,15,88,Surging
+32,SLS,Sellas Life Sciences,16,23,6,74,-58,-26,Falling
+33,AAPL,Apple,15,26,28,20,-5,-5,Falling
 34,IT,Gartner,15,34,67,4,11,33,Surging
 35,SMCI,Supermicro,14,34,106,2,12,71,Surging
-36,NFLX,Netflix,13,28,33,13,0,-3,Fading
-37,PLTR,Palantir,13,19,40,10,3,3,Rising
-38,GLD,SSgA SPDR Gold Shares,13,25,19,18,-5,-19,Falling
-39,VOO,Vanguard S&amp;P 500 ETF,13,87,35,10,3,-4,Fading
-40,INFQ,Infleqtion,13,13,38,10,3,-2,Fading
-41,CRM,Salesforce,12,21,105,4,8,64,Surging
-42,BK,Bank of New York Mellon,11,191,0,NA,NA,-42,Falling
-43,HTZ,Hertz,11,-4,26,18,-7,-17,Falling
-44,EU,enCore Energy,11,20,127,3,8,83,Surging
-45,YOU,CLEAR Secure,10,13,46,9,1,1,Steady
-46,RNA,Avidity Biosciences,10,10,446,1,9,400,Surging
-47,IREN,Iris Energy,10,41,31,17,-7,-16,Falling
-48,LINK,Interlink Electronics,10,13,61,5,5,13,Surging
+36,GLD,SSgA SPDR Gold Shares,13,25,19,18,-5,-17,Falling
+37,INFQ,Infleqtion,13,13,38,10,3,1,Steady
+38,NFLX,Netflix,12,25,33,13,-1,-5,Falling
+39,CRM,Salesforce,12,21,105,4,8,66,Surging
+40,PLTR,Palantir,12,16,40,11,1,0,Steady
+41,VOO,Vanguard S&amp;P 500 ETF,12,39,35,10,2,-6,Falling
+42,BK,Bank of New York Mellon,11,193,0,NA,NA,-42,Falling
+43,YOU,CLEAR Secure,11,14,46,9,2,3,Rising
+44,HTZ,Hertz,11,-4,26,17,-6,-18,Falling
+45,EU,enCore Energy,11,21,127,3,8,82,Surging
+46,IREN,Iris Energy,10,41,31,17,-7,-15,Falling
+47,RNA,Avidity Biosciences,9,9,446,1,8,399,Surging
+48,LINK,Interlink Electronics,9,12,61,5,4,13,Surging
 49,CSCO,Cisco,8,12,48,6,2,-1,Steady
 50,ALL,Allstate,8,8,65,4,4,15,Surging
