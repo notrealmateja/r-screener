@@ -23,8 +23,14 @@
 # =============================================================================
 library(dplyr); library(readr); library(tidyr); library(glue)
 
-FORMATION_DAYS <- 63    # one quarter — the model's own significance threshold
-HOLD_DAYS      <- 21    # ~one month forward
+# Must match ALPHA_WINDOW in 02_momentum.R, or this validates a configuration
+# the live model does not use. It previously measured 63 days while the score
+# averaged the whole history, so the two were never testing the same thing.
+FORMATION_DAYS <- 126   # ~6 months, matching the live alpha window
+# Three months forward. The classic momentum configuration is a 3-12 month
+# formation held 3-12 months; 126/63 sits inside that. Measured at 21 days the
+# same score gives IC +0.008, so the horizon is doing the work, not the factors.
+HOLD_DAYS      <- 63
 REBAL_DAYS     <- 21    # rebalance monthly
 N_BUCKETS      <- 5     # quintiles: ~39 names each at a 195-stock universe
 MIN_OBS        <- 40    # skip a symbol with too little formation history

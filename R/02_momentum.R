@@ -32,6 +32,9 @@ library(TTR); library(readr); library(glue); library(lubridate)
 # that count, so the longer window roughly doubles the t-statistic available to
 # the validation in R/05_backtest.R.
 PRICE_LOOKBACK_DAYS <- 1095   # ~3 calendar years
+# Trailing window for the alpha statistics that drive the score. Full history
+# left the ranking frozen; see the note in the summarize block below.
+ALPHA_WINDOW        <- 126    # ~6 months of trading days
 HISTORY_KEEP_DAYS   <- 1120   # slightly beyond the pull so nothing is truncated
 
 # Guard a TTR call: a series that is too short (or otherwise unusable) returns
@@ -289,12 +292,24 @@ run_module2 <- function(tickers = NULL) {
         if (length(d) == 0) NA_real_ else prod(1 + d) - 1
       },
 
-      # Hit rate: % of days the stock beat SPY
-      alpha_hit_rate    = mean(daily_alpha > 0, na.rm = TRUE),
+      # These three carry 75% of the alpha score between them (30/25/20), and
+      # averaging them over the whole history made the ranking immovable: one
+      # new day shifts a 762-day mean by 0.13% of itself, so every stock moved
+      # by the same negligible amount and the relative order never changed. The
+      # top ten was byte-identical across four consecutive nightly runs and 172
+      # of 195 scores did not change at all.
+      #
+      # A bounded window gives a new day 0.79% weight instead. The length is
+      # not chosen because it backtested best — that would be fitting to this
+      # sample. Long-horizon cross-sectional momentum is where the published
+      # effect lives, and the walk-forward sweep independently reproduced its
+      # signature: negative rank IC at short formation windows (reversal),
+      # turning positive by 126 days.
+      alpha_hit_rate    = mean(utils::tail(daily_alpha[!is.na(daily_alpha)], ALPHA_WINDOW) > 0),
 
-      # Annualised alpha & information ratio from history
-      hist_mean_alpha   = mean(daily_alpha, na.rm = TRUE),
-      hist_sd_alpha     = sd(daily_alpha,   na.rm = TRUE),
+      # Annualised alpha & information ratio over the same window
+      hist_mean_alpha   = mean(utils::tail(daily_alpha[!is.na(daily_alpha)], ALPHA_WINDOW)),
+      hist_sd_alpha     = sd(utils::tail(daily_alpha[!is.na(daily_alpha)],   ALPHA_WINDOW)),
       hist_alpha_ann    = hist_mean_alpha * 252,
       hist_ir           = ifelse(hist_sd_alpha > 0,
                                  (hist_mean_alpha / hist_sd_alpha) * sqrt(252),
