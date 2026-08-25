@@ -535,7 +535,7 @@
         "Maintainer": "Jeroen Ooms <jeroenooms@gmail.com>",
         "Repository": "CRAN",
         "Date/Publication": "2026-08-25 16:40:02 UTC",
-        "Built": "R 4.4.0; x86_64-pc-linux-gnu; 2026-08-25 21:33:21 UTC; unix"
+        "Built": "R 4.4.0; x86_64-pc-linux-gnu; 2026-08-25 21:52:44 UTC; unix"
       }
     },
     "data.table": {
@@ -2575,7 +2575,7 @@
       "checksum": "165aa567b2075aa695a1d55ba19aec2e"
     },
     "data/meta.rds": {
-      "checksum": "c32af92f538358c1baa057267d3b4a15"
+      "checksum": "fcfa90a71746db616ca6b3d2611668cc"
     },
     "data/price_series_cache.rds": {
       "checksum": "266a1b7cfa8bbf9180380a4969dbc886"
@@ -2605,7 +2605,7 @@
       "checksum": "e17557ade4d91ac9e634a6562b413a2f"
     },
     "meta.rds": {
-      "checksum": "c32af92f538358c1baa057267d3b4a15"
+      "checksum": "fcfa90a71746db616ca6b3d2611668cc"
     },
     "momentum_scored.csv": {
       "checksum": "944afbd7e6a7f33be8f9359eb0992e25"
@@ -2623,7 +2623,7 @@
       "checksum": "81f2e47c9f2a5ecffe802421ee5d2366"
     },
     "sec_filings.csv": {
-      "checksum": "2b91afde5b085128cf1e7f5146a40fd4"
+      "checksum": "abd31654b4d928741d833bb4512cdf79"
     },
     "sec_financials.csv": {
       "checksum": "e8525145a20e0572962cf9d6607705a2"
@@ -2632,16 +2632,16 @@
       "checksum": "c9c814bb241dee8a5527c2171f649e17"
     },
     "sentiment_history.csv": {
-      "checksum": "6facea224502c361c757addcf8ae0fdb"
+      "checksum": "7bee0ff971697cfcb67c7094d04fa3c0"
     },
     "squeeze_scored.csv": {
       "checksum": "f585fd0bc94fac6284a6048b44555bd6"
     },
     "stock_news.csv": {
-      "checksum": "3e6608a47e6180f50f462ea2628a4b9a"
+      "checksum": "fd0829ca75dacc51b742101c0c426bbf"
     },
     "stocktwits_trending.csv": {
-      "checksum": "e5f13703d0b5496d9797de7fc9009fa8"
+      "checksum": "ef3dcb8e531e3151f17f391ad74d6437"
     },
     "top15_sweetspot.csv": {
       "checksum": "1d8989407b4d3bc583304dd9e16d7b3e"
@@ -2650,10 +2650,10 @@
       "checksum": "1b6a5cacef6f81aa52cf331294ea61eb"
     },
     "tv_channels.csv": {
-      "checksum": "a09655b0c533621ba772400eb399c505"
+      "checksum": "25982819cb78a1931a758eafda442143"
     },
     "wsb_trending.csv": {
-      "checksum": "3460e22f60dab9b345569a8c6fe09480"
+      "checksum": "2fe074dd9ca7d4ea564903e1b00a4936"
     }
   },
   "users": null
