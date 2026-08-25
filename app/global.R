@@ -79,7 +79,10 @@ fmt_chg <- function(x) {
 price_data <- price_history
 
 # Shared by the <title> and the link-preview meta tags.
-PAGE_URL  <- "https://r-codescreener.shinyapps.io/r-codescreener/"
+# Connect Cloud, deployed from this repository and redeploying whenever the
+# nightly pipeline pushes. The old shinyapps.io address served a one-time
+# upload with no repo attached, so it could never pick up new data.
+PAGE_URL  <- "https://notrealmateja-r-screener.share.connect.posit.cloud/"
 PAGE_DESC <- paste("Nightly quantitative screener ranking 195 US equities on risk-adjusted",
                    "excess return versus the S&P 500, with DCF and LBO modelling from SEC",
                    "XBRL filings, short interest, and walk-forward validation.")

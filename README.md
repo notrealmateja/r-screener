@@ -9,7 +9,7 @@ A quantitative equity screener that scores a 195-stock universe on risk-adjusted
 alpha, refreshes itself every night without human involvement, and publishes the
 result as a live dashboard.
 
-**Live app:** https://r-codescreener.shinyapps.io/r-codescreener/
+**Live app:** https://notrealmateja-r-screener.share.connect.posit.cloud/
 
 Every trading day at 21:30 UTC a GitHub Actions workflow pulls fresh market data,
 recomputes the model, commits the results, and redeploys the app. No local machine
