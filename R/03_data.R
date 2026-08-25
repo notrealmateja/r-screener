@@ -1063,7 +1063,7 @@ run_module3 <- function(tickers=NULL) {
     # Finnhub first for the consensus estimate; it covers the whole calendar in
     # one call. Dates still come from SEC, so a Finnhub row only contributes its
     # estimate and only when it refers to the same release.
-    fh <- tryCatch(get_finnhub_estimates(), error = function(e) tibble())
+    fh <- tryCatch(get_finnhub_estimates(tickers), error = function(e) tibble())
     if (nrow(fh) > 0) {
       earn_sec <- earn_sec %>%
         select(-any_of("epsEstimated")) %>%
@@ -1214,6 +1214,207 @@ get_tv_channels <- function() {
   }
   message(glue("  TV: {sum(df$is_live)}/{nrow(df)} channels live ",
                "({paste(df$channel[df$is_live], collapse=', ')})"))
+  df
+}
+
+# ── Earnings dates from SEC filings ────────────────────────────────────────
+# Alpha Vantage has refused EARNINGS_CALENDAR on this key since 5 August,
+# answering with a CSV header followed by an "Information" notice, so the
+# calendar froze. SEC is a better source anyway for the dates themselves: an
+# 8-K tagged Item 2.02 ("Results of Operations and Financial Condition") is the
+# earnings release, the submissions API exposes those item codes, and it needs
+# no key and works from a datacenter IP — the property that decided the live-TV
+# problem after four attempts at sources that did not.
+#
+# What SEC cannot give is the consensus EPS estimate, so that column stays
+# empty unless Alpha Vantage starts answering again and supplies it.
+EARN_ITEM        <- "2.02"
+EARN_MIN_HISTORY <- 2      # need at least two releases to measure a cadence
+EARN_LOOKAHEAD   <- 2      # project this many future dates per company
+EARN_SAME_QUARTER <- 45    # releases closer than this belong to one quarter
+EARN_OVERDUE_GRACE <- 35   # a projection this recently passed is due, not next quarter
+
+earnings_dates_for <- function(sym, cik) {
+  tryCatch({
+    padded <- sprintf("CIK%010d", as.integer(cik))
+    r <- GET(glue("https://data.sec.gov/submissions/{padded}.json"),
+             add_headers(`User-Agent` = SEC_UA), timeout(30))
+    if (status_code(r) != 200) return(NULL)
+    d <- fromJSON(content(r, as = "text", encoding = "UTF-8"))
+    rec <- d$filings$recent
+    if (is.null(rec) || length(rec$form) == 0) return(NULL)
+    items <- if (!is.null(rec$items)) as.character(rec$items) else rep("", length(rec$form))
+
+    hits <- which(as.character(rec$form) == "8-K" &
+                  grepl(EARN_ITEM, items, fixed = TRUE))
+    if (length(hits) < EARN_MIN_HISTORY) return(NULL)
+
+    dates <- suppressWarnings(as.Date(as.character(rec$filingDate[hits])))
+    dates <- sort(dates[!is.na(dates)], decreasing = TRUE)
+
+    # Some companies file more than one 8-K tagged 2.02 per quarter — a results
+    # release and a follow-up — which halves the measured cadence and would put
+    # every projected date weeks early. Honeywell measured 63 days that way
+    # against a real 91. Keep one release per quarter.
+    keep <- dates[1]
+    for (dt in dates[-1]) {
+      if (as.numeric(keep[length(keep)] - dt) >= EARN_SAME_QUARTER) keep <- c(keep, dt)
+    }
+    dates <- keep
+    if (length(dates) < EARN_MIN_HISTORY) return(NULL)
+
+    # Median gap over recent releases rather than the mean: one delayed filing
+    # would drag a mean and push every projected date with it.
+    gaps <- as.numeric(utils::head(dates, 6)[-length(utils::head(dates, 6))] -
+                       utils::head(dates, 6)[-1])
+    gaps <- gaps[gaps >= 60 & gaps <= 200]        # a real quarterly rhythm, not an amendment
+    cadence <- if (length(gaps)) stats::median(gaps) else 91
+
+    # A projection that has only just passed means the release is due about now,
+    # not a quarter away: NVIDIA last filed 20 May, which projects to 19 August,
+    # and rolling that forward showed 18 November when the real date was days
+    # out. Treat a recently-passed projection as imminent, and only roll a full
+    # cadence for a company that has genuinely gone quiet.
+    nxt <- dates[1] + cadence
+    if (nxt < Sys.Date()) {
+      overdue <- as.numeric(Sys.Date() - nxt)
+      if (overdue <= EARN_OVERDUE_GRACE) {
+        nxt <- Sys.Date()
+      } else {
+        while (nxt < Sys.Date()) nxt <- nxt + cadence
+      }
+    }
+
+    tibble(symbol = sym,
+           date = nxt + cadence * (seq_len(EARN_LOOKAHEAD) - 1),
+           last_report = dates[1],
+           cadence_days = cadence,
+           reports_seen = length(dates))
+  }, error = function(e) NULL)
+}
+
+get_earnings_sec <- function(tickers, fundamentals = NULL) {
+  message(glue("Deriving earnings dates from SEC filings for {length(tickers)} stocks..."))
+  cikmap <- sec_cik_map()
+  if (is.null(cikmap)) {
+    message("  SEC ticker map unavailable - skipping earnings.")
+    return(tibble())
+  }
+  have <- tickers[tickers %in% names(cikmap)]
+  out <- vector("list", length(have))
+  for (i in seq_along(have)) {
+    out[[i]] <- earnings_dates_for(have[i], cikmap[[have[i]]])
+    Sys.sleep(0.12)
+    if (i %% 50 == 0) message(glue("    {i}/{length(have)}"))
+  }
+  df <- bind_rows(out)
+  if (nrow(df) == 0) {
+    message("  No earnings dates derived.")
+    return(tibble())
+  }
+
+  names_map <- if (!is.null(fundamentals) && all(c("symbol","company") %in% names(fundamentals)))
+                 setNames(fundamentals$company, fundamentals$symbol) else character(0)
+
+  df <- df %>%
+    mutate(
+      name = if (length(names_map)) unname(names_map[symbol]) else NA_character_,
+      name = ifelse(is.na(name), symbol, name),
+      # Empty strings rather than NA: a column that is entirely NA is read back
+      # from CSV as logical, and downstream code that expects character then
+      # fails on it.
+      fiscalDateEnding = "",
+      # SEC publishes no consensus estimate; the panel renders this blank.
+      epsEstimated = NA_real_,
+      currency = "USD",
+      time = "",
+      source = "SEC 8-K Item 2.02") %>%
+    arrange(date) %>%
+    select(symbol, name, date, fiscalDateEnding, epsEstimated, currency, time,
+           last_report, cadence_days, reports_seen, source)
+
+  message(glue("  Earnings: {nrow(df)} projected dates across ",
+               "{dplyr::n_distinct(df$symbol)}/{length(tickers)} tickers ",
+               "(median cadence {stats::median(df$cadence_days)}d)"))
+  df
+}
+
+# ── Finnhub: consensus EPS estimates ───────────────────────────────────────
+# SEC gives reliable earnings dates but publishes no consensus estimate, so
+# that column on the calendar renders blank. Alpha Vantage would supply it but
+# has refused EARNINGS_CALENDAR on this key since 5 August.
+#
+# Only the estimate is taken from here. Analyst ratings and price targets
+# already come from Alpha Vantage's OVERVIEW cache, which measured a median
+# age of 6 days across the universe — fresh enough that replacing it would add
+# a dependency without adding information.
+FINNHUB_KEY  <- Sys.getenv("FINNHUB_KEY")
+FINNHUB_BASE <- "https://finnhub.io/api/v1"
+
+finnhub_get <- function(path, query = list()) {
+  if (!nzchar(FINNHUB_KEY)) return(NULL)
+  query$token <- FINNHUB_KEY
+  tryCatch({
+    r <- GET(paste0(FINNHUB_BASE, path), query = query, timeout(30))
+    code <- status_code(r)
+    if (code != 200) {
+      # 403 is Finnhub's premium gate and 429 its rate limit; both are worth
+      # naming in the log rather than failing silently as "no data".
+      message(glue("    finnhub {path}: HTTP {code}",
+                   if (code == 403) " (premium endpoint on this plan)"
+                   else if (code == 429) " (rate limited)" else ""))
+      return(NULL)
+    }
+    fromJSON(content(r, as = "text", encoding = "UTF-8"), simplifyVector = FALSE)
+  }, error = function(e) {
+    message(glue("    finnhub {path}: {conditionMessage(e)}")); NULL
+  })
+}
+
+# Rate limit: the free tier allows 60 calls a minute, so one call per symbol
+# for a 195-name universe costs about three and a half minutes.
+FINNHUB_SLEEP <- 1.05
+
+get_finnhub_estimates <- function(tickers, from = Sys.Date(), to = Sys.Date() + 180) {
+  if (!nzchar(FINNHUB_KEY)) {
+    message("Finnhub: no FINNHUB_KEY set — earnings estimates will stay blank.")
+    return(tibble())
+  }
+  # Asking for the whole market's calendar returns a capped response: a 90-day
+  # request came back at exactly 1500 rows spanning 1497 symbols, so this
+  # universe barely appeared and only 13 of 386 dates matched. Querying per
+  # symbol filters server-side and cannot be truncated by other companies.
+  message(glue("Pulling consensus EPS estimates (Finnhub) for {length(tickers)} stocks..."))
+  out <- vector("list", length(tickers))
+  for (i in seq_along(tickers)) {
+    d <- finnhub_get("/calendar/earnings",
+                     list(symbol = tickers[i], from = as.character(from),
+                          to = as.character(to)))
+    Sys.sleep(FINNHUB_SLEEP)
+    if (is.null(d) || is.null(d$earningsCalendar) || length(d$earningsCalendar) == 0) next
+    pick <- function(x, f, cast) {
+      v <- x[[f]]
+      if (is.null(v) || length(v) != 1) cast(NA) else cast(v)
+    }
+    out[[i]] <- bind_rows(lapply(d$earningsCalendar, function(x) tibble(
+      symbol       = pick(x, "symbol", as.character),
+      fh_date      = pick(x, "date", as.character),
+      epsEstimated = pick(x, "epsEstimate", as.numeric),
+      hour         = pick(x, "hour", as.character))))
+    if (i %% 50 == 0) message(glue("    {i}/{length(tickers)}"))
+  }
+  df <- bind_rows(out)
+  if (nrow(df) == 0) {
+    message("  Finnhub: no calendar rows returned.")
+    return(tibble())
+  }
+  df <- df %>%
+    filter(!is.na(symbol), nzchar(symbol)) %>%
+    mutate(fh_date = suppressWarnings(as.Date(fh_date))) %>%
+    filter(!is.na(fh_date))
+  message(glue("  Finnhub: {nrow(df)} rows across {dplyr::n_distinct(df$symbol)}",
+               "/{length(tickers)} tickers, ",
+               "{sum(!is.na(df$epsEstimated))} carrying an EPS estimate"))
   df
 }
 
