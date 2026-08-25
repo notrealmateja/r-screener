@@ -86,6 +86,9 @@ jobs:
           # pipeline holds whatever ids are already committed rather than
           # blanking the panel.
           YT_KEY: ${{ secrets.YT_KEY }}
+          # Consensus EPS estimates for the earnings calendar. SEC supplies the
+          # dates but publishes no estimate; without this the column is blank.
+          FINNHUB_KEY: ${{ secrets.FINNHUB_KEY }}
         run: |
           Rscript -e '
             # Prevent modules from auto-running on source()

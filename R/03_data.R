@@ -1060,19 +1060,41 @@ run_module3 <- function(tickers=NULL) {
   earn_sec  <- tryCatch(get_earnings_sec(tickers, fund_data),
                         error = function(e) { message("SEC earnings skipped: ", conditionMessage(e)); tibble() })
   if (nrow(earn_sec) > 0) {
+    # Finnhub first for the consensus estimate; it covers the whole calendar in
+    # one call. Dates still come from SEC, so a Finnhub row only contributes its
+    # estimate and only when it refers to the same release.
+    fh <- tryCatch(get_finnhub_estimates(), error = function(e) tibble())
+    if (nrow(fh) > 0) {
+      earn_sec <- earn_sec %>%
+        select(-any_of("epsEstimated")) %>%
+        left_join(fh %>% select(symbol, fh_date, fh_eps = epsEstimated, hour),
+                  by = "symbol", relationship = "many-to-many") %>%
+        mutate(keep = !is.na(fh_date) & abs(as.numeric(date - fh_date)) <= 10) %>%
+        group_by(symbol, date) %>%
+        summarise(across(-c(fh_date, fh_eps, hour, keep), dplyr::first),
+                  epsEstimated = { v <- fh_eps[keep]; if (length(v)) v[1] else NA_real_ },
+                  time = { v <- hour[keep]; if (length(v) && !is.na(v[1])) v[1] else "" },
+                  .groups = "drop")
+      message(glue("  Earnings: {sum(!is.na(earn_sec$epsEstimated))}/{nrow(earn_sec)} ",
+                   "matched to a Finnhub estimate"))
+    }
     if (nrow(earn) > 0 && all(c("symbol","date","epsEstimated") %in% names(earn))) {
       av_est <- earn %>%
         filter(!is.na(epsEstimated)) %>%
         transmute(symbol, av_date = as.Date(date), av_eps = epsEstimated)
       earn_sec <- earn_sec %>%
         left_join(av_est, by = "symbol", relationship = "many-to-many") %>%
-        # only trust an estimate that refers to the same release
-        mutate(keep = !is.na(av_date) & abs(as.numeric(date - av_date)) <= 10) %>%
+        # only trust an estimate that refers to the same release, and only
+        # where Finnhub has not already supplied one
+        mutate(keep = is.na(epsEstimated) & !is.na(av_date) &
+                      abs(as.numeric(date - av_date)) <= 10) %>%
         group_by(symbol, date) %>%
-        summarise(across(-c(av_date, av_eps, keep), dplyr::first),
+        summarise(across(-c(av_date, av_eps, keep, epsEstimated), dplyr::first),
                   epsEstimated = {
-                    v <- av_eps[keep]
-                    if (length(v)) v[1] else NA_real_
+                    have <- epsEstimated[!is.na(epsEstimated)]
+                    if (length(have)) have[1] else {
+                      v <- av_eps[keep]; if (length(v)) v[1] else NA_real_
+                    }
                   }, .groups = "drop")
       matched <- sum(!is.na(earn_sec$epsEstimated))
       message(glue("  Earnings: {matched}/{nrow(earn_sec)} enriched with an AV estimate"))
@@ -1314,5 +1336,69 @@ get_earnings_sec <- function(tickers, fundamentals = NULL) {
   message(glue("  Earnings: {nrow(df)} projected dates across ",
                "{dplyr::n_distinct(df$symbol)}/{length(tickers)} tickers ",
                "(median cadence {stats::median(df$cadence_days)}d)"))
+  df
+}
+
+# ── Finnhub: consensus EPS estimates ───────────────────────────────────────
+# SEC gives reliable earnings dates but publishes no consensus estimate, so
+# that column on the calendar renders blank. Alpha Vantage would supply it but
+# has refused EARNINGS_CALENDAR on this key since 5 August.
+#
+# Only the estimate is taken from here. Analyst ratings and price targets
+# already come from Alpha Vantage's OVERVIEW cache, which measured a median
+# age of 6 days across the universe — fresh enough that replacing it would add
+# a dependency without adding information.
+FINNHUB_KEY  <- Sys.getenv("FINNHUB_KEY")
+FINNHUB_BASE <- "https://finnhub.io/api/v1"
+
+finnhub_get <- function(path, query = list()) {
+  if (!nzchar(FINNHUB_KEY)) return(NULL)
+  query$token <- FINNHUB_KEY
+  tryCatch({
+    r <- GET(paste0(FINNHUB_BASE, path), query = query, timeout(30))
+    code <- status_code(r)
+    if (code != 200) {
+      # 403 is Finnhub's premium gate and 429 its rate limit; both are worth
+      # naming in the log rather than failing silently as "no data".
+      message(glue("    finnhub {path}: HTTP {code}",
+                   if (code == 403) " (premium endpoint on this plan)"
+                   else if (code == 429) " (rate limited)" else ""))
+      return(NULL)
+    }
+    fromJSON(content(r, as = "text", encoding = "UTF-8"), simplifyVector = FALSE)
+  }, error = function(e) {
+    message(glue("    finnhub {path}: {conditionMessage(e)}")); NULL
+  })
+}
+
+get_finnhub_estimates <- function(from = Sys.Date(), to = Sys.Date() + 90) {
+  if (!nzchar(FINNHUB_KEY)) {
+    message("Finnhub: no FINNHUB_KEY set — earnings estimates will stay blank.")
+    return(tibble())
+  }
+  message(glue("Pulling consensus EPS estimates (Finnhub, {from} to {to})..."))
+  d <- finnhub_get("/calendar/earnings",
+                   list(from = as.character(from), to = as.character(to)))
+  if (is.null(d) || is.null(d$earningsCalendar) || length(d$earningsCalendar) == 0) {
+    message("  Finnhub: no earnings calendar returned.")
+    return(tibble())
+  }
+  pick <- function(x, f, cast) {
+    v <- x[[f]]
+    if (is.null(v) || length(v) != 1) return(cast(NA)) else return(cast(v))
+  }
+  df <- bind_rows(lapply(d$earningsCalendar, function(x) tibble(
+    symbol       = pick(x, "symbol", as.character),
+    fh_date      = pick(x, "date", as.character),
+    epsEstimated = pick(x, "epsEstimate", as.numeric),
+    revEstimate  = pick(x, "revenueEstimate", as.numeric),
+    hour         = pick(x, "hour", as.character))))
+  df <- df %>%
+    filter(!is.na(symbol), nzchar(symbol)) %>%
+    mutate(fh_date = suppressWarnings(as.Date(fh_date))) %>%
+    filter(!is.na(fh_date))
+  message(glue("  Finnhub: {nrow(df)} calendar rows, ",
+               "{sum(!is.na(df$epsEstimated))} with an EPS estimate, ",
+               "{dplyr::n_distinct(df$symbol)} symbols"))
   df
 }
