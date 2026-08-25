@@ -120,6 +120,24 @@ jobs:
 
             csv_files <- list.files("data", pattern="\\.csv$", full.names=TRUE)
             file.copy(csv_files, file.path("app", basename(csv_files)), overwrite=TRUE)
+
+            # The app never reads past 400 days: the Deep Dive chart filters to
+            # 365 and the live fallback pulls 400. Shipping the full three-year
+            # pull made price_history.csv 47MB of a 53MB bundle for data no
+            # screen displays. The pipeline keeps the full file under data/.
+            APP_PRICE_DAYS <- 400
+            ph <- "app/price_history.csv"
+            if (file.exists(ph)) {
+              pp <- suppressWarnings(readr::read_csv(ph, show_col_types = FALSE))
+              if (nrow(pp) > 0 && "date" %in% names(pp)) {
+                before <- nrow(pp)
+                pp <- pp[pp$date >= Sys.Date() - APP_PRICE_DAYS, ]
+                readr::write_csv(pp, ph)
+                message(sprintf("Trimmed app price history: %s -> %s rows (%.1f MB)",
+                                format(before, big.mark=","), format(nrow(pp), big.mark=","),
+                                file.size(ph)/1024^2))
+              }
+            }
             rds_files <- list.files("data", pattern="\\.rds$", full.names=TRUE)
             file.copy(rds_files, file.path("app", basename(rds_files)), overwrite=TRUE)
             if (!dir.exists("app/data")) dir.create("app/data")
