@@ -284,7 +284,13 @@ jobs:
       # No continue-on-error: a silently failed deploy leaves the live site
       # stale while the run still reports green.  Transient failures are
       # retried below; a genuine one must turn the run red so GitHub notifies.
-      - name: Deploy to shinyapps.io
+      # Non-fatal on purpose. The primary host is Connect Cloud, which deploys
+      # from the repo itself; shinyapps.io is the legacy target and is being
+      # retired at the end of 2026. Letting it fail the run meant a healthy
+      # nightly refresh — data pulled, verified and committed — reported as a
+      # total failure and sent a failure email, which trains you to ignore them.
+      - name: Deploy to shinyapps.io (legacy, non-fatal)
+        continue-on-error: true
         env:
           SHINYAPPS_ACCOUNT: ${{ secrets.SHINYAPPS_ACCOUNT }}
           SHINYAPPS_TOKEN: ${{ secrets.SHINYAPPS_TOKEN }}
