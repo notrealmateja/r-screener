@@ -20,9 +20,14 @@ bloomberg_css <- "
   --s3:      #222222;
   --border:  #2A2A2A;
   --border2: #333333;
-  --orange:  #FF6B00;
-  --orange2: #FF8C00;
-  --orange3: #FFA040;
+  /* Bloomberg's amber sits warmer and lighter than the orange this used, and
+     the terminal pairs it with a blue for structural chrome — headers and
+     labels in blue, data in amber, so the eye separates frame from content. */
+  --orange:  #FF9E1B;
+  --orange2: #FFB547;
+  --orange3: #FFCC80;
+  --tealhdr: #1B4F72;
+  --hdrtext: #7FB3D5;
   --text:    #E8E8E8;
   --text2:   #AAAAAA;
   --muted:   #666666;
@@ -60,6 +65,8 @@ html, body { background:var(--bg); color:var(--text); font-family:var(--sans);
   display:flex; gap:0; white-space:nowrap;
   animation:ticker-scroll 60s linear infinite;
 }
+/* Pausing on hover is not decoration: the tape scrolls, and a moving target
+   cannot be clicked reliably. */
 .ticker-content:hover { animation-play-state:paused; }
 @keyframes ticker-scroll {
   0%   { transform:translateX(0); }
@@ -67,9 +74,17 @@ html, body { background:var(--bg); color:var(--text); font-family:var(--sans);
 }
 .ticker-item {
   display:inline-flex; align-items:center; gap:8px;
-  padding:0 20px; border-right:1px solid var(--border);
+  padding:0 18px; border-right:1px solid var(--border2);
   height:32px; font-family:var(--mono); font-size:11px;
+  font-variant-numeric:tabular-nums;
+  /* Each entry opens that stock in Deep Dive, so it has to read as a control. */
+  cursor:pointer; transition:background .14s ease;
 }
+.ticker-item:hover {
+  background:rgba(255,158,27,0.14);
+  box-shadow:inset 0 -2px 0 var(--orange);
+}
+.ticker-item:hover .ticker-sym { color:#FFFFFF; }
 .ticker-sym  { color:var(--orange); font-weight:600; letter-spacing:0.3px; }
 .ticker-price { color:var(--text); }
 .ticker-up   { color:var(--green); }
@@ -143,21 +158,23 @@ html, body { background:var(--bg); color:var(--text); font-family:var(--sans);
 
 /* ── PANEL ── */
 .panel {
-  background:var(--s1); border:1px solid var(--border);
-  margin-bottom:16px;
+  background:var(--s1); border:1px solid var(--border2);
+  margin-bottom:10px;
 }
+/* A solid header bar rather than a tinted strip: the terminal marks every
+   panel with a filled band so the screen reads as a grid of framed windows. */
 .panel-head {
-  background:var(--s2); border-bottom:1px solid var(--border);
-  padding:8px 14px; display:flex; align-items:center; justify-content:space-between;
+  background:var(--tealhdr); border-bottom:1px solid #2E6F9E;
+  padding:5px 10px; display:flex; align-items:center; justify-content:space-between;
 }
 .panel-head-title {
-  font-family:var(--mono); font-size:10px; font-weight:600;
-  color:var(--orange2); text-transform:uppercase; letter-spacing:1px;
+  font-family:var(--mono); font-size:10px; font-weight:700;
+  color:#FFFFFF; text-transform:uppercase; letter-spacing:1.2px;
 }
 .panel-head-meta {
-  font-family:var(--mono); font-size:9px; color:var(--muted); letter-spacing:0.5px;
+  font-family:var(--mono); font-size:9px; color:var(--hdrtext); letter-spacing:0.5px;
 }
-.panel-body { padding:14px; }
+.panel-body { padding:9px 10px; }
 
 /* ── GRID LAYOUTS ── */
 .g2  { display:grid; grid-template-columns:1fr 1fr;         gap:16px; }
@@ -190,19 +207,22 @@ html, body { background:var(--bg); color:var(--text); font-family:var(--sans);
 .dataTables_wrapper { font-size:11px; }
 table.dataTable { background:transparent !important; color:var(--text) !important;
                   border-collapse:collapse !important; width:100% !important; }
+/* Column headers get the same blue band as panel headers, so a table reads as
+   a framed window rather than floating text. Terminal screens are dense: the
+   row padding below is deliberately tight. */
 table.dataTable thead th {
-  background:var(--s3) !important; color:var(--orange2) !important;
-  border-bottom:1px solid var(--border2) !important;
+  background:var(--tealhdr) !important; color:#FFFFFF !important;
+  border-bottom:1px solid #2E6F9E !important;
   font-family:var(--mono) !important; font-size:9px !important;
-  text-transform:uppercase !important; letter-spacing:1px !important;
-  font-weight:600 !important; padding:8px 10px !important;
+  text-transform:uppercase !important; letter-spacing:0.8px !important;
+  font-weight:700 !important; padding:5px 9px !important;
   white-space:nowrap !important;
 }
 /* A rule under every cell drew a full grid across the table and made 20 rows
    read as 20 boxes. Rows are separated by alternating tone instead, which
    groups a row visually without ruling it off. */
 table.dataTable tbody td {
-  padding:9px 12px !important; border:0 !important;
+  padding:4px 9px !important; border:0 !important;
   background:transparent !important; font-family:var(--mono) !important;
   font-size:11px !important; vertical-align:middle !important;
   /* Cells were wrapping: company names, rating labels and driver names each
@@ -217,7 +237,11 @@ table.dataTable tbody td {
 /* Signal lists are the longest field and the least essential to read in full. */
 table.dataTable tbody td:nth-last-child(3) { max-width:170px !important; }
 table.dataTable tbody tr { background:transparent !important; }
-table.dataTable tbody tr:nth-child(even) td { background:rgba(255,255,255,0.018) !important; }
+table.dataTable tbody tr:nth-child(even) td { background:rgba(255,255,255,0.022) !important; }
+/* Tabular figures so digits line up in a column, as they do on a terminal. */
+table.dataTable tbody td, table.dataTable thead th {
+  font-variant-numeric: tabular-nums;
+}
 table.dataTable tbody tr td { transition:background .15s ease; }
 table.dataTable tbody tr:hover td { background:rgba(255,107,0,0.07) !important; }
 /* One hairline under the header keeps the columns anchored without a grid. */
@@ -1342,6 +1366,9 @@ ui <- fluidPage(
       if (!sym) return;
       var sel = document.getElementById('dd_ticker');
       if (sel && sel.selectize) {
+        // A symbol the selector does not know about would be silently ignored,
+        // leaving the viewer on whatever stock was already open.
+        if (!(sym in sel.selectize.options)) return;
         sel.selectize.setValue(sym, false);
       } else if (window.Shiny) {
         Shiny.setInputValue('dd_ticker', sym, {priority: 'event'});
@@ -1506,7 +1533,9 @@ server <- function(input, output, session) {
     make_item <- function(sym, price, chg) {
       cls <- if (chg >= 0) "ticker-up" else "ticker-dn"
       arrow <- if (chg >= 0) "▲" else "▼"
-      div(class="ticker-item",
+      # Clicking a tape entry opens that stock in Deep Dive, same as a table row.
+      div(class="ticker-item", onclick=sprintf("openDeepDive('%s')", sym),
+          title=paste("Open", sym, "in Deep Dive"),
         span(class="ticker-sym", sym),
         span(class="ticker-price", paste0("$", formatC(price, format="f", digits=2, big.mark=","))),
         span(class=cls, paste0(arrow, " ", round(abs(chg), 2), "%"))

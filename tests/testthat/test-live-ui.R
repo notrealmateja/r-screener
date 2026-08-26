@@ -294,3 +294,19 @@ test_that("liveness falls back to isLive when lengthSeconds is absent", {
   expect_true(live_from('{"isLive":true,"videoId":"QB5BNdBFujE"}'))
   expect_false(live_from('{"videoId":"wDfAQOsPbDo"}'))
 })
+
+# ── ticker tape as a control ────────────────────────────────────────────────
+test_that("tape entries open the stock in Deep Dive", {
+  src <- paste(readLines(repo_path("app", "app.R")), collapse = "\n")
+  expect_true(grepl('onclick=sprintf("openDeepDive', src, fixed = TRUE))
+  # the tape scrolls, so it must stop under the cursor or the target moves away
+  expect_true(grepl(".ticker-content:hover { animation-play-state:paused; }", src, fixed = TRUE))
+  expect_true(grepl(".ticker-item:hover", src, fixed = TRUE))
+})
+
+test_that("openDeepDive refuses a symbol the selector does not carry", {
+  src <- paste(readLines(repo_path("app", "app.R")), collapse = "\n")
+  # Setting an unknown value is silently ignored by selectize, which would
+  # switch panes while leaving whatever stock was already open on screen.
+  expect_true(grepl("if (!(sym in sel.selectize.options)) return;", src, fixed = TRUE))
+})
