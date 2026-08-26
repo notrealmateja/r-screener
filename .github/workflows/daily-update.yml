@@ -118,8 +118,36 @@ jobs:
                      error = function(e) message("Reversal test skipped: ",
                                                  conditionMessage(e)))
 
-            csv_files <- list.files("data", pattern="\\.csv$", full.names=TRUE)
-            file.copy(csv_files, file.path("app", basename(csv_files)), overwrite=TRUE)
+            # An explicit list of what the app reads, rather than every CSV the
+            # pipeline produced. The blanket copy shipped ten intermediates the
+            # app never opens — alpha_history alone is 5MB — because it could
+            # not tell "the app needs this" from "a scoring module made this".
+            # Anything added here must also be loaded in app/global.R.
+            APP_FILES <- c(
+              "master_scored.csv", "price_history.csv", "macro_data.csv",
+              "earnings_calendar.csv", "market_news.csv", "sector_performance.csv",
+              "wsb_trending.csv", "stocktwits_trending.csv", "stock_news.csv",
+              "sec_filings.csv", "tv_channels.csv",
+              "top15_sweetspot.csv", "top15_unicorns.csv",
+              "backtest_summary.csv", "backtest_headline.csv", "backtest_ic.csv",
+              "backtest_components.csv", "reversal_results.csv"
+            )
+            src <- file.path("data", APP_FILES)
+            have <- file.exists(src)
+            if (any(!have))
+              message("Not yet generated, skipped: ",
+                      paste(APP_FILES[!have], collapse=", "))
+            file.copy(src[have], file.path("app", APP_FILES[have]), overwrite=TRUE)
+
+            # Drop anything the app no longer reads, so a file removed from the
+            # list above does not linger in the bundle forever.
+            stale <- setdiff(list.files("app", pattern="\\.csv$"), APP_FILES)
+            if (length(stale)) {
+              freed <- sum(file.size(file.path("app", stale)))/1024^2
+              unlink(file.path("app", stale))
+              message(sprintf("Removed %d files the app does not read (%.1f MB): %s",
+                              length(stale), freed, paste(stale, collapse=", ")))
+            }
 
             # The app never reads past 400 days: the Deep Dive chart filters to
             # 365 and the live fallback pulls 400. Shipping the full three-year

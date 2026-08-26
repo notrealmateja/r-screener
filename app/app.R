@@ -4,8 +4,12 @@
 source("global.R")
 
 # Load new quant outputs (graceful fallback if not yet generated)
-top15_data   <- tryCatch(read_csv("top15_sweetspot.csv", show_col_types=FALSE), error=function(e) NULL)
-unicorn_data <- tryCatch(read_csv("top15_unicorns.csv",  show_col_types=FALSE), error=function(e) NULL)
+# Through load_csv like everything else. These two read a bare filename, which
+# resolves only when the working directory happens to be the app folder — the
+# same assumption that left the whole app rendering with no data behind it on
+# Connect Cloud. Both tables would have silently gone empty.
+top15_data   <- load_csv("top15_sweetspot.csv")
+unicorn_data <- load_csv("top15_unicorns.csv")
 
 # =============================================================================
 # CSS — Pure Bloomberg DNA
@@ -1438,7 +1442,9 @@ server <- function(input, output, session) {
 
   # Auto-refresh: log data age (pipeline runs via GitHub Actions cron, not in-app)
   observe({
-    meta_file <- "data/meta.rds"
+    # "data/meta.rds" only exists when the app runs from the repo root; from the
+    # app directory the file sits alongside. Resolve it the same way as the rest.
+    meta_file <- file.path(APP_DATA_DIR, "meta.rds")
     if (file.exists(meta_file)) {
       tryCatch({
         m <- readRDS(meta_file)
