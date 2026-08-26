@@ -98,3 +98,13 @@ if (have_pkgs("dplyr", "readr", "tibble")) {
     expect_true(grepl("do.call(tabsetPanel", src, fixed = TRUE))
   })
 }
+
+test_that("earnings rows open the stock in Deep Dive", {
+  src <- paste(readLines(repo_path("app", "app.R")), collapse = "\n")
+  expect_true(grepl("earn-clickable", src, fixed = TRUE))
+  expect_true(grepl('sprintf("openDeepDive(\'%s\')", row$symbol)', src, fixed = TRUE))
+  # A name outside the universe has no Deep Dive page, so it must not look
+  # clickable — the click and the affordance are both gated on in_universe.
+  expect_true(grepl('if (in_universe) "earn-item earn-clickable" else "earn-item"',
+                    src, fixed = TRUE))
+})

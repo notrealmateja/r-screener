@@ -473,6 +473,12 @@ table.dataTable.row-clickable tbody tr:hover td {
 /* ── EARNINGS ROW ── */
 .earn-item { display:flex; align-items:center; gap:10px; padding:7px 0; border-bottom:1px solid var(--border); font-family:var(--mono); font-size:11px; }
 .earn-item:last-child { border:none; }
+.earn-clickable { cursor:pointer; transition:background .14s ease, padding-left .14s ease; }
+.earn-clickable:hover {
+  background:rgba(255,158,27,0.10);
+  padding-left:6px;
+  box-shadow:inset 2px 0 0 var(--orange);
+}
 .earn-date   { color:var(--muted); min-width:80px; }
 .earn-time   { color:var(--text2); font-size:10px; }
 .earn-eps    { margin-left:auto; color:var(--text); }
@@ -2719,7 +2725,12 @@ server <- function(input, output, session) {
         "amc" = "After-Close",
         time_str
       )
-      div(class="earn-item", style=bg_style,
+      # Only names in the universe open a Deep Dive; anything else has no page
+      # to show, so it must not look clickable.
+      div(class = if (in_universe) "earn-item earn-clickable" else "earn-item",
+          style = bg_style,
+          onclick = if (in_universe) sprintf("openDeepDive('%s')", row$symbol) else NULL,
+          title = if (in_universe) paste("Open", row$symbol, "in Deep Dive") else NULL,
         div(class="earn-date", format(row$date, "%b %d")),
         div(style=paste0(sym_style, "min-width:55px;font-family:var(--mono);font-size:11px;"), row$symbol),
         div(class="earn-time", time_icon),
