@@ -510,8 +510,8 @@
       }
     },
     "curl": {
-      "Source": "CRAN",
-      "Repository": "https://cran.rstudio.com",
+      "Source": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
       "description": {
         "Package": "curl",
         "Type": "Package",
@@ -533,9 +533,9 @@
         "Packaged": "2026-08-25 12:49:41 UTC; jeroen",
         "Author": "Jeroen Ooms [aut, cre] (ORCID: <https://orcid.org/0000-0002-4035-0289>),\n  Hadley Wickham [ctb],\n  Posit Software, PBC [cph]",
         "Maintainer": "Jeroen Ooms <jeroenooms@gmail.com>",
-        "Repository": "CRAN",
+        "Repository": "RSPM",
         "Date/Publication": "2026-08-25 16:40:02 UTC",
-        "Built": "R 4.4.0; x86_64-pc-linux-gnu; 2026-08-25 21:52:44 UTC; unix"
+        "Built": "R 4.4.0; x86_64-pc-linux-gnu; 2026-08-26 04:06:52 UTC; unix"
       }
     },
     "data.table": {
@@ -2542,13 +2542,13 @@
   },
   "files": {
     "alpha_history.csv": {
-      "checksum": "1a324c692b65db4bbac21b39d34c0362"
+      "checksum": "3ecfb98ce01f1aecc6e628dcd57f6b2f"
     },
     "app.R": {
-      "checksum": "f7b206eee192a0dd93cafb4a4cc777a9"
+      "checksum": "1db3e58791ace7689f9eb3bfe5e7718c"
     },
     "av_cache.csv": {
-      "checksum": "b9b30c6ec3d99cf26cef2ab97a914e0d"
+      "checksum": "5d18f32a64af7ee8269a9b239b620ca0"
     },
     "backtest_components.csv": {
       "checksum": "18520bb8f07a37a05258c8ab55a5cdf4"
@@ -2575,7 +2575,7 @@
       "checksum": "165aa567b2075aa695a1d55ba19aec2e"
     },
     "data/meta.rds": {
-      "checksum": "fcfa90a71746db616ca6b3d2611668cc"
+      "checksum": "42360b5c574e1925934c99601327a11f"
     },
     "data/price_series_cache.rds": {
       "checksum": "266a1b7cfa8bbf9180380a4969dbc886"
@@ -2587,73 +2587,73 @@
       "checksum": "b9260e096fb89fc630076a716d838da7"
     },
     "earnings_calendar.csv": {
-      "checksum": "10c723396d6e08c636b4a5373dce0960"
+      "checksum": "34145f9c7f8a8e7b51746877fac34242"
     },
     "fundamentals_scored.csv": {
-      "checksum": "afdb66ee5b39174e921f37f3f1d97d6b"
+      "checksum": "b4588cbf483971983f62965069369161"
     },
     "global.R": {
       "checksum": "4f5df45b17f4ec8c78bae53c65252440"
     },
     "macro_data.csv": {
-      "checksum": "1894d69b959fd6f1be856fc9d82c50f1"
+      "checksum": "89533e2798ff346b09c2c0eca039d7d3"
     },
     "market_news.csv": {
-      "checksum": "6ca29e3b1eb511faad62b27ab5df5edb"
+      "checksum": "7faa6aa26bdb10f40ba036fb17a2b49e"
     },
     "master_scored.csv": {
-      "checksum": "e17557ade4d91ac9e634a6562b413a2f"
+      "checksum": "5885893b1801fa22a08f4408584b2fcb"
     },
     "meta.rds": {
-      "checksum": "fcfa90a71746db616ca6b3d2611668cc"
+      "checksum": "42360b5c574e1925934c99601327a11f"
     },
     "momentum_scored.csv": {
-      "checksum": "944afbd7e6a7f33be8f9359eb0992e25"
+      "checksum": "355d9af6b6d85d94a699cc7688902bd6"
     },
     "polygon_cache.csv": {
-      "checksum": "84c28a5afa8494ef85b32384ec170623"
+      "checksum": "e0dbfea98e3b1fd9fad9cfddfa11f5c8"
     },
     "polygon_scored.csv": {
-      "checksum": "00c5a63dadcb648a9386c5cc8a91ca36"
+      "checksum": "55d83cde32a701e384eae350abfe84e5"
     },
     "price_history.csv": {
-      "checksum": "ed7f7e67cf67d932c0da5f3b1b1f8157"
+      "checksum": "0534a5edc53f99c3196bd2acda20f594"
     },
     "reversal_results.csv": {
       "checksum": "81f2e47c9f2a5ecffe802421ee5d2366"
     },
     "sec_filings.csv": {
-      "checksum": "abd31654b4d928741d833bb4512cdf79"
+      "checksum": "32b3d4155530544ddaedefe7f14f88ed"
     },
     "sec_financials.csv": {
-      "checksum": "e8525145a20e0572962cf9d6607705a2"
+      "checksum": "d58eb182796da8e204037630679f64f3"
     },
     "sector_performance.csv": {
-      "checksum": "c9c814bb241dee8a5527c2171f649e17"
+      "checksum": "7cf1bffb99922c0f9bf8dd24f94771d0"
     },
     "sentiment_history.csv": {
-      "checksum": "7bee0ff971697cfcb67c7094d04fa3c0"
+      "checksum": "ce4dea1f58fdcafdd5dee8b597dbe7ca"
     },
     "squeeze_scored.csv": {
       "checksum": "f585fd0bc94fac6284a6048b44555bd6"
     },
     "stock_news.csv": {
-      "checksum": "fd0829ca75dacc51b742101c0c426bbf"
+      "checksum": "c1fdb8e56f6d4c76653ef3fefdbbbf22"
     },
     "stocktwits_trending.csv": {
-      "checksum": "ef3dcb8e531e3151f17f391ad74d6437"
+      "checksum": "4480cf8cc5368e0c6a0675ca0318265f"
     },
     "top15_sweetspot.csv": {
-      "checksum": "1d8989407b4d3bc583304dd9e16d7b3e"
+      "checksum": "a96dd144f2558461513d4ad7cc0163a3"
     },
     "top15_unicorns.csv": {
-      "checksum": "1b6a5cacef6f81aa52cf331294ea61eb"
+      "checksum": "716f4ae97d73e9abbc0e2eb911188929"
     },
     "tv_channels.csv": {
-      "checksum": "25982819cb78a1931a758eafda442143"
+      "checksum": "cb0e334360afa9cc9b774eeef654401e"
     },
     "wsb_trending.csv": {
-      "checksum": "2fe074dd9ca7d4ea564903e1b00a4936"
+      "checksum": "b2fb2532f2437d74bb2e529a11693e87"
     }
   },
   "users": null

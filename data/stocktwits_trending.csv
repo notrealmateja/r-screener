@@ -1,31 +1,31 @@
 symbol,title,watchlist_count,st_rank,trending_score,messages,bullish,bearish,sentiment_label,fetched_at
-INTU,Intuit Inc,12451,1,14.8408,10,1,6,Very Bearish,2026-08-25T21:56:32Z
-DKS,"Dicks Sporting Goods, Inc.",8951,2,13.2757,5,1,0,Very Bullish,2026-08-25T21:56:32Z
-CRML,Critical Metals Corp.,14138,3,12.6055,1,1,0,Very Bullish,2026-08-25T21:56:32Z
-IBRX,ImmunityBio Inc,30082,4,10.7153,1,1,0,Very Bullish,2026-08-25T21:56:32Z
-ZM,Zoom Communications Inc. - Ordinary Shares - Class A,64683,5,9.46946,0,0,0,Neutral,2026-08-25T21:56:32Z
-NVDA,NVIDIA Corp,661850,6,4.68374,4,3,0,Very Bullish,2026-08-25T21:56:32Z
-USO,United States Oil Fund,74541,7,1.05935,0,0,0,Neutral,2026-08-25T21:56:32Z
-NUVB,Nuvation Bio Inc - Ordinary Shares - Class A,3487,8,3.19929,0,0,0,Neutral,2026-08-25T21:56:32Z
-HELP,Helus Pharma Inc.,8065,9,6.0666,0,0,0,Neutral,2026-08-25T21:56:32Z
-CCL,Carnival Corp,89287,10,1.04619,0,0,0,Neutral,2026-08-25T21:56:32Z
-TLT,iShares 20+ Year Treasury Bond ETF,30688,11,1.67883,0,0,0,Neutral,2026-08-25T21:56:32Z
-ONON,On Holding AG,6924,12,6.61245,0,0,0,Neutral,2026-08-25T21:56:32Z
-XLF,Financial Select Sector SPDR Fund,18439,13,1.78409,0,0,0,Neutral,2026-08-25T21:56:32Z
-GLD,SPDR Gold Shares ETF,96217,14,2.02314,0,0,0,Neutral,2026-08-25T21:56:32Z
-CRM,Salesforce Inc,70564,15,1.36495,0,0,0,Neutral,2026-08-25T21:56:32Z
-BTC.X,Bitcoin,677406,16,3.68821,5,2,0,Very Bullish,2026-08-25T21:56:32Z
-FCX,Freeport-McMoRan Inc,28383,17,3.93752,0,0,0,Neutral,2026-08-25T21:56:32Z
-ALOY,REalloys Inc.,12108,18,2.30819,0,0,0,Neutral,2026-08-25T21:56:32Z
-CRWD,Crowdstrike Holdings Inc,62154,19,4.28772,0,0,0,Neutral,2026-08-25T21:56:32Z
-IMMX,Immix Biopharma Inc,4635,20,1.05674,0,0,0,Neutral,2026-08-25T21:56:32Z
-OPEAZZX.P,OpenAI,2351,21,4.13224,0,0,0,Neutral,2026-08-25T21:56:32Z
-ARKK,ARK Innovation ETF,49716,22,2.26057,0,0,0,Neutral,2026-08-25T21:56:32Z
-NKE,Nike Inc,138494,23,2.17788,0,0,0,Neutral,2026-08-25T21:56:32Z
-TTWO,"Take-Two Interactive Software, Inc.",23386,24,0.757905,0,0,0,Neutral,2026-08-25T21:56:32Z
-SQD.X,SQD,425,25,2.47452,0,0,0,Neutral,2026-08-25T21:56:32Z
-LPTH,"Lightpath Technologies, Inc. - Ordinary Shares - Class A",8645,26,1.50896,0,0,0,Neutral,2026-08-25T21:56:32Z
-AVGO,Broadcom Inc,72110,27,-0.494451,0,0,0,Neutral,2026-08-25T21:56:32Z
-UVXY,ProShares Ultra VIX Short-Term Futures ETF,85188,28,4.1609,0,0,0,Neutral,2026-08-25T21:56:32Z
-JASMY.X,JasmyCoin,25285,29,0.777056,0,0,0,Neutral,2026-08-25T21:56:32Z
-PURR,Hyperliquid Strategies Inc.,25953,30,3.58335,0,0,0,Neutral,2026-08-25T21:56:32Z
+NVDA,NVIDIA Corp,663234,1,20.6842,7,3,1,Very Bullish,2026-08-27T01:08:44Z
+WEN,Wendy's Co,16195,2,14.769,1,0,1,Very Bearish,2026-08-27T01:08:44Z
+CRM,Salesforce Inc,70837,3,9.69825,2,2,0,Very Bullish,2026-08-27T01:08:44Z
+CRWD,Crowdstrike Holdings Inc,62430,4,7.82012,0,0,0,Neutral,2026-08-27T01:08:44Z
+RUM,RUM Group Inc.,34949,5,7.70154,1,0,0,Neutral,2026-08-27T01:08:44Z
+OKTA,Okta Inc,24624,6,7.27921,0,0,0,Neutral,2026-08-27T01:08:44Z
+TMC,TMC the metals company Inc,31482,7,7.06662,2,1,0,Very Bullish,2026-08-27T01:08:44Z
+SMCI,Super Micro Computer Inc,92557,8,6.99134,4,2,0,Very Bullish,2026-08-27T01:08:44Z
+ANF,Abercrombie & Fitch Co.,9115,9,6.64538,0,0,0,Neutral,2026-08-27T01:08:44Z
+NOK,Nokia Corp,114392,10,6.34674,1,0,0,Neutral,2026-08-27T01:08:44Z
+MRVL,Marvell Technology Inc,51108,11,5.83893,1,0,0,Neutral,2026-08-27T01:08:44Z
+SOXL,Direxion Daily Semiconductor Bull 3X Shares,39855,12,5.62024,2,1,0,Very Bullish,2026-08-27T01:08:44Z
+FLUT,Flutter Entertainment Plc,2003,13,5.16941,0,0,0,Neutral,2026-08-27T01:08:44Z
+WULF,TeraWulf Inc,31227,14,5.08449,0,0,0,Neutral,2026-08-27T01:08:44Z
+RVMD,Revolution Medicines Inc,3093,15,5.01096,0,0,0,Neutral,2026-08-27T01:08:44Z
+AVGO,Broadcom Inc,72235,16,4.7298,1,0,0,Neutral,2026-08-27T01:08:44Z
+AFRM,Affirm Holdings Inc,39494,17,4.6918,0,0,0,Neutral,2026-08-27T01:08:44Z
+IREN,IREN Limited,49076,18,4.46056,0,0,0,Neutral,2026-08-27T01:08:44Z
+TQQQ,ProShares UltraPro QQQ,44286,19,4.41083,0,0,0,Neutral,2026-08-27T01:08:44Z
+INTC,Intel Corp,207544,20,4.38195,1,0,0,Neutral,2026-08-27T01:08:44Z
+DELL,Dell Technologies Inc,29426,21,4.28244,0,0,0,Neutral,2026-08-27T01:08:44Z
+NKE,Nike Inc,138656,22,4.2508,2,1,1,Neutral,2026-08-27T01:08:44Z
+TGT,Target Corp,50189,23,4.0722,0,0,0,Neutral,2026-08-27T01:08:44Z
+P,Everpure Inc,20789,24,3.85614,0,0,0,Neutral,2026-08-27T01:08:44Z
+TEM,Tempus AI Inc,21466,25,3.85493,0,0,0,Neutral,2026-08-27T01:08:44Z
+VKTX,Viking Therapeutics Inc,38395,26,3.81211,0,0,0,Neutral,2026-08-27T01:08:44Z
+SEDG,Solaredge Technologies Inc,18509,27,3.61757,0,0,0,Neutral,2026-08-27T01:08:44Z
+ZS,Zscaler Inc,23226,28,3.45449,0,0,0,Neutral,2026-08-27T01:08:44Z
+FIGR,Figure Technology Solutions Inc,2560,29,3.44422,0,0,0,Neutral,2026-08-27T01:08:44Z
+CLSK,Cleanspark Inc,56793,30,3.36952,0,0,0,Neutral,2026-08-27T01:08:44Z
