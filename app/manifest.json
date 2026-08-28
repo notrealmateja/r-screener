@@ -2542,13 +2542,13 @@
   },
   "files": {
     "alpha_history.csv": {
-      "checksum": "3ecfb98ce01f1aecc6e628dcd57f6b2f"
+      "checksum": "e28dba9a174fac5ce098af24b9aa9120"
     },
     "app.R": {
       "checksum": "1db3e58791ace7689f9eb3bfe5e7718c"
     },
     "av_cache.csv": {
-      "checksum": "5d18f32a64af7ee8269a9b239b620ca0"
+      "checksum": "e6d7874e9a416d8c3b47c405a18deca0"
     },
     "backtest_components.csv": {
       "checksum": "18520bb8f07a37a05258c8ab55a5cdf4"
@@ -2575,7 +2575,7 @@
       "checksum": "165aa567b2075aa695a1d55ba19aec2e"
     },
     "data/meta.rds": {
-      "checksum": "42360b5c574e1925934c99601327a11f"
+      "checksum": "564d848cbf13475a449c7f39aa1aa349"
     },
     "data/price_series_cache.rds": {
       "checksum": "266a1b7cfa8bbf9180380a4969dbc886"
@@ -2587,73 +2587,73 @@
       "checksum": "b9260e096fb89fc630076a716d838da7"
     },
     "earnings_calendar.csv": {
-      "checksum": "34145f9c7f8a8e7b51746877fac34242"
+      "checksum": "a4932f80e23ff8a4002d935cc7d0013f"
     },
     "fundamentals_scored.csv": {
-      "checksum": "b4588cbf483971983f62965069369161"
+      "checksum": "0e36d70c911ebf5f3c39ade9c3261eb3"
     },
     "global.R": {
       "checksum": "4f5df45b17f4ec8c78bae53c65252440"
     },
     "macro_data.csv": {
-      "checksum": "89533e2798ff346b09c2c0eca039d7d3"
+      "checksum": "9c3dd97ac2e9bb4b62a5c2277f33f327"
     },
     "market_news.csv": {
-      "checksum": "7faa6aa26bdb10f40ba036fb17a2b49e"
+      "checksum": "9749f99cd298e2aca538ea31318bf49d"
     },
     "master_scored.csv": {
-      "checksum": "5885893b1801fa22a08f4408584b2fcb"
+      "checksum": "f80fca53a6062f5df54609890dd2088f"
     },
     "meta.rds": {
-      "checksum": "42360b5c574e1925934c99601327a11f"
+      "checksum": "564d848cbf13475a449c7f39aa1aa349"
     },
     "momentum_scored.csv": {
-      "checksum": "355d9af6b6d85d94a699cc7688902bd6"
+      "checksum": "5259f9f31bc64c9cf7853a19e3c972b4"
     },
     "polygon_cache.csv": {
-      "checksum": "e0dbfea98e3b1fd9fad9cfddfa11f5c8"
+      "checksum": "1af6ca2de15ce332bdcdd6b07983a8c9"
     },
     "polygon_scored.csv": {
-      "checksum": "55d83cde32a701e384eae350abfe84e5"
+      "checksum": "74bda8758189a07589b5638d4496c419"
     },
     "price_history.csv": {
-      "checksum": "0534a5edc53f99c3196bd2acda20f594"
+      "checksum": "783f865db5af58f8b0fb2e31f8ab61c1"
     },
     "reversal_results.csv": {
       "checksum": "81f2e47c9f2a5ecffe802421ee5d2366"
     },
     "sec_filings.csv": {
-      "checksum": "32b3d4155530544ddaedefe7f14f88ed"
+      "checksum": "7d470d77c6783529de180c31684f25e4"
     },
     "sec_financials.csv": {
-      "checksum": "d58eb182796da8e204037630679f64f3"
+      "checksum": "11d9dfcfb8be3b8dc19319ba9c35cbbb"
     },
     "sector_performance.csv": {
-      "checksum": "7cf1bffb99922c0f9bf8dd24f94771d0"
+      "checksum": "d21b78a2285e13b42914a7964d5c8450"
     },
     "sentiment_history.csv": {
-      "checksum": "ce4dea1f58fdcafdd5dee8b597dbe7ca"
+      "checksum": "dd1cfa3d7a4e9c06c42086b2cf36909c"
     },
     "squeeze_scored.csv": {
-      "checksum": "f585fd0bc94fac6284a6048b44555bd6"
+      "checksum": "eb0c452d7fe92d09f0714b7d3671b945"
     },
     "stock_news.csv": {
-      "checksum": "c1fdb8e56f6d4c76653ef3fefdbbbf22"
+      "checksum": "6e1e0b99a389d15322172f8862ff9778"
     },
     "stocktwits_trending.csv": {
-      "checksum": "4480cf8cc5368e0c6a0675ca0318265f"
+      "checksum": "41a4bb1c9cfcdfa78010f4a628a0e1e9"
     },
     "top15_sweetspot.csv": {
-      "checksum": "a96dd144f2558461513d4ad7cc0163a3"
+      "checksum": "43629367b6393f9c07c1414ca8284be4"
     },
     "top15_unicorns.csv": {
-      "checksum": "716f4ae97d73e9abbc0e2eb911188929"
+      "checksum": "bff190ba797a6fa0850d535cc7eb6561"
     },
     "tv_channels.csv": {
-      "checksum": "cb0e334360afa9cc9b774eeef654401e"
+      "checksum": "35b4c59308386ef972720b9ec7ad0d68"
     },
     "wsb_trending.csv": {
-      "checksum": "b2fb2532f2437d74bb2e529a11693e87"
+      "checksum": "1ef511e1ad3a5f44e0c9d85d4a70f7e1"
     }
   },
   "users": null
