@@ -1,6 +1,6 @@
 symbol,shares_short,shares_short_prior,short_ratio,settlement_date,float_shares,short_percent_float,short_source,shares_outstanding,short_pct_basis,short_trend,improvement_count,fundamentals_improving,sf_score,dtc_score,fi_score,st_score,squeeze_score_raw,squeeze_mult,squeeze_score,squeeze_tier,short_float_pct
 LOVE,2812077,3027171,12.39,2026-08-14,NA,0.19,finra,14638400,shares outstanding,Decreasing,0,FALSE,94.85,94.85,0,80,54.68,1,54.68,Low Signal,19.2%
-ASAN,26240041,28563366,5.57,2026-08-14,NA,0.16,finra,160970000,shares outstanding,Decreasing,0,FALSE,90.72,80.93,0,80,50.87,1,50.87,Low Signal,16.3%
+ASAN,26240041,28563366,5.57,2026-08-14,NA,0.16,finra,167823000,shares outstanding,Decreasing,0,FALSE,89.69,80.93,0,80,50.61,1,50.61,Low Signal,15.6%
 RXRX,177923359,180771459,13.37,2026-08-14,NA,0.33,finra,535342000,shares outstanding,Stable,0,FALSE,99.48,95.36,0,40,49.94,1,49.94,Low Signal,33.2%
 AI,48144524,46307686,11.46,2026-08-14,NA,0.32,finra,151949000,shares outstanding,Stable,0,FALSE,98.97,94.33,0,40,49.61,1,49.61,Low Signal,31.7%
 SRPT,27049885,27566969,9.07,2026-08-14,NA,0.26,finra,105627000,shares outstanding,Stable,0,FALSE,97.94,91.24,0,40,48.73,1,48.73,Low Signal,25.6%
@@ -28,8 +28,8 @@ WLDN,1910051,1925574,6.07,2026-08-14,NA,0.13,finra,15232100,shares outstanding,S
 MEDP,1578593,1746898,7.64,2026-08-14,NA,0.06,finra,27911700,shares outstanding,Decreasing,0,FALSE,56.7,88.66,0,80,43.91,1,43.91,Low Signal,5.7%
 WDAY,20124869,25349192,3.86,2026-08-14,NA,0.1,finra,201000000,shares outstanding,Decreasing,0,FALSE,77.32,62.89,0,80,43.91,1,43.91,Low Signal,10%
 YETI,7913216,8352671,3.55,2026-08-14,NA,0.11,finra,72989000,shares outstanding,Decreasing,0,FALSE,81.96,55.67,0,80,43.62,1,43.62,Low Signal,10.8%
+RARE,15887767,14963396,7.78,2026-08-14,NA,0.16,finra,98589000,shares outstanding,Increasing,0,FALSE,90.72,89.69,0,20,43.62,1,43.62,Low Signal,16.1%
 CALM,5020240,5103170,7.55,2026-08-14,NA,0.11,finra,46917100,shares outstanding,Stable,0,FALSE,79.9,88.14,0,40,43.6,1,43.6,Low Signal,10.7%
-RARE,15887767,14963396,7.78,2026-08-14,NA,0.16,finra,98589000,shares outstanding,Increasing,0,FALSE,90.21,89.69,0,20,43.49,1,43.49,Low Signal,16.1%
 HALO,14636927,14022134,5.01,2026-08-14,NA,0.13,finra,113498000,shares outstanding,Stable,0,FALSE,87.63,77.32,0,40,43.37,1,43.37,Low Signal,12.9%
 DUOL,7091179,7263743,4.5,2026-08-14,NA,0.18,finra,40237100,shares outstanding,Stable,0,FALSE,92.27,71.13,0,40,43.29,1,43.29,Low Signal,17.6%
 ERAS,30847289,29953849,10.01,2026-08-14,NA,0.09,finra,349762000,shares outstanding,Stable,0,FALSE,73.2,93.3,0,40,42.96,1,42.96,Low Signal,8.8%
@@ -47,7 +47,7 @@ PD,8359474,7644566,7.46,2026-08-14,NA,0.11,finra,77123000,shares outstanding,Inc
 AFRM,14461742,15391541,5.38,2026-08-14,NA,0.05,finra,294358000,shares outstanding,Decreasing,0,FALSE,50.52,80.41,0,80,40.71,1,40.71,Low Signal,4.9%
 TDUP,18733587,19197601,3.78,2026-08-14,NA,0.17,finra,111010000,shares outstanding,Stable,0,FALSE,91.24,59.28,0,40,40.66,1,40.66,Low Signal,16.9%
 ROAD,3450960,4564569,3.72,2026-08-14,NA,0.07,finra,48206400,shares outstanding,Decreasing,0,FALSE,66.49,58.25,0,80,40.27,1,40.27,Low Signal,7.2%
-ACAD,9478912,10812093,4.54,2026-08-14,NA,0.06,finra,171236000,shares outstanding,Decreasing,0,FALSE,54.64,72.68,0,80,40.2,1,40.2,Low Signal,5.5%
+ACAD,9478912,10812093,4.54,2026-08-14,NA,0.06,finra,172306000,shares outstanding,Decreasing,0,FALSE,54.64,72.68,0,80,40.2,1,40.2,Low Signal,5.5%
 CROX,4351107,4415345,4.82,2026-08-14,NA,0.09,finra,47945100,shares outstanding,Stable,0,FALSE,75.77,75.77,0,40,40.1,1,40.1,Low Signal,9.1%
 PINS,43797898,50504065,3.26,2026-08-14,NA,0.09,finra,492198000,shares outstanding,Decreasing,0,FALSE,74.23,47.42,0,80,40.04,1,40.04,Low Signal,8.9%
 QRVO,5033137,6555540,4.26,2026-08-14,NA,0.06,finra,88222000,shares outstanding,Decreasing,0,FALSE,57.22,67.53,0,80,39.81,1,39.81,No Signal,5.7%
@@ -58,7 +58,7 @@ CXM,9126823,13273788,3.43,2026-08-14,NA,0.07,finra,133099000,shares outstanding,
 SMPL,6639195,7383061,3.32,2026-08-14,NA,0.08,finra,88441000,shares outstanding,Decreasing,0,FALSE,68.04,48.97,0,80,38.8,1,38.8,No Signal,7.5%
 FROG,8465931,9393448,3.41,2026-08-14,NA,0.07,finra,123301000,shares outstanding,Decreasing,0,FALSE,64.95,52.58,0,80,38.75,1,38.75,No Signal,6.9%
 FIZZ,4302830,4331658,14.5,2026-08-14,NA,0.05,finra,93612000,shares outstanding,Stable,0,FALSE,48.97,97.94,0,40,37.83,1,37.83,No Signal,4.6%
-WING,4261459,4241597,3.14,2026-08-14,NA,0.16,finra,27242500,shares outstanding,Stable,0,FALSE,89.69,44.85,0,40,37.39,1,37.39,No Signal,15.6%
+WING,4261459,4241597,3.14,2026-08-14,NA,0.16,finra,27242500,shares outstanding,Stable,0,FALSE,90.21,44.85,0,40,37.52,1,37.52,No Signal,15.6%
 EXP,1879956,1921344,5.03,2026-08-14,NA,0.06,finra,30675300,shares outstanding,Stable,0,FALSE,60.82,77.84,0,40,36.77,1,36.77,No Signal,6.1%
 INTA,3416808,3807922,4,2026-08-14,NA,0.04,finra,76511000,shares outstanding,Decreasing,0,FALSE,47.94,63.92,0,80,36.77,1,36.77,No Signal,4.5%
 BMRN,10202950,12504131,3.69,2026-08-14,NA,0.05,finra,193574000,shares outstanding,Decreasing,0,FALSE,52.58,57.73,0,80,36.69,1,36.69,No Signal,5.3%
@@ -132,9 +132,9 @@ COST,7364782,7655966,4.38,2026-08-14,NA,0.02,finra,443479000,shares outstanding,
 AVGO,56209128,61196152,3.21,2026-08-14,NA,0.01,finra,4757580000,shares outstanding,Decreasing,0,FALSE,11.34,46.39,0,80,24.11,1,24.11,No Signal,1.2%
 MYRG,660757,662535,2.73,2026-08-14,NA,0.04,finra,15569200,shares outstanding,Stable,0,FALSE,45.88,30.93,0,40,23.65,1,23.65,No Signal,4.2%
 HD,10319915,12299979,3.26,2026-08-14,NA,0.01,finra,997117000,shares outstanding,Decreasing,0,FALSE,8.25,47.42,0,80,23.55,1,23.55,No Signal,1%
-PANW,22414335,21000807,3.95,2026-08-14,NA,0.03,finra,815000000,shares outstanding,Increasing,0,FALSE,31.44,63.4,0,20,23.54,1,23.54,No Signal,2.8%
 JBSS,450527,373950,2.98,2026-08-14,NA,0.05,finra,9092100,shares outstanding,Increasing,0,FALSE,51.03,38.66,0,20,23.49,1,23.49,No Signal,5%
 FIVE,1732751,1864884,2.1,2026-08-14,NA,0.03,finra,55295000,shares outstanding,Decreasing,0,FALSE,34.54,13.92,0,80,23.42,1,23.42,No Signal,3.1%
+PANW,22414335,21000807,3.95,2026-08-14,NA,0.03,finra,815000000,shares outstanding,Increasing,0,FALSE,30.93,63.4,0,20,23.41,1,23.41,No Signal,2.8%
 WTS,807593,740879,3.83,2026-08-14,NA,0.03,finra,27466800,shares outstanding,Increasing,0,FALSE,32.47,61.34,0,20,23.39,1,23.39,No Signal,2.9%
 BLK,1813402,2176024,3.13,2026-08-14,NA,0.01,finra,154869000,shares outstanding,Decreasing,0,FALSE,10.31,43.81,0,80,23.34,1,23.34,No Signal,1.2%
 NPWR,2973284,2676837,3.52,2026-08-14,NA,0.03,finra,88481000,shares outstanding,Increasing,0,FALSE,37.11,55.15,0,20,23.31,1,23.31,No Signal,3.4%
@@ -168,8 +168,8 @@ XOM,36897721,42347070,2.66,2026-08-14,NA,0.01,finra,4111912000,shares outstandin
 NTRS,3595439,3389629,3.36,2026-08-14,NA,0.02,finra,182956000,shares outstanding,Increasing,0,FALSE,21.65,51.03,0,20,18.62,1,18.62,No Signal,2%
 IBKR,8095922,9250070,1.77,2026-08-14,NA,0.02,finra,453078000,shares outstanding,Decreasing,0,FALSE,20.62,7.22,0,80,18.6,1,18.6,No Signal,1.8%
 LIN,4915056,5593695,2.39,2026-08-14,NA,0.01,finra,460980000,shares outstanding,Decreasing,0,FALSE,9.79,20.1,0,80,18.47,1,18.47,No Signal,1.1%
+ZM,7250683,7214118,2.52,2026-08-14,NA,0.03,finra,263233000,shares outstanding,Stable,0,FALSE,31.44,22.16,0,40,18.29,1,18.29,No Signal,2.8%
 V,22251297,20789298,3.63,2026-08-14,NA,0.01,finra,1704113000,shares outstanding,Increasing,0,FALSE,14.95,57.22,0,20,18.18,1,18.18,No Signal,1.3%
-ZM,7250683,7214118,2.52,2026-08-14,NA,0.03,finra,264646000,shares outstanding,Stable,0,FALSE,30.41,22.16,0,40,18.04,1,18.04,No Signal,2.7%
 RBLX,13884449,24107149,1,2026-08-14,NA,0.02,finra,669993000,shares outstanding,Decreasing,0,FALSE,23.2,0,0,80,17.8,1,17.8,No Signal,2.1%
 MA,7188654,8962947,2.58,2026-08-14,NA,0.01,finra,869464000,shares outstanding,Decreasing,0,FALSE,2.06,25.77,0,80,17.67,1,17.67,No Signal,0.8%
 META,28048106,31458758,1.94,2026-08-14,NA,0.01,finra,2205129000,shares outstanding,Decreasing,0,FALSE,13.4,11.34,0,80,17.62,1,17.62,No Signal,1.3%
@@ -187,7 +187,7 @@ GOOGL,72705550,70493725,2.67,2026-08-14,NA,0.01,finra,5867156000,shares outstand
 CVX,15741465,20250198,1.91,2026-08-14,NA,0.01,finra,1961603000,shares outstanding,Decreasing,0,FALSE,1.55,10.82,0,80,14.55,1,14.55,No Signal,0.8%
 TSLA,69196896,68501639,2.15,2026-08-14,NA,0.02,finra,3949547000,shares outstanding,Stable,0,FALSE,20.1,15.46,0,40,14.12,1,14.12,No Signal,1.8%
 MDB,2839284,2598807,1.67,2026-08-14,NA,0.04,finra,80432000,shares outstanding,Increasing,0,FALSE,39.18,6.19,0,20,14.03,1,14.03,No Signal,3.5%
-TWLO,4210074,4308336,1.23,2026-08-14,NA,0.03,finra,153575000,shares outstanding,Stable,0,FALSE,30.93,0.52,0,40,13.84,1,13.84,No Signal,2.7%
+TWLO,4210074,4308336,1.23,2026-08-14,NA,0.03,finra,153575000,shares outstanding,Stable,0,FALSE,30.41,0.52,0,40,13.71,1,13.71,No Signal,2.7%
 NVDA,285956804,292667375,2.52,2026-08-14,NA,0.01,finra,24221000000,shares outstanding,Stable,0,FALSE,10.82,22.16,0,40,13.14,1,13.14,No Signal,1.2%
 ISRG,7069998,6620078,2.34,2026-08-14,NA,0.02,finra,358278000,shares outstanding,Increasing,0,FALSE,22.16,19.07,0,20,12.36,1,12.36,No Signal,2%
 ORCL,47767442,50143917,1.56,2026-08-14,NA,0.02,finra,2880471000,shares outstanding,Stable,0,FALSE,16.49,4.64,0,40,11.05,1,11.05,No Signal,1.7%
