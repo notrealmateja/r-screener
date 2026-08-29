@@ -1,31 +1,31 @@
 symbol,title,watchlist_count,st_rank,trending_score,messages,bullish,bearish,sentiment_label,fetched_at
-AFRM,Affirm Holdings Inc,39886,1,4.85179,4,0,1,Very Bearish,2026-08-29T03:24:28Z
-FLUT,Flutter Entertainment Plc,2012,2,5.79357,0,0,0,Neutral,2026-08-29T03:24:28Z
-VLO,Valero Energy Corp.,9554,3,0.297144,0,0,0,Neutral,2026-08-29T03:24:28Z
-UNH,Unitedhealth Group Inc,55724,4,4.51819,1,1,0,Very Bullish,2026-08-29T03:24:28Z
-OKLO,Oklo Inc.,39394,5,1.9039,1,1,0,Very Bullish,2026-08-29T03:24:28Z
-IBRX,ImmunityBio Inc,30192,6,3.45582,7,4,0,Very Bullish,2026-08-29T03:24:28Z
-GLSI,Greenwich LifeSciences Inc,12624,7,0.455914,0,0,0,Neutral,2026-08-29T03:24:28Z
-NEM,Newmont Corp,13436,8,2.59855,0,0,0,Neutral,2026-08-29T03:24:28Z
-COST,Costco Wholesale Corp,64773,9,2.3249,0,0,0,Neutral,2026-08-29T03:24:28Z
-VST,Vistra Corp,14111,10,2.53738,0,0,0,Neutral,2026-08-29T03:24:28Z
-CRML,Critical Metals Corp.,14290,11,2.2802,2,1,0,Very Bullish,2026-08-29T03:24:28Z
-BTG,B2gold Corp,8123,12,2.3249,0,0,0,Neutral,2026-08-29T03:24:28Z
-CIFR,Cipher Digital Inc.,23335,13,2.23216,0,0,0,Neutral,2026-08-29T03:24:28Z
-RIG,Transocean Ltd,25021,14,2.08572,0,0,0,Neutral,2026-08-29T03:24:28Z
-IBM,International Business Machines Corp.,69362,15,1.48273,0,0,0,Neutral,2026-08-29T03:24:28Z
-ASTS,AST SpaceMobile Inc,70645,16,1.12793,1,1,0,Very Bullish,2026-08-29T03:24:28Z
-WDAY,Workday Inc,15219,17,2.25664,0,0,0,Neutral,2026-08-29T03:24:28Z
-CCL,Carnival Corp,89285,18,1.77064,1,0,0,Neutral,2026-08-29T03:24:28Z
-UVXY,ProShares Ultra VIX Short-Term Futures ETF,85177,19,2.01586,0,0,0,Neutral,2026-08-29T03:24:28Z
-CVX,Chevron Corp.,36863,20,1.55187,1,0,0,Neutral,2026-08-29T03:24:28Z
-APP,Applovin Corp,23699,21,1.34835,2,0,0,Neutral,2026-08-29T03:24:28Z
-DKNG,DraftKings Inc,120343,22,1.25828,0,0,0,Neutral,2026-08-29T03:24:28Z
-AXTI,AXT Inc,7708,23,4.2715,3,3,0,Very Bullish,2026-08-29T03:24:28Z
-LULU,Lululemon Athletica Inc,49276,24,1.58071,0,0,0,Neutral,2026-08-29T03:24:28Z
-NVAX,Novavax Inc,107652,25,1.27444,0,0,0,Neutral,2026-08-29T03:24:28Z
-CASHCAT.X,Cash Cat,408,26,-0.905031,0,0,0,Neutral,2026-08-29T03:24:28Z
-WMT,Walmart Inc,138806,27,1.23942,0,0,0,Neutral,2026-08-29T03:24:28Z
-BB.TSX,BlackBerry Ltd,1012,28,-0.60356,0,0,0,Neutral,2026-08-29T03:24:28Z
-QCOM,"Qualcomm, Inc.",77670,29,0.642797,0,0,0,Neutral,2026-08-29T03:24:28Z
-BTC,Grayscale Bitcoin Mini Trust ETF,4731,30,0.727845,0,0,0,Neutral,2026-08-29T03:24:28Z
+4CHAN.X,4Chan,3181,1,7.36097,10,8,0,Very Bullish,2026-08-29T23:35:40Z
+TRLV,Trulieve Cannabis Corp ,7737,2,4.5488,1,1,0,Very Bullish,2026-08-29T23:35:40Z
+STUDY,Stocktwits Education,5995,3,4.54625,1,0,0,Neutral,2026-08-29T23:35:40Z
+QUANT,Quant Traders and Investors,265,4,3.94709,0,0,0,Neutral,2026-08-29T23:35:40Z
+QNT,Quantinuum Inc.,2951,5,3.86337,0,0,0,Neutral,2026-08-29T23:35:40Z
+XCN.X,Onyxcoin,8034,6,3.62398,0,0,0,Neutral,2026-08-29T23:35:40Z
+XTZ.X,Tezos,47675,7,3.473,0,0,0,Neutral,2026-08-29T23:35:40Z
+IGV,iShares Expanded Tech-Software Sector ETF,5342,8,2.9838,0,0,0,Neutral,2026-08-29T23:35:40Z
+CAR,Avis Budget Group Inc,11355,9,2.8204,1,0,0,Neutral,2026-08-29T23:35:40Z
+SCHW,Charles Schwab Corp.,11679,10,2.8204,0,0,0,Neutral,2026-08-29T23:35:40Z
+PANW,Palo Alto Networks Inc,39087,11,2.8204,0,0,0,Neutral,2026-08-29T23:35:40Z
+MAGS,Roundhill Magnificent Seven ETF,3680,12,2.57526,0,0,0,Neutral,2026-08-29T23:35:40Z
+PEP,PepsiCo Inc,23502,13,2.53738,0,0,0,Neutral,2026-08-29T23:35:40Z
+XLF,Financial Select Sector SPDR Fund,18451,14,2.53738,0,0,0,Neutral,2026-08-29T23:35:40Z
+XLK,Technology Select Sector SPDR Fund,11774,15,2.53738,0,0,0,Neutral,2026-08-29T23:35:40Z
+UVXY,ProShares Ultra VIX Short-Term Futures ETF,85181,16,2.48226,1,0,0,Neutral,2026-08-29T23:35:40Z
+RGTI,Rigetti Computing Inc,52012,17,2.42752,0,0,0,Neutral,2026-08-29T23:35:40Z
+PUMP.X,Pump.fun,1721,18,2.36579,0,0,0,Neutral,2026-08-29T23:35:40Z
+ONDO.X,Ondo,6909,19,2.22136,0,0,0,Neutral,2026-08-29T23:35:40Z
+ON,ON Semiconductor Corp.,12982,20,2.08572,1,1,0,Very Bullish,2026-08-29T23:35:40Z
+SMH,VanEck Semiconductor ETF,18782,21,1.92364,1,0,0,Neutral,2026-08-29T23:35:40Z
+STLA,Stellantis N.V,11790,22,1.84016,0,0,0,Neutral,2026-08-29T23:35:40Z
+DRAM,Roundhill ETF Trust - Roundhill Memory ETF,14551,23,1.81214,2,1,1,Neutral,2026-08-29T23:35:40Z
+AG,First Majestic Silver Corporation,19908,24,1.74084,1,0,0,Neutral,2026-08-29T23:35:40Z
+RYCEY,Rolls-Royce Holdings Plc - ADR,23144,25,1.74084,1,0,0,Neutral,2026-08-29T23:35:40Z
+NASA,Tema Space Innovators ETF,5510,26,1.63192,1,0,0,Neutral,2026-08-29T23:35:40Z
+IBIT,iShares Bitcoin ETF,20437,27,1.59639,0,0,0,Neutral,2026-08-29T23:35:40Z
+HUT,Hut 8 Corp,29672,28,1.57033,0,0,0,Neutral,2026-08-29T23:35:40Z
+TSLL,Direxion Daily TSLA Bull 2X Shares,9285,29,1.54993,0,0,0,Neutral,2026-08-29T23:35:40Z
+COST,Costco Wholesale Corp,64775,30,1.48273,0,0,0,Neutral,2026-08-29T23:35:40Z
