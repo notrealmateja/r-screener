@@ -170,7 +170,7 @@ jobs:
             file.copy(rds_files, file.path("app", basename(rds_files)), overwrite=TRUE)
             if (!dir.exists("app/data")) dir.create("app/data")
             file.copy(rds_files, file.path("app/data", basename(rds_files)), overwrite=TRUE)
-            message("Copied ", length(csv_files)+length(rds_files), " files into app/")
+            message("Copied ", sum(have)+length(rds_files), " files into app/")
           '
 
       - name: Verify pipeline output
