@@ -47,6 +47,14 @@ for (f in files) {
       problems <- problems + 1L
       next
     }
+    # codetools ships with R, but degrade to a parse-only check rather than
+    # failing the nightly if it is ever absent. A guard that breaks the build
+    # it is meant to protect is worse than no guard.
+    if (!requireNamespace("codetools", quietly = TRUE)) {
+      cat(sprintf("ok   %s (%d lines, parse-only: codetools unavailable)\n",
+                  label, length(b$code)))
+      next
+    }
     fn <- as.function(c(alist(), as.call(c(as.name("{"), as.list(exprs)))))
     globals <- tryCatch(codetools::findGlobals(fn, merge = FALSE)$variables,
                         error = function(e) character(0))
