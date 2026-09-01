@@ -33,6 +33,12 @@ jobs:
           r-version: '4.4.0'
           use-public-rspm: true
 
+      # Runs before anything expensive. The inline R in this file is otherwise
+      # only executed in production, so a dangling reference is discovered by a
+      # failed nightly rather than by CI — which is how `csv_files` got through.
+      - name: Lint workflow R blocks
+        run: Rscript tools/lint_workflow_r.R
+
       - name: Install system dependencies
         run: |
           sudo apt-get update -qq
