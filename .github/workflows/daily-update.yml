@@ -198,10 +198,21 @@ jobs:
             out <- c("## Data health", "",
                      "| File | Rows | Age (h) | Status |", "|---|---:|---:|---|")
             problems <- character(0)
+            # Split hard breakage from soft noise. Only the files every screen
+            # reads are fatal; news/sentiment/TV feeds fail for reasons outside
+            # this pipeline and must not halt the run. Staleness is deliberately
+            # NOT fatal: a weekend run produces identical data, nothing gets
+            # committed, and the last-commit age crosses the threshold by Monday
+            # through no fault of the pipeline.
+            CORE <- c("data/master_scored.csv", "data/top15_sweetspot.csv",
+                      "data/top15_unicorns.csv", "data/price_history.csv",
+                      "data/macro_data.csv")
+            hard <- character(0)
             for (f in files) {
               if (!file.exists(f)) {
                 out <- c(out, sprintf("| `%s` | - | - | MISSING |", basename(f)))
                 problems <- c(problems, paste(basename(f), "missing"))
+                if (f %in% CORE) hard <- c(hard, paste(basename(f), "missing"))
                 next
               }
               n <- tryCatch(nrow(suppressWarnings(read_csv(f, show_col_types = FALSE))),
@@ -220,6 +231,7 @@ jobs:
               if (is.na(n) || n == 0) {
                 status <- "EMPTY"
                 problems <- c(problems, paste(basename(f), "empty"))
+                if (f %in% CORE) hard <- c(hard, paste(basename(f), "empty"))
               } else if (!is.na(age) && age > (if (f %in% names(max_age)) max_age[[f]] else 36)) {
                 status <- "STALE"
                 problems <- c(problems, paste(basename(f), "stale"))
@@ -270,6 +282,12 @@ jobs:
             cat(paste(out, collapse = "\n"), "\n")
             sf <- Sys.getenv("GITHUB_STEP_SUMMARY")
             if (nzchar(sf)) writeLines(out, sf)
+            # Report red when a file the app cannot run without is missing or
+            # empty. Previously every problem was written to the summary and the
+            # job still went green, so a source returning zero rows looked
+            # identical to a healthy night.
+            if (length(hard) > 0)
+              stop("Core data unusable: ", paste(hard, collapse = "; "))
           '
 
       # Connect Cloud deploys from the repo and validates each file against a
