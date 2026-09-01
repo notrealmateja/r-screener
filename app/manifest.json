@@ -253,12 +253,12 @@
       }
     },
     "bit64": {
-      "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Source": "CRAN",
+      "Repository": "https://cran.rstudio.com",
       "description": {
         "Package": "bit64",
         "Title": "A S3 Class for Vectors of 64bit Integers",
-        "Version": "4.8.4",
+        "Version": "4.8.6",
         "Authors@R": "c(\n    person(\"Michael\", \"Chirico\", email=\"michaelchirico4@gmail.com\", role=c(\"aut\", \"cre\")),\n    person(\"Jens\", \"Oehlschlägel\", role=\"aut\"),\n    person(\"Leonardo\", \"Silvestri\", role=\"ctb\"),\n    person(\"Ofek\", \"Shilon\", role=\"ctb\"),\n    person(\"Christian\", \"Ullerich\", role=\"ctb\")\n  )",
         "Depends": "R (>= 3.5.0)",
         "Description": "\n  Package 'bit64' provides serializable S3 atomic 64bit (signed) integers.\n  These are useful for handling database keys and exact counting in +-2^63.\n  WARNING: do not use them as replacement for 32bit integers, integer64 are not\n  supported for subscripting by R-core and they have different semantics when\n  combined with double, e.g. integer64 + double => integer64.\n  Class integer64 can be used in vectors, matrices, arrays and data.frames.\n  Methods are available for coercion from and to logicals, integers, doubles,\n  characters and factors as well as many elementwise and summary functions.\n  Many fast algorithmic operations such as 'match' and 'order' support inter-\n  active data exploration and manipulation and optionally leverage caching.",
@@ -274,12 +274,12 @@
         "Config/Needs/website": "tidyverse/tidytemplate",
         "Config/roxygen2/version": "8.0.0",
         "NeedsCompilation": "yes",
-        "Packaged": "2026-08-19 16:52:49 UTC; chiricom",
+        "Packaged": "2026-09-01 05:45:08 UTC; chiricom",
         "Author": "Michael Chirico [aut, cre],\n  Jens Oehlschlägel [aut],\n  Leonardo Silvestri [ctb],\n  Ofek Shilon [ctb],\n  Christian Ullerich [ctb]",
         "Maintainer": "Michael Chirico <michaelchirico4@gmail.com>",
-        "Repository": "RSPM",
-        "Date/Publication": "2026-08-20 05:23:42 UTC",
-        "Built": "R 4.4.0; x86_64-pc-linux-gnu; 2026-08-21 03:56:48 UTC; unix"
+        "Repository": "CRAN",
+        "Date/Publication": "2026-09-01 09:30:09 UTC",
+        "Built": "R 4.4.0; x86_64-pc-linux-gnu; 2026-09-01 19:44:06 UTC; unix"
       }
     },
     "bslib": {
@@ -1035,12 +1035,12 @@
       }
     },
     "httr": {
-      "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Source": "CRAN",
+      "Repository": "https://cran.rstudio.com",
       "description": {
         "Package": "httr",
         "Title": "Tools for Working with URLs and HTTP",
-        "Version": "1.4.8",
+        "Version": "1.4.9",
         "Authors@R": "c(\n    person(\"Hadley\", \"Wickham\", , \"hadley@posit.co\", role = c(\"aut\", \"cre\")),\n    person(\"Posit Software, PBC\", role = c(\"cph\", \"fnd\"))\n  )",
         "Description": "Useful tools for working with HTTP organised by HTTP verbs\n    (GET(), POST(), etc). Configuration functions make it easy to control\n    additional request components (authenticate(), add_headers() and so\n    on).",
         "License": "MIT + file LICENSE",
@@ -1051,15 +1051,15 @@
         "Suggests": "covr, httpuv, jpeg, knitr, png, readr, rmarkdown, testthat\n(>= 0.8.0), xml2",
         "VignetteBuilder": "knitr",
         "Config/Needs/website": "tidyverse/tidytemplate",
+        "Config/roxygen2/version": "8.1.0",
         "Encoding": "UTF-8",
-        "RoxygenNote": "7.3.3",
         "NeedsCompilation": "no",
-        "Packaged": "2026-02-13 13:25:45 UTC; hadleywickham",
+        "Packaged": "2026-08-31 22:59:51 UTC; hadleywickham",
         "Author": "Hadley Wickham [aut, cre],\n  Posit Software, PBC [cph, fnd]",
         "Maintainer": "Hadley Wickham <hadley@posit.co>",
-        "Repository": "RSPM",
-        "Date/Publication": "2026-02-13 16:20:15 UTC",
-        "Built": "R 4.4.0; ; 2026-08-12 19:07:48 UTC; unix"
+        "Repository": "CRAN",
+        "Date/Publication": "2026-09-01 13:20:02 UTC",
+        "Built": "R 4.4.0; ; 2026-09-01 19:44:15 UTC; unix"
       }
     },
     "isoband": {
@@ -1809,34 +1809,33 @@
       }
     },
     "rmarkdown": {
-      "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Source": "CRAN",
+      "Repository": "https://cran.rstudio.com",
       "description": {
         "Type": "Package",
         "Package": "rmarkdown",
         "Title": "Dynamic Documents for R",
-        "Version": "2.31",
+        "Version": "2.32",
         "Authors@R": "c(\n    person(\"JJ\", \"Allaire\", , \"jj@posit.co\", role = \"aut\"),\n    person(\"Yihui\", \"Xie\", , \"xie@yihui.name\", role = c(\"aut\", \"cre\"), comment = c(ORCID = \"0000-0003-0645-5666\")),\n    person(\"Christophe\", \"Dervieux\", , \"cderv@posit.co\", role = \"aut\", comment = c(ORCID = \"0000-0003-4474-2498\")),\n    person(\"Jonathan\", \"McPherson\", , \"jonathan@posit.co\", role = \"aut\"),\n    person(\"Javier\", \"Luraschi\", role = \"aut\"),\n    person(\"Kevin\", \"Ushey\", , \"kevin@posit.co\", role = \"aut\"),\n    person(\"Aron\", \"Atkins\", , \"aron@posit.co\", role = \"aut\"),\n    person(\"Hadley\", \"Wickham\", , \"hadley@posit.co\", role = \"aut\"),\n    person(\"Joe\", \"Cheng\", , \"joe@posit.co\", role = \"aut\"),\n    person(\"Winston\", \"Chang\", , \"winston@posit.co\", role = \"aut\"),\n    person(\"Richard\", \"Iannone\", , \"rich@posit.co\", role = \"aut\", comment = c(ORCID = \"0000-0003-3925-190X\")),\n    person(\"Andrew\", \"Dunning\", role = \"ctb\", comment = c(ORCID = \"0000-0003-0464-5036\")),\n    person(\"Atsushi\", \"Yasumoto\", role = c(\"ctb\", \"cph\"), comment = c(ORCID = \"0000-0002-8335-495X\", cph = \"Number sections Lua filter\")),\n    person(\"Barret\", \"Schloerke\", role = \"ctb\"),\n    person(\"Carson\", \"Sievert\", role = \"ctb\", comment = c(ORCID = \"0000-0002-4958-2844\")), \n    person(\"Devon\", \"Ryan\", , \"dpryan79@gmail.com\", role = \"ctb\", comment = c(ORCID = \"0000-0002-8549-0971\")),\n    person(\"Frederik\", \"Aust\", , \"frederik.aust@uni-koeln.de\", role = \"ctb\", comment = c(ORCID = \"0000-0003-4900-788X\")),\n    person(\"Jeff\", \"Allen\", , \"jeff@posit.co\", role = \"ctb\"), \n    person(\"JooYoung\", \"Seo\", role = \"ctb\", comment = c(ORCID = \"0000-0002-4064-6012\")),\n    person(\"Malcolm\", \"Barrett\", role = \"ctb\"),\n    person(\"Rob\", \"Hyndman\", , \"Rob.Hyndman@monash.edu\", role = \"ctb\"),\n    person(\"Romain\", \"Lesur\", role = \"ctb\"),\n    person(\"Roy\", \"Storey\", role = \"ctb\"),\n    person(\"Ruben\", \"Arslan\", , \"ruben.arslan@uni-goettingen.de\", role = \"ctb\"),\n    person(\"Sergio\", \"Oller\", role = \"ctb\"),\n    person(given = \"Posit Software, PBC\", role = c(\"cph\", \"fnd\")),\n    person(, \"jQuery UI contributors\", role = c(\"ctb\", \"cph\"), comment = \"jQuery UI library; authors listed in inst/rmd/h/jqueryui/AUTHORS.txt\"),\n    person(\"Mark\", \"Otto\", role = \"ctb\", comment = \"Bootstrap library\"),\n    person(\"Jacob\", \"Thornton\", role = \"ctb\", comment = \"Bootstrap library\"),\n    person(, \"Bootstrap contributors\", role = \"ctb\", comment = \"Bootstrap library\"),\n    person(, \"Twitter, Inc\", role = \"cph\", comment = \"Bootstrap library\"),\n    person(\"Alexander\", \"Farkas\", role = c(\"ctb\", \"cph\"), comment = \"html5shiv library\"),\n    person(\"Scott\", \"Jehl\", role = c(\"ctb\", \"cph\"), comment = \"Respond.js library\"),\n    person(\"Ivan\", \"Sagalaev\", role = c(\"ctb\", \"cph\"), comment = \"highlight.js library\"),\n    person(\"Greg\", \"Franko\", role = c(\"ctb\", \"cph\"), comment = \"tocify library\"),\n    person(\"John\", \"MacFarlane\", role = c(\"ctb\", \"cph\"), comment = \"Pandoc templates\"),\n    person(, \"Google, Inc.\", role = c(\"ctb\", \"cph\"), comment = \"ioslides library\"),\n    person(\"Dave\", \"Raggett\", role = \"ctb\", comment = \"slidy library\"),\n    person(, \"W3C\", role = \"cph\", comment = \"slidy library\"),\n    person(\"Dave\", \"Gandy\", role = c(\"ctb\", \"cph\"), comment = \"Font-Awesome\"),\n    person(\"Ben\", \"Sperry\", role = \"ctb\", comment = \"Ionicons\"),\n    person(, \"Drifty\", role = \"cph\", comment = \"Ionicons\"),\n    person(\"Aidan\", \"Lister\", role = c(\"ctb\", \"cph\"), comment = \"jQuery StickyTabs\"),\n    person(\"Benct Philip\", \"Jonsson\", role = c(\"ctb\", \"cph\"), comment = \"pagebreak Lua filter\"),\n    person(\"Albert\", \"Krewinkel\", role = c(\"ctb\", \"cph\"), comment = \"pagebreak Lua filter\")\n  )",
         "Description": "Convert R Markdown documents into a variety of formats.",
-        "License": "GPL-3",
+        "License": "MIT + file LICENSE",
         "URL": "https://github.com/rstudio/rmarkdown,\nhttps://pkgs.rstudio.com/rmarkdown/",
         "BugReports": "https://github.com/rstudio/rmarkdown/issues",
         "Depends": "R (>= 3.0)",
-        "Imports": "bslib (>= 0.2.5.1), evaluate (>= 0.13), fontawesome (>=\n0.5.0), htmltools (>= 0.5.1), jquerylib, jsonlite, knitr (>=\n1.43), methods, tinytex (>= 0.31), tools, utils, xfun (>=\n0.36), yaml (>= 2.1.19)",
+        "Imports": "bslib (>= 0.2.5.1), evaluate (>= 0.13), fontawesome (>=\n0.5.0), htmltools (>= 0.5.1), jquerylib, jsonlite, knitr (>=\n1.50), methods, tinytex (>= 0.31), tools, utils, xfun (>=\n0.36), yaml (>= 2.1.19)",
         "Suggests": "digest, dygraphs, fs, rsconnect, downlit (>= 0.4.0), katex\n(>= 1.4.0), sass (>= 0.4.0), shiny (>= 1.6.0), testthat (>=\n3.0.3), tibble, vctrs, cleanrmd, withr (>= 2.4.2), xml2",
         "VignetteBuilder": "knitr",
-        "Config/Needs/website": "rstudio/quillt, pkgdown",
         "Config/testthat/edition": "3",
         "Encoding": "UTF-8",
-        "RoxygenNote": "7.3.3",
-        "SystemRequirements": "pandoc (>= 1.14) - http://pandoc.org",
+        "SystemRequirements": "pandoc (>= 2.8) - http://pandoc.org",
+        "Config/roxygen2/version": "8.1.0",
         "NeedsCompilation": "no",
-        "Packaged": "2026-03-25 18:23:38 UTC; yihui",
+        "Packaged": "2026-08-28 14:24:20 UTC; yihui",
         "Author": "JJ Allaire [aut],\n  Yihui Xie [aut, cre] (ORCID: <https://orcid.org/0000-0003-0645-5666>),\n  Christophe Dervieux [aut] (ORCID:\n    <https://orcid.org/0000-0003-4474-2498>),\n  Jonathan McPherson [aut],\n  Javier Luraschi [aut],\n  Kevin Ushey [aut],\n  Aron Atkins [aut],\n  Hadley Wickham [aut],\n  Joe Cheng [aut],\n  Winston Chang [aut],\n  Richard Iannone [aut] (ORCID: <https://orcid.org/0000-0003-3925-190X>),\n  Andrew Dunning [ctb] (ORCID: <https://orcid.org/0000-0003-0464-5036>),\n  Atsushi Yasumoto [ctb, cph] (ORCID:\n    <https://orcid.org/0000-0002-8335-495X>, cph: Number sections Lua\n    filter),\n  Barret Schloerke [ctb],\n  Carson Sievert [ctb] (ORCID: <https://orcid.org/0000-0002-4958-2844>),\n  Devon Ryan [ctb] (ORCID: <https://orcid.org/0000-0002-8549-0971>),\n  Frederik Aust [ctb] (ORCID: <https://orcid.org/0000-0003-4900-788X>),\n  Jeff Allen [ctb],\n  JooYoung Seo [ctb] (ORCID: <https://orcid.org/0000-0002-4064-6012>),\n  Malcolm Barrett [ctb],\n  Rob Hyndman [ctb],\n  Romain Lesur [ctb],\n  Roy Storey [ctb],\n  Ruben Arslan [ctb],\n  Sergio Oller [ctb],\n  Posit Software, PBC [cph, fnd],\n  jQuery UI contributors [ctb, cph] (jQuery UI library; authors listed in\n    inst/rmd/h/jqueryui/AUTHORS.txt),\n  Mark Otto [ctb] (Bootstrap library),\n  Jacob Thornton [ctb] (Bootstrap library),\n  Bootstrap contributors [ctb] (Bootstrap library),\n  Twitter, Inc [cph] (Bootstrap library),\n  Alexander Farkas [ctb, cph] (html5shiv library),\n  Scott Jehl [ctb, cph] (Respond.js library),\n  Ivan Sagalaev [ctb, cph] (highlight.js library),\n  Greg Franko [ctb, cph] (tocify library),\n  John MacFarlane [ctb, cph] (Pandoc templates),\n  Google, Inc. [ctb, cph] (ioslides library),\n  Dave Raggett [ctb] (slidy library),\n  W3C [cph] (slidy library),\n  Dave Gandy [ctb, cph] (Font-Awesome),\n  Ben Sperry [ctb] (Ionicons),\n  Drifty [cph] (Ionicons),\n  Aidan Lister [ctb, cph] (jQuery StickyTabs),\n  Benct Philip Jonsson [ctb, cph] (pagebreak Lua filter),\n  Albert Krewinkel [ctb, cph] (pagebreak Lua filter)",
         "Maintainer": "Yihui Xie <xie@yihui.name>",
-        "Repository": "RSPM",
-        "Date/Publication": "2026-03-26 16:30:02 UTC",
-        "Built": "R 4.4.0; ; 2026-08-12 19:10:01 UTC; unix"
+        "Repository": "CRAN",
+        "Date/Publication": "2026-09-01 13:10:02 UTC",
+        "Built": "R 4.4.0; ; 2026-09-01 19:45:25 UTC; unix"
       }
     },
     "sass": {
@@ -2566,7 +2565,7 @@
       "checksum": "165aa567b2075aa695a1d55ba19aec2e"
     },
     "data/meta.rds": {
-      "checksum": "a73a1b68c1c5493e729923776e6ba99d"
+      "checksum": "dc6108da803ab8199f39e50b83035dd9"
     },
     "data/price_series_cache.rds": {
       "checksum": "266a1b7cfa8bbf9180380a4969dbc886"
@@ -2578,7 +2577,7 @@
       "checksum": "b9260e096fb89fc630076a716d838da7"
     },
     "earnings_calendar.csv": {
-      "checksum": "517b9784a5af9d136830673a5cf6cf00"
+      "checksum": "be03657ccd49345adf4593cc0d3320f9"
     },
     "global.R": {
       "checksum": "4f5df45b17f4ec8c78bae53c65252440"
@@ -2587,43 +2586,43 @@
       "checksum": "8074066cc26b5a8de7fc42cca509bdba"
     },
     "market_news.csv": {
-      "checksum": "b0ee5b8689f458ba906290678999b17d"
+      "checksum": "080e5c2e734b41ff6d420f062fa83a66"
     },
     "master_scored.csv": {
-      "checksum": "f3671a1169be00e784c28e2534abc0b8"
+      "checksum": "61ae76e78d719d45820cebd35d2f38ca"
     },
     "meta.rds": {
-      "checksum": "a73a1b68c1c5493e729923776e6ba99d"
+      "checksum": "dc6108da803ab8199f39e50b83035dd9"
     },
     "price_history.csv": {
-      "checksum": "ab654829bfa4b0fb12283c442308da31"
+      "checksum": "c9e23ce04927bd8a51e9ea2f7d66b2fc"
     },
     "reversal_results.csv": {
       "checksum": "81f2e47c9f2a5ecffe802421ee5d2366"
     },
     "sec_filings.csv": {
-      "checksum": "c41fc6344b49420da1aad4132d06cb27"
+      "checksum": "ec523bc7e61be3f2fdfc12aa282f4db7"
     },
     "sector_performance.csv": {
       "checksum": "bfef65294b2a65724f442adddfa0656e"
     },
     "stock_news.csv": {
-      "checksum": "efc9be9b513235d7840ecc23ff8c789d"
+      "checksum": "a453fb4753c717bb36c104adf9e1c74d"
     },
     "stocktwits_trending.csv": {
-      "checksum": "c5f88bfb18d9d32baf84189b6d8c60da"
+      "checksum": "b1ae23c3488e89ac841d663b890c8ab9"
     },
     "top15_sweetspot.csv": {
-      "checksum": "5ab96ccaae6f6333343f9baa977a7ca2"
+      "checksum": "eced59857cea4833887cbe0695317dd3"
     },
     "top15_unicorns.csv": {
-      "checksum": "dd53b319714c67820b0ddddca2dc6874"
+      "checksum": "3aecd3e2168c0fa67e6c31701ef6cce8"
     },
     "tv_channels.csv": {
-      "checksum": "c1c33d904d9e0653b080cbef880d3c0b"
+      "checksum": "f5f5ffeeb9989e17cc0aea6b18e8896e"
     },
     "wsb_trending.csv": {
-      "checksum": "6264c3e9b4efaac9ada59fa2dd7f1526"
+      "checksum": "789aed80f05c02be6f76ba4fb15fd2d0"
     }
   },
   "users": null
