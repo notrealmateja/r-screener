@@ -1,31 +1,31 @@
 symbol,title,watchlist_count,st_rank,trending_score,messages,bullish,bearish,sentiment_label,fetched_at
-DELL,Dell Technologies Inc,30083,1,13.4476,2,1,0,Very Bullish,2026-09-01T23:38:48Z
-AAPL,Apple Inc,991306,2,10.3466,0,0,0,Neutral,2026-09-01T23:38:48Z
-CRDO,Credo Technology Group Holding Ltd,11655,3,10.7992,3,0,0,Neutral,2026-09-01T23:38:48Z
-GOOG,Alphabet Inc - Ordinary Shares - Class C,311535,4,8.44557,1,0,0,Neutral,2026-09-01T23:38:48Z
-PANW,Palo Alto Networks Inc,39372,5,8.29653,1,0,1,Very Bearish,2026-09-01T23:38:48Z
-MDB,MongoDB Inc,21378,6,8.36398,1,0,1,Very Bearish,2026-09-01T23:38:48Z
-GTLB,Gitlab Inc,8456,7,7.48359,0,0,0,Neutral,2026-09-01T23:38:48Z
-GOOGL,Alphabet Inc Class A,227953,8,5.30694,0,0,0,Neutral,2026-09-01T23:38:48Z
-USO,United States Oil Fund,74673,9,6.42894,0,0,0,Neutral,2026-09-01T23:38:48Z
-LTC.X,Litecoin,109320,10,0.694248,0,0,0,Neutral,2026-09-01T23:38:48Z
-CIEN,CIENA Corp.,6982,11,4.43708,0,0,0,Neutral,2026-09-01T23:38:48Z
-FRVO,Fervo Energy Co,1511,12,6.79766,0,0,0,Neutral,2026-09-01T23:38:48Z
-FNMA,Federal National Mortgage Association,17819,13,2.84211,0,0,0,Neutral,2026-09-01T23:38:48Z
-XLE,Energy Select Sector SPDR Fund,24531,14,2.92785,0,0,0,Neutral,2026-09-01T23:38:48Z
-FMCC,Freddie Mac,6724,15,4.64253,0,0,0,Neutral,2026-09-01T23:38:48Z
-WULF,TeraWulf Inc,31303,16,2.4845,0,0,0,Neutral,2026-09-01T23:38:48Z
-CRCL,Circle,22981,17,2.96622,0,0,0,Neutral,2026-09-01T23:38:48Z
-VG,Venture Global Inc,4650,18,2.88207,0,0,0,Neutral,2026-09-01T23:38:48Z
-LWLG,Lightwave Logic Inc,5864,19,2.01686,0,0,0,Neutral,2026-09-01T23:38:48Z
-AVGO,Broadcom Inc,72703,20,4.15762,0,0,0,Neutral,2026-09-01T23:38:48Z
-AGEN,Agenus Inc,12753,21,4.31446,1,1,0,Very Bullish,2026-09-01T23:38:48Z
-SMCI,Super Micro Computer Inc,92662,22,3.79716,4,0,1,Very Bearish,2026-09-01T23:38:48Z
-SOFI,SoFi Technologies Inc,156046,23,4.98122,1,1,0,Very Bullish,2026-09-01T23:38:48Z
-CIFR,Cipher Digital Inc.,23359,24,3.5868,0,0,0,Neutral,2026-09-01T23:38:48Z
-WFC,Wells Fargo & Co.,54539,25,0.109754,0,0,0,Neutral,2026-09-01T23:38:48Z
-GRPN,Groupon Inc,37512,26,1.95331,0,0,0,Neutral,2026-09-01T23:38:48Z
-DFTX,Definium Therapeutics Inc.,26371,27,3.16951,0,0,0,Neutral,2026-09-01T23:38:48Z
-ORCL,Oracle Corp.,69002,28,6.03525,1,1,0,Very Bullish,2026-09-01T23:38:48Z
-XLF,Financial Select Sector SPDR Fund,18448,29,-0.342999,0,0,0,Neutral,2026-09-01T23:38:48Z
-S,SentinelOne Inc,31932,30,4.82848,0,0,0,Neutral,2026-09-01T23:38:48Z
+AVGO,Broadcom Inc,73317,1,17.652,5,3,0,Very Bullish,2026-09-02T23:37:25Z
+SNOW,Snowflake Inc,58328,2,12.187,2,1,0,Very Bullish,2026-09-02T23:37:25Z
+HPE,Hewlett Packard Enterprise Co,13177,3,10.9388,4,1,0,Very Bullish,2026-09-02T23:37:25Z
+RARE,Ultragenyx Pharmaceutical Inc,3383,4,10.0739,1,0,0,Neutral,2026-09-02T23:37:25Z
+HOOD,Robinhood Markets Inc,100236,5,11.5903,3,3,0,Very Bullish,2026-09-02T23:37:25Z
+AVAV,AeroVironment Inc.,13253,6,8.63746,3,0,0,Neutral,2026-09-02T23:37:25Z
+AI,C3.ai Inc,49805,7,7.45099,1,0,1,Very Bearish,2026-09-02T23:37:25Z
+SMMT,Summit Therapeutics Inc,10158,8,7.24782,0,0,0,Neutral,2026-09-02T23:37:25Z
+NTAP,Netapp Inc,4837,9,6.79084,0,0,0,Neutral,2026-09-02T23:37:25Z
+DE,Deere & Co,13551,10,1.86123,0,0,0,Neutral,2026-09-02T23:37:25Z
+NTSK,Netskope Inc. - Ordinary Shares - Class A,1621,11,6.77081,0,0,0,Neutral,2026-09-02T23:37:25Z
+DJIA,Global X Dow 30 Covered Call ETF,84378,12,5.36162,0,0,0,Neutral,2026-09-02T23:37:25Z
+STUDY,Stocktwits Education,5996,13,4.26061,0,0,0,Neutral,2026-09-02T23:37:25Z
+AG,First Majestic Silver Corporation,19904,14,3.70733,0,0,0,Neutral,2026-09-02T23:37:25Z
+QUANT,Quant Traders and Investors,265,15,4.84351,0,0,0,Neutral,2026-09-02T23:37:25Z
+NLST,Netlist Inc,27256,16,6.41179,1,0,0,Neutral,2026-09-02T23:37:25Z
+CRDO,Credo Technology Group Holding Ltd,12320,17,4.35275,0,0,0,Neutral,2026-09-02T23:37:25Z
+CIEN,CIENA Corp.,7003,18,5.04379,0,0,0,Neutral,2026-09-02T23:37:25Z
+ZORA.X,Zoracles,1523,19,0.237956,0,0,0,Neutral,2026-09-02T23:37:25Z
+SLS,SELLAS Life Sciences Group Inc,61674,20,3.17299,5,1,0,Very Bullish,2026-09-02T23:37:25Z
+BABA,Alibaba Group Holding Ltd,425268,21,1.23391,0,0,0,Neutral,2026-09-02T23:37:25Z
+PL,Planet Labs PBC,15831,22,5.70882,0,0,0,Neutral,2026-09-02T23:37:25Z
+EXK,Endeavour Silver Corp.,5590,23,2.26211,0,0,0,Neutral,2026-09-02T23:37:25Z
+APLD,Applied Digital Corporation,46045,24,4.15536,2,1,1,Neutral,2026-09-02T23:37:25Z
+NVAX,Novavax Inc,107720,25,1.99173,0,0,0,Neutral,2026-09-02T23:37:25Z
+COST,Costco Wholesale Corp,64801,26,0.0114203,0,0,0,Neutral,2026-09-02T23:37:25Z
+RIG,Transocean Ltd,25013,27,4.60712,0,0,0,Neutral,2026-09-02T23:37:25Z
+DELL,Dell Technologies Inc,30537,28,5.64401,1,0,0,Neutral,2026-09-02T23:37:25Z
+USDE.X,Ethena USDe,68,29,-0.296142,0,0,0,Neutral,2026-09-02T23:37:25Z
+HL,Hecla Mining Co,9811,30,-0.656158,0,0,0,Neutral,2026-09-02T23:37:25Z

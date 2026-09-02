@@ -253,8 +253,8 @@
       }
     },
     "bit64": {
-      "Source": "CRAN",
-      "Repository": "https://cran.rstudio.com",
+      "Source": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
       "description": {
         "Package": "bit64",
         "Title": "A S3 Class for Vectors of 64bit Integers",
@@ -277,9 +277,9 @@
         "Packaged": "2026-09-01 05:45:08 UTC; chiricom",
         "Author": "Michael Chirico [aut, cre],\n  Jens Oehlschlägel [aut],\n  Leonardo Silvestri [ctb],\n  Ofek Shilon [ctb],\n  Christian Ullerich [ctb]",
         "Maintainer": "Michael Chirico <michaelchirico4@gmail.com>",
-        "Repository": "CRAN",
+        "Repository": "RSPM",
         "Date/Publication": "2026-09-01 09:30:09 UTC",
-        "Built": "R 4.4.0; x86_64-pc-linux-gnu; 2026-09-01 23:28:36 UTC; unix"
+        "Built": "R 4.4.0; x86_64-pc-linux-gnu; 2026-09-02 03:40:02 UTC; unix"
       }
     },
     "bslib": {
@@ -1035,8 +1035,8 @@
       }
     },
     "httr": {
-      "Source": "CRAN",
-      "Repository": "https://cran.rstudio.com",
+      "Source": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
       "description": {
         "Package": "httr",
         "Title": "Tools for Working with URLs and HTTP",
@@ -1057,9 +1057,9 @@
         "Packaged": "2026-08-31 22:59:51 UTC; hadleywickham",
         "Author": "Hadley Wickham [aut, cre],\n  Posit Software, PBC [cph, fnd]",
         "Maintainer": "Hadley Wickham <hadley@posit.co>",
-        "Repository": "CRAN",
+        "Repository": "RSPM",
         "Date/Publication": "2026-09-01 13:20:02 UTC",
-        "Built": "R 4.4.0; ; 2026-09-01 23:28:48 UTC; unix"
+        "Built": "R 4.4.0; ; 2026-09-02 03:40:20 UTC; unix"
       }
     },
     "isoband": {
@@ -1809,8 +1809,8 @@
       }
     },
     "rmarkdown": {
-      "Source": "CRAN",
-      "Repository": "https://cran.rstudio.com",
+      "Source": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
       "description": {
         "Type": "Package",
         "Package": "rmarkdown",
@@ -1833,9 +1833,9 @@
         "Packaged": "2026-08-28 14:24:20 UTC; yihui",
         "Author": "JJ Allaire [aut],\n  Yihui Xie [aut, cre] (ORCID: <https://orcid.org/0000-0003-0645-5666>),\n  Christophe Dervieux [aut] (ORCID:\n    <https://orcid.org/0000-0003-4474-2498>),\n  Jonathan McPherson [aut],\n  Javier Luraschi [aut],\n  Kevin Ushey [aut],\n  Aron Atkins [aut],\n  Hadley Wickham [aut],\n  Joe Cheng [aut],\n  Winston Chang [aut],\n  Richard Iannone [aut] (ORCID: <https://orcid.org/0000-0003-3925-190X>),\n  Andrew Dunning [ctb] (ORCID: <https://orcid.org/0000-0003-0464-5036>),\n  Atsushi Yasumoto [ctb, cph] (ORCID:\n    <https://orcid.org/0000-0002-8335-495X>, cph: Number sections Lua\n    filter),\n  Barret Schloerke [ctb],\n  Carson Sievert [ctb] (ORCID: <https://orcid.org/0000-0002-4958-2844>),\n  Devon Ryan [ctb] (ORCID: <https://orcid.org/0000-0002-8549-0971>),\n  Frederik Aust [ctb] (ORCID: <https://orcid.org/0000-0003-4900-788X>),\n  Jeff Allen [ctb],\n  JooYoung Seo [ctb] (ORCID: <https://orcid.org/0000-0002-4064-6012>),\n  Malcolm Barrett [ctb],\n  Rob Hyndman [ctb],\n  Romain Lesur [ctb],\n  Roy Storey [ctb],\n  Ruben Arslan [ctb],\n  Sergio Oller [ctb],\n  Posit Software, PBC [cph, fnd],\n  jQuery UI contributors [ctb, cph] (jQuery UI library; authors listed in\n    inst/rmd/h/jqueryui/AUTHORS.txt),\n  Mark Otto [ctb] (Bootstrap library),\n  Jacob Thornton [ctb] (Bootstrap library),\n  Bootstrap contributors [ctb] (Bootstrap library),\n  Twitter, Inc [cph] (Bootstrap library),\n  Alexander Farkas [ctb, cph] (html5shiv library),\n  Scott Jehl [ctb, cph] (Respond.js library),\n  Ivan Sagalaev [ctb, cph] (highlight.js library),\n  Greg Franko [ctb, cph] (tocify library),\n  John MacFarlane [ctb, cph] (Pandoc templates),\n  Google, Inc. [ctb, cph] (ioslides library),\n  Dave Raggett [ctb] (slidy library),\n  W3C [cph] (slidy library),\n  Dave Gandy [ctb, cph] (Font-Awesome),\n  Ben Sperry [ctb] (Ionicons),\n  Drifty [cph] (Ionicons),\n  Aidan Lister [ctb, cph] (jQuery StickyTabs),\n  Benct Philip Jonsson [ctb, cph] (pagebreak Lua filter),\n  Albert Krewinkel [ctb, cph] (pagebreak Lua filter)",
         "Maintainer": "Yihui Xie <xie@yihui.name>",
-        "Repository": "CRAN",
+        "Repository": "RSPM",
         "Date/Publication": "2026-09-01 13:10:02 UTC",
-        "Built": "R 4.4.0; ; 2026-09-01 23:31:03 UTC; unix"
+        "Built": "R 4.4.0; ; 2026-09-02 03:40:28 UTC; unix"
       }
     },
     "sass": {
@@ -2565,7 +2565,7 @@
       "checksum": "165aa567b2075aa695a1d55ba19aec2e"
     },
     "data/meta.rds": {
-      "checksum": "b33b97adbfc9b16e5b9aaef0d8b675bd"
+      "checksum": "0429d4ea1c14e12a250c92925d994ca0"
     },
     "data/price_series_cache.rds": {
       "checksum": "266a1b7cfa8bbf9180380a4969dbc886"
@@ -2577,52 +2577,52 @@
       "checksum": "b9260e096fb89fc630076a716d838da7"
     },
     "earnings_calendar.csv": {
-      "checksum": "2f458b8338b9ab9e7bc586ce1e379768"
+      "checksum": "38ca65319ca8865f6727b5d58da4f64c"
     },
     "global.R": {
       "checksum": "4f5df45b17f4ec8c78bae53c65252440"
     },
     "macro_data.csv": {
-      "checksum": "7d22eeb68273ed08e100607b7a716654"
+      "checksum": "08e8cb10b8d0abe77cec547324854a49"
     },
     "market_news.csv": {
-      "checksum": "11409bdca0858665a99076d8418039fc"
+      "checksum": "2b1b78e4e2bd29bbc8c2221cb5a0f65c"
     },
     "master_scored.csv": {
-      "checksum": "a58656d68c6a663f783b006f9c478ff0"
+      "checksum": "a70f3302057e231b73bc387238008a47"
     },
     "meta.rds": {
-      "checksum": "b33b97adbfc9b16e5b9aaef0d8b675bd"
+      "checksum": "0429d4ea1c14e12a250c92925d994ca0"
     },
     "price_history.csv": {
-      "checksum": "0baffaaa992999d5b5a878ab1fac60f7"
+      "checksum": "3b212b187cbf748b9993252d3f03a3e7"
     },
     "reversal_results.csv": {
       "checksum": "81f2e47c9f2a5ecffe802421ee5d2366"
     },
     "sec_filings.csv": {
-      "checksum": "9009ace76a9aa9c7292121272150ca8d"
+      "checksum": "f6cfe7cc73cb986aca56c480fe471418"
     },
     "sector_performance.csv": {
-      "checksum": "bfef65294b2a65724f442adddfa0656e"
+      "checksum": "1a2939c80fd8d07a133ce6880caf91db"
     },
     "stock_news.csv": {
-      "checksum": "988b9df5d5aee5108b62164d5b80c2b3"
+      "checksum": "2fbbf021df000aa71ced4d508245065c"
     },
     "stocktwits_trending.csv": {
-      "checksum": "47b03416b5e0616f1a6d221dd1a1bf59"
+      "checksum": "27705bbb962aea11b99d1e4012157da7"
     },
     "top15_sweetspot.csv": {
-      "checksum": "554984cb914484be3b918c1fffec3396"
+      "checksum": "aa9550fff04e5c8a7ef69f1c5b8006d2"
     },
     "top15_unicorns.csv": {
-      "checksum": "18398ae75232a5be097504dad176eae1"
+      "checksum": "379ed6b8e58a5545019238bb203ea6d5"
     },
     "tv_channels.csv": {
-      "checksum": "a8429786ce68a6cf6f8bdb9782ad1a60"
+      "checksum": "a2b26a771a241a3a3475848d0bf90947"
     },
     "wsb_trending.csv": {
-      "checksum": "df7bf566aabd64d0d0c48a3c30b74334"
+      "checksum": "566bc82970ab7280facc67ae5a8c1dcd"
     }
   },
   "users": null
