@@ -1,0 +1,12 @@
+[
+  {
+    "id": "csv-files-undefined-2026-08-31",
+    "description": "Inline R in the 'Clean stale files and commit updated data' step references csv_files, which was removed when the blanket CSV copy was replaced by an explicit allowlist. The step aborts after doing its real work, so the run fails but data is already correct.",
+    "file": ".github/workflows/daily-update.yml",
+    "match": "Error: object 'csv_files' not found",
+    "old_string": "message(\"Copied \", length(csv_files)+length(rds_files), \" files into app/\")",
+    "new_string": "message(\"Copied \", sum(have)+length(rds_files), \" files into app/\")",
+    "fixed_by_commit": "8862fe53696da1cb3b7e05881e01cc07a2adcd4a",
+    "incident_date": "2026-08-31"
+  }
+]
