@@ -978,6 +978,7 @@ ui <- fluidPage(
       div(class="topbar-nav-item",        id="nav-deepdive",  onclick="showPane('deepdive')",  "Deep Dive"),
       div(class="topbar-nav-item",        id="nav-macro",     onclick="showPane('macro')",     "Macro"),
       div(class="topbar-nav-item",        id="nav-news",      onclick="showPane('news')",      "News & Events"),
+      div(class="topbar-nav-item",        id="nav-validation",onclick="showPane('validation')","Validation"),
       div(class="topbar-nav-item",        id="nav-about",     onclick="showPane('about')",     "Methodology")
     ),
     div(class="topbar-right",
@@ -997,6 +998,7 @@ ui <- fluidPage(
     div(class="mobile-nav-item",        id="mnav-deepdive",  onclick="showPane('deepdive')",  "▸ Deep Dive"),
     div(class="mobile-nav-item",        id="mnav-macro",     onclick="showPane('macro')",     "▸ Macro"),
     div(class="mobile-nav-item",        id="mnav-news",      onclick="showPane('news')",      "▸ News & Events"),
+    div(class="mobile-nav-item",        id="mnav-validation",onclick="showPane('validation')","▸ Validation"),
     div(class="mobile-nav-item",        id="mnav-about",     onclick="showPane('about')",     "▸ Methodology")
   ),
 
@@ -1324,6 +1326,47 @@ ui <- fluidPage(
       )
     ),
 
+    # ── VALIDATION ─────────────────────────────────────────────────────────
+    # Answers "would holding this have beaten the index?" in money rather than
+    # in units of alpha. Built so it can show the model losing: the bottom
+    # quintile is drawn as a falsification control and the relative curve
+    # exposes stretches of underperformance that the absolute chart hides
+    # while both lines are rising.
+    div(class="tab-pane", id="pane-validation",
+      div(class="kpi-strip",
+        div(class="kpi-cell", div(class="kpi-k","Model CAGR"),   div(class="kpi-v", uiOutput("val_cagr")),  div(class="kpi-s","top quintile, net of costs")),
+        div(class="kpi-cell", div(class="kpi-k","S&P 500 CAGR"), div(class="kpi-v", uiOutput("val_bcagr")), div(class="kpi-s","SPY, same window")),
+        div(class="kpi-cell", div(class="kpi-k","No-Signal Universe"), div(class="kpi-v", uiOutput("val_univ")), div(class="kpi-s","same list, no ranking")),
+        div(class="kpi-cell", div(class="kpi-k","Edge vs Universe"),  div(class="kpi-v", uiOutput("val_edge")), div(class="kpi-s","what the score adds")),
+        div(class="kpi-cell", div(class="kpi-k","Beta"),         div(class="kpi-v", uiOutput("val_beta")),  div(class="kpi-s","market exposure")),
+        div(class="kpi-cell", div(class="kpi-k","Bottom Quintile"),div(class="kpi-v", uiOutput("val_q5")),  div(class="kpi-s","falsification control"))
+      ),
+      div(class="panel",
+        div(class="panel-head",
+          div(class="panel-head-title","GROWTH OF $1 — MODEL VS S&P 500"),
+          div(class="panel-head-meta", uiOutput("val_curve_meta"))),
+        div(class="panel-body", plotlyOutput("val_curve", height="340px"))
+      ),
+      div(class="g2",
+        div(class="panel",
+          div(class="panel-head",
+            div(class="panel-head-title","RELATIVE — MODEL ÷ S&P 500"),
+            div(class="panel-head-meta","rising = beating the index")),
+          div(class="panel-body", plotlyOutput("val_rel", height="220px"))
+        ),
+        div(class="panel",
+          div(class="panel-head",
+            div(class="panel-head-title","DRAWDOWN"),
+            div(class="panel-head-meta","peak-to-trough, both series")),
+          div(class="panel-body", plotlyOutput("val_dd_chart", height="220px"))
+        )
+      ),
+      div(class="panel",
+        div(class="panel-head",
+          div(class="panel-head-title","WHAT THIS DOES AND DOES NOT SHOW")),
+        div(class="panel-body", div(class="doc", uiOutput("val_caveats")))
+      )
+    ),
     # ── METHODOLOGY ────────────────────────────────────────────────────────
     div(class="tab-pane", id="pane-about",
       div(class="panel",
@@ -3688,6 +3731,195 @@ server <- function(input, output, session) {
     )
   })
 
+
+  # ── VALIDATION ───────────────────────────────────────────────────────────
+  # The point of this panel is that it can show the model losing. Everything
+  # is drawn from data/backtest_equity.csv, which is computed walk-forward in
+  # R/05_backtest.R: rank on 126 days of PAST data only, hold the top quintile
+  # 63 days, net of a 10bp turnover charge.
+  eq_stat <- function(series, field) {
+    if (is.null(bt_eq_stats) || nrow(bt_eq_stats) == 0) return(NA_real_)
+    row <- bt_eq_stats[bt_eq_stats$series == series, , drop = FALSE]
+    if (nrow(row) == 0 || !field %in% names(row)) return(NA_real_)
+    suppressWarnings(as.numeric(row[[field]][1]))
+  }
+  pct1 <- function(x, sign = FALSE) {
+    if (is.na(x)) return("N/A")
+    sprintf("%s%.1f%%", if (sign && x > 0) "+" else "", x * 100)
+  }
+  val_tone <- function(x, good_when_positive = TRUE) {
+    if (is.na(x)) return("#666")
+    good <- if (good_when_positive) x > 0 else x < 0
+    if (good) "#00C853" else "#FF3D00"
+  }
+
+  output$val_cagr   <- renderUI(HTML(pct1(eq_stat("model", "cagr"))))
+  output$val_bcagr  <- renderUI(HTML(pct1(eq_stat("spy",   "cagr"))))
+  # What the score adds ON TOP of simply being in this universe. The universe
+  # itself beats the index because it is a list written in 2026 and backtested
+  # from 2024, so crediting the model with that gap flatters it.
+  output$val_univ <- renderUI(HTML(pct1(eq_stat("univ", "cagr"))))
+  output$val_edge <- renderUI({
+    m <- eq_stat("model", "cagr"); u <- eq_stat("univ", "cagr")
+    x <- if (is.na(m) || is.na(u)) NA_real_ else m - u
+    HTML(sprintf("<span style='color:%s'>%s</span>", val_tone(x), pct1(x, sign = TRUE)))
+  })
+  output$val_beta <- renderUI({
+    b <- eq_stat("model", "beta")
+    HTML(if (is.na(b)) "N/A" else sprintf("%.2f", b))
+  })
+  output$val_dd <- renderUI({
+    HTML(sprintf("<span style='color:#FF3D00'>%s</span>", pct1(eq_stat("model", "max_drawdown"))))
+  })
+  output$val_q5 <- renderUI({
+    x <- eq_stat("q5", "cagr")
+    HTML(if (is.na(x)) "N/A" else sprintf("%.1f%%", x * 100))
+  })
+
+  output$val_curve_meta <- renderUI({
+    if (is.null(bt_eq_stats) || nrow(bt_eq_stats) == 0) return(HTML("no backtest yet"))
+    s <- bt_eq_stats[1, ]
+    HTML(sprintf("%s to %s &nbsp;·&nbsp; %s tranches &nbsp;·&nbsp; buy-and-hold, net of %sbp turnover &nbsp;·&nbsp; %s corporate actions neutralised",
+                 s$start_date, s$end_date, s$tranches, s$cost_bps,
+                 s$corporate_actions_neutralised))
+  })
+
+  output$val_curve <- renderPlotly({
+    if (is.null(bt_equity) || nrow(bt_equity) == 0)
+      return(no_data("Run R/05_backtest.R to generate the equity curve"))
+    d <- bt_equity
+    # Log y-axis: over a 2x range a linear axis exaggerates the terminal gap
+    # into a fan, when the honest reading is a steady annual edge.
+    plot_ly(d) %>%
+      add_lines(x = ~date, y = ~model_cum, name = "Model (top quintile)",
+                line = list(color = "#FF9E1B", width = 2)) %>%
+      add_lines(x = ~date, y = ~spy_cum, name = "S&P 500 (SPY)",
+                line = list(color = "#00B8D9", width = 2)) %>%
+      add_lines(x = ~date, y = ~q5_cum, name = "Model (bottom quintile)",
+                line = list(color = "#777777", width = 1.5, dash = "dot")) %>%
+      add_lines(x = ~date, y = ~univ_cum, name = "Universe, no signal",
+                line = list(color = "#B388FF", width = 1.5, dash = "dash")) %>%
+      layout(xaxis = list(title = ""),
+             yaxis = list(title = "Growth of $1", type = "log",
+                          tickvals = c(0.8, 1, 1.25, 1.5, 2, 2.5, 3),
+                          ticktext = c("$0.80","$1.00","$1.25","$1.50","$2.00","$2.50","$3.00")),
+             hovermode = "x", hoverdistance = -1,
+             legend = list(orientation = "h", y = -0.08)) %>%
+      dk(mb = 30, spike = TRUE)
+  })
+
+  output$val_rel <- renderPlotly({
+    if (is.null(bt_equity) || nrow(bt_equity) == 0) return(no_data("No equity curve"))
+    d <- bt_equity
+    plot_ly(d) %>%
+      add_lines(x = ~date, y = ~rel_cum, name = "Model / SPY",
+                line = list(color = "#FF9E1B", width = 2)) %>%
+      layout(xaxis = list(title = ""),
+             yaxis = list(title = "Ratio"),
+             shapes = list(list(type = "line", x0 = min(d$date), x1 = max(d$date),
+                                y0 = 1, y1 = 1, layer = "below",
+                                line = list(color = "#555", width = 1, dash = "dash"))),
+             showlegend = FALSE, hovermode = "x") %>%
+      dk(mt = 10, mb = 30)
+  })
+
+  output$val_dd_chart <- renderPlotly({
+    if (is.null(bt_equity) || nrow(bt_equity) == 0) return(no_data("No equity curve"))
+    d <- bt_equity
+    plot_ly(d) %>%
+      add_lines(x = ~date, y = ~model_dd, name = "Model",
+                line = list(color = "#FF3D00", width = 1.5),
+                fill = "tozeroy", fillcolor = "rgba(255,61,0,0.12)") %>%
+      add_lines(x = ~date, y = ~spy_dd, name = "S&P 500",
+                line = list(color = "#00B8D9", width = 1.5)) %>%
+      layout(xaxis = list(title = ""),
+             yaxis = list(title = "Drawdown", tickformat = ".0%"),
+             legend = list(orientation = "h", y = -0.15), hovermode = "x") %>%
+      dk(mt = 10, mb = 30)
+  })
+
+  output$val_caveats <- renderUI({
+    q5x    <- eq_stat("q5", "excess_cagr")
+    beta   <- eq_stat("model", "beta")
+    m_cagr <- eq_stat("model", "cagr"); b_cagr <- eq_stat("spy", "cagr")
+    beta_adj <- if (!is.na(beta) && !is.na(m_cagr) && !is.na(b_cagr))
+                  m_cagr - beta * b_cagr else NA_real_
+    ex_t    <- eq_stat("model", "excess_t")
+    ex_t_tr <- eq_stat("model", "excess_t_tranche")
+    n_dec   <- eq_stat("model", "n_decisions")
+    u_cagr  <- eq_stat("univ", "cagr")
+    n_ca    <- eq_stat("model", "corporate_actions_neutralised")
+
+    HTML(paste0(
+      "<p><b>How this is built.</b> At each rebalance the score is computed from the previous ",
+      "126 trading days only, the top quintile (~39 names) is bought equal-weighted and held ",
+      "63 days without intervening trades, then the basket is rebuilt. Weights drift with the ",
+      "prices, as they would in a real account. Tranches do not overlap, so the curve is one ",
+      "pool of capital. Returns are net of a ", eq_stat("model", "cost_bps"),
+      " basis point charge on the fraction of the book that actually turns over.</p>",
+
+      "<p><b>The bottom quintile is the control.</b> If the names the model ranks <i>worst</i> ",
+      "also beat the index, the ranking is sorting on market exposure rather than skill. ",
+      if (!is.na(q5x) && q5x > 0)
+        paste0("<span style='color:#FF3D00'>It currently does beat the index, by ",
+               sprintf("%.1f", q5x * 100), " points a year. Treat the headline number with ",
+               "suspicion: on this evidence the score separates high-beta names from low-beta ",
+               "ones at least as much as good from bad.</span>")
+      else
+        "It currently underperforms the index, which is the result you want: the ranking separates.",
+      "</p>",
+
+      "<p><b>Beta does much of the work.</b> The portfolio carries a beta of ",
+      if (is.na(beta)) "N/A" else sprintf("%.2f", beta),
+      ", so a rising market alone lifts it above the index. The return not explained by market ",
+      "exposure is roughly ",
+      if (is.na(beta_adj)) "N/A" else sprintf("%+.1f%% a year", beta_adj * 100),
+      ", against a headline gap of ",
+      if (is.na(m_cagr) || is.na(b_cagr)) "N/A" else sprintf("%+.1f%%", (m_cagr - b_cagr) * 100),
+      ". That figure assumes cash pays nothing; measured against T-bills it would be smaller.</p>",
+
+      "<p><b>Most of the edge is the universe, not the score.</b> The purple line holds all 195 ",
+      "names equal-weighted with no ranking at all, and it returns ",
+      if (is.na(u_cagr)) "N/A" else sprintf("%.1f%% a year", u_cagr * 100),
+      " against the index\'s ",
+      if (is.na(b_cagr)) "N/A" else sprintf("%.1f%%", b_cagr * 100),
+      ". That gap is pure survivorship: the ticker list was written in 2026 and tested from ",
+      "2024, and in three years of small and mid caps it contains not one delisting. ",
+      "Measured against that baseline instead of the index, the score adds ",
+      if (is.na(m_cagr) || is.na(u_cagr)) "N/A" else sprintf("%+.1f points a year", (m_cagr - u_cagr) * 100),
+      ", not the ",
+      if (is.na(m_cagr) || is.na(b_cagr)) "N/A" else sprintf("%+.1f", (m_cagr - b_cagr) * 100),
+      " the index comparison suggests.</p>",
+
+      "<p><b>What this cannot prove.</b> Over the ",
+      if (is.na(n_dec)) "N/A" else sprintf("%.0f", n_dec),
+      " independent rebalances this strategy actually makes, the excess return carries a ",
+      "t-statistic of ",
+      if (is.na(ex_t_tr)) "N/A" else sprintf("%.2f", ex_t_tr),
+      " — short of the conventional bar of 2, so the outperformance is not distinguishable ",
+      "from luck. (The daily figure of ",
+      if (is.na(ex_t)) "N/A" else sprintf("%.2f", ex_t),
+      " is higher only because it counts all 623 days as separate evidence when each 63-day ",
+      "hold is one decision.) The result is also sensitive to an arbitrary choice: shifting ",
+      "the rebalance calendar by a few weeks, changing nothing else, moves the model between ",
+      "roughly 25% and 46% a year and can flip the bottom quintile above the top. There is no ",
+      "bear market in the window, and the formation and holding periods were chosen after ",
+      "trying several, with no multiple-testing penalty applied.</p>",
+
+      "<p><b>Data note.</b> Prices are Yahoo\'s raw close, never adjusted backwards for splits, ",
+      "so a reverse split would otherwise arrive as a fake one-day gain of several hundred ",
+      "percent. Such bars are identified by their signature — price and share volume moving in ",
+      "opposite directions, which no news event does — and set to zero, since a split preserves ",
+      "the value of a position. ",
+      if (!is.na(n_ca) && n_ca > 0)
+        paste0(sprintf("%.0f", n_ca), " bars in this window were treated that way. ")
+      else
+        "No bars in this window required it. ",
+      "Genuine large moves are left alone: an earlier version of this filter used a plain 50% ",
+      "threshold and deleted real catalysts, understating the model by about 4 points a year. ",
+      "The same unadjusted prices still feed the momentum scores on the other tabs.</p>"
+    ))
+  })
   # The tab panes are plain divs toggled with a CSS class, so Shiny is never
   # told an output became visible and leaves it suspended — it renders nothing
   # and the panel looks broken while the server is perfectly healthy. That has

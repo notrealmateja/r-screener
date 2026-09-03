@@ -31,6 +31,15 @@ library(TTR); library(readr); library(glue); library(lubridate)
 # three years yields ~32.  Statistical power scales with the square root of
 # that count, so the longer window roughly doubles the t-statistic available to
 # the validation in R/05_backtest.R.
+if (!exists("corporate_action")) {
+  # Modules run from the repo root in production but from tests/testthat under
+  # testthat, so resolve rather than assuming the working directory.
+  .utils <- Filter(file.exists,
+                   c("R/00_utils.R", "../R/00_utils.R", "../../R/00_utils.R"))
+  if (length(.utils)) source(.utils[1]) else
+    stop("00_utils.R not found from ", getwd())
+}
+
 PRICE_LOOKBACK_DAYS <- 1095   # ~3 calendar years
 # Trailing window for the alpha statistics that drive the score. Full history
 # left the ranking frozen; see the note in the summarize block below.
@@ -99,10 +108,28 @@ run_module2 <- function(tickers = NULL) {
       bb_pct      = (close - bb_lower) / (bb_upper - bb_lower),
       atr14       = safe_calc(ATR(cbind(high, low, close), 14)[, "atr"], length(close)),
       daily_ret   = (close / lag(close)) - 1,
+      vol_ratio   = volume / lag(volume),
       vol20       = safe_calc(rollapply(daily_ret, 20, sd, na.rm = TRUE,
                               fill = NA, align = "right") * sqrt(252), length(close))
     ) %>%
     ungroup()
+
+  # A reverse split arrives as a several-hundred-percent "return" that is not
+  # performance: PRPL showed +2010% and BRCC +872%. Left alone these flow
+  # straight into daily_alpha, the alpha score and therefore the live ranking —
+  # BRCC sat at #2 on the site off a day that never happened. A split preserves
+  # the value of a position, so the correct return is 0.
+  ca <- corporate_action(tech$daily_ret, tech$vol_ratio)
+  if (any(ca)) {
+    hits <- tech[ca, ] %>% arrange(desc(abs(daily_ret)))
+    message(glue("Neutralised {sum(ca)} corporate-action bars ",
+                 "(price and volume moved opposite ways):"))
+    for (i in seq_len(min(5, nrow(hits))))
+      message(glue("    {hits$symbol[i]} {hits$date[i]}: ",
+                   "{round(hits$daily_ret[i] * 100, 1)}% on ",
+                   "{round(hits$vol_ratio[i], 2)}x volume"))
+    tech$daily_ret[ca] <- 0
+  }
 
   # ── 3. Alpha vs SPY ────────────────────────────────────────────────────────
   message("Computing daily alpha vs SPY...")
@@ -251,21 +278,24 @@ run_module2 <- function(tickers = NULL) {
       error = function(e) NULL)
     if (!is.null(existing) && nrow(existing) > 0 &&
         all(c("date","symbol","daily_alpha") %in% names(existing))) {
-      # Prefer rows already on disk and backfill only missing symbol/date pairs.
-      # Today is always recomputed so a re-run picks up the latest prices.
-      existing <- existing %>% filter(date != today)
-      alpha_history <- bind_rows(existing, window_history)
+      # Fresh data wins wherever this pull reaches; disk only backfills dates
+      # the pull no longer covers.
+      #
+      # This previously kept every stored row except today's, and because the
+      # distinct() below keeps the FIRST match, a bad bar could never be
+      # corrected once written. Yahoo restates recent history routinely — it has
+      # since withdrawn the BRCC bar entirely, yet the phantom +872% stayed in
+      # alpha_history.csv and kept feeding the score.
+      alpha_history <- merge_history(existing, window_history,
+                                     keep_days = HISTORY_KEEP_DAYS)
     } else {
-      alpha_history <- window_history
+      alpha_history <- merge_history(NULL, window_history,
+                                     keep_days = HISTORY_KEEP_DAYS)
     }
   } else {
-    alpha_history <- window_history
+    alpha_history <- merge_history(NULL, window_history,
+                                   keep_days = HISTORY_KEEP_DAYS)
   }
-
-  alpha_history <- alpha_history %>%
-    distinct(symbol, date, .keep_all = TRUE) %>%
-    filter(date >= Sys.Date() - HISTORY_KEEP_DAYS) %>%
-    arrange(symbol, date)
 
   write_csv(alpha_history, history_path)
   message(glue("alpha_history.csv now has {nrow(alpha_history)} rows across ",

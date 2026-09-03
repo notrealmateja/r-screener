@@ -495,8 +495,272 @@ run_reversal_test <- function(history_path = "data/alpha_history.csv") {
   out
 }
 
+
+# =============================================================================
+# 4. EQUITY CURVE VERSUS THE S&P 500
+# =============================================================================
+# The first three sections answer "does the score rank correctly?" in units of
+# alpha. This one answers the question a person actually asks — "would holding
+# this have beaten the index?" — in money, and it is built so it can show the
+# model LOSING. Q5 (the names the model ranks worst) is carried through as a
+# falsification control: if Q5 also beats the benchmark, the ranking is sorting
+# on market exposure rather than skill, and the tab says so.
+#
+# Non-overlapping tranches: rebalance every HOLD_DAYS rather than every
+# REBAL_DAYS. The IC sections above deliberately overlap windows to gain
+# observations, but overlapping tranches cannot be drawn as one tradeable
+# equity curve without double-counting capital.
+
+EQ_COST_BPS <- 10   # round-trip cost per unit turnover, in basis points
+
+# Corporate actions are identified and neutralised at ingest by 02_momentum.R,
+# but this module reads price_history.csv directly and may be run against a
+# file written before that guard existed, so it applies the same test itself.
+# Shared so the two can never drift apart.
+if (!exists("corporate_action")) {
+  # Modules run from the repo root in production but from tests/testthat under
+  # testthat, so resolve rather than assuming the working directory.
+  .utils <- Filter(file.exists,
+                   c("R/00_utils.R", "../R/00_utils.R", "../../R/00_utils.R"))
+  if (length(.utils)) source(.utils[1]) else
+    stop("00_utils.R not found from ", getwd())
+}
+
+equity_stats <- function(r, bench, dates = NULL, periods_per_year = 252) {
+  ok <- !is.na(r) & !is.na(bench)
+  r <- r[ok]; bench <- bench[ok]
+  if (length(r) < 2) return(NULL)
+  cum <- cumprod(1 + r)
+  # Years from the calendar span where we have dates. Deriving them as
+  # length(r)/252 silently inflates CAGR whenever a day is dropped from the
+  # series, because the denominator shrinks while the money made does not.
+  yrs <- if (!is.null(dates) && length(dates) == length(ok)) {
+           d <- dates[ok]
+           as.numeric(max(d) - min(d)) / 365.25
+         } else length(r) / periods_per_year
+  if (!is.finite(yrs) || yrs <= 0) yrs <- length(r) / periods_per_year
+  cagr  <- cum[length(cum)]^(1 / yrs) - 1
+  vol   <- sd(r) * sqrt(periods_per_year)
+  bcum  <- cumprod(1 + bench)
+  bcagr <- bcum[length(bcum)]^(1 / yrs) - 1
+  beta  <- if (var(bench) > 0) cov(r, bench) / var(bench) else NA_real_
+  ex    <- r - bench
+  te    <- sd(ex) * sqrt(periods_per_year)
+  list(
+    total_return = cum[length(cum)] - 1,
+    cagr         = cagr,
+    vol          = vol,
+    # Return over volatility with NO risk-free deduction. Named so, because
+    # calling it "Sharpe" while assuming cash pays nothing overstates it.
+    return_vol   = if (vol > 0) cagr / vol else NA_real_,
+    max_drawdown = min(cum / cummax(cum) - 1),
+    beta         = beta,
+    tracking_err = te,
+    info_ratio   = if (te > 0) (cagr - bcagr) / te else NA_real_,
+    excess_cagr  = cagr - bcagr,
+    # Daily excess t. Reported for reference only — it divides by sqrt(623)
+    # when the strategy makes ~10 independent decisions, so it overstates
+    # significance. excess_t_tranche below is the one to quote.
+    excess_t     = if (sd(ex) > 0) mean(ex) / (sd(ex) / sqrt(length(ex))) else NA_real_,
+    days         = length(r)
+  )
+}
+
+# Buy and hold one equal-weighted basket for the life of a tranche, letting the
+# weights drift. Averaging daily returns cross-sectionally instead would
+# silently rebalance to equal weight EVERY day — a different, higher-turnover
+# strategy than the one described, and one whose turnover goes uncharged.
+tranche_returns <- function(fw, held) {
+  fw <- fw %>% filter(symbol %in% held) %>% select(date, symbol, daily_ret)
+  if (nrow(fw) == 0) return(NULL)
+  wide <- fw %>%
+    tidyr::pivot_wider(names_from = symbol, values_from = daily_ret,
+                       values_fill = 0) %>%
+    arrange(date)
+  mat <- as.matrix(wide[, -1, drop = FALSE])
+  if (ncol(mat) == 0) return(NULL)
+  mat[is.na(mat)] <- 0
+  growth <- apply(1 + mat, 2, cumprod)
+  if (is.null(dim(growth))) growth <- matrix(growth, nrow = nrow(mat))
+  port <- rowMeans(growth)
+  tibble(date = wide$date,
+         ret  = c(port[1] - 1, port[-1] / port[-length(port)] - 1),
+         n    = ncol(mat))
+}
+
+run_equity_curve <- function(price_path = "data/price_history.csv") {
+  if (!file.exists(price_path)) {
+    message("No price history at ", price_path, " — skipping equity curve.")
+    return(invisible(NULL))
+  }
+  px <- read_csv(price_path, show_col_types = FALSE)
+  need <- c("symbol", "date", "daily_ret", "spy_ret", "daily_alpha", "volume")
+  if (!all(need %in% names(px))) {
+    message("price_history lacks ", paste(setdiff(need, names(px)), collapse = ", "),
+            " — skipping equity curve.")
+    return(invisible(NULL))
+  }
+
+  px <- px %>% select(all_of(need)) %>% arrange(symbol, date) %>%
+    group_by(symbol) %>% mutate(vol_ratio = volume / lag(volume)) %>% ungroup()
+
+  px$is_ca <- corporate_action(px$daily_ret, px$vol_ratio)
+  n_ca <- sum(px$is_ca, na.rm = TRUE)
+  if (n_ca > 0) {
+    hits <- px[px$is_ca, ] %>% arrange(desc(abs(daily_ret)))
+    message(glue("Neutralised {n_ca} corporate-action bars (price and volume ",
+                 "moved opposite ways):"))
+    for (i in seq_len(min(5, nrow(hits))))
+      message(glue("    {hits$symbol[i]} {hits$date[i]}: ",
+                   "{round(hits$daily_ret[i] * 100, 1)}% on ",
+                   "{round(hits$vol_ratio[i], 2)}x volume"))
+    # A split preserves position value, so the correct portfolio return is 0 —
+    # not the peer average that deleting the row would implicitly assign.
+    px$daily_ret[px$is_ca]   <- 0
+    px$daily_alpha[px$is_ca] <- 0 - px$spy_ret[px$is_ca]
+  }
+
+  px <- px %>% filter(!is.na(daily_ret), !is.na(spy_ret)) %>% arrange(date, symbol)
+  if (nrow(px) == 0) { message("No usable price rows."); return(invisible(NULL)) }
+
+  bench <- px %>% distinct(date, spy_ret) %>% arrange(date)
+
+  # Equal-weighting the WHOLE universe with no signal at all. This is the
+  # control for survivorship: the 195 tickers are a list written in 2026 and
+  # backtested from 2024, with zero delistings in three years, so simply being
+  # eligible is worth something. Whatever this line earns above the index is
+  # the candidate set, not the score. Without it the tab credits the model for
+  # the bias in its own universe.
+  universe <- px %>% group_by(date) %>%
+    summarize(univ_ret = mean(daily_ret, na.rm = TRUE), .groups = "drop") %>%
+    arrange(date)
+  dates <- bench$date
+  if (length(dates) < FORMATION_DAYS + HOLD_DAYS + 1) {
+    message(glue("Need {FORMATION_DAYS + HOLD_DAYS + 1} trading days, have {length(dates)}."))
+    return(invisible(NULL))
+  }
+
+  # Run to the END of the data. Stopping at the last FULL tranche discarded the
+  # most recent 56 trading days, and which days get discarded depends only on
+  # where the grid happens to start — a phase choice that moved the result.
+  starts <- seq(FORMATION_DAYS + 1, length(dates) - 1, by = HOLD_DAYS)
+  message(glue("Equity curve: formation {FORMATION_DAYS}d, hold {HOLD_DAYS}d, ",
+               "{length(starts)} non-overlapping tranches, {EQ_COST_BPS}bp turnover cost."))
+
+  legs <- list(); prev_q1 <- character(0); prev_q5 <- character(0)
+
+  for (ix in starts) {
+    fm <- px %>% filter(date %in% dates[(ix - FORMATION_DAYS):(ix - 1)]) %>%
+      select(date, symbol, daily_alpha)
+    scored <- score_formation(fm)
+    if (is.null(scored)) next
+
+    scored <- scored %>% mutate(bucket = ntile(desc(score), N_BUCKETS))
+    q1 <- scored$symbol[scored$bucket == 1]
+    q5 <- scored$symbol[scored$bucket == N_BUCKETS]
+    if (length(q1) == 0 || length(q5) == 0) next
+
+    fw_dates <- dates[ix:min(ix + HOLD_DAYS - 1, length(dates))]
+    fw <- px %>% filter(date %in% fw_dates)
+
+    leg1 <- tranche_returns(fw, q1)
+    leg5 <- tranche_returns(fw, q5)
+    if (is.null(leg1) || is.null(leg5)) next
+    leg <- leg1 %>% rename(model_ret = ret, n_held = n) %>%
+      inner_join(leg5 %>% select(date, q5_ret = ret), by = "date")
+    if (nrow(leg) == 0) next
+
+    # Charge turnover once, on the first day. Holding a name across a rebalance
+    # costs nothing; only the switched fraction does.
+    turn1 <- if (length(prev_q1) == 0) 1 else 1 - length(intersect(prev_q1, q1)) / length(q1)
+    turn5 <- if (length(prev_q5) == 0) 1 else 1 - length(intersect(prev_q5, q5)) / length(q5)
+    leg$model_ret[1] <- leg$model_ret[1] - turn1 * EQ_COST_BPS / 10000
+    leg$q5_ret[1]    <- leg$q5_ret[1]    - turn5 * EQ_COST_BPS / 10000
+
+    prev_q1 <- q1; prev_q5 <- q5
+    leg$tranche <- length(legs) + 1L
+    legs[[length(legs) + 1]] <- leg
+  }
+
+  if (length(legs) == 0) { message("No tranches produced."); return(invisible(NULL)) }
+
+  curve <- bind_rows(legs) %>% arrange(date) %>%
+    inner_join(bench, by = "date") %>%
+    inner_join(universe, by = "date") %>%
+    mutate(
+      model_cum = cumprod(1 + model_ret),
+      q5_cum    = cumprod(1 + q5_ret),
+      spy_cum   = cumprod(1 + spy_ret),
+      univ_cum  = cumprod(1 + univ_ret),
+      # Where the model actually loses. Both lines can rise together and hide a
+      # long stretch of underperformance.
+      rel_cum   = model_cum / spy_cum,
+      model_dd  = model_cum / cummax(model_cum) - 1,
+      spy_dd    = spy_cum   / cummax(spy_cum)   - 1
+    )
+
+  m  <- equity_stats(curve$model_ret, curve$spy_ret, curve$date)
+  q5 <- equity_stats(curve$q5_ret,    curve$spy_ret, curve$date)
+  b  <- equity_stats(curve$spy_ret,   curve$spy_ret, curve$date)
+  u  <- equity_stats(curve$univ_ret,  curve$spy_ret, curve$date)
+
+  # Significance on INDEPENDENT decisions. The daily excess t divides by
+  # sqrt(623) when the strategy only rebalances ~10 times, and every day inside
+  # a 63-day hold is the same decision still playing out — not fresh evidence.
+  tranche_t <- function(col) {
+    per <- curve %>% group_by(tranche) %>%
+      summarize(ex = prod(1 + .data[[col]]) / prod(1 + spy_ret) - 1, .groups = "drop")
+    if (nrow(per) < 2 || sd(per$ex) == 0) return(NA_real_)
+    mean(per$ex) / (sd(per$ex) / sqrt(nrow(per)))
+  }
+  m$excess_t_tranche  <- tranche_t("model_ret")
+  q5$excess_t_tranche <- tranche_t("q5_ret")
+  b$excess_t_tranche  <- NA_real_
+  u$excess_t_tranche  <- tranche_t("univ_ret")
+  m$n_decisions  <- length(legs); q5$n_decisions <- length(legs)
+  b$n_decisions  <- length(legs); u$n_decisions  <- length(legs)
+
+  ca_in_window <- sum(px$is_ca & px$date >= min(curve$date) &
+                        px$date <= max(curve$date), na.rm = TRUE)
+
+  stats <- bind_rows(
+    tibble(series = "model", label = "Model (top quintile)",    !!!m),
+    tibble(series = "q5",    label = "Model (bottom quintile)", !!!q5),
+    tibble(series = "univ",  label = "Universe, equal weight (no signal)", !!!u),
+    tibble(series = "spy",   label = "S&P 500 (SPY)",           !!!b)
+  ) %>%
+    mutate(tranches = length(legs), cost_bps = EQ_COST_BPS,
+           corporate_actions_neutralised = ca_in_window,
+           start_date = min(curve$date), end_date = max(curve$date))
+
+  write_csv(curve %>% select(date, tranche, model_ret, q5_ret, spy_ret, univ_ret,
+                             model_cum, q5_cum, spy_cum, univ_cum, rel_cum,
+                             model_dd, spy_dd, n_held),
+            "data/backtest_equity.csv")
+  write_csv(stats, "data/backtest_equity_stats.csv")
+
+  message(glue("\nGrowth of $1, {min(curve$date)} to {max(curve$date)} ({m$days} days):"))
+  message(glue("  Model Q1  {round(m$cagr * 100, 1)}%/yr  maxDD {round(m$max_drawdown * 100, 1)}%  ",
+               "beta {round(m$beta, 2)}  excess t {round(m$excess_t, 2)}"))
+  message(glue("  S&P 500   {round(b$cagr * 100, 1)}%/yr  maxDD {round(b$max_drawdown * 100, 1)}%"))
+  message(glue("  Universe  {round(u$cagr * 100, 1)}%/yr  (equal weight, NO signal)"))
+  message(glue("  Model Q5  {round(q5$cagr * 100, 1)}%/yr  (falsification control)"))
+  message(glue("  Excess t over {length(legs)} independent rebalances: ",
+               "{round(m$excess_t_tranche, 2)}"))
+  if (!is.na(u$excess_cagr) && u$excess_cagr > 0)
+    message(glue("  NOTE: holding the whole universe with no signal beat the index by ",
+                 "{round(u$excess_cagr * 100, 1)}pp/yr. That much of the model's edge is ",
+                 "the candidate list, not the score."))
+  if (!is.na(q5$excess_cagr) && q5$excess_cagr > 0)
+    message("  NOTE: the bottom quintile also beat the index — the ranking is ",
+            "sorting substantially on market exposure, not skill.")
+
+  list(curve = curve, stats = stats)
+}
+
 if (!exists("SOURCED_BY_MASTER")) {
   backtest_results   <- run_backtest()
   component_results  <- run_component_diagnostic()
   reversal_results   <- run_reversal_test()
+  equity_results     <- run_equity_curve()
 }
