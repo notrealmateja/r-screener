@@ -1,0 +1,5 @@
+[
+  {"name": "symbol", "type": "STRING", "mode": "REQUIRED"},
+  {"name": "date",   "type": "DATE",   "mode": "REQUIRED"},
+  {"name": "close",  "type": "FLOAT",  "mode": "REQUIRED"}
+]
