@@ -70,6 +70,11 @@ rank  symbol  as_of       excess_return_pct  volatility_pct  score
 3     CRWD    2026-09-02  133.69             58.59           2.282
 4     DUOL    2026-09-02   93.55             60.68           1.542
 5     UNH     2026-09-02   44.00             31.04           1.418
+6     AAPL    2026-09-02   23.34             27.00           0.865
+7     CRM     2026-09-02   48.96             57.49           0.852
+8     NVDA    2026-09-02   25.69             32.81           0.783
+9     MSFT    2026-09-02   24.48             35.13           0.697
+10    JPM     2026-09-02   13.87             19.95           0.696
 ```
 
 Note AMD in second place. It earned more excess return than PANW — 167% against
@@ -109,11 +114,17 @@ The `ROW_NUMBER` version is written out here because it runs anywhere.
 
 ## Checking it
 
-The query was run against this CSV and the numbers were reproduced
-independently in R with `dplyr`. Every symbol, figure and position matched. If
-you change the window length or the benchmark, re-check it the same way — an
-off-by-one in a window frame does not throw an error, it just gives a wrong
-answer quietly.
+The same query was run three ways against this CSV and all three agree on every
+symbol, figure and position:
+
+- BigQuery, loaded from `prices.csv` as described above
+- sqlite, with `STDDEV_SAMP` written out algebraically since sqlite lacks it
+- R with `dplyr`, computing the mean and standard deviation directly
+
+Three implementations agreeing is worth more than one that looks right. An
+off-by-one in a window frame does not throw an error — it returns a wrong
+answer quietly, and it will look entirely plausible. If you change the window
+length or the benchmark, check it the same way.
 
 ## What the score does not tell you
 
