@@ -152,6 +152,16 @@ jobs:
             # Drop anything the app no longer reads, so a file removed from the
             # list above does not linger in the bundle forever.
             stale <- setdiff(list.files("app", pattern="\\.csv$"), APP_FILES)
+            # A truncated APP_FILES would empty the bundle rather than trim it:
+            # the copy above silently skips names it cannot find, and this would
+            # then delete those same files from app/. Editing that list wrongly
+            # is exactly the mistake that has already broken this workflow once,
+            # so refuse to delete anything if the list looks wrong.
+            if (length(APP_FILES) < 10) {
+              message("APP_FILES has only ", length(APP_FILES),
+                      " entries and looks truncated — skipping cleanup.")
+              stale <- character(0)
+            }
             if (length(stale)) {
               freed <- sum(file.size(file.path("app", stale)))/1024^2
               unlink(file.path("app", stale))
