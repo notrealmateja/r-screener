@@ -106,4 +106,32 @@ if (have_pkgs("dplyr", "tibble")) {
     expect_equal(anyDuplicated(got[c("symbol", "date")]), 0)
     expect_equal(got$symbol, c("A", "A", "B"))
   })
+
+  # Found by a debugging pass, in this function's own code. An undated row in
+  # the fresh pull made min() return Inf, so `existing$date < Inf` kept every
+  # stored row — silently restoring the stale-value bug merge_history exists to
+  # prevent, and duplicating the symbol/date besides.
+  test_that("undated fresh rows cannot resurrect a stale value", {
+    existing <- tibble(symbol = "BRCC", date = as.Date("2026-08-25"), daily_alpha = 8.716)
+    fresh    <- tibble(symbol = "BRCC", date = as.Date(NA),           daily_alpha = 0)
+    got <- merge_history(existing, fresh)
+    expect_equal(nrow(got), 1)                 # not 2
+    expect_equal(got$daily_alpha, 8.716)       # nothing usable arrived, so disk stands
+  })
+
+  test_that("a dated fresh row still wins when other fresh rows are undated", {
+    existing <- tibble(symbol = "BRCC", date = as.Date("2026-08-25"), daily_alpha = 8.716)
+    fresh    <- tibble(symbol = "BRCC",
+                       date = as.Date(c(NA, "2026-08-25")),
+                       daily_alpha = c(9.9, 0))
+    got <- merge_history(existing, fresh)
+    expect_equal(nrow(got), 1)
+    expect_equal(got$daily_alpha, 0)           # the corrected value replaces the stale one
+  })
+
+  test_that("merging emits no warning on undated input", {
+    existing <- tibble(symbol = "A", date = as.Date("2026-01-01"), daily_alpha = 1)
+    fresh    <- tibble(symbol = "A", date = as.Date(NA),           daily_alpha = 2)
+    expect_silent(merge_history(existing, fresh))
+  })
 }

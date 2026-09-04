@@ -45,12 +45,16 @@ corporate_action <- function(daily_ret, vol_ratio) {
 # +872%, yet the phantom value persisted and kept feeding the score.
 merge_history <- function(existing, fresh, keep_days = NULL, today = Sys.Date()) {
   if (is.null(fresh) || nrow(fresh) == 0) fresh <- fresh[0, , drop = FALSE]
+  # An undated row cannot be merged against anything, and leaving one in makes
+  # min() below return Inf, which keeps every stored row and quietly restores
+  # the stale-value bug this function exists to prevent.
+  if (nrow(fresh) > 0) fresh <- fresh[!is.na(fresh$date), , drop = FALSE]
   if (is.null(existing) || nrow(existing) == 0) {
     out <- fresh
   } else if (nrow(fresh) == 0) {
     out <- existing
   } else {
-    fresh_from <- min(fresh$date, na.rm = TRUE)
+    fresh_from <- min(fresh$date)
     out <- dplyr::bind_rows(existing[existing$date < fresh_from, , drop = FALSE], fresh)
   }
   out <- dplyr::distinct(out, symbol, date, .keep_all = TRUE)
