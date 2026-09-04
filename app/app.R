@@ -1883,11 +1883,18 @@ server <- function(input, output, session) {
     clrs <- c("High Conviction"="#FF3D00","Watch List"="#FFD600","Low Signal"="#00B8D9","No Signal"="#333")
     plot_ly(d, x=~eg, y=~sf, type="scatter", mode="markers",
       color=~squeeze_tier, colors=clrs,
-      size=~squeeze_score, sizes=c(4,24),
       text=~paste0("<b>",symbol,"</b><br>",company,"<br>Squeeze: ",squeeze_score,
                    "<br>Short Float: ",short_float_pct,"<br>EPS Growth: ",round(earningsGrowth*100,1),"%"),
       hoverinfo="text",
-      marker=list(opacity=0.82, sizemode="diameter", line=list(color="rgba(0,0,0,0.4)",width=0.5))) %>%
+      # Sizes are scaled here rather than through plotly's `size=`/`sizes=`
+      # arguments. That path rescales marker sizes internally and writes
+      # marker.line.width while doing it, which emits one
+      # "line.width does not currently support multiple values" warning per
+      # trace on every render. Setting marker$size directly gives the identical
+      # 4-24 point range with no warning, and keeps the outline.
+      marker=list(size=~scales::rescale(replace_na(squeeze_score, 0), to=c(4,24)),
+                  sizemode="diameter", opacity=0.82,
+                  line=list(color="rgba(0,0,0,0.4)", width=0.5))) %>%
       layout(
         xaxis=list(title="Earnings Growth (%)"),
         yaxis=list(title="Short % of Float (%)"),
