@@ -1,31 +1,31 @@
 symbol,title,watchlist_count,st_rank,trending_score,messages,bullish,bearish,sentiment_label,fetched_at
-BE,Bloom Energy Corp - Ordinary Shares - Class A,35011,1,12.8439,4,2,0,Very Bullish,2026-09-04T23:18:10Z
-ORCL,Oracle Corp.,69251,2,7.84711,3,1,0,Very Bullish,2026-09-04T23:18:10Z
-KLAC,KLA Corp.,6175,3,5.99277,2,1,0,Very Bullish,2026-09-04T23:18:10Z
-LNG,Cheniere Energy Inc.,7906,4,5.78696,0,0,0,Neutral,2026-09-04T23:18:10Z
-MCD,McDonald's Corp,40838,5,5.32327,2,0,1,Very Bearish,2026-09-04T23:18:10Z
-BTDR,Bitdeer Technologies Holding Co,4053,6,5.22683,0,0,0,Neutral,2026-09-04T23:18:10Z
-STRL,"Sterling Construction Company, Inc.",3094,7,4.39494,1,0,0,Neutral,2026-09-04T23:18:10Z
-XCN.X,Onyxcoin,8075,8,3.74912,2,1,0,Very Bullish,2026-09-04T23:18:10Z
-ASAN,Asana Inc,10222,9,3.71772,0,0,0,Neutral,2026-09-04T23:18:10Z
-P,Everpure Inc,20805,10,3.31066,0,0,0,Neutral,2026-09-04T23:18:10Z
-ALAB,Astera Labs Inc,12865,11,3.29852,0,0,0,Neutral,2026-09-04T23:18:10Z
-MSFT,Microsoft Corp,547985,12,3.25227,0,0,0,Neutral,2026-09-04T23:18:10Z
-DIS,Walt Disney Co,290084,13,3.10896,0,0,0,Neutral,2026-09-04T23:18:10Z
-MUU,Direxion Daily MU Bull 2X Shares,1832,14,3.05493,1,0,0,Neutral,2026-09-04T23:18:10Z
-USAR,USA Rare Earth Inc,20042,15,3.02509,2,1,0,Very Bullish,2026-09-04T23:18:10Z
-UBER,Uber Technologies Inc,130649,16,2.83402,1,0,0,Neutral,2026-09-04T23:18:10Z
-HOG,"Harley-Davidson, Inc.",5338,17,2.8204,0,0,0,Neutral,2026-09-04T23:18:10Z
-ZTS,Zoetis Inc - Ordinary Shares - Class A,4895,18,2.8204,1,1,0,Very Bullish,2026-09-04T23:18:10Z
-ZEC.X,Zcash,11189,19,2.72856,2,2,0,Very Bullish,2026-09-04T23:18:10Z
-B,Barrick Mining Corp,32243,20,2.69764,0,0,0,Neutral,2026-09-04T23:18:10Z
-ABUS,Arbutus Biopharma Corp,16817,21,2.68375,0,0,0,Neutral,2026-09-04T23:18:10Z
-QCOM,"Qualcomm, Inc.",77641,22,2.6287,0,0,0,Neutral,2026-09-04T23:18:10Z
-XYO.X,XYO Network,13576,23,2.60383,1,1,0,Very Bullish,2026-09-04T23:18:10Z
-SGOV,iShares 0-3 Month Treasury Bond ETF,1983,24,2.57604,0,0,0,Neutral,2026-09-04T23:18:10Z
-CAR,Avis Budget Group Inc,11340,25,2.53738,0,0,0,Neutral,2026-09-04T23:18:10Z
-PHAT,Phathom Pharmaceuticals Inc,2379,26,2.47108,0,0,0,Neutral,2026-09-04T23:18:10Z
-AMRN,Amarin Corp - ADR,30394,27,2.46486,0,0,0,Neutral,2026-09-04T23:18:10Z
-ABTC,American Bitcoin Corp.,4174,28,2.32955,1,0,0,Neutral,2026-09-04T23:18:10Z
-BB.TSX,BlackBerry Ltd,1015,29,2.3249,0,0,0,Neutral,2026-09-04T23:18:10Z
-CEG,Constellation Energy Corporation,11807,30,2.30635,0,0,0,Neutral,2026-09-04T23:18:10Z
+COMP.X,Compound,5554,1,6.26524,3,2,0,Very Bullish,2026-09-05T23:14:34Z
+LTC.X,Litecoin,109492,2,5.60808,4,3,0,Very Bullish,2026-09-05T23:14:34Z
+4CHAN.X,4Chan,3231,3,3.78686,3,3,0,Very Bullish,2026-09-05T23:14:34Z
+DASH.X,Dash,9000,4,3.64571,2,0,0,Neutral,2026-09-05T23:14:34Z
+TJX,"TJX Companies, Inc.",8367,5,2.8204,1,1,0,Very Bullish,2026-09-05T23:14:34Z
+GLD.X,GoldCoin,309,6,2.68572,0,0,0,Neutral,2026-09-05T23:14:34Z
+LYFT,Lyft Inc,42504,7,2.39818,0,0,0,Neutral,2026-09-05T23:14:34Z
+GE,GE Aerospace,154879,8,2.08572,0,0,0,Neutral,2026-09-05T23:14:34Z
+RUN,Sunrun Inc,22948,9,2.08572,0,0,0,Neutral,2026-09-05T23:14:34Z
+ALGO.X,Algorand,32021,10,2.0217,1,1,0,Very Bullish,2026-09-05T23:14:34Z
+SBET,SharpLink Gaming Ltd,21626,11,1.95331,0,0,0,Neutral,2026-09-05T23:14:34Z
+RYCEY,Rolls-Royce Holdings Plc - ADR,23160,12,1.95331,1,1,0,Very Bullish,2026-09-05T23:14:34Z
+FMCC,Freddie Mac,6720,13,1.89866,0,0,0,Neutral,2026-09-05T23:14:34Z
+FNMA,Federal National Mortgage Association,17816,14,1.7915,0,0,0,Neutral,2026-09-05T23:14:34Z
+TMUS,T-Mobile US Inc,19326,15,1.72082,1,0,0,Neutral,2026-09-05T23:14:34Z
+PSNL,Personalis Inc,2926,16,1.62439,0,0,0,Neutral,2026-09-05T23:14:34Z
+USO,United States Oil Fund,74761,17,1.60632,1,0,0,Neutral,2026-09-05T23:14:34Z
+JASMY.X,JasmyCoin,25314,18,1.18569,0,0,0,Neutral,2026-09-05T23:14:34Z
+SGML,Sigma Lithium Corporation,3671,19,1.07,1,1,0,Very Bullish,2026-09-05T23:14:34Z
+RIVN,Rivian Automotive Inc,88359,20,1.06153,0,0,0,Neutral,2026-09-05T23:14:34Z
+SOXX,iShares Semiconductor ETF,10802,21,0.856329,0,0,0,Neutral,2026-09-05T23:14:34Z
+TGT,Target Corp,50173,22,0.740524,0,0,0,Neutral,2026-09-05T23:14:34Z
+LEGN,Legend Biotech,1405,23,0.553137,1,0,0,Neutral,2026-09-05T23:14:34Z
+QCOM,"Qualcomm, Inc.",77645,24,0.548835,1,0,0,Neutral,2026-09-05T23:14:34Z
+DOGE.X,Dogecoin,350281,25,0.501468,2,2,0,Very Bullish,2026-09-05T23:14:34Z
+DKNG,DraftKings Inc,120318,26,0.426537,1,1,0,Very Bullish,2026-09-05T23:14:34Z
+SKR.X,Seeker,475,27,0.404764,1,1,0,Very Bullish,2026-09-05T23:14:34Z
+CRO.X,Crypto.com Coin,37130,28,0.380649,0,0,0,Neutral,2026-09-05T23:14:34Z
+VKTX,Viking Therapeutics Inc,38450,29,0.32584,0,0,0,Neutral,2026-09-05T23:14:34Z
+KLAR,Klarna Group plc,7894,30,0.27454,0,0,0,Neutral,2026-09-05T23:14:34Z
