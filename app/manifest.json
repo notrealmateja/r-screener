@@ -1144,8 +1144,8 @@
       }
     },
     "knitr": {
-      "Source": "CRAN",
-      "Repository": "https://cran.rstudio.com",
+      "Source": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
       "description": {
         "Package": "knitr",
         "Type": "Package",
@@ -1168,9 +1168,9 @@
         "Packaged": "2026-09-05 14:51:05 UTC; yihui",
         "Author": "Yihui Xie [aut, cre] (ORCID: <https://orcid.org/0000-0003-0645-5666>,\n    URL: https://yihui.org),\n  Abhraneel Sarma [ctb],\n  Adam Vogt [ctb],\n  Alastair Andrew [ctb],\n  Alex Zvoleff [ctb],\n  Amar Al-Zubaidi [ctb],\n  Andre Simon [ctb] (the CSS files under inst/themes/ were derived from\n    the Highlight package http://www.andre-simon.de),\n  Aron Atkins [ctb],\n  Aaron Wolen [ctb],\n  Ashley Manton [ctb],\n  Atsushi Yasumoto [ctb] (ORCID: <https://orcid.org/0000-0002-8335-495X>),\n  Ben Baumer [ctb],\n  Brian Diggs [ctb],\n  Brian Zhang [ctb],\n  Bulat Yapparov [ctb],\n  Cassio Pereira [ctb],\n  Christophe Dervieux [ctb],\n  David Hall [ctb],\n  David Hugh-Jones [ctb],\n  David Robinson [ctb],\n  Doug Hemken [ctb],\n  Duncan Murdoch [ctb],\n  Elio Campitelli [ctb],\n  Ellis Hughes [ctb],\n  Emily Riederer [ctb],\n  Fabian Hirschmann [ctb],\n  Fitch Simeon [ctb],\n  Forest Fang [ctb],\n  Frank E Harrell Jr [ctb] (the Sweavel package at inst/misc/Sweavel.sty),\n  Garrick Aden-Buie [ctb],\n  Gregoire Detrez [ctb],\n  Hadley Wickham [ctb],\n  Hao Zhu [ctb],\n  Heewon Jeon [ctb],\n  Henrik Bengtsson [ctb],\n  Hiroaki Yutani [ctb],\n  Ian Lyttle [ctb],\n  Hodges Daniel [ctb],\n  Jacob Bien [ctb],\n  Jake Burkhead [ctb],\n  James Manton [ctb],\n  Jared Lander [ctb],\n  Jason Punyon [ctb],\n  Javier Luraschi [ctb],\n  Jeff Arnold [ctb],\n  Jenny Bryan [ctb],\n  Jeremy Ashkenas [ctb, cph] (the CSS file at\n    inst/misc/docco-classic.css),\n  Jeremy Stephens [ctb],\n  Jim Hester [ctb],\n  Joe Cheng [ctb],\n  Johan Larsson [ctb],\n  Johannes Ranke [ctb],\n  John Honaker [ctb],\n  John Muschelli [ctb],\n  Jonathan Keane [ctb],\n  JJ Allaire [ctb],\n  Johan Toloe [ctb],\n  Jonathan Sidi [ctb],\n  Joseph Larmarange [ctb],\n  Julien Barnier [ctb],\n  Kaiyin Zhong [ctb],\n  Kamil Slowikowski [ctb],\n  Karl Forner [ctb],\n  Kevin K. Smith [ctb],\n  Kirill Mueller [ctb],\n  Kohske Takahashi [ctb],\n  Leonidas Zhak [ctb],\n  Lorenz Walthert [ctb],\n  Lucas Gallindo [ctb],\n  Marius Hofert [ctb],\n  Martin Modrák [ctb],\n  Michael Chirico [ctb],\n  Michael Friendly [ctb],\n  Michal Bojanowski [ctb],\n  Michel Kuhlmann [ctb],\n  Miller Patrick [ctb],\n  Nacho Caballero [ctb],\n  Nick Salkowski [ctb],\n  Niels Richard Hansen [ctb],\n  Noam Ross [ctb],\n  Obada Mahdi [ctb],\n  Pavel N. Krivitsky [ctb] (ORCID:\n    <https://orcid.org/0000-0002-9101-3362>),\n  Pedro Faria [ctb],\n  Qiang Li [ctb],\n  Ramnath Vaidyanathan [ctb],\n  Richard Cotton [ctb],\n  Robert Krzyzanowski [ctb],\n  Rodrigo Copetti [ctb],\n  Romain Francois [ctb],\n  Ruaridh Williamson [ctb],\n  Sagiru Mati [ctb] (ORCID: <https://orcid.org/0000-0003-1413-3974>),\n  Scott Kostyshak [ctb],\n  Sebastian Meyer [ctb],\n  Sietse Brouwer [ctb],\n  Simon de Bernard [ctb],\n  Sylvain Rousseau [ctb],\n  Taiyun Wei [ctb],\n  Thibaut Assus [ctb],\n  Thibaut Lamadon [ctb],\n  Thomas Leeper [ctb],\n  Tim Mastny [ctb],\n  Tom Torsney-Weir [ctb],\n  Trevor Davis [ctb],\n  Viktoras Veitas [ctb],\n  Weicheng Zhu [ctb],\n  Wush Wu [ctb],\n  Zachary Foster [ctb],\n  Zhian N. Kamvar [ctb] (ORCID: <https://orcid.org/0000-0003-1458-7108>),\n  Posit Software, PBC [cph, fnd]",
         "Maintainer": "Yihui Xie <xie@yihui.name>",
-        "Repository": "CRAN",
+        "Repository": "RSPM",
         "Date/Publication": "2026-09-06 19:10:02 UTC",
-        "Built": "R 4.4.0; ; 2026-09-06 22:59:27 UTC; unix"
+        "Built": "R 4.4.0; ; 2026-09-07 03:42:40 UTC; unix"
       }
     },
     "labeling": {
@@ -2547,10 +2547,10 @@
       "checksum": "7e330a674136a01dc6b2e36c9c0ad7bc"
     },
     "backtest_equity_stats.csv": {
-      "checksum": "948f35d40b5029413b7377bfbc965380"
+      "checksum": "44846266241c4e14f5030e737e1bdbdc"
     },
     "backtest_equity.csv": {
-      "checksum": "624247f59742bfdbb42800a243c63ef5"
+      "checksum": "271c67adefc9312dbc6d7e21d0741e8a"
     },
     "backtest_headline.csv": {
       "checksum": "ac292562694a7d728117496949982530"
@@ -2571,7 +2571,7 @@
       "checksum": "165aa567b2075aa695a1d55ba19aec2e"
     },
     "data/meta.rds": {
-      "checksum": "eefa83e5def33f37f95ca866b0ace372"
+      "checksum": "7ce664e4a587a1f2d78778a1b0f7c062"
     },
     "data/price_series_cache.rds": {
       "checksum": "266a1b7cfa8bbf9180380a4969dbc886"
@@ -2583,52 +2583,52 @@
       "checksum": "b9260e096fb89fc630076a716d838da7"
     },
     "earnings_calendar.csv": {
-      "checksum": "1a6a1195543ed087933fa39433b7f00b"
+      "checksum": "1544aaeade3394222d6ef2dc4139ce51"
     },
     "global.R": {
       "checksum": "0f91695b6642435d60fa09d46d339b43"
     },
     "macro_data.csv": {
-      "checksum": "67bd0c0977a5501c80eff8b9d13dda69"
+      "checksum": "c5c647e1a34662152f139c3ab0072f9a"
     },
     "market_news.csv": {
-      "checksum": "be97c60790471effed704ff3a1aea582"
+      "checksum": "66399d15663f119501cbf5cae4d47aa5"
     },
     "master_scored.csv": {
-      "checksum": "a517bf79302e996f090ec4ab1331e278"
+      "checksum": "fceace1edce1590e3a32f61058475419"
     },
     "meta.rds": {
-      "checksum": "eefa83e5def33f37f95ca866b0ace372"
+      "checksum": "7ce664e4a587a1f2d78778a1b0f7c062"
     },
     "price_history.csv": {
-      "checksum": "4fe203b7dd0a92a55017a5a2402e2072"
+      "checksum": "543fc4a436cc990004d86d0e3513a7ef"
     },
     "reversal_results.csv": {
       "checksum": "536fa8bbcfe7a2cbd97625f240454c33"
     },
     "sec_filings.csv": {
-      "checksum": "bc5a1f3ab885fdcea2528426f247545f"
+      "checksum": "2d0d5137b9c66fe5943435ab4c295ede"
     },
     "sector_performance.csv": {
       "checksum": "d5fc3fca7013cdb68146632de2a4bc87"
     },
     "stock_news.csv": {
-      "checksum": "2dd6446ce716b9a15b0d9533bc5c3487"
+      "checksum": "0644e497d2a4f7161fdc6880468c50f4"
     },
     "stocktwits_trending.csv": {
-      "checksum": "e6fce852706e04ac7ae19644390a8d9b"
+      "checksum": "6205a74a9e25c54552d28e8cb5991645"
     },
     "top15_sweetspot.csv": {
-      "checksum": "1d3f52b8ab41c21b831d74fa80084f6a"
+      "checksum": "e32f94b92b47f122400df64374341033"
     },
     "top15_unicorns.csv": {
-      "checksum": "061f441e8327c5af1c31adbc43a8eccf"
+      "checksum": "83037e2dd88db71c197bff0e00894d4a"
     },
     "tv_channels.csv": {
-      "checksum": "08d73864917b2836adea76fe27a7e94b"
+      "checksum": "099195f4938b5d1f7a73a6c260033888"
     },
     "wsb_trending.csv": {
-      "checksum": "eea892f7392200e219ac444bc37f24cb"
+      "checksum": "6505e45d362110f81365d449f8a2bf4d"
     }
   },
   "users": null
