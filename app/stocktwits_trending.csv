@@ -1,31 +1,31 @@
 symbol,title,watchlist_count,st_rank,trending_score,messages,bullish,bearish,sentiment_label,fetched_at
-ORCL,Oracle Corp.,69437,1,8.92684,5,2,0,Very Bullish,2026-09-07T23:49:11Z
-AMZN,Amazon.com Inc,701917,2,9.52452,8,0,2,Very Bearish,2026-09-07T23:49:11Z
-WLD.X,Worldcoin,2860,3,6.95162,2,1,0,Very Bullish,2026-09-07T23:49:11Z
-AERO.X,Aerodrome Finance,4479,4,0.0584128,0,0,0,Neutral,2026-09-07T23:49:11Z
-CRO.X,Crypto.com Coin,37135,5,3.67365,0,0,0,Neutral,2026-09-07T23:49:11Z
-QCOM,"Qualcomm, Inc.",77662,6,2.84265,0,0,0,Neutral,2026-09-07T23:49:11Z
-HOOD,Robinhood Markets Inc,100682,7,2.43529,0,0,0,Neutral,2026-09-07T23:49:11Z
-ZIM,Zim Integrated Shipping Services Ltd,15370,8,5.28386,1,1,0,Very Bullish,2026-09-07T23:49:11Z
-ADUR,Aduro Clean Technologies Inc,4976,9,3.89588,0,0,0,Neutral,2026-09-07T23:49:11Z
-VET.X,Vechain,36489,10,2.61833,0,0,0,Neutral,2026-09-07T23:49:11Z
-GRPN,Groupon Inc,37516,11,5.44212,3,3,0,Very Bullish,2026-09-07T23:49:11Z
-STX,Seagate Technology Holdings Plc,13892,12,4.01138,0,0,0,Neutral,2026-09-07T23:49:11Z
-CASHCAT.X,Cash Cat,545,13,2.85746,0,0,0,Neutral,2026-09-07T23:49:11Z
-KLAC,KLA Corp.,6213,14,4.01615,0,0,0,Neutral,2026-09-07T23:49:11Z
-GLW,"Corning, Inc.",15685,15,2.53738,0,0,0,Neutral,2026-09-07T23:49:11Z
-ARKK,ARK Innovation ETF,49710,16,0,0,0,0,Neutral,2026-09-07T23:49:11Z
-OWL,Blue Owl Capital Inc - Ordinary Shares - Class A,3749,17,0,0,0,0,Neutral,2026-09-07T23:49:11Z
-XYZ,Block Inc,178712,18,3.2307,0,0,0,Neutral,2026-09-07T23:49:11Z
-SPRY,ARS Pharmaceuticals Inc,2497,19,0.0124206,0,0,0,Neutral,2026-09-07T23:49:11Z
-ZEC.X,Zcash,11664,20,4.27468,2,2,0,Very Bullish,2026-09-07T23:49:11Z
-ARCT,Arcturus Therapeutics Holdings Inc,5589,21,0,0,0,0,Neutral,2026-09-07T23:49:11Z
-RUN,Sunrun Inc,22949,22,0,0,0,0,Neutral,2026-09-07T23:49:11Z
-AXSM,Axsome Therapeutics Inc,11931,23,2.53738,0,0,0,Neutral,2026-09-07T23:49:11Z
-ICP.X,Internet Computer,12151,24,4.6822,1,0,0,Neutral,2026-09-07T23:49:11Z
-USDJPY,US Dollar / Japanese Yen,15022,25,-0.507476,0,0,0,Neutral,2026-09-07T23:49:11Z
-BAC,Bank of America Corp,146827,26,2.53738,0,0,0,Neutral,2026-09-07T23:49:11Z
-SPY,SPDR S&P 500 ETF Trust,636957,27,0.51832,3,0,2,Very Bearish,2026-09-07T23:49:11Z
-XBI,SPDR S&P Biotech ETF,28873,28,0.476016,0,0,0,Neutral,2026-09-07T23:49:11Z
-MS,Morgan Stanley,15134,29,0.0946845,0,0,0,Neutral,2026-09-07T23:49:11Z
-GS,"Goldman Sachs Group, Inc.",34221,30,2.82369,0,0,0,Neutral,2026-09-07T23:49:11Z
+GME,GameStop Corp,307445,1,8.63689,3,1,0,Very Bullish,2026-09-08T23:40:29Z
+CASY,"Casey`s General Stores, Inc.",2402,2,8.4028,1,0,0,Neutral,2026-09-08T23:40:29Z
+TTAN,ServiceTitan ,1315,3,7.20804,1,0,0,Neutral,2026-09-08T23:40:29Z
+GT,Goodyear Tire & Rubber Co.,5935,4,6.51417,1,1,0,Very Bullish,2026-09-08T23:40:29Z
+DOT.X,Polkadot,25104,5,6.37812,1,1,0,Very Bullish,2026-09-08T23:40:29Z
+WULF,TeraWulf Inc,31410,6,6.18973,2,2,0,Very Bullish,2026-09-08T23:40:29Z
+GLXY,Galaxy Digital Inc. - Ordinary Shares - Class A,18958,7,5.97878,0,0,0,Neutral,2026-09-08T23:40:29Z
+RGTI,Rigetti Computing Inc,52298,8,5.88721,0,0,0,Neutral,2026-09-08T23:40:29Z
+NLST,Netlist Inc,27309,9,5.25308,3,1,0,Very Bullish,2026-09-08T23:40:29Z
+ORCL,Oracle Corp.,69773,10,4.92853,1,1,0,Very Bullish,2026-09-08T23:40:29Z
+TSLL,Direxion Daily TSLA Bull 2X Shares,9320,11,4.58857,0,0,0,Neutral,2026-09-08T23:40:29Z
+DJT,Trump Media & Technology Group Corp.,115641,12,4.21414,9,1,1,Neutral,2026-09-08T23:40:29Z
+WDC,Western Digital Corp.,21116,13,3.97399,0,0,0,Neutral,2026-09-08T23:40:29Z
+POET,POET Technologies Inc,29541,14,3.90695,1,1,0,Very Bullish,2026-09-08T23:40:29Z
+QCOM,"Qualcomm, Inc.",77825,15,3.66337,0,0,0,Neutral,2026-09-08T23:40:29Z
+SGML,Sigma Lithium Corporation,3717,16,3.38288,0,0,0,Neutral,2026-09-08T23:40:29Z
+SMR,NuScale Power Corp,25003,17,3.28172,1,0,0,Neutral,2026-09-08T23:40:29Z
+DKNG,DraftKings Inc,120317,18,3.25795,0,0,0,Neutral,2026-09-08T23:40:29Z
+CELH,Celsius Holdings Inc,30795,19,3.15462,1,1,0,Very Bullish,2026-09-08T23:40:29Z
+NNE,Nano Nuclear Energy Inc.,12881,20,2.97647,0,0,0,Neutral,2026-09-08T23:40:29Z
+PEP,PepsiCo Inc,23544,21,2.97641,0,0,0,Neutral,2026-09-08T23:40:29Z
+BCRX,Biocryst Pharmaceuticals Inc.,36939,22,2.97219,1,1,0,Very Bullish,2026-09-08T23:40:29Z
+LMT,Lockheed Martin Corp.,37301,23,2.95286,0,0,0,Neutral,2026-09-08T23:40:29Z
+BB.TSX,BlackBerry Ltd,1022,24,2.91014,0,0,0,Neutral,2026-09-08T23:40:29Z
+CHIP.X,Chip,664,25,2.88654,0,0,0,Neutral,2026-09-08T23:40:29Z
+XLV,Health Care Select Sector SPDR Fund,7727,26,2.86043,0,0,0,Neutral,2026-09-08T23:40:29Z
+NVTS,Navitas Semiconductor Corp,26667,27,2.81253,1,1,0,Very Bullish,2026-09-08T23:40:29Z
+NUAI,New Era Energy & Digital Inc.,10206,28,2.80922,0,0,0,Neutral,2026-09-08T23:40:29Z
+FCEL,Fuelcell Energy Inc,144202,29,2.74797,0,0,0,Neutral,2026-09-08T23:40:29Z
+ENPH,Enphase Energy Inc,49340,30,2.68159,0,0,0,Neutral,2026-09-08T23:40:29Z
