@@ -73,8 +73,8 @@ CGEM,2026-10-22,Cullinan Oncology LLC,,USD,,2026-08-06,77,24,SEC 8-K Item 2.02,N
 CGEM,2027-01-07,Cullinan Oncology LLC,,USD,,2026-08-06,77,24,SEC 8-K Item 2.02,NA
 COIN,2026-10-22,Coinbase Global Inc,,USD,amc,2026-07-30,84,19,SEC 8-K Item 2.02,-0.0884
 COIN,2027-01-14,Coinbase Global Inc,,USD,,2026-07-30,84,19,SEC 8-K Item 2.02,NA
-COST,2026-09-09,Costco Wholesale Corp,,USD,,2026-05-28,84,40,SEC 8-K Item 2.02,NA
-COST,2026-12-02,Costco Wholesale Corp,,USD,,2026-05-28,84,40,SEC 8-K Item 2.02,4.9727
+COST,2026-09-10,Costco Wholesale Corp,,USD,,2026-05-28,84,40,SEC 8-K Item 2.02,NA
+COST,2026-12-03,Costco Wholesale Corp,,USD,,2026-05-28,84,40,SEC 8-K Item 2.02,4.9727
 CRM,2026-11-25,Salesforce.com Inc,,USD,amc,2026-08-26,91,13,SEC 8-K Item 2.02,3.4447
 CRM,2027-02-24,Salesforce.com Inc,,USD,amc,2026-08-26,91,13,SEC 8-K Item 2.02,3.6338
 CRNX,2026-10-21,Crinetics Pharmaceuticals Inc,,USD,,2026-08-03,79,32,SEC 8-K Item 2.02,NA
@@ -88,7 +88,7 @@ CRWD,2027-02-24,Crowdstrike Holdings Inc,,USD,amc,2026-08-26,91,24,SEC 8-K Item 
 CVX,2026-10-30,Chevron Corp,,USD,bmo,2026-07-31,91,30,SEC 8-K Item 2.02,4.6603
 CVX,2027-01-29,Chevron Corp,,USD,amc,2026-07-31,91,30,SEC 8-K Item 2.02,3.9586
 CXM,2026-12-02,Sprinklr Inc,,USD,,2026-09-02,91,21,SEC 8-K Item 2.02,0.1323
-CXM,2027-03-03,Sprinklr Inc,,USD,,2026-09-02,91,21,SEC 8-K Item 2.02,NA
+CXM,2027-03-03,Sprinklr Inc,,USD,,2026-09-02,91,21,SEC 8-K Item 2.02,0.1416
 DDOG,2026-11-05,Datadog Inc,,USD,bmo,2026-08-06,91,14,SEC 8-K Item 2.02,0.6652
 DDOG,2027-02-04,Datadog Inc,,USD,,2026-08-06,91,14,SEC 8-K Item 2.02,NA
 DECK,2026-10-22,Deckers Outdoor Corporation,,USD,,2026-07-23,91,37,SEC 8-K Item 2.02,1.8243
@@ -191,8 +191,8 @@ LLY,2026-11-10,Eli Lilly and Company,,USD,,2026-08-05,97,20,SEC 8-K Item 2.02,NA
 LLY,2027-02-15,Eli Lilly and Company,,USD,,2026-08-05,97,20,SEC 8-K Item 2.02,NA
 LMB,2026-11-03,Limbach Holdings Inc,,USD,,2026-08-04,91,39,SEC 8-K Item 2.02,1.0464
 LMB,2027-02-02,Limbach Holdings Inc,,USD,,2026-08-04,91,39,SEC 8-K Item 2.02,NA
-LOVE,2026-09-10,The Lovesac Company,,USD,bmo,2026-06-11,91,32,SEC 8-K Item 2.02,-0.3652
-LOVE,2026-12-10,The Lovesac Company,,USD,,2026-06-11,91,32,SEC 8-K Item 2.02,-0.5426
+LOVE,2026-12-10,The Lovesac Company,,USD,,2026-09-10,91,33,SEC 8-K Item 2.02,-0.5426
+LOVE,2027-03-11,The Lovesac Company,,USD,,2026-09-10,91,33,SEC 8-K Item 2.02,NA
 LSCC,2026-11-03,Lattice Semiconductor Corporation,,USD,amc,2026-08-04,91,23,SEC 8-K Item 2.02,0.5618
 LSCC,2027-02-02,Lattice Semiconductor Corporation,,USD,amc,2026-08-04,91,23,SEC 8-K Item 2.02,0.6528
 MA,2026-10-29,Mastercard Inc,,USD,bmo,2026-07-30,91,30,SEC 8-K Item 2.02,5.3041
@@ -249,8 +249,8 @@ OLMA,2026-10-25,Olema Pharmaceuticals Inc,,USD,,2026-08-10,76.5,24,SEC 8-K Item 
 OLMA,2027-01-10,Olema Pharmaceuticals Inc,,USD,,2026-08-10,76.5,24,SEC 8-K Item 2.02,NA
 ON,2026-11-02,ON Semiconductor Corporation,,USD,bmo,2026-08-03,91,40,SEC 8-K Item 2.02,0.8976
 ON,2027-02-01,ON Semiconductor Corporation,,USD,amc,2026-08-03,91,40,SEC 8-K Item 2.02,0.9778
-ORCL,2026-09-10,Oracle Corporation,,USD,amc,2026-06-10,92,42,SEC 8-K Item 2.02,1.7766
-ORCL,2026-12-11,Oracle Corporation,,USD,,2026-06-10,92,42,SEC 8-K Item 2.02,1.9334
+ORCL,2026-12-11,Oracle Corporation,,USD,,2026-09-10,92,43,SEC 8-K Item 2.02,1.9334
+ORCL,2027-03-13,Oracle Corporation,,USD,,2026-09-10,92,43,SEC 8-K Item 2.02,2.0994
 ORN,2026-10-28,Orion Group Holdings Inc,,USD,,2026-07-29,91.5,63,SEC 8-K Item 2.02,0.0938
 ORN,2027-01-28,Orion Group Holdings Inc,,USD,,2026-07-29,91.5,63,SEC 8-K Item 2.02,NA
 PANW,2026-12-01,Palo Alto Networks Inc,,USD,,2026-09-01,91,29,SEC 8-K Item 2.02,NA

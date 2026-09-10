@@ -1,31 +1,31 @@
 symbol,title,watchlist_count,st_rank,trending_score,messages,bullish,bearish,sentiment_label,fetched_at
-AAPL,Apple Inc,992601,1,11.6949,8,2,2,Neutral,2026-09-09T23:34:17Z
-DJT,Trump Media & Technology Group Corp.,115648,2,7.04038,2,0,0,Neutral,2026-09-09T23:34:17Z
-META,Meta Platforms Inc,608857,3,8.5249,1,0,0,Neutral,2026-09-09T23:34:17Z
-ORCL,Oracle Corp.,69924,4,6.91545,3,2,0,Very Bullish,2026-09-09T23:34:17Z
-AEO,"American Eagle Outfitters, Inc.",7723,5,6.68425,2,0,0,Neutral,2026-09-09T23:34:17Z
-IRD,Opus Genetics Inc.,826,6,7.39556,2,1,0,Very Bullish,2026-09-09T23:34:17Z
-USO,United States Oil Fund,74830,7,9.71567,3,1,0,Very Bullish,2026-09-09T23:34:17Z
-CHWY,Chewy Inc,31212,8,6.72662,0,0,0,Neutral,2026-09-09T23:34:17Z
-SKHY,SK Hynix Inc - ADR,15381,9,4.85896,1,1,0,Very Bullish,2026-09-09T23:34:17Z
-KLAR,Klarna Group plc,7892,10,4.69277,0,0,0,Neutral,2026-09-09T23:34:17Z
-HYMC,Hycroft Mining Holding Corp,20673,11,4.80495,0,0,0,Neutral,2026-09-09T23:34:17Z
-DDOG,Datadog Inc,25813,12,5.00206,0,0,0,Neutral,2026-09-09T23:34:17Z
-GME,GameStop Corp,307547,13,5.11876,2,2,0,Very Bullish,2026-09-09T23:34:17Z
-KENDU.X,Kendu,5537,14,5.13829,0,0,0,Neutral,2026-09-09T23:34:17Z
-VRT,Vertiv Holdings Co,19891,15,5.66164,0,0,0,Neutral,2026-09-09T23:34:17Z
-AVAV,AeroVironment Inc.,13645,16,2.04452,0,0,0,Neutral,2026-09-09T23:34:17Z
-CMCSA,Comcast Corp,13216,17,6.81352,1,0,0,Neutral,2026-09-09T23:34:17Z
-VLO,Valero Energy Corp.,9657,18,2.373,0,0,0,Neutral,2026-09-09T23:34:17Z
-TJX,"TJX Companies, Inc.",8403,19,5.24484,0,0,0,Neutral,2026-09-09T23:34:17Z
-CAG,Conagra Brands Inc,4222,20,5.05815,0,0,0,Neutral,2026-09-09T23:34:17Z
-LEU,Centrus Energy Corp ,8690,21,3.28962,0,0,0,Neutral,2026-09-09T23:34:17Z
-ICP.X,Internet Computer,12163,22,1.49477,0,0,0,Neutral,2026-09-09T23:34:17Z
-CMPS,COMPASS Pathways,9887,23,4.76035,0,0,0,Neutral,2026-09-09T23:34:17Z
-NET,Cloudflare Inc,35209,24,2.56344,0,0,0,Neutral,2026-09-09T23:34:17Z
-SOUN,SoundHound AI Inc,58464,25,3.09398,0,0,0,Neutral,2026-09-09T23:34:17Z
-CIFR,Cipher Digital Inc.,23457,26,3.24385,0,0,0,Neutral,2026-09-09T23:34:17Z
-KRMN,Karman Holdings Ord Shs,1514,27,0.601489,0,0,0,Neutral,2026-09-09T23:34:17Z
-XE,X-Energy Inc,3535,28,4.00329,0,0,0,Neutral,2026-09-09T23:34:17Z
-BAC,Bank of America Corp,146825,29,2.83375,0,0,0,Neutral,2026-09-09T23:34:17Z
-PSQL,Pasqal Holding SA,1282,30,3.52281,0,0,0,Neutral,2026-09-09T23:34:17Z
+GME,GameStop Corp,307608,1,17.8234,8,5,0,Very Bullish,2026-09-10T23:28:59Z
+ORCL,Oracle Corp.,70519,2,16.8189,8,3,1,Very Bullish,2026-09-10T23:28:59Z
+USO,United States Oil Fund,75016,3,11.7867,3,1,1,Neutral,2026-09-10T23:28:59Z
+ADBE,Adobe Inc,50850,4,10.1615,2,0,0,Neutral,2026-09-10T23:28:59Z
+JOBY,Joby Aviation Inc,28979,5,7.83709,1,0,0,Neutral,2026-09-10T23:28:59Z
+BABA,Alibaba Group Holding Ltd,425244,6,6.58663,0,0,0,Neutral,2026-09-10T23:28:59Z
+NKE,Nike Inc,139598,7,6.48029,0,0,0,Neutral,2026-09-10T23:28:59Z
+M,Macy's Inc,28824,8,6.155,0,0,0,Neutral,2026-09-10T23:28:59Z
+QQQ,Invesco QQQ Trust Series 1,279446,9,5.3751,2,0,2,Very Bearish,2026-09-10T23:28:59Z
+SCO,ProShares UltraShort Bloomberg Crude Oil,8611,10,5.3375,0,0,0,Neutral,2026-09-10T23:28:59Z
+EBAY,eBay Inc,23793,11,5.28781,0,0,0,Neutral,2026-09-10T23:28:59Z
+RIVN,Rivian Automotive Inc,88346,12,5.26265,0,0,0,Neutral,2026-09-10T23:28:59Z
+UEC,Uranium Energy Corp,19123,13,5.20786,0,0,0,Neutral,2026-09-10T23:28:59Z
+BWET,Breakwave Tanker Shipping ETF,496,14,4.95323,0,0,0,Neutral,2026-09-10T23:28:59Z
+KWEB,KraneShares CSI China Internet ETF,8924,15,4.90866,0,0,0,Neutral,2026-09-10T23:28:59Z
+CELH,Celsius Holdings Inc,30817,16,4.88144,0,0,0,Neutral,2026-09-10T23:28:59Z
+TLT,iShares 20+ Year Treasury Bond ETF,30848,17,4.5882,1,1,0,Very Bullish,2026-09-10T23:28:59Z
+GS,"Goldman Sachs Group, Inc.",34234,18,4.11798,0,0,0,Neutral,2026-09-10T23:28:59Z
+POET,POET Technologies Inc,29557,19,4.1104,0,0,0,Neutral,2026-09-10T23:28:59Z
+LPTH,"Lightpath Technologies, Inc. - Ordinary Shares - Class A",8761,20,4.02581,0,0,0,Neutral,2026-09-10T23:28:59Z
+AAPL,Apple Inc,992829,21,3.90529,0,0,0,Neutral,2026-09-10T23:28:59Z
+MSFT,Microsoft Corp,548596,22,3.76363,0,0,0,Neutral,2026-09-10T23:28:59Z
+LAPTOP.X,Hunter Biden's Laptop,122,23,4.74108,0,0,0,Neutral,2026-09-10T23:28:59Z
+APPS,Digital Turbine Inc,25060,24,3.68072,0,0,0,Neutral,2026-09-10T23:28:59Z
+MGNI,Magnite Inc,12025,25,3.6412,0,0,0,Neutral,2026-09-10T23:28:59Z
+UBER,Uber Technologies Inc,130923,26,4.33769,0,0,0,Neutral,2026-09-10T23:28:59Z
+NCLH,Norwegian Cruise Line Holdings Ltd,39540,27,3.6272,1,0,0,Neutral,2026-09-10T23:28:59Z
+FLNC,Fluence Energy Inc - Ordinary Shares - Class A,8402,28,3.40436,0,0,0,Neutral,2026-09-10T23:28:59Z
+AXON,Axon Enterprise Inc,15262,29,3.36541,0,0,0,Neutral,2026-09-10T23:28:59Z
+UI,Ubiquiti Inc,4127,30,3.2313,0,0,0,Neutral,2026-09-10T23:28:59Z
