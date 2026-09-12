@@ -1,31 +1,31 @@
 symbol,title,watchlist_count,st_rank,trending_score,messages,bullish,bearish,sentiment_label,fetched_at
-ORCL,Oracle Corp.,70966,1,14.2873,10,2,0,Very Bullish,2026-09-11T23:34:48Z
-SLS,SELLAS Life Sciences Group Inc,61858,2,13.8781,10,7,0,Very Bullish,2026-09-11T23:34:48Z
-OKLO,Oklo Inc.,39767,3,4.70737,1,0,0,Neutral,2026-09-11T23:34:48Z
-XCN.X,Onyxcoin,8204,4,7.19868,0,0,0,Neutral,2026-09-11T23:34:48Z
-APP,Applovin Corp,24075,5,9.58803,2,1,0,Very Bullish,2026-09-11T23:34:48Z
-BWET,Breakwave Tanker Shipping ETF,706,6,7.23951,1,1,0,Very Bullish,2026-09-11T23:34:48Z
-XNDU,Xanadu Quantum Technologies Ltd. - Ordinary Shares - Class B (Sub Voting),6413,7,0.170957,0,0,0,Neutral,2026-09-11T23:34:48Z
-LOW,"Lowe's Companies, Inc.",19081,8,5.96747,0,0,0,Neutral,2026-09-11T23:34:48Z
-LAPTOP.X,Hunter Biden's Laptop,150,9,5.51671,0,0,0,Neutral,2026-09-11T23:34:48Z
-AZN,AstraZeneca PLC,19074,10,5.07245,0,0,0,Neutral,2026-09-11T23:34:48Z
-GT,Goodyear Tire & Rubber Co.,5964,11,3.63062,0,0,0,Neutral,2026-09-11T23:34:48Z
-ARM,Arm Holdings Plc.,33443,12,4.10053,1,0,0,Neutral,2026-09-11T23:34:48Z
-AENT,Alliance Entertainment Holding Corporation - Ordinary Shares - Class A,690,13,3.56063,0,0,0,Neutral,2026-09-11T23:34:48Z
-FPS,Forgent Power Solutions Inc.,2256,14,3.79606,0,0,0,Neutral,2026-09-11T23:34:48Z
-MLTX,MoonLake Immunotherapeutics,6558,15,1.60713,0,0,0,Neutral,2026-09-11T23:34:48Z
-BASECAT.X,Basecat,59,16,3.63054,0,0,0,Neutral,2026-09-11T23:34:48Z
-SMR,NuScale Power Corp,25162,17,3.27876,0,0,0,Neutral,2026-09-11T23:34:48Z
-FIGR,Figure Technology Solutions Inc,2586,18,3.12287,0,0,0,Neutral,2026-09-11T23:34:48Z
-CRSR,Corsair Gaming Inc,24291,19,3.0516,0,0,0,Neutral,2026-09-11T23:34:48Z
-FEIM,"Frequency Electronics, Inc.",1119,20,1.95313,0,0,0,Neutral,2026-09-11T23:34:48Z
-BW,Babcock & Wilcox Enterprises Inc,6972,21,1.22541,0,0,0,Neutral,2026-09-11T23:34:48Z
-NOC,Northrop Grumman Corp.,11485,22,0.0556941,0,0,0,Neutral,2026-09-11T23:34:48Z
-BSX,Boston Scientific Corp.,9012,23,2.14049,0,0,0,Neutral,2026-09-11T23:34:48Z
-AAPL,Apple Inc,992975,24,1.56317,0,0,0,Neutral,2026-09-11T23:34:48Z
-GTBIF,Green Thumb Industries,6336,25,1.56778,0,0,0,Neutral,2026-09-11T23:34:48Z
-UNH,Unitedhealth Group Inc,55727,26,5.54103,0,0,0,Neutral,2026-09-11T23:34:48Z
-EROC,"Eagle Rock Energy Partners, L.P.",629,27,-0.358967,0,0,0,Neutral,2026-09-11T23:34:48Z
-ALMS,Alumis Inc.,1258,28,1.63984,0,0,0,Neutral,2026-09-11T23:34:48Z
-CRVS,Corvus Pharmaceuticals Inc,6759,29,2.24076,0,0,0,Neutral,2026-09-11T23:34:48Z
-DVN,Devon Energy Corp.,14442,30,3.28812,0,0,0,Neutral,2026-09-11T23:34:48Z
+VG,Venture Global Inc,4679,1,6.0758,7,2,0,Very Bullish,2026-09-12T23:17:39Z
+LAPTOP.X,Hunter Biden's Laptop,190,2,5.72269,5,1,1,Neutral,2026-09-12T23:17:39Z
+FPS,Forgent Power Solutions Inc.,2283,3,4.58857,0,0,0,Neutral,2026-09-12T23:17:39Z
+JNJ,Johnson & Johnson,49212,4,3.61348,0,0,0,Neutral,2026-09-12T23:17:39Z
+GM,General Motors Company,50547,5,3.2307,0,0,0,Neutral,2026-09-12T23:17:39Z
+XTZ.X,Tezos,47697,6,2.8204,1,0,0,Neutral,2026-09-12T23:17:39Z
+EL,Estee Lauder Cos. Inc,7425,7,2.8204,1,1,0,Very Bullish,2026-09-12T23:17:39Z
+IGV,iShares Expanded Tech-Software Sector ETF,5375,8,2.69764,0,0,0,Neutral,2026-09-12T23:17:39Z
+ABBV,Abbvie Inc,32861,9,2.56246,0,0,0,Neutral,2026-09-12T23:17:39Z
+F,Ford Motor Co,186232,10,2.53738,0,0,0,Neutral,2026-09-12T23:17:39Z
+WIF.X,dogwifhat,4030,11,2.53738,0,0,0,Neutral,2026-09-12T23:17:39Z
+IBM,International Business Machines Corp.,69363,12,2.15595,0,0,0,Neutral,2026-09-12T23:17:39Z
+CHPY,YieldMax Semiconductor Portfolio Option Income ETF,1523,13,2.01586,1,0,0,Neutral,2026-09-12T23:17:39Z
+HIMS,Hims & Hers Health Inc,57505,14,1.73933,1,0,0,Neutral,2026-09-12T23:17:39Z
+ADA.X,Cardano,130333,15,1.65364,0,0,0,Neutral,2026-09-12T23:17:39Z
+RIG,Transocean Ltd,25024,16,1.62439,1,0,0,Neutral,2026-09-12T23:17:39Z
+STLA,Stellantis N.V,11808,17,1.57033,0,0,0,Neutral,2026-09-12T23:17:39Z
+SQQQ,ProShares UltraPro Short QQQ,43222,18,1.4174,1,1,0,Very Bullish,2026-09-12T23:17:39Z
+BROS,Dutch Bros Inc,12134,19,1.29033,1,0,0,Neutral,2026-09-12T23:17:39Z
+PEPE.X,Pepe,25169,20,1.22827,0,0,0,Neutral,2026-09-12T23:17:39Z
+BWET,Breakwave Tanker Shipping ETF,754,21,1.12738,0,0,0,Neutral,2026-09-12T23:17:39Z
+MLTX,MoonLake Immunotherapeutics,6566,22,1.11594,0,0,0,Neutral,2026-09-12T23:17:39Z
+ALOY,REalloys Inc.,12874,23,1.10761,0,0,0,Neutral,2026-09-12T23:17:39Z
+SMR,NuScale Power Corp,25178,24,1.0824,0,0,0,Neutral,2026-09-12T23:17:39Z
+TOSHI.X,TOSHI,5676,25,0.990163,0,0,0,Neutral,2026-09-12T23:17:39Z
+USO,United States Oil Fund,75105,26,0.966532,4,2,0,Very Bullish,2026-09-12T23:17:39Z
+MRK,Merck & Co Inc,26487,27,0.897838,0,0,0,Neutral,2026-09-12T23:17:39Z
+DOT.X,Polkadot,25119,28,0.863431,0,0,0,Neutral,2026-09-12T23:17:39Z
+QUBT,Quantum Computing Inc,33532,29,0.675838,1,1,0,Very Bullish,2026-09-12T23:17:39Z
+DKNG,DraftKings Inc,120306,30,0.578049,1,1,0,Very Bullish,2026-09-12T23:17:39Z
