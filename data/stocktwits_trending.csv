@@ -1,31 +1,31 @@
 symbol,title,watchlist_count,st_rank,trending_score,messages,bullish,bearish,sentiment_label,fetched_at
-PLAY,Dave & Buster's Entertainment,15306,1,8.75572,0,0,0,Neutral,2026-09-15T00:05:21Z
-CLOV,Clover Health Investments Corp,85158,2,9.38427,3,1,0,Very Bullish,2026-09-15T00:05:21Z
-SIMO,Silicon Motion Technology Corp.,3234,3,0.525637,0,0,0,Neutral,2026-09-15T00:05:21Z
-BAC,Bank of America Corp,146900,4,6.00132,1,0,1,Very Bearish,2026-09-15T00:05:21Z
-CCXI,Churchill Capital Corp XI - Ordinary Shares - Class A,12572,5,6.76848,1,0,0,Neutral,2026-09-15T00:05:21Z
-FPS,Forgent Power Solutions Inc.,2335,6,5.55086,0,0,0,Neutral,2026-09-15T00:05:21Z
-ADUR,Aduro Clean Technologies Inc,4980,7,4.12405,0,0,0,Neutral,2026-09-15T00:05:21Z
-NOK,Nokia Corp,114652,8,4.46433,1,1,0,Very Bullish,2026-09-15T00:05:21Z
-SE,Sea Ltd - ADR,28314,9,-0.305458,0,0,0,Neutral,2026-09-15T00:05:21Z
-AMKR,AMKOR Technology Inc.,6248,10,4.1978,0,0,0,Neutral,2026-09-15T00:05:21Z
-NOW,ServiceNow Inc,44407,11,1.17164,0,0,0,Neutral,2026-09-15T00:05:21Z
-RUM,RUM Group Inc.,35304,12,3.88052,3,2,0,Very Bullish,2026-09-15T00:05:21Z
-NET,Cloudflare Inc,35265,13,-0.0501098,0,0,0,Neutral,2026-09-15T00:05:21Z
-IBM,International Business Machines Corp.,69383,14,-0.0816148,0,0,0,Neutral,2026-09-15T00:05:21Z
-FRVO,Fervo Energy Co,1676,15,-0.310678,0,0,0,Neutral,2026-09-15T00:05:21Z
-S,SentinelOne Inc,32041,16,6.03837,1,0,0,Neutral,2026-09-15T00:05:21Z
-BNTX,BioNTech SE - ADR,19294,17,-0.256309,0,0,0,Neutral,2026-09-15T00:05:21Z
-WRD,WeRide Inc. - ADR,4481,18,0.120193,0,0,0,Neutral,2026-09-15T00:05:21Z
-CIFR,Cipher Digital Inc.,23528,19,-0.386705,0,0,0,Neutral,2026-09-15T00:05:21Z
-VERA,Vera Therapeutics Inc - Ordinary Shares - Class A,2041,20,-0.27503,0,0,0,Neutral,2026-09-15T00:05:21Z
-IOVA,Iovance Biotherapeutics Inc,20100,21,1.12321,0,0,0,Neutral,2026-09-15T00:05:21Z
-DFTX,Definium Therapeutics Inc.,26460,22,0.185596,0,0,0,Neutral,2026-09-15T00:05:21Z
-SRPT,Sarepta Therapeutics Inc,26726,23,4.7861,0,0,0,Neutral,2026-09-15T00:05:21Z
-ALAB,Astera Labs Inc,12985,24,4.26233,0,0,0,Neutral,2026-09-15T00:05:21Z
-RIVN,Rivian Automotive Inc,88335,25,3.93905,0,0,0,Neutral,2026-09-15T00:05:21Z
-IWM,iShares Russell 2000 ETF,49690,26,0.402172,0,0,0,Neutral,2026-09-15T00:05:21Z
-BKSY,BlackSky Technology Inc - Ordinary Shares - Class A,12668,27,-0.492714,0,0,0,Neutral,2026-09-15T00:05:21Z
-XYZ,Block Inc,178683,28,0.0088839,0,0,0,Neutral,2026-09-15T00:05:21Z
-LHX,L3Harris Technologies Inc,4476,29,2.3249,0,0,0,Neutral,2026-09-15T00:05:21Z
-ACHR,Archer Aviation Inc,37371,30,0.0994656,0,0,0,Neutral,2026-09-15T00:05:21Z
+ASTS,AST SpaceMobile Inc,71037,1,11.9414,1,1,0,Very Bullish,2026-09-15T23:45:25Z
+LUNR,Intuitive Machines Inc,38993,2,9.95056,6,5,0,Very Bullish,2026-09-15T23:45:25Z
+COIN,Coinbase Global Inc,138552,3,8.21247,0,0,0,Neutral,2026-09-15T23:45:25Z
+WING,Wingstop Inc,5186,4,7.72023,2,0,0,Neutral,2026-09-15T23:45:25Z
+SWMR,Swarmer Inc.,3016,5,6.85128,0,0,0,Neutral,2026-09-15T23:45:25Z
+BTC.X,Bitcoin,680144,6,6.59645,6,2,0,Very Bullish,2026-09-15T23:45:25Z
+ARWR,Arrowhead Pharmaceuticals Inc.,12471,7,6.59157,0,0,0,Neutral,2026-09-15T23:45:25Z
+XRP.X,Ripple,238125,8,5.91854,2,0,1,Very Bearish,2026-09-15T23:45:25Z
+CAVA,CAVA Group Inc,13659,9,6.31066,0,0,0,Neutral,2026-09-15T23:45:25Z
+XOM,Exxon Mobil Corp,99670,10,3.77238,0,0,0,Neutral,2026-09-15T23:45:25Z
+CELH,Celsius Holdings Inc,30913,11,4.72314,0,0,0,Neutral,2026-09-15T23:45:25Z
+FPS,Forgent Power Solutions Inc.,2650,12,6.03866,0,0,0,Neutral,2026-09-15T23:45:25Z
+QQQ,Invesco QQQ Trust Series 1,279674,13,4.09527,4,1,0,Very Bullish,2026-09-15T23:45:25Z
+DRTS,ALPHA TAU MEDICAL LTD,3265,14,5.02726,0,0,0,Neutral,2026-09-15T23:45:25Z
+CRCL,Circle,23190,15,5.01726,0,0,0,Neutral,2026-09-15T23:45:25Z
+RTX,Raytheon Technologies Corporation,24332,16,2.68052,0,0,0,Neutral,2026-09-15T23:45:25Z
+RUM,RUM Group Inc.,35329,17,2.82473,0,0,0,Neutral,2026-09-15T23:45:25Z
+VERA,Vera Therapeutics Inc - Ordinary Shares - Class A,2203,18,4.59627,0,0,0,Neutral,2026-09-15T23:45:25Z
+QXO,QXO Inc.,4763,19,4.78892,0,0,0,Neutral,2026-09-15T23:45:25Z
+FNMA,Federal National Mortgage Association,17859,20,2.67386,0,0,0,Neutral,2026-09-15T23:45:25Z
+SOUN,SoundHound AI Inc,58464,21,2.38919,0,0,0,Neutral,2026-09-15T23:45:25Z
+BCRX,Biocryst Pharmaceuticals Inc.,36972,22,4.09308,0,0,0,Neutral,2026-09-15T23:45:25Z
+XBI,SPDR S&P Biotech ETF,28923,23,2.68294,0,0,0,Neutral,2026-09-15T23:45:25Z
+BTC,Grayscale Bitcoin Mini Trust ETF,4748,24,3.60183,0,0,0,Neutral,2026-09-15T23:45:25Z
+BBWI,Bath & Body Works Inc,1814,25,0.0981802,0,0,0,Neutral,2026-09-15T23:45:25Z
+JPM,JPMorgan Chase & Co,98260,26,5.38973,0,0,0,Neutral,2026-09-15T23:45:25Z
+CPB,Campbell Soup Co.,4673,27,0,0,0,0,Neutral,2026-09-15T23:45:25Z
+IOVA,Iovance Biotherapeutics Inc,20167,28,0.648739,0,0,0,Neutral,2026-09-15T23:45:25Z
+CLM,"Cornerstone Strategic Investment Fund, Inc.",4247,29,2.27274,0,0,0,Neutral,2026-09-15T23:45:25Z
+SPY,SPDR S&P 500 ETF Trust,637451,30,4.21146,3,0,0,Neutral,2026-09-15T23:45:25Z
