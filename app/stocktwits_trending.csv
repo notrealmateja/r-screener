@@ -1,31 +1,31 @@
 symbol,title,watchlist_count,st_rank,trending_score,messages,bullish,bearish,sentiment_label,fetched_at
-SPY,SPDR S&P 500 ETF Trust,637274,1,13.2109,18,3,5,Bearish,2026-09-13T23:28:15Z
-INFQ,Infleqtion Inc.,16534,2,8.61737,1,0,0,Neutral,2026-09-13T23:28:15Z
-QQQ,Invesco QQQ Trust Series 1,279510,3,7.18052,2,0,0,Neutral,2026-09-13T23:28:15Z
-DFTX,Definium Therapeutics Inc.,26392,4,6.43259,1,0,0,Neutral,2026-09-13T23:28:15Z
-USO,United States Oil Fund,75121,5,6.05934,1,1,0,Very Bullish,2026-09-13T23:28:15Z
-USO.X,United States Oil Fund (Robinhood Tokenized Stock),44,6,5.75751,0,0,0,Neutral,2026-09-13T23:28:15Z
-AMD,Advanced Micro Devices Inc,564145,7,5.67054,2,1,0,Very Bullish,2026-09-13T23:28:15Z
-ADA.X,Cardano,130361,8,4.70867,0,0,0,Neutral,2026-09-13T23:28:15Z
-SMCI,Super Micro Computer Inc,92818,9,4.2936,0,0,0,Neutral,2026-09-13T23:28:15Z
-DKNG,DraftKings Inc,120302,10,4.24491,0,0,0,Neutral,2026-09-13T23:28:15Z
-SOXX,iShares Semiconductor ETF,10839,11,4.02899,0,0,0,Neutral,2026-09-13T23:28:15Z
-MU,Micron Technology Inc,216086,12,3.95135,0,0,0,Neutral,2026-09-13T23:28:15Z
-SCO,ProShares UltraShort Bloomberg Crude Oil,8645,13,3.7605,0,0,0,Neutral,2026-09-13T23:28:15Z
-DIA,SPDR Dow Jones Industrial Average ETF,76740,14,3.43383,1,0,1,Very Bearish,2026-09-13T23:28:15Z
-KO,Coca-Cola Co,53514,15,3.2307,0,0,0,Neutral,2026-09-13T23:28:15Z
-XLF,Financial Select Sector SPDR Fund,18450,16,3.2307,0,0,0,Neutral,2026-09-13T23:28:15Z
-DASH,DoorDash Inc - Ordinary Shares - Class A,18565,17,3.2307,0,0,0,Neutral,2026-09-13T23:28:15Z
-MUU,Direxion Daily MU Bull 2X Shares,1877,18,3.2307,0,0,0,Neutral,2026-09-13T23:28:15Z
-KOLD,ProShares UltraShort Bloomberg Natural Gas,10351,19,3.00879,0,0,0,Neutral,2026-09-13T23:28:15Z
-DOT.X,Polkadot,25120,20,2.86974,0,0,0,Neutral,2026-09-13T23:28:15Z
-NCLH,Norwegian Cruise Line Holdings Ltd,39545,21,2.8567,0,0,0,Neutral,2026-09-13T23:28:15Z
-RTX,Raytheon Technologies Corporation,24330,22,2.8204,0,0,0,Neutral,2026-09-13T23:28:15Z
-BOIL,ProShares Ultra Bloomberg Natural Gas,17348,23,2.75332,0,0,0,Neutral,2026-09-13T23:28:15Z
-MLTX,MoonLake Immunotherapeutics,6567,24,2.71388,0,0,0,Neutral,2026-09-13T23:28:15Z
-CSCO,"Cisco Systems, Inc.",62376,25,2.55531,0,0,0,Neutral,2026-09-13T23:28:15Z
-NVO,Novo Nordisk A/S,31714,26,2.55531,0,0,0,Neutral,2026-09-13T23:28:15Z
-AXSM,Axsome Therapeutics Inc,11943,27,2.53738,0,0,0,Neutral,2026-09-13T23:28:15Z
-AENT,Alliance Entertainment Holding Corporation - Ordinary Shares - Class A,695,28,2.53738,0,0,0,Neutral,2026-09-13T23:28:15Z
-CRSR,Corsair Gaming Inc,24291,29,2.53738,0,0,0,Neutral,2026-09-13T23:28:15Z
-IBB,iShares Biotechnology ETF,23667,30,2.3249,0,0,0,Neutral,2026-09-13T23:28:15Z
+PLAY,Dave & Buster's Entertainment,15306,1,8.75572,0,0,0,Neutral,2026-09-15T00:05:21Z
+CLOV,Clover Health Investments Corp,85158,2,9.38427,3,1,0,Very Bullish,2026-09-15T00:05:21Z
+SIMO,Silicon Motion Technology Corp.,3234,3,0.525637,0,0,0,Neutral,2026-09-15T00:05:21Z
+BAC,Bank of America Corp,146900,4,6.00132,1,0,1,Very Bearish,2026-09-15T00:05:21Z
+CCXI,Churchill Capital Corp XI - Ordinary Shares - Class A,12572,5,6.76848,1,0,0,Neutral,2026-09-15T00:05:21Z
+FPS,Forgent Power Solutions Inc.,2335,6,5.55086,0,0,0,Neutral,2026-09-15T00:05:21Z
+ADUR,Aduro Clean Technologies Inc,4980,7,4.12405,0,0,0,Neutral,2026-09-15T00:05:21Z
+NOK,Nokia Corp,114652,8,4.46433,1,1,0,Very Bullish,2026-09-15T00:05:21Z
+SE,Sea Ltd - ADR,28314,9,-0.305458,0,0,0,Neutral,2026-09-15T00:05:21Z
+AMKR,AMKOR Technology Inc.,6248,10,4.1978,0,0,0,Neutral,2026-09-15T00:05:21Z
+NOW,ServiceNow Inc,44407,11,1.17164,0,0,0,Neutral,2026-09-15T00:05:21Z
+RUM,RUM Group Inc.,35304,12,3.88052,3,2,0,Very Bullish,2026-09-15T00:05:21Z
+NET,Cloudflare Inc,35265,13,-0.0501098,0,0,0,Neutral,2026-09-15T00:05:21Z
+IBM,International Business Machines Corp.,69383,14,-0.0816148,0,0,0,Neutral,2026-09-15T00:05:21Z
+FRVO,Fervo Energy Co,1676,15,-0.310678,0,0,0,Neutral,2026-09-15T00:05:21Z
+S,SentinelOne Inc,32041,16,6.03837,1,0,0,Neutral,2026-09-15T00:05:21Z
+BNTX,BioNTech SE - ADR,19294,17,-0.256309,0,0,0,Neutral,2026-09-15T00:05:21Z
+WRD,WeRide Inc. - ADR,4481,18,0.120193,0,0,0,Neutral,2026-09-15T00:05:21Z
+CIFR,Cipher Digital Inc.,23528,19,-0.386705,0,0,0,Neutral,2026-09-15T00:05:21Z
+VERA,Vera Therapeutics Inc - Ordinary Shares - Class A,2041,20,-0.27503,0,0,0,Neutral,2026-09-15T00:05:21Z
+IOVA,Iovance Biotherapeutics Inc,20100,21,1.12321,0,0,0,Neutral,2026-09-15T00:05:21Z
+DFTX,Definium Therapeutics Inc.,26460,22,0.185596,0,0,0,Neutral,2026-09-15T00:05:21Z
+SRPT,Sarepta Therapeutics Inc,26726,23,4.7861,0,0,0,Neutral,2026-09-15T00:05:21Z
+ALAB,Astera Labs Inc,12985,24,4.26233,0,0,0,Neutral,2026-09-15T00:05:21Z
+RIVN,Rivian Automotive Inc,88335,25,3.93905,0,0,0,Neutral,2026-09-15T00:05:21Z
+IWM,iShares Russell 2000 ETF,49690,26,0.402172,0,0,0,Neutral,2026-09-15T00:05:21Z
+BKSY,BlackSky Technology Inc - Ordinary Shares - Class A,12668,27,-0.492714,0,0,0,Neutral,2026-09-15T00:05:21Z
+XYZ,Block Inc,178683,28,0.0088839,0,0,0,Neutral,2026-09-15T00:05:21Z
+LHX,L3Harris Technologies Inc,4476,29,2.3249,0,0,0,Neutral,2026-09-15T00:05:21Z
+ACHR,Archer Aviation Inc,37371,30,0.0994656,0,0,0,Neutral,2026-09-15T00:05:21Z
