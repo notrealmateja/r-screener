@@ -1,31 +1,31 @@
 symbol,title,watchlist_count,st_rank,trending_score,messages,bullish,bearish,sentiment_label,fetched_at
-ASTS,AST SpaceMobile Inc,71037,1,11.9414,1,1,0,Very Bullish,2026-09-15T23:45:25Z
-LUNR,Intuitive Machines Inc,38993,2,9.95056,6,5,0,Very Bullish,2026-09-15T23:45:25Z
-COIN,Coinbase Global Inc,138552,3,8.21247,0,0,0,Neutral,2026-09-15T23:45:25Z
-WING,Wingstop Inc,5186,4,7.72023,2,0,0,Neutral,2026-09-15T23:45:25Z
-SWMR,Swarmer Inc.,3016,5,6.85128,0,0,0,Neutral,2026-09-15T23:45:25Z
-BTC.X,Bitcoin,680144,6,6.59645,6,2,0,Very Bullish,2026-09-15T23:45:25Z
-ARWR,Arrowhead Pharmaceuticals Inc.,12471,7,6.59157,0,0,0,Neutral,2026-09-15T23:45:25Z
-XRP.X,Ripple,238125,8,5.91854,2,0,1,Very Bearish,2026-09-15T23:45:25Z
-CAVA,CAVA Group Inc,13659,9,6.31066,0,0,0,Neutral,2026-09-15T23:45:25Z
-XOM,Exxon Mobil Corp,99670,10,3.77238,0,0,0,Neutral,2026-09-15T23:45:25Z
-CELH,Celsius Holdings Inc,30913,11,4.72314,0,0,0,Neutral,2026-09-15T23:45:25Z
-FPS,Forgent Power Solutions Inc.,2650,12,6.03866,0,0,0,Neutral,2026-09-15T23:45:25Z
-QQQ,Invesco QQQ Trust Series 1,279674,13,4.09527,4,1,0,Very Bullish,2026-09-15T23:45:25Z
-DRTS,ALPHA TAU MEDICAL LTD,3265,14,5.02726,0,0,0,Neutral,2026-09-15T23:45:25Z
-CRCL,Circle,23190,15,5.01726,0,0,0,Neutral,2026-09-15T23:45:25Z
-RTX,Raytheon Technologies Corporation,24332,16,2.68052,0,0,0,Neutral,2026-09-15T23:45:25Z
-RUM,RUM Group Inc.,35329,17,2.82473,0,0,0,Neutral,2026-09-15T23:45:25Z
-VERA,Vera Therapeutics Inc - Ordinary Shares - Class A,2203,18,4.59627,0,0,0,Neutral,2026-09-15T23:45:25Z
-QXO,QXO Inc.,4763,19,4.78892,0,0,0,Neutral,2026-09-15T23:45:25Z
-FNMA,Federal National Mortgage Association,17859,20,2.67386,0,0,0,Neutral,2026-09-15T23:45:25Z
-SOUN,SoundHound AI Inc,58464,21,2.38919,0,0,0,Neutral,2026-09-15T23:45:25Z
-BCRX,Biocryst Pharmaceuticals Inc.,36972,22,4.09308,0,0,0,Neutral,2026-09-15T23:45:25Z
-XBI,SPDR S&P Biotech ETF,28923,23,2.68294,0,0,0,Neutral,2026-09-15T23:45:25Z
-BTC,Grayscale Bitcoin Mini Trust ETF,4748,24,3.60183,0,0,0,Neutral,2026-09-15T23:45:25Z
-BBWI,Bath & Body Works Inc,1814,25,0.0981802,0,0,0,Neutral,2026-09-15T23:45:25Z
-JPM,JPMorgan Chase & Co,98260,26,5.38973,0,0,0,Neutral,2026-09-15T23:45:25Z
-CPB,Campbell Soup Co.,4673,27,0,0,0,0,Neutral,2026-09-15T23:45:25Z
-IOVA,Iovance Biotherapeutics Inc,20167,28,0.648739,0,0,0,Neutral,2026-09-15T23:45:25Z
-CLM,"Cornerstone Strategic Investment Fund, Inc.",4247,29,2.27274,0,0,0,Neutral,2026-09-15T23:45:25Z
-SPY,SPDR S&P 500 ETF Trust,637451,30,4.21146,3,0,0,Neutral,2026-09-15T23:45:25Z
+SPY,SPDR S&P 500 ETF Trust,637594,1,18.5174,18,8,2,Very Bullish,2026-09-16T23:53:48Z
+NKE,Nike Inc,139866,2,9.75516,0,0,0,Neutral,2026-09-16T23:53:48Z
+QQQ,Invesco QQQ Trust Series 1,279767,3,12.8683,3,0,1,Very Bearish,2026-09-16T23:53:48Z
+NBIS,Nebius Group N.V. ,52269,4,8.8817,2,1,0,Very Bullish,2026-09-16T23:53:48Z
+FLNC,Fluence Energy Inc - Ordinary Shares - Class A,8446,5,7.43015,0,0,0,Neutral,2026-09-16T23:53:48Z
+IOVA,Iovance Biotherapeutics Inc,20225,6,8.62278,2,1,0,Very Bullish,2026-09-16T23:53:48Z
+GNRC,Generac Holdings Inc,5818,7,7.81146,0,0,0,Neutral,2026-09-16T23:53:48Z
+SOUN,SoundHound AI Inc,58502,8,7.2708,1,0,0,Neutral,2026-09-16T23:53:48Z
+DIA,SPDR Dow Jones Industrial Average ETF,76764,9,7.30676,0,0,0,Neutral,2026-09-16T23:53:48Z
+RCAT,Red Cat Holdings Inc,28531,10,2.13984,0,0,0,Neutral,2026-09-16T23:53:48Z
+LEN,Lennar Corp.,7022,11,6.86479,0,0,0,Neutral,2026-09-16T23:53:48Z
+TLT,iShares 20+ Year Treasury Bond ETF,30948,12,2.42488,0,0,0,Neutral,2026-09-16T23:53:48Z
+ALMU,Aeluma Inc,3088,13,3.87524,0,0,0,Neutral,2026-09-16T23:53:48Z
+LITE,Lumentum Holdings Inc,15357,14,3.16493,0,0,0,Neutral,2026-09-16T23:53:48Z
+AMZN,Amazon.com Inc,702953,15,4.19008,0,0,0,Neutral,2026-09-16T23:53:48Z
+META,Meta Platforms Inc,609556,16,-0.819348,0,0,0,Neutral,2026-09-16T23:53:48Z
+BA,Boeing Co,197288,17,1.98764,0,0,0,Neutral,2026-09-16T23:53:48Z
+DJT,Trump Media & Technology Group Corp.,115757,18,2.71809,0,0,0,Neutral,2026-09-16T23:53:48Z
+SPCX,SpaceX,105149,19,5.1583,1,1,0,Very Bullish,2026-09-16T23:53:48Z
+TQQQ,ProShares UltraPro QQQ,44371,20,-0.75253,0,0,0,Neutral,2026-09-16T23:53:48Z
+KTOS,Kratos Defense & Security Solutions Inc,21759,21,-0.941431,0,0,0,Neutral,2026-09-16T23:53:48Z
+QXO,QXO Inc.,4796,22,5.50446,0,0,0,Neutral,2026-09-16T23:53:48Z
+SOXL,Direxion Daily Semiconductor Bull 3X Shares,40230,23,1.84613,2,0,0,Neutral,2026-09-16T23:53:48Z
+IWM,iShares Russell 2000 ETF,49733,24,3.89209,0,0,0,Neutral,2026-09-16T23:53:48Z
+CRML,Critical Metals Corp.,14279,25,-0.0215342,0,0,0,Neutral,2026-09-16T23:53:48Z
+GS,"Goldman Sachs Group, Inc.",34288,26,4.93484,0,0,0,Neutral,2026-09-16T23:53:48Z
+UCO,ProShares Ultra Bloomberg Crude Oil,20022,27,-0.628956,0,0,0,Neutral,2026-09-16T23:53:48Z
+AGEN,Agenus Inc,12743,28,3.8948,0,0,0,Neutral,2026-09-16T23:53:48Z
+TJX,"TJX Companies, Inc.",8440,29,2.8089,0,0,0,Neutral,2026-09-16T23:53:48Z
+GLD.X,GoldCoin,409,30,-0.0980017,0,0,0,Neutral,2026-09-16T23:53:48Z

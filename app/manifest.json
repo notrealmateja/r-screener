@@ -2371,13 +2371,13 @@
       }
     },
     "xfun": {
-      "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Source": "CRAN",
+      "Repository": "https://cran.rstudio.com",
       "description": {
         "Package": "xfun",
         "Type": "Package",
         "Title": "Supporting Functions for Packages Maintained by 'Yihui Xie'",
-        "Version": "0.60",
+        "Version": "0.61",
         "Authors@R": "c(\n  person(\"Yihui\", \"Xie\", role = c(\"aut\", \"cre\", \"cph\"), email = \"xie@yihui.name\", comment = c(ORCID = \"0000-0003-0645-5666\", URL = \"https://yihui.org\")),\n  person(\"Wush\", \"Wu\", role = \"ctb\"),\n  person(\"Daijiang\", \"Li\", role = \"ctb\"),\n  person(\"Xianying\", \"Tan\", role = \"ctb\"),\n  person(\"Salim\", \"Brüggemann\", role = \"ctb\", email = \"salim-b@pm.me\", comment = c(ORCID = \"0000-0002-5329-5987\")),\n  person(\"Christophe\", \"Dervieux\", role = \"ctb\"),\n  person()\n  )",
         "Description": "Miscellaneous functions commonly used in other packages maintained by 'Yihui Xie'.",
         "Depends": "R (>= 3.2.0)",
@@ -2388,14 +2388,14 @@
         "BugReports": "https://github.com/yihui/xfun/issues",
         "Encoding": "UTF-8",
         "VignetteBuilder": "litedown",
-        "Config/roxygen2/version": "8.0.0",
+        "Config/roxygen2/version": "8.1.0",
         "NeedsCompilation": "yes",
-        "Packaged": "2026-07-09 05:04:56 UTC; yihui",
+        "Packaged": "2026-09-16 17:36:20 UTC; yihui",
         "Author": "Yihui Xie [aut, cre, cph] (ORCID:\n    <https://orcid.org/0000-0003-0645-5666>, URL: https://yihui.org),\n  Wush Wu [ctb],\n  Daijiang Li [ctb],\n  Xianying Tan [ctb],\n  Salim Brüggemann [ctb] (ORCID: <https://orcid.org/0000-0002-5329-5987>),\n  Christophe Dervieux [ctb]",
         "Maintainer": "Yihui Xie <xie@yihui.name>",
-        "Repository": "RSPM",
-        "Date/Publication": "2026-07-09 10:50:02 UTC",
-        "Built": "R 4.4.0; x86_64-pc-linux-gnu; 2026-08-12 19:07:01 UTC; unix"
+        "Repository": "CRAN",
+        "Date/Publication": "2026-09-16 18:30:02 UTC",
+        "Built": "R 4.4.0; x86_64-pc-linux-gnu; 2026-09-16 23:45:05 UTC; unix"
       }
     },
     "xml2": {
@@ -2544,22 +2544,22 @@
       "checksum": "90d7febbfbaad24b5923adcb45b25934"
     },
     "backtest_components.csv": {
-      "checksum": "a318ee8bb32e368ced4cdbcb9f298586"
+      "checksum": "67757fe35cb3b8587a7cc8061c75a872"
     },
     "backtest_equity_stats.csv": {
-      "checksum": "f7368d38ad19de33d3aab89bd7ae06aa"
+      "checksum": "4a2219a8f8818ea7dca8e8a8674ff8c5"
     },
     "backtest_equity.csv": {
-      "checksum": "24af492fc02c7609474ecdb621d40700"
+      "checksum": "fb4da4cc59f2b4b00ff2179cf1811592"
     },
     "backtest_headline.csv": {
-      "checksum": "b133b47f67c68c1ebeee34c39642024f"
+      "checksum": "527d59c79d6053937b5ec8f47865f21c"
     },
     "backtest_ic.csv": {
-      "checksum": "1109ea50b80ae96257ee623d3cfcfb58"
+      "checksum": "609544034ef495e11c235f82ca5f83c3"
     },
     "backtest_summary.csv": {
-      "checksum": "b06613777d3257a7151edade8def38bb"
+      "checksum": "6ea5b02f9fd944bbc02e1033c318327b"
     },
     "data/batch_tracker.rds": {
       "checksum": "6f1dddc156f656f2d4c4d382e7b64017"
@@ -2571,7 +2571,7 @@
       "checksum": "165aa567b2075aa695a1d55ba19aec2e"
     },
     "data/meta.rds": {
-      "checksum": "14847cd20f0a9c3d4fee810cc67f982d"
+      "checksum": "2cd6a95790db4ca7b58d4ae6721955d3"
     },
     "data/price_series_cache.rds": {
       "checksum": "266a1b7cfa8bbf9180380a4969dbc886"
@@ -2583,52 +2583,52 @@
       "checksum": "b9260e096fb89fc630076a716d838da7"
     },
     "earnings_calendar.csv": {
-      "checksum": "31bbf3edf7152b34cb0df7010ba27543"
+      "checksum": "b684850414b418199a57a4abf77d93a9"
     },
     "global.R": {
       "checksum": "0f91695b6642435d60fa09d46d339b43"
     },
     "macro_data.csv": {
-      "checksum": "cfe5d2f7415f4dc256f7eea629f6997c"
+      "checksum": "8d890162278f613a6e02ff08d2fbbc56"
     },
     "market_news.csv": {
-      "checksum": "92d4fead5f2afca47aea71e32259b094"
+      "checksum": "ce776897c19fa2e57b961da4fa999658"
     },
     "master_scored.csv": {
-      "checksum": "4ba4d2c0889165d4ac42262cb917d741"
+      "checksum": "b33d62be229fca17bc3f552035b67852"
     },
     "meta.rds": {
-      "checksum": "14847cd20f0a9c3d4fee810cc67f982d"
+      "checksum": "2cd6a95790db4ca7b58d4ae6721955d3"
     },
     "price_history.csv": {
-      "checksum": "e5d7d009f67c261aef34ccf8650d26cc"
+      "checksum": "ebe7914d00b5738e023ad7508c86bc9b"
     },
     "reversal_results.csv": {
-      "checksum": "0d91d779348b2c409e9621dbef365e81"
+      "checksum": "280f5e4eb4b602cea36044c59c8a4a45"
     },
     "sec_filings.csv": {
-      "checksum": "aa04717da4b71728608f7a1e171e7022"
+      "checksum": "0713db1b177844ea3ac1e4a171a7a00d"
     },
     "sector_performance.csv": {
-      "checksum": "4f99975ebf9c389fbe283721557099e3"
+      "checksum": "0f0867bda2dd5a9534204f92dcc3b5ed"
     },
     "stock_news.csv": {
-      "checksum": "d178f28f7fb0052a96a968f24e1af9f0"
+      "checksum": "e28724a8323b6fcd4028c72e45e7f70f"
     },
     "stocktwits_trending.csv": {
-      "checksum": "7ad87644cca7b1f77be24def9d16a3ab"
+      "checksum": "b7cadcd54904d65006df0f45940d80e9"
     },
     "top15_sweetspot.csv": {
-      "checksum": "6994112806dec579890f23aadefc5f7b"
+      "checksum": "4db11f450c0f47ca161b9fef8a60ff7d"
     },
     "top15_unicorns.csv": {
-      "checksum": "9c4eb1579e3455af40f1f2ecf9e0be0c"
+      "checksum": "51197854a2eeee0d6dc0ba7b1a684aaf"
     },
     "tv_channels.csv": {
-      "checksum": "1cff150e06392baa8e514364d8216e72"
+      "checksum": "3ad67aed6208b2d71ae2fd6bfe422976"
     },
     "wsb_trending.csv": {
-      "checksum": "82bc09b908fdac9a4f806a254f4c557e"
+      "checksum": "1efdc43738e9a874aa416c7a9dd9d562"
     }
   },
   "users": null
