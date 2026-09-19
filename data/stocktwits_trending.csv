@@ -1,31 +1,31 @@
 symbol,title,watchlist_count,st_rank,trending_score,messages,bullish,bearish,sentiment_label,fetched_at
-CRML,Critical Metals Corp.,14379,1,12.9356,2,2,0,Very Bullish,2026-09-18T23:36:09Z
-ZEC.X,Zcash,12169,2,11.3505,6,4,1,Very Bullish,2026-09-18T23:36:09Z
-NFLX,Netflix Inc,521809,3,8.23083,2,1,1,Neutral,2026-09-18T23:36:09Z
-NKE,Nike Inc,140070,4,7.57987,5,0,1,Very Bearish,2026-09-18T23:36:09Z
-NEAR.X,Near,4930,5,6.0349,0,0,0,Neutral,2026-09-18T23:36:09Z
-WLFI.X,WorldFinancial,4465,6,5.98291,0,0,0,Neutral,2026-09-18T23:36:09Z
-SOXS,Direxion Daily Semiconductor Bear 3X ETF,18828,7,5.90667,0,0,0,Neutral,2026-09-18T23:36:09Z
-GEMI,Gemini Space Station,4474,8,5.87703,2,0,0,Neutral,2026-09-18T23:36:09Z
-QCOM,"Qualcomm, Inc.",77967,9,5.56076,0,0,0,Neutral,2026-09-18T23:36:09Z
-SECZ,Securitize Corp.,857,10,5.07602,0,0,0,Neutral,2026-09-18T23:36:09Z
-PSKY,Paramount Skydance Corp. - Ordinary Shares - Class B,26624,11,4.95993,2,0,0,Neutral,2026-09-18T23:36:09Z
-AMAT,Applied Materials Inc.,35582,12,4.60466,0,0,0,Neutral,2026-09-18T23:36:09Z
-SOXX,iShares Semiconductor ETF,10907,13,4.32019,1,0,0,Neutral,2026-09-18T23:36:09Z
-TGTX,TG Therapeutics Inc,21677,14,3.96929,0,0,0,Neutral,2026-09-18T23:36:09Z
-WBD,Warner Bros Discovery Inc,10084,15,3.87606,0,0,0,Neutral,2026-09-18T23:36:09Z
-PFE,Pfizer Inc,106420,16,3.6741,0,0,0,Neutral,2026-09-18T23:36:09Z
-APP,Applovin Corp,24178,17,3.62696,2,1,0,Very Bullish,2026-09-18T23:36:09Z
-CCL,Carnival Corp,89390,18,3.58735,0,0,0,Neutral,2026-09-18T23:36:09Z
-FISV,"Fiserv, Inc.",10103,19,3.58658,0,0,0,Neutral,2026-09-18T23:36:09Z
-SYM,Symbotic Inc ,11195,20,3.43509,1,0,0,Neutral,2026-09-18T23:36:09Z
-MSTR,Strategy,83093,21,3.31678,2,2,0,Very Bullish,2026-09-18T23:36:09Z
-HONA,Honeywell Aerospace,1112,22,3.2307,0,0,0,Neutral,2026-09-18T23:36:09Z
-SNDK,Sandisk Corp,35597,23,3.07367,3,1,0,Very Bullish,2026-09-18T23:36:09Z
-WFC,Wells Fargo & Co.,54574,24,3.06394,0,0,0,Neutral,2026-09-18T23:36:09Z
-CURLF,Curaleaf Holdings Inc,9011,25,2.99125,0,0,0,Neutral,2026-09-18T23:36:09Z
-XLK,Technology Select Sector SPDR Fund,11797,26,2.96019,0,0,0,Neutral,2026-09-18T23:36:09Z
-CRK,"Comstock Resources, Inc.",5360,27,2.82563,0,0,0,Neutral,2026-09-18T23:36:09Z
-XTZ.X,Tezos,47719,28,2.75901,0,0,0,Neutral,2026-09-18T23:36:09Z
-LITE,Lumentum Holdings Inc,15391,29,2.73641,0,0,0,Neutral,2026-09-18T23:36:09Z
-LUNC.X,Terra Luna Classic,33370,30,2.56608,0,0,0,Neutral,2026-09-18T23:36:09Z
+AVAX.X,Avalanche,18197,1,7.72171,5,3,0,Very Bullish,2026-09-19T23:25:10Z
+AGEN,Agenus Inc,12747,2,6.65488,3,1,0,Very Bullish,2026-09-19T23:25:10Z
+PEP,PepsiCo Inc,23632,3,4.4238,1,1,0,Very Bullish,2026-09-19T23:25:10Z
+CURLF,Curaleaf Holdings Inc,9012,4,4.39494,1,1,0,Very Bullish,2026-09-19T23:25:10Z
+PR,Permian Resources Corp - Ordinary Shares - Class A,14965,5,3.2307,0,0,0,Neutral,2026-09-19T23:25:10Z
+GDXU,Bank of Montreal - MicroSectors Gold Miners 3X Leveraged ETN,2141,6,3.2307,0,0,0,Neutral,2026-09-19T23:25:10Z
+CVNA,Carvana Co.,41444,7,3.20566,2,0,1,Very Bearish,2026-09-19T23:25:10Z
+PEPE.X,Pepe,25185,8,3.18602,1,1,0,Very Bullish,2026-09-19T23:25:10Z
+NEAR.X,Near,4951,9,2.91233,2,1,0,Very Bullish,2026-09-19T23:25:10Z
+SBUX,Starbucks Corp,118417,10,2.8204,0,0,0,Neutral,2026-09-19T23:25:10Z
+HD,"Home Depot, Inc.",45921,11,2.8204,1,0,0,Neutral,2026-09-19T23:25:10Z
+XLF,Financial Select Sector SPDR Fund,18457,12,2.8204,0,0,0,Neutral,2026-09-19T23:25:10Z
+XYZ,Block Inc,178655,13,2.8204,0,0,0,Neutral,2026-09-19T23:25:10Z
+RCL,Royal Caribbean Group,29812,14,2.53738,0,0,0,Neutral,2026-09-19T23:25:10Z
+XLK,Technology Select Sector SPDR Fund,11794,15,2.53738,0,0,0,Neutral,2026-09-19T23:25:10Z
+CADL,Candel Therapeutics Inc,10286,16,2.49785,2,0,0,Neutral,2026-09-19T23:25:10Z
+AMRN,Amarin Corp - ADR,30397,17,2.40701,1,1,0,Very Bullish,2026-09-19T23:25:10Z
+BNB.X,Binance,24170,18,2.3249,0,0,0,Neutral,2026-09-19T23:25:10Z
+BB.TSX,BlackBerry Ltd,1039,19,2.24591,0,0,0,Neutral,2026-09-19T23:25:10Z
+ZCSH,Grayscale Zcash Trust ZEC,553,20,2.23254,0,0,0,Neutral,2026-09-19T23:25:10Z
+IWM,iShares Russell 2000 ETF,49756,21,2.21638,0,0,0,Neutral,2026-09-19T23:25:10Z
+SCHD,Schwab US Dividend Equity ETF,23749,22,2.15595,0,0,0,Neutral,2026-09-19T23:25:10Z
+TSLL,Direxion Daily TSLA Bull 2X Shares,9325,23,2.08572,0,0,0,Neutral,2026-09-19T23:25:10Z
+MAGS,Roundhill Magnificent Seven ETF,3733,24,2.01586,0,0,0,Neutral,2026-09-19T23:25:10Z
+DIS,Walt Disney Co,290028,25,1.74084,0,0,0,Neutral,2026-09-19T23:25:10Z
+SUI.X,SUI,11282,26,1.70287,1,1,0,Very Bullish,2026-09-19T23:25:10Z
+WMT,Walmart Inc,138942,27,1.57752,0,0,0,Neutral,2026-09-19T23:25:10Z
+JNJ,Johnson & Johnson,49244,28,1.55443,1,1,0,Very Bullish,2026-09-19T23:25:10Z
+BOIL,ProShares Ultra Bloomberg Natural Gas,17344,29,1.55443,1,1,0,Very Bullish,2026-09-19T23:25:10Z
+TJX,"TJX Companies, Inc.",8454,30,1.48273,1,1,0,Very Bullish,2026-09-19T23:25:10Z
