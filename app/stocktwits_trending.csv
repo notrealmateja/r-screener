@@ -1,31 +1,31 @@
 symbol,title,watchlist_count,st_rank,trending_score,messages,bullish,bearish,sentiment_label,fetched_at
-AVAX.X,Avalanche,18197,1,7.72171,5,3,0,Very Bullish,2026-09-19T23:25:10Z
-AGEN,Agenus Inc,12747,2,6.65488,3,1,0,Very Bullish,2026-09-19T23:25:10Z
-PEP,PepsiCo Inc,23632,3,4.4238,1,1,0,Very Bullish,2026-09-19T23:25:10Z
-CURLF,Curaleaf Holdings Inc,9012,4,4.39494,1,1,0,Very Bullish,2026-09-19T23:25:10Z
-PR,Permian Resources Corp - Ordinary Shares - Class A,14965,5,3.2307,0,0,0,Neutral,2026-09-19T23:25:10Z
-GDXU,Bank of Montreal - MicroSectors Gold Miners 3X Leveraged ETN,2141,6,3.2307,0,0,0,Neutral,2026-09-19T23:25:10Z
-CVNA,Carvana Co.,41444,7,3.20566,2,0,1,Very Bearish,2026-09-19T23:25:10Z
-PEPE.X,Pepe,25185,8,3.18602,1,1,0,Very Bullish,2026-09-19T23:25:10Z
-NEAR.X,Near,4951,9,2.91233,2,1,0,Very Bullish,2026-09-19T23:25:10Z
-SBUX,Starbucks Corp,118417,10,2.8204,0,0,0,Neutral,2026-09-19T23:25:10Z
-HD,"Home Depot, Inc.",45921,11,2.8204,1,0,0,Neutral,2026-09-19T23:25:10Z
-XLF,Financial Select Sector SPDR Fund,18457,12,2.8204,0,0,0,Neutral,2026-09-19T23:25:10Z
-XYZ,Block Inc,178655,13,2.8204,0,0,0,Neutral,2026-09-19T23:25:10Z
-RCL,Royal Caribbean Group,29812,14,2.53738,0,0,0,Neutral,2026-09-19T23:25:10Z
-XLK,Technology Select Sector SPDR Fund,11794,15,2.53738,0,0,0,Neutral,2026-09-19T23:25:10Z
-CADL,Candel Therapeutics Inc,10286,16,2.49785,2,0,0,Neutral,2026-09-19T23:25:10Z
-AMRN,Amarin Corp - ADR,30397,17,2.40701,1,1,0,Very Bullish,2026-09-19T23:25:10Z
-BNB.X,Binance,24170,18,2.3249,0,0,0,Neutral,2026-09-19T23:25:10Z
-BB.TSX,BlackBerry Ltd,1039,19,2.24591,0,0,0,Neutral,2026-09-19T23:25:10Z
-ZCSH,Grayscale Zcash Trust ZEC,553,20,2.23254,0,0,0,Neutral,2026-09-19T23:25:10Z
-IWM,iShares Russell 2000 ETF,49756,21,2.21638,0,0,0,Neutral,2026-09-19T23:25:10Z
-SCHD,Schwab US Dividend Equity ETF,23749,22,2.15595,0,0,0,Neutral,2026-09-19T23:25:10Z
-TSLL,Direxion Daily TSLA Bull 2X Shares,9325,23,2.08572,0,0,0,Neutral,2026-09-19T23:25:10Z
-MAGS,Roundhill Magnificent Seven ETF,3733,24,2.01586,0,0,0,Neutral,2026-09-19T23:25:10Z
-DIS,Walt Disney Co,290028,25,1.74084,0,0,0,Neutral,2026-09-19T23:25:10Z
-SUI.X,SUI,11282,26,1.70287,1,1,0,Very Bullish,2026-09-19T23:25:10Z
-WMT,Walmart Inc,138942,27,1.57752,0,0,0,Neutral,2026-09-19T23:25:10Z
-JNJ,Johnson & Johnson,49244,28,1.55443,1,1,0,Very Bullish,2026-09-19T23:25:10Z
-BOIL,ProShares Ultra Bloomberg Natural Gas,17344,29,1.55443,1,1,0,Very Bullish,2026-09-19T23:25:10Z
-TJX,"TJX Companies, Inc.",8454,30,1.48273,1,1,0,Very Bullish,2026-09-19T23:25:10Z
+AVAX.X,Avalanche,18347,1,7.56978,0,0,0,Neutral,2026-09-20T23:31:02Z
+SPY,SPDR S&P 500 ETF Trust,637771,2,5.63101,14,4,3,Bullish,2026-09-20T23:31:02Z
+HBAR.X,Hedera Hashgraph,35735,3,5.34339,0,0,0,Neutral,2026-09-20T23:31:02Z
+USO,United States Oil Fund,75331,4,5.22646,2,0,0,Neutral,2026-09-20T23:31:02Z
+DJT,Trump Media & Technology Group Corp.,115734,5,4.98353,5,1,2,Bearish,2026-09-20T23:31:02Z
+COHR,Coherent Corp,10872,6,4.82848,3,2,0,Very Bullish,2026-09-20T23:31:02Z
+ALGO.X,Algorand,32072,7,4.76227,0,0,0,Neutral,2026-09-20T23:31:02Z
+XLM.X,Stellar Lumens,70315,8,4.70841,0,0,0,Neutral,2026-09-20T23:31:02Z
+QQQ,Invesco QQQ Trust Series 1,279930,9,4.65436,3,1,0,Very Bullish,2026-09-20T23:31:02Z
+NEAR.X,Near,5057,10,4.42185,0,0,0,Neutral,2026-09-20T23:31:02Z
+ALOY,REalloys Inc.,13240,11,4.11472,0,0,0,Neutral,2026-09-20T23:31:02Z
+VLO,Valero Energy Corp.,9769,12,4.05964,0,0,0,Neutral,2026-09-20T23:31:02Z
+OXY,Occidental Petroleum Corp.,43352,13,4.01138,0,0,0,Neutral,2026-09-20T23:31:02Z
+BMY,Bristol-Myers Squibb Co.,20783,14,3.25025,0,0,0,Neutral,2026-09-20T23:31:02Z
+BOIL,ProShares Ultra Bloomberg Natural Gas,17344,15,3.24732,1,0,0,Neutral,2026-09-20T23:31:02Z
+ICP.X,Internet Computer,12171,16,3.24732,0,0,0,Neutral,2026-09-20T23:31:02Z
+XAUUSD,Gold U.S. Dollar,17842,17,3.2307,0,0,0,Neutral,2026-09-20T23:31:02Z
+PR,Permian Resources Corp - Ordinary Shares - Class A,14966,18,3.2307,0,0,0,Neutral,2026-09-20T23:31:02Z
+SATL,Satellogic Inc - Ordinary Shares - Class A,4720,19,3.2307,0,0,0,Neutral,2026-09-20T23:31:02Z
+BWET,Breakwave Tanker Shipping ETF,1132,20,3.16811,0,0,0,Neutral,2026-09-20T23:31:02Z
+DOGE.X,Dogecoin,350873,21,2.87786,0,0,0,Neutral,2026-09-20T23:31:02Z
+DVN,Devon Energy Corp.,14458,22,2.8204,0,0,0,Neutral,2026-09-20T23:31:02Z
+GDXU,Bank of Montreal - MicroSectors Gold Miners 3X Leveraged ETN,2143,23,2.8204,0,0,0,Neutral,2026-09-20T23:31:02Z
+UPST,Upstart Holdings Inc,47579,24,2.8204,0,0,0,Neutral,2026-09-20T23:31:02Z
+XOM,Exxon Mobil Corp,99716,25,2.75332,0,0,0,Neutral,2026-09-20T23:31:02Z
+USDE,StableCoinX Inc. - Ordinary Shares - Class A,661,26,2.71388,0,0,0,Neutral,2026-09-20T23:31:02Z
+XLE,Energy Select Sector SPDR Fund,24640,27,2.63663,0,0,0,Neutral,2026-09-20T23:31:02Z
+JNUG,Direxion Shares ETF Trust - Direxion Daily Junior Gold Miners Index Bull 2X ETF,78764,28,2.5578,0,0,0,Neutral,2026-09-20T23:31:02Z
+HIMX,"Himax Technologies, Inc.",18656,29,2.53738,0,0,0,Neutral,2026-09-20T23:31:02Z
+FLY,Firefly Aerospace Inc.,9460,30,2.53738,0,0,0,Neutral,2026-09-20T23:31:02Z
