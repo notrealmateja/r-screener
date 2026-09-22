@@ -1,31 +1,31 @@
 symbol,title,watchlist_count,st_rank,trending_score,messages,bullish,bearish,sentiment_label,fetched_at
-AVAX.X,Avalanche,18347,1,7.56978,0,0,0,Neutral,2026-09-20T23:31:02Z
-SPY,SPDR S&P 500 ETF Trust,637771,2,5.63101,14,4,3,Bullish,2026-09-20T23:31:02Z
-HBAR.X,Hedera Hashgraph,35735,3,5.34339,0,0,0,Neutral,2026-09-20T23:31:02Z
-USO,United States Oil Fund,75331,4,5.22646,2,0,0,Neutral,2026-09-20T23:31:02Z
-DJT,Trump Media & Technology Group Corp.,115734,5,4.98353,5,1,2,Bearish,2026-09-20T23:31:02Z
-COHR,Coherent Corp,10872,6,4.82848,3,2,0,Very Bullish,2026-09-20T23:31:02Z
-ALGO.X,Algorand,32072,7,4.76227,0,0,0,Neutral,2026-09-20T23:31:02Z
-XLM.X,Stellar Lumens,70315,8,4.70841,0,0,0,Neutral,2026-09-20T23:31:02Z
-QQQ,Invesco QQQ Trust Series 1,279930,9,4.65436,3,1,0,Very Bullish,2026-09-20T23:31:02Z
-NEAR.X,Near,5057,10,4.42185,0,0,0,Neutral,2026-09-20T23:31:02Z
-ALOY,REalloys Inc.,13240,11,4.11472,0,0,0,Neutral,2026-09-20T23:31:02Z
-VLO,Valero Energy Corp.,9769,12,4.05964,0,0,0,Neutral,2026-09-20T23:31:02Z
-OXY,Occidental Petroleum Corp.,43352,13,4.01138,0,0,0,Neutral,2026-09-20T23:31:02Z
-BMY,Bristol-Myers Squibb Co.,20783,14,3.25025,0,0,0,Neutral,2026-09-20T23:31:02Z
-BOIL,ProShares Ultra Bloomberg Natural Gas,17344,15,3.24732,1,0,0,Neutral,2026-09-20T23:31:02Z
-ICP.X,Internet Computer,12171,16,3.24732,0,0,0,Neutral,2026-09-20T23:31:02Z
-XAUUSD,Gold U.S. Dollar,17842,17,3.2307,0,0,0,Neutral,2026-09-20T23:31:02Z
-PR,Permian Resources Corp - Ordinary Shares - Class A,14966,18,3.2307,0,0,0,Neutral,2026-09-20T23:31:02Z
-SATL,Satellogic Inc - Ordinary Shares - Class A,4720,19,3.2307,0,0,0,Neutral,2026-09-20T23:31:02Z
-BWET,Breakwave Tanker Shipping ETF,1132,20,3.16811,0,0,0,Neutral,2026-09-20T23:31:02Z
-DOGE.X,Dogecoin,350873,21,2.87786,0,0,0,Neutral,2026-09-20T23:31:02Z
-DVN,Devon Energy Corp.,14458,22,2.8204,0,0,0,Neutral,2026-09-20T23:31:02Z
-GDXU,Bank of Montreal - MicroSectors Gold Miners 3X Leveraged ETN,2143,23,2.8204,0,0,0,Neutral,2026-09-20T23:31:02Z
-UPST,Upstart Holdings Inc,47579,24,2.8204,0,0,0,Neutral,2026-09-20T23:31:02Z
-XOM,Exxon Mobil Corp,99716,25,2.75332,0,0,0,Neutral,2026-09-20T23:31:02Z
-USDE,StableCoinX Inc. - Ordinary Shares - Class A,661,26,2.71388,0,0,0,Neutral,2026-09-20T23:31:02Z
-XLE,Energy Select Sector SPDR Fund,24640,27,2.63663,0,0,0,Neutral,2026-09-20T23:31:02Z
-JNUG,Direxion Shares ETF Trust - Direxion Daily Junior Gold Miners Index Bull 2X ETF,78764,28,2.5578,0,0,0,Neutral,2026-09-20T23:31:02Z
-HIMX,"Himax Technologies, Inc.",18656,29,2.53738,0,0,0,Neutral,2026-09-20T23:31:02Z
-FLY,Firefly Aerospace Inc.,9460,30,2.53738,0,0,0,Neutral,2026-09-20T23:31:02Z
+HOOD,Robinhood Markets Inc,101081,1,14.9295,1,0,0,Neutral,2026-09-22T00:24:17Z
+AMD,Advanced Micro Devices Inc,564798,2,14.7534,4,4,0,Very Bullish,2026-09-22T00:24:17Z
+PSKY,Paramount Skydance Corp. - Ordinary Shares - Class B,26732,3,11.6217,0,0,0,Neutral,2026-09-22T00:24:17Z
+RKLB,Rocket Lab USA Inc,67993,4,11.3264,1,0,0,Neutral,2026-09-22T00:24:17Z
+DOGE.X,Dogecoin,350949,5,10.0491,1,1,0,Very Bullish,2026-09-22T00:24:17Z
+XRP.X,Ripple,238496,6,8.4456,1,0,0,Neutral,2026-09-22T00:24:17Z
+SOXL,Direxion Daily Semiconductor Bull 3X Shares,40294,7,8.36085,1,0,0,Neutral,2026-09-22T00:24:17Z
+META,Meta Platforms Inc,610244,8,8.21915,2,0,1,Very Bearish,2026-09-22T00:24:17Z
+SHIB.X,Shiba Inu,188944,9,7.62312,0,0,0,Neutral,2026-09-22T00:24:17Z
+ASST,Strive Inc.,20092,10,6.86099,0,0,0,Neutral,2026-09-22T00:24:17Z
+INTC,Intel Corp,209015,11,6.75864,3,1,1,Neutral,2026-09-22T00:24:17Z
+GME,GameStop Corp,307822,12,6.52884,1,1,0,Very Bullish,2026-09-22T00:24:17Z
+SOXS,Direxion Daily Semiconductor Bear 3X ETF,18907,13,6.29789,0,0,0,Neutral,2026-09-22T00:24:17Z
+AERO.X,Aerodrome Finance,4574,14,6.28097,0,0,0,Neutral,2026-09-22T00:24:17Z
+QQQ,Invesco QQQ Trust Series 1,279989,15,6.11958,4,0,1,Very Bearish,2026-09-22T00:24:17Z
+CRML,Critical Metals Corp.,15263,16,5.97793,1,0,0,Neutral,2026-09-22T00:24:17Z
+SOFI,SoFi Technologies Inc,156311,17,5.84018,3,1,0,Very Bullish,2026-09-22T00:24:17Z
+SOXX,iShares Semiconductor ETF,10944,18,5.81784,0,0,0,Neutral,2026-09-22T00:24:17Z
+ETH.X,Ethereum,337723,19,5.71676,0,0,0,Neutral,2026-09-22T00:24:17Z
+VICR,Vicor Corp.,2026,20,5.36447,1,0,0,Neutral,2026-09-22T00:24:17Z
+ARM,Arm Holdings Plc.,33623,21,4.97459,0,0,0,Neutral,2026-09-22T00:24:17Z
+GRPN,Groupon Inc,37499,22,4.90021,0,0,0,Neutral,2026-09-22T00:24:17Z
+TQQQ,ProShares UltraPro QQQ,44383,23,4.89732,0,0,0,Neutral,2026-09-22T00:24:17Z
+AAOI,Applied Optoelectronics Inc,25820,24,4.81349,0,0,0,Neutral,2026-09-22T00:24:17Z
+IONQ,IonQ Inc,59788,25,4.72101,0,0,0,Neutral,2026-09-22T00:24:17Z
+XLE,Energy Select Sector SPDR Fund,24639,26,4.68014,0,0,0,Neutral,2026-09-22T00:24:17Z
+TAO.X,Bittensor,2878,27,4.5871,0,0,0,Neutral,2026-09-22T00:24:17Z
+PEPE.X,Pepe,25210,28,4.47236,0,0,0,Neutral,2026-09-22T00:24:17Z
+XLM.X,Stellar Lumens,70329,29,4.45882,0,0,0,Neutral,2026-09-22T00:24:17Z
+NVO,Novo Nordisk A/S,31978,30,4.34781,0,0,0,Neutral,2026-09-22T00:24:17Z
