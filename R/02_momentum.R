@@ -303,9 +303,39 @@ run_module2 <- function(tickers = NULL) {
 
   # ── 6. Compute compounding rolling alpha metrics from full history ─────────
   message("Computing compounding alpha metrics from full history...")
+  # Score on the return the market does NOT explain, not on raw excess.
+  #
+  # daily_alpha is daily_ret - spy_ret, so a high-beta name scores well simply
+  # for carrying market risk while the market rises. The walk-forward equity
+  # curve showed what that does: the book ran a beta of 1.49 and the BOTTOM
+  # quintile still beat the index by 3.3 points a year, which is what a ranking
+  # sorting on market exposure rather than skill looks like.
+  #
+  # Subtracting beta * spy_ret instead removes that. Measured over the same
+  # window, it lowers the book's beta to 1.34, widens the top-to-bottom spread
+  # from 14.5 to 18.3 points, cuts the worst drawdown from -33.4% to -28.7%,
+  # and drops the bottom quintile to 18.0% against the index's 17.7% — the
+  # control stops beating the market. Changed 2026-09-23.
+  #
+  # Beta is estimated over the same ALPHA_WINDOW the score uses, so it reflects
+  # only data available on the scoring date. The residual is NOT stored: a beta
+  # fitted today cannot be applied to a 2024 window without leaking the future,
+  # so the backtest re-estimates it inside each formation window instead.
   rolling_alpha <- alpha_history %>%
+    left_join(tech %>% select(symbol, date, daily_ret, spy_ret),
+              by = c("symbol", "date")) %>%
     group_by(symbol) %>%
     arrange(date) %>%
+    mutate(
+      beta_window = compute_beta(utils::tail(daily_ret, ALPHA_WINDOW),
+                                 utils::tail(spy_ret,  ALPHA_WINDOW)),
+      # Fall back to raw excess where a return is missing (alpha_history keeps
+      # a few dates that predate the current price pull) or beta is unusable.
+      daily_resid = ifelse(
+        is.na(daily_ret) | is.na(spy_ret) | is.na(beta_window),
+        daily_alpha,
+        daily_ret - beta_window * spy_ret)
+    ) %>%
     summarize(
       days_tracked      = n(),
 
@@ -318,7 +348,7 @@ run_module2 <- function(tickers = NULL) {
         if (length(d) == 0) NA_real_ else prod(1 + d) - 1
       },
       alpha_63d         = {
-        d <- tail(daily_alpha[!is.na(daily_alpha)], 63)
+        d <- tail(daily_resid[!is.na(daily_resid)], 63)
         if (length(d) == 0) NA_real_ else prod(1 + d) - 1
       },
 
@@ -335,11 +365,11 @@ run_module2 <- function(tickers = NULL) {
       # effect lives, and the walk-forward sweep independently reproduced its
       # signature: negative rank IC at short formation windows (reversal),
       # turning positive by 126 days.
-      alpha_hit_rate    = mean(utils::tail(daily_alpha[!is.na(daily_alpha)], ALPHA_WINDOW) > 0),
+      alpha_hit_rate    = mean(utils::tail(daily_resid[!is.na(daily_resid)], ALPHA_WINDOW) > 0),
 
       # Annualised alpha & information ratio over the same window
-      hist_mean_alpha   = mean(utils::tail(daily_alpha[!is.na(daily_alpha)], ALPHA_WINDOW)),
-      hist_sd_alpha     = sd(utils::tail(daily_alpha[!is.na(daily_alpha)],   ALPHA_WINDOW)),
+      hist_mean_alpha   = mean(utils::tail(daily_resid[!is.na(daily_resid)], ALPHA_WINDOW)),
+      hist_sd_alpha     = sd(utils::tail(daily_resid[!is.na(daily_resid)],   ALPHA_WINDOW)),
       hist_alpha_ann    = hist_mean_alpha * 252,
       hist_ir           = ifelse(hist_sd_alpha > 0,
                                  (hist_mean_alpha / hist_sd_alpha) * sqrt(252),
@@ -351,7 +381,7 @@ run_module2 <- function(tickers = NULL) {
 
       # Alpha streak: consecutive days with positive alpha (most recent)
       alpha_streak      = {
-        signs <- rev(as.integer(daily_alpha > 0))
+        signs <- rev(as.integer(daily_resid > 0))
         if (length(signs) == 0 || is.na(signs[1])) 0L
         else {
           streak <- 0L

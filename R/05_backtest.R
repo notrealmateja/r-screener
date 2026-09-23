@@ -38,6 +38,28 @@ MIN_OBS        <- 40    # skip a symbol with too little formation history
 # Reproduce the live alpha_score_raw blend (04_master_score.R) on a formation
 # window.  Percentile ranks are computed cross-sectionally, as in production.
 score_formation <- function(fm) {
+  # Mirror the live model, which scores on the part of a return the market does
+  # not explain rather than on raw excess (02_momentum.R, changed 2026-09-23).
+  # Beta is re-estimated inside THIS formation window, never carried in from
+  # outside it: a beta fitted on later data would leak the future into the
+  # ranking, which is the one error that would invalidate every number here.
+  # Callers that supply only daily_alpha keep the old behaviour.
+  if (all(c("daily_ret", "spy_ret") %in% names(fm))) {
+    fm <- fm %>%
+      group_by(symbol) %>%
+      mutate(
+        .beta = if (sum(!is.na(daily_ret) & !is.na(spy_ret)) >= 20 &&
+                    !is.na(var(spy_ret, na.rm = TRUE)) &&
+                    var(spy_ret, na.rm = TRUE) > 0) {
+                  cov(daily_ret, spy_ret, use = "complete.obs") /
+                    var(spy_ret, na.rm = TRUE)
+                } else NA_real_,
+        daily_alpha = ifelse(is.na(.beta), daily_alpha, daily_ret - .beta * spy_ret)
+      ) %>%
+      ungroup() %>%
+      select(-.beta)
+  }
+
   per_sym <- fm %>%
     group_by(symbol) %>%
     arrange(date) %>%
@@ -651,7 +673,7 @@ run_equity_curve <- function(price_path = "data/price_history.csv") {
 
   for (ix in starts) {
     fm <- px %>% filter(date %in% dates[(ix - FORMATION_DAYS):(ix - 1)]) %>%
-      select(date, symbol, daily_alpha)
+      select(date, symbol, daily_alpha, daily_ret, spy_ret)
     scored <- score_formation(fm)
     if (is.null(scored)) next
 

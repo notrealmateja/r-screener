@@ -3016,14 +3016,27 @@ server <- function(input, output, session) {
                  "across the three components that do carry signal. A paid Polygon key ",
                  "reactivates the term with no code change."))
       })(),
-      tags$p("The alpha component is a percentile blend of five measures taken from each ",
-             "stock's daily excess-return series:"),
+      tags$p("The alpha component is a percentile blend of five measures. All five are ",
+             "taken from the part of a stock's return the market does not explain — its ",
+             "return minus beta times the index, with beta fitted over the same 126-day ",
+             "window the score uses:"),
       tags$pre(
 "alpha_raw = annualised_alpha  x 0.30   Jensen's alpha, CAPM-adjusted
           + information_ratio x 0.25   alpha per unit of tracking error
-          + hit_rate          x 0.20   % of days the stock beat SPY
-          + alpha_63d         x 0.15   compounded alpha over one quarter
-          + streak            x 0.10   consecutive positive-alpha days"),
+          + hit_rate          x 0.20   % of days the residual was positive
+          + alpha_63d         x 0.15   compounded residual over one quarter
+          + streak            x 0.10   consecutive positive-residual days"),
+      tags$p(tags$b("Changed 2026-09-23."), " Until then these five were measured on raw ",
+             "excess over the index rather than on the residual, which rewarded a stock ",
+             "for carrying market risk while the market rose. The walk-forward curve showed ",
+             "the cost: the ranking had inverted, and the bottom quintile was beating the ",
+             "top by 8.7 points a year. Re-running the same backtest on the residual turned ",
+             "that spread from -8.7 to +10.1 points, lowered the book's beta from 1.42 to ",
+             "1.32 and its worst drawdown from -33.8% to -30.6%. The change was made because ",
+             "the reasoning holds on its own, not because it backtested better — the excess ",
+             "return still is not statistically significant, and this is one more ",
+             "configuration tried on the same 2.5 years. Note also that the description ",
+             "above said CAPM-adjusted before the code did."),
 
       tags$h2("Confidence weighting"),
       tags$p("A short return series gives a noisy alpha estimate, so the raw score is ",
