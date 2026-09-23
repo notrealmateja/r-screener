@@ -1724,8 +1724,15 @@ server <- function(input, output, session) {
         company_fmt  = coalesce(company, symbol),
         sector_fmt   = coalesce(sector, "—")
       ) %>%
+      # `dm[symbol]` rather than dm[[symbol]]: single-bracket indexing returns NA
+      # for a name that is not in the map, where [[ ]] would abort the render.
+      mutate(`5D` = {
+        dm <- delta_map(5)
+        d  <- if (is.null(dm)) rep(NA_integer_, dplyr::n()) else unname(dm[symbol])
+        vapply(d, delta_html, character(1), USE.NAMES = FALSE)
+      }) %>%
       select(`#`, Symbol=symbol, Company=company_fmt, Sector=sector_fmt,
-             Score, Rating, `Exp Ret/D`=`Exp Return`,
+             Score, Rating, `5D`, `Exp Ret/D`=`Exp Return`,
              `1M`=ret_1m_fmt, `3M`=ret_3m_fmt,
              Percentile, Driver, `Sig Matches`=Signals,
              `P/E`=pe_fmt, `Mkt Cap`=mktcap_fmt)
@@ -1861,7 +1868,14 @@ server <- function(input, output, session) {
         momentum_score = coalesce(momentum_score, 45),
         squeeze_score  = coalesce(squeeze_score,  28.5)
       ) %>%
-      select(Symbol=symbol, Company=company_fmt, Sector=sector_fmt, Score, Rating,
+      # `dm[symbol]` rather than dm[[symbol]]: single-bracket indexing returns NA
+      # for a name that is not in the map, where [[ ]] would abort the render.
+      mutate(`5D` = {
+        dm <- delta_map(5)
+        d  <- if (is.null(dm)) rep(NA_integer_, dplyr::n()) else unname(dm[symbol])
+        vapply(d, delta_html, character(1), USE.NAMES = FALSE)
+      }) %>%
+      select(Symbol=symbol, Company=company_fmt, Sector=sector_fmt, Score, Rating, `5D`,
              Fund=fundamental_score, Mom=momentum_score, Squeeze=squeeze_score,
              `P/E`=pe_fmt, `1M`=ret_1m_fmt, `3M`=ret_3m_fmt,
              `6M`=ret_6m_fmt, `1Y`=ret_1y_fmt,

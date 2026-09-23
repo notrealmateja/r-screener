@@ -39,6 +39,7 @@ bt_summary     <- load_csv("backtest_summary.csv")
 bt_headline    <- load_csv("backtest_headline.csv")
 bt_ic          <- load_csv("backtest_ic.csv")
 bt_components  <- load_csv("backtest_components.csv")
+score_history  <- load_csv("score_history.csv")
 bt_equity      <- load_csv("backtest_equity.csv")
 bt_eq_stats    <- load_csv("backtest_equity_stats.csv")
 bt_reversal    <- load_csv("reversal_results.csv")
@@ -585,4 +586,48 @@ tv_embed_url <- function(channel) {
     return(paste0("https://www.youtube.com/embed/live_stream?channel=",
                   TV_CHANNELS[[channel]], "&autoplay=1&mute=1&playsinline=1"))
   paste0("https://www.youtube.com/embed/", vid, "?autoplay=1&mute=1&playsinline=1")
+}
+
+
+# ── Rank movement ───────────────────────────────────────────────────────────
+# master_scored.csv is a snapshot, so the tables could say what a stock scores
+# but never whether it was climbing or falling. score_history.csv keeps one row
+# per stock per day, and this turns it into a change figure.
+#
+# A POSITIVE delta means the stock moved UP the ranking, i.e. its rank number
+# got smaller. Comparisons are skipped when the universe changed size between
+# the two dates: the list went from 50 names to 195 on 2026-08-05, and a rank
+# move across that boundary is the list growing, not the stock moving.
+rank_delta <- function(lookback = 5, sh = score_history) {
+  if (is.null(sh) || nrow(sh) == 0) return(NULL)
+  need <- c("date", "symbol", "rank", "n_universe")
+  if (!all(need %in% names(sh))) return(NULL)
+  sh  <- sh %>% mutate(date = as.Date(date))
+  dts <- sort(unique(sh$date))
+  if (length(dts) < 2) return(NULL)
+  latest <- dts[length(dts)]
+  prior  <- dts[max(1, length(dts) - lookback)]
+  if (prior == latest) return(NULL)
+  now  <- sh %>% filter(date == latest) %>% select(symbol, r_now = rank,  n_now = n_universe)
+  then <- sh %>% filter(date == prior)  %>% select(symbol, r_then = rank, n_then = n_universe)
+  out <- inner_join(now, then, by = "symbol") %>%
+    filter(n_now == n_then) %>%
+    transmute(symbol, delta = as.integer(r_then - r_now))
+  if (nrow(out) == 0) NULL else out
+}
+
+# Small coloured arrow for a table cell. A dash where there is nothing to
+# compare is better than a zero, which would read as "did not move".
+delta_html <- function(d) {
+  if (length(d) != 1 || is.na(d)) return("<span style=\'color:#444\'>&ndash;</span>")
+  if (d > 0)  return(sprintf("<span style=\'color:#00C853\'>&#9650;%d</span>", d))
+  if (d < 0)  return(sprintf("<span style=\'color:#FF3D00\'>&#9660;%d</span>", abs(d)))
+  "<span style=\'color:#888\'>&#8226;</span>"
+}
+
+# Named lookup so a table can add the column with one vapply.
+delta_map <- function(lookback = 5, sh = score_history) {
+  d <- rank_delta(lookback, sh)
+  if (is.null(d)) return(NULL)
+  setNames(d$delta, d$symbol)
 }

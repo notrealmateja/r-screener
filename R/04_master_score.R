@@ -10,6 +10,10 @@
 #   sector, company, squeeze_candidate, etc.
 # =============================================================================
 
+# Two years of daily score snapshots is about 100k rows and 3MB — enough for
+# any trend the site shows, and bounded so the file cannot grow without limit.
+SCORE_HISTORY_DAYS <- 730
+
 run_module4 <- function(fund_data = NULL) {
   message("\n=== MODULE 4: ALPHA-CENTERED SCORING ENGINE ===\n")
 
@@ -444,6 +448,39 @@ run_module4 <- function(fund_data = NULL) {
   if (!dir.exists("data")) dir.create("data", recursive = TRUE)
   write_csv(df, "data/master_scored.csv")
   message("Saved: data/master_scored.csv (", n, " stocks)\n")
+
+  # ── 9b. Append today's scores to the history ───────────────────────────────
+  # master_scored.csv is a snapshot: it says what a stock scores, never whether
+  # that score is rising or falling. Keeping one row per stock per day is what
+  # lets the site show rank movement. The first few months were recovered from
+  # git by tools/rebuild_score_history.R, since the snapshots were already
+  # being committed nightly.
+  #
+  # n_universe travels with each row because the list grew from 50 names to 195
+  # on 2026-08-05. A rank change measured across that boundary reflects the
+  # list growing, not the stock moving, so the app skips those comparisons.
+  if (!exists("merge_history")) {
+    .u <- Filter(file.exists, c("R/00_utils.R", "../R/00_utils.R", "../../R/00_utils.R"))
+    if (length(.u)) source(.u[1])
+  }
+  if (exists("merge_history")) {
+    sh_path <- "data/score_history.csv"
+    as_of <- if ("date" %in% names(df)) max(as.Date(df$date), na.rm = TRUE) else Sys.Date()
+    today_scores <- df %>%
+      filter(!is.na(symbol), !is.na(master_score)) %>%
+      transmute(date = as_of, symbol = as.character(symbol),
+                master_score = as.numeric(master_score),
+                rating = if ("rating" %in% names(df)) as.character(rating) else NA_character_,
+                rank = rank(-master_score, ties.method = "min"),
+                n_universe = n())
+    prior <- if (file.exists(sh_path))
+      tryCatch(read_csv(sh_path, show_col_types = FALSE) %>% mutate(date = as.Date(date)),
+               error = function(e) NULL) else NULL
+    score_history <- merge_history(prior, today_scores, keep_days = SCORE_HISTORY_DAYS)
+    write_csv(score_history, sh_path)
+    message(glue("Score history: {nrow(score_history)} rows across ",
+                 "{n_distinct(score_history$date)} days."))
+  }
 
   # ── 10. Top 15 Sweetspot: all columns the app table needs ──────────────────
   top15_sweetspot <- df %>%
