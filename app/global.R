@@ -631,3 +631,45 @@ delta_map <- function(lookback = 5, sh = score_history) {
   if (is.null(d)) return(NULL)
   setNames(d$delta, d$symbol)
 }
+
+# ── Which price to show ─────────────────────────────────────────────────────
+# The ticker tape polls Yahoo every 60s, but Deep Dive was reading the close
+# stored by the nightly run. The two sat on the same screen disagreeing: the
+# tape showed PD at $14.83 while the panel below said $14.46, which reads as a
+# bug rather than as two different timestamps.
+#
+# Prefer the live quote, fall back to the stored close, and always say which
+# one is on screen. A price with no timestamp is worse than a stale price with
+# one, because the reader cannot tell the difference.
+pick_price <- function(live_price = NA_real_, live_chg = NA_real_,
+                       live_time = NULL, stored_close = NA_real_,
+                       stored_chg = NA_real_, stored_date = NULL) {
+  usable <- length(live_price) == 1 && !is.na(live_price) && is.finite(live_price) &&
+            live_price > 0
+  if (usable) {
+    stamp <- if (!is.null(live_time) && !is.na(live_time))
+      format(as.POSIXct(live_time), "%H:%M") else NULL
+    return(list(price = as.numeric(live_price),
+                chg = if (length(live_chg) == 1 && !is.na(live_chg)) as.numeric(live_chg) else NA_real_,
+                is_live = TRUE,
+                label = if (is.null(stamp)) "LIVE" else paste("LIVE", stamp)))
+  }
+  stamp <- if (!is.null(stored_date) && !is.na(stored_date))
+    format(as.Date(stored_date), "%b %d") else NULL
+  list(price = if (length(stored_close) == 1 && !is.na(stored_close))
+                 as.numeric(stored_close) else NA_real_,
+       chg = if (length(stored_chg) == 1 && !is.na(stored_chg)) as.numeric(stored_chg) else NA_real_,
+       is_live = FALSE,
+       label = if (is.null(stamp)) "last close" else paste("close", stamp))
+}
+
+# Newest bar the nightly pipeline stored, used to date a fallback price.
+# Guarded on exists(): the price file may not have loaded, and parts of this
+# file are evaluated on their own by the test suite, where it is absent. A
+# missing date should leave the badge unstamped, never abort startup.
+STORED_AS_OF <- local({
+  if (!exists("price_history", inherits = TRUE)) return(NA)
+  ph <- get("price_history", inherits = TRUE)
+  if (is.null(ph) || !"date" %in% names(ph) || !nrow(ph)) return(NA)
+  suppressWarnings(max(as.Date(ph$date), na.rm = TRUE))
+})

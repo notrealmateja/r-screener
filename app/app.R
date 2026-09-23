@@ -1982,15 +1982,48 @@ server <- function(input, output, session) {
     div(paste(s$symbol,"— PRICE CHART"))
   })
 
+  # The tape polls only the top 25 by score, so the stock on screen is usually
+  # not in it. This quotes whichever one Deep Dive is showing, on the same 60s
+  # cadence and the same visibility gate, so a hidden tab stops polling.
+  dd_quote <- reactive({
+    sym <- input$dd_ticker
+    if (is.null(sym) || !nzchar(sym)) return(NULL)
+    if (tab_is_visible()) invalidateLater(60000)
+    tryCatch({
+      q <- getQuote(sym)
+      if (is.null(q) || !nrow(q)) return(NULL)
+      list(price = as.numeric(q$Last),
+           chg   = as.numeric(q$`% Change`),
+           time  = q$`Trade Time`[1])
+    }, error = function(e) {
+      message("dd_quote failed for ", sym, ": ", conditionMessage(e))
+      NULL
+    })
+  })
+
   output$dd_header <- renderUI({
     s <- sel(); req(nrow(s)>0)
-    chg_col <- if(!is.na(s$changesPercentage) && s$changesPercentage>=0) "#00C853" else "#FF3D00"
-    chg_sym <- if(!is.na(s$changesPercentage) && s$changesPercentage>=0) "▲" else "▼"
+    lq <- dd_quote()
+    p <- pick_price(
+      live_price   = if (is.null(lq)) NA_real_ else lq$price,
+      live_chg     = if (is.null(lq)) NA_real_ else lq$chg,
+      live_time    = if (is.null(lq)) NULL     else lq$time,
+      stored_close = s$close,
+      stored_chg   = s$changesPercentage,
+      stored_date  = STORED_AS_OF)
+    up      <- !is.na(p$chg) && p$chg >= 0
+    chg_col <- if (up) "#00C853" else "#FF3D00"
+    chg_sym <- if (up) "▲" else "▼"
+    badge_col <- if (p$is_live) "#00C853" else "#777"
     div(style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;",
       div(style="font-family:IBM Plex Mono;font-size:20px;font-weight:700;color:#FF6B00;",
-          paste0("$", round(replace_na(s$close,0),2))),
+          paste0("$", formatC(replace_na(p$price,0), format="f", digits=2, big.mark=","))),
       div(style=glue("font-family:IBM Plex Mono;font-size:13px;color:{chg_col};font-weight:600;"),
-          paste0(chg_sym," ", round(replace_na(s$changesPercentage,0),2),"%")),
+          paste0(chg_sym," ", round(replace_na(p$chg,0),2),"%")),
+      # Never show a price without saying how old it is.
+      div(style=glue("font-family:IBM Plex Mono;font-size:10px;color:{badge_col};",
+                     "border:1px solid {badge_col};border-radius:3px;padding:1px 5px;",
+                     "letter-spacing:.5px;"), p$label),
       div(style="font-size:13px;color:#AAA;", paste(s$company,"•",s$sector,"•",s$mktcap_fmt))
     )
   })
