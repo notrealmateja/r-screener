@@ -673,3 +673,47 @@ STORED_AS_OF <- local({
   if (is.null(ph) || !"date" %in% names(ph) || !nrow(ph)) return(NA)
   suppressWarnings(max(as.Date(ph$date), na.rm = TRUE))
 })
+
+# ── Snapping the chart to the live quote ────────────────────────────────────
+# The chart draws price_history, which ends at the last nightly bar, so it
+# stopped a day or two short of the price shown in the header. This carries the
+# line forward to the live quote.
+#
+# Only the close is filled in. A quote is a price, not a bar: there is no
+# settled open, high, low or volume, and the moving averages and Bollinger
+# bands in price_history were computed by the pipeline. Writing a value into
+# any of those would be inventing data, so they stay NA and their lines simply
+# stop one point earlier, which is the truth.
+#
+# The added point is flagged so the chart can mark it as live rather than let
+# it pass for a settled bar.
+append_live_point <- function(p, live_price = NA_real_, live_time = NULL) {
+  if (is.null(p) || !is.data.frame(p) || !nrow(p) || !"date" %in% names(p) ||
+      !"close" %in% names(p)) return(p)
+  if (length(live_price) != 1 || is.na(live_price) || !is.finite(live_price) ||
+      live_price <= 0) return(p)
+
+  p <- p[order(p$date), , drop = FALSE]
+  p$is_live <- FALSE
+  qd <- if (!is.null(live_time) && !all(is.na(live_time)))
+          as.Date(live_time[1]) else Sys.Date()
+  last_date <- as.Date(p$date[nrow(p)])
+
+  # A quote older than the chart's last bar tells us nothing; leave it alone.
+  if (is.na(qd) || qd < last_date) return(p)
+
+  # Same session: the stored close is provisional, so replace it in place
+  # rather than drawing two points on one date.
+  if (qd == last_date) {
+    p$close[nrow(p)] <- live_price
+    p$is_live[nrow(p)] <- TRUE
+    return(p)
+  }
+
+  new <- p[nrow(p), , drop = FALSE]
+  new[] <- lapply(new, function(col) col[NA_integer_])  # NA of each column's type
+  new$date    <- qd
+  new$close   <- live_price
+  new$is_live <- TRUE
+  rbind(p, new)
+}

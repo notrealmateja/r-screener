@@ -2057,11 +2057,24 @@ server <- function(input, output, session) {
       }, error=function(e) { p <- data.frame() })
     }
     if (is.null(p) || nrow(p) == 0) return(no_data("No price data available"))
-    
+
+    # Carry the line forward to the quote in the header, so the chart does not
+    # stop two days short of the price printed above it.
+    lq <- dd_quote()
+    if (!is.null(lq)) p <- append_live_point(p, lq$price, lq$time)
+
     plt <- plot_ly(p) %>%
       add_lines(x=~date, y=~close, name="Price",
         line=list(color="#FF6B00", width=2, shape="spline", smoothing=0.5),
         hovertemplate="%{x|%b %d, %Y}   <b>$%{y:.2f}</b><extra></extra>")
+    # Mark the live point so it cannot pass for a settled bar.
+    if ("is_live" %in% names(p) && any(p$is_live, na.rm=TRUE)) {
+      lp <- p[which(p$is_live), , drop=FALSE]
+      plt <- plt %>% add_markers(
+        x=lp$date, y=lp$close, name="Live", inherit=FALSE,
+        marker=list(color="#00C853", size=9, line=list(color="#0A0A0A", width=1)),
+        hovertemplate="Live  <b>$%{y:.2f}</b><extra></extra>")
+    }
     # hoverinfo="skip" on the overlays: they are visual context, and including
     # them in the tooltip is what produced the six-line block.
     if ("ma20"  %in% names(p)) plt <- plt %>% add_lines(x=~date, y=~ma20,  name="MA20",  hoverinfo="skip", line=list(color="#FFD600",width=1,dash="dot"))
