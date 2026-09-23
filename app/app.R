@@ -3411,51 +3411,6 @@ server <- function(input, output, session) {
   output$dd_mom_score     <- renderText({ req(master_data, dd_stock()); s <- master_data[master_data$symbol==dd_stock(),]; if(nrow(s)==0) "N/A" else round(coalesce(s$momentum_score[1],45),1) })
   output$dd_squeeze_score <- renderText({ req(master_data, dd_stock()); s <- master_data[master_data$symbol==dd_stock(),]; if(nrow(s)==0) "N/A" else round(coalesce(s$squeeze_score[1],28.5),1) })
 
-  output$dd_price_chart <- renderPlotly({
-    req(price_data, dd_stock())
-    sym <- dd_stock()
-    df  <- price_data[price_data$symbol == sym, ]
-    if (is.null(df) || nrow(df) == 0) {
-      # Fetch live if not in CSV
-      tryCatch({
-        env <- new.env()
-        suppressWarnings(quantmod::getSymbols(sym, src="yahoo", env=env, auto.assign=TRUE,
-                          from=Sys.Date()-365, to=Sys.Date()))
-        px <- env[[sym]]
-        df <- data.frame(
-          date  = as.character(zoo::index(px)),
-          close = as.numeric(quantmod::Cl(px)),
-          open  = as.numeric(quantmod::Op(px)),
-          high  = as.numeric(quantmod::Hi(px)),
-          low   = as.numeric(quantmod::Lo(px)),
-          volume= as.numeric(quantmod::Vo(px))
-        )
-        df <- df[!is.na(df$close),]
-      }, error=function(e) {
-        return(plotly::plot_ly() %>% plotly::layout(title="Unable to load price data"))
-      })
-    }
-    
-    if (nrow(df) == 0) return(plotly::plot_ly() %>% plotly::layout(title="No data"))
-    
-    df$date <- as.Date(df$date)
-    
-    # Candlestick chart
-    plotly::plot_ly(df, type="candlestick",
-      x=~date, open=~open, close=~close, high=~high, low=~low,
-      name=sym,
-      increasing=list(line=list(color="#FF6B00")),
-      decreasing=list(line=list(color="#666666"))
-    ) %>%
-    plotly::layout(
-      title=list(text=paste0("<b>", sym, " — 1Y Price Chart</b>"), font=list(color="#E8E8E8")),
-      paper_bgcolor="#0A0A0A", plot_bgcolor="#111111",
-      xaxis=list(color="#999", gridcolor="#1A1A1A", rangeslider=list(visible=FALSE)),
-      yaxis=list(color="#999", gridcolor="#1A1A1A", title="Price ($)"),
-      font=list(color="#E8E8E8"),
-      showlegend=FALSE
-    )
-  })
 
   output$dd_key_metrics <- renderUI({
     req(master_data, dd_stock())
