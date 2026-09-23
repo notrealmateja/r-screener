@@ -3855,6 +3855,7 @@ server <- function(input, output, session) {
     ex_t_tr <- eq_stat("model", "excess_t_tranche")
     n_dec   <- eq_stat("model", "n_decisions")
     u_cagr  <- eq_stat("univ", "cagr")
+    u_beta  <- eq_stat("univ", "beta")
     n_ca    <- eq_stat("model", "corporate_actions_neutralised")
 
     HTML(paste0(
@@ -3885,18 +3886,34 @@ server <- function(input, output, session) {
       if (is.na(m_cagr) || is.na(b_cagr)) "N/A" else sprintf("%+.1f%%", (m_cagr - b_cagr) * 100),
       ". That figure assumes cash pays nothing; measured against T-bills it would be smaller.</p>",
 
-      "<p><b>Most of the edge is the universe, not the score.</b> The purple line holds all 195 ",
-      "names equal-weighted with no ranking at all, and it returns ",
+      "<p><b>Much of the edge is the universe, not the score.</b> The purple line holds every ",
+      "name equal-weighted with no ranking at all, and it returns ",
       if (is.na(u_cagr)) "N/A" else sprintf("%.1f%% a year", u_cagr * 100),
       " against the index\'s ",
       if (is.na(b_cagr)) "N/A" else sprintf("%.1f%%", b_cagr * 100),
-      ". That gap is pure survivorship: the ticker list was written in 2026 and tested from ",
-      "2024, and in three years of small and mid caps it contains not one delisting. ",
-      "Measured against that baseline instead of the index, the score adds ",
+      ". Measured against that baseline rather than the index, the score adds ",
       if (is.na(m_cagr) || is.na(u_cagr)) "N/A" else sprintf("%+.1f points a year", (m_cagr - u_cagr) * 100),
       ", not the ",
       if (is.na(m_cagr) || is.na(b_cagr)) "N/A" else sprintf("%+.1f", (m_cagr - b_cagr) * 100),
       " the index comparison suggests.</p>",
+
+      "<p><b>That universe gap is mostly market exposure.</b> An earlier version of this page ",
+      "called it survivorship. Measuring it says otherwise: the no-signal universe carries a ",
+      "beta of ",
+      if (is.na(u_beta)) "N/A" else sprintf("%.2f", u_beta),
+      ", and the part of its return the market does not explain is only ",
+      if (is.na(u_beta) || is.na(u_cagr) || is.na(b_cagr)) "N/A"
+        else sprintf("%+.1f points a year", (u_cagr - u_beta * b_cagr) * 100),
+      ". Checked on 2026-09-23, the reason is visible in the ticker list\'s own history: 145 of ",
+      "the names were added in August 2026 and are smaller and more volatile, while the 50 ",
+      "tracked before that returned 17.7% a year against the index\'s 17.7% — no excess at all. ",
+      "Adding them raised the universe\'s beta, and a rising market did the rest.</p>",
+
+      "<p><b>Delisting bias is still unmeasured, and it runs the other way.</b> No name has ever ",
+      "been removed from this list, so no company that went bankrupt or was acquired appears ",
+      "anywhere above — not in the model, not in the controls. Measuring that needs a ",
+      "point-in-time index membership history, which this pipeline does not have. Whatever it ",
+      "is worth, it flatters every number on this page.</p>",
 
       "<p><b>What this cannot prove.</b> Over the ",
       if (is.na(n_dec)) "N/A" else sprintf("%.0f", n_dec),
