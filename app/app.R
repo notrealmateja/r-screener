@@ -1570,12 +1570,16 @@ server <- function(input, output, session) {
       pull(symbol)
     tryCatch({
       q <- getQuote(top_syms)
-      tibble(
+      out <- tibble(
         symbol     = rownames(q),
         price      = as.numeric(q$Last),
         change     = as.numeric(q$Change),
         change_pct = as.numeric(q$`% Change`)
       ) %>% filter(!is.na(price), price > 0)
+      # Share them, so opening one of these in Deep Dive costs no request.
+      quote_cache_put(out$symbol, out$price, out$change_pct,
+                      if ("Trade Time" %in% names(q)) q$`Trade Time` else NULL)
+      out
     }, error = function(e) {
       message("getQuote failed: ", e$message)
       NULL
@@ -1989,12 +1993,15 @@ server <- function(input, output, session) {
     sym <- input$dd_ticker
     if (is.null(sym) || !nzchar(sym)) return(NULL)
     if (tab_is_visible()) invalidateLater(60000)
+    # A fresh enough quote from the tape beats waiting on a request.
+    hit <- quote_cache_get(sym)
+    if (!is.null(hit)) return(hit)
     tryCatch({
       q <- getQuote(sym)
       if (is.null(q) || !nrow(q)) return(NULL)
-      list(price = as.numeric(q$Last),
-           chg   = as.numeric(q$`% Change`),
-           time  = q$`Trade Time`[1])
+      tt <- if ("Trade Time" %in% names(q)) q$`Trade Time`[1] else Sys.time()
+      quote_cache_put(sym, as.numeric(q$Last), as.numeric(q$`% Change`), tt)
+      list(price = as.numeric(q$Last), chg = as.numeric(q$`% Change`), time = tt)
     }, error = function(e) {
       message("dd_quote failed for ", sym, ": ", conditionMessage(e))
       NULL

@@ -717,3 +717,40 @@ append_live_point <- function(p, live_price = NA_real_, live_time = NULL) {
   new$is_live <- TRUE
   rbind(p, new)
 }
+
+# ── Quote cache ─────────────────────────────────────────────────────────────
+# Opening Deep Dive cost about 1.3s on the deployed site, almost all of it
+# waiting on a quote request while the header sat empty. Meanwhile the ticker
+# tape was already fetching 25 quotes every 60 seconds and discarding them.
+#
+# This is a shared, time-limited store so the tape's work is reused. The stocks
+# people click are usually the ones ranked highest, which are exactly the ones
+# the tape has already fetched, so most opens now need no request at all.
+#
+# The environment lives at app level, not per session, so every viewer benefits
+# from any fetch. Entries expire so a cache hit can never show a price older
+# than the refresh interval.
+QUOTE_TTL <- 60  # seconds
+
+.quote_cache <- new.env(parent = emptyenv())
+
+quote_cache_put <- function(symbol, price, chg = NA_real_, time = NULL) {
+  ok <- !is.na(price) & is.finite(price) & price > 0
+  for (i in which(ok)) {
+    assign(symbol[i],
+           list(price = as.numeric(price[i]),
+                chg   = if (length(chg) >= i) as.numeric(chg[i]) else NA_real_,
+                time  = if (!is.null(time) && length(time) >= i) time[i] else Sys.time(),
+                at    = Sys.time()),
+           envir = .quote_cache)
+  }
+  invisible(sum(ok))
+}
+
+quote_cache_get <- function(symbol, ttl = QUOTE_TTL, now = Sys.time()) {
+  if (length(symbol) != 1 || is.na(symbol) || !nzchar(symbol)) return(NULL)
+  if (!exists(symbol, envir = .quote_cache, inherits = FALSE)) return(NULL)
+  e <- get(symbol, envir = .quote_cache, inherits = FALSE)
+  if (as.numeric(difftime(now, e$at, units = "secs")) > ttl) return(NULL)
+  e
+}
