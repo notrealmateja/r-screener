@@ -1570,15 +1570,19 @@ server <- function(input, output, session) {
       pull(symbol)
     tryCatch({
       q <- getQuote(top_syms)
+      # The trade time is carried INTO the tibble so it survives the filter
+      # below. Passing q$`Trade Time` separately meant a pre-filter vector met
+      # post-filter symbols, and one dropped row shifted every timestamp after
+      # it onto the wrong stock.
       out <- tibble(
         symbol     = rownames(q),
         price      = as.numeric(q$Last),
         change     = as.numeric(q$Change),
-        change_pct = as.numeric(q$`% Change`)
+        change_pct = as.numeric(q$`% Change`),
+        qtime      = if ("Trade Time" %in% names(q)) q$`Trade Time` else Sys.time()
       ) %>% filter(!is.na(price), price > 0)
       # Share them, so opening one of these in Deep Dive costs no request.
-      quote_cache_put(out$symbol, out$price, out$change_pct,
-                      if ("Trade Time" %in% names(q)) q$`Trade Time` else NULL)
+      quote_cache_put(out$symbol, out$price, out$change_pct, out$qtime)
       out
     }, error = function(e) {
       message("getQuote failed: ", e$message)

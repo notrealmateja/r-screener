@@ -195,12 +195,14 @@ jobs:
           '
 
       - name: Verify pipeline output
+        id: verify
         if: always()
         run: |
           Rscript -e '
             suppressMessages(library(readr))
             files <- c("data/master_scored.csv","data/top15_sweetspot.csv",
                        "data/top15_unicorns.csv","data/alpha_history.csv",
+                       "data/price_history.csv",
                        "data/market_news.csv","data/earnings_calendar.csv",
                        "data/wsb_trending.csv","data/stocktwits_trending.csv",
                        "data/macro_data.csv","data/sector_performance.csv",
@@ -332,8 +334,13 @@ jobs:
             }
           '
 
+      # always(), so a failure in the pipeline step still publishes whatever good
+      # data it managed to write — but NOT when the health check has just called
+      # the core data unusable. Committing then would overwrite yesterday's
+      # working data with an empty file and take the live site down, while the
+      # red run only tells you afterwards.
       - name: Clean stale files and commit updated data
-        if: always()
+        if: always() && steps.verify.outcome != 'failure'
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"

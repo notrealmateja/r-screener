@@ -739,12 +739,31 @@ QUOTE_TTL <- 60  # seconds
 .quote_cache <- new.env(parent = emptyenv())
 
 quote_cache_put <- function(symbol, price, chg = NA_real_, time = NULL) {
-  ok <- !is.na(price) & is.finite(price) & price > 0
+  n <- length(symbol)
+  if (!n) return(invisible(0L))
+
+  # Anything not aligned to `symbol` is treated as absent rather than indexed
+  # positionally. The ticker tape once passed a PRE-filter timestamp vector
+  # alongside POST-filter symbols, so a single dropped row — which quantmod
+  # produces for any delisted or halted ticker — shifted every timestamp after
+  # it. Each stock was cached under a neighbour's trade time, and the one after
+  # the gap got NA, which printed as a bare "LIVE" with no time at all.
+  fit <- function(x, n) {
+    if (is.null(x)) return(NULL)
+    if (length(x) == n) return(x)
+    if (length(x) == 1) return(rep(x, n))
+    NULL
+  }
+  price <- fit(price, n); chg <- fit(chg, n); time <- fit(time, n)
+  if (is.null(price)) return(invisible(0L))
+
+  ok <- !is.na(symbol) & nzchar(symbol) &
+        !is.na(price) & is.finite(price) & price > 0
   for (i in which(ok)) {
     assign(symbol[i],
            list(price = as.numeric(price[i]),
-                chg   = if (length(chg) >= i) as.numeric(chg[i]) else NA_real_,
-                time  = if (!is.null(time) && length(time) >= i) time[i] else Sys.time(),
+                chg   = if (is.null(chg)) NA_real_ else as.numeric(chg[i]),
+                time  = if (is.null(time)) Sys.time() else time[i],
                 at    = Sys.time()),
            envir = .quote_cache)
   }
