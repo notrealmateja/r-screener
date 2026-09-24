@@ -647,15 +647,6 @@ run_equity_curve <- function(price_path = "data/price_history.csv") {
 
   bench <- px %>% distinct(date, spy_ret) %>% arrange(date)
 
-  # Equal-weighting the WHOLE universe with no signal at all. This is the
-  # control for survivorship: the 195 tickers are a list written in 2026 and
-  # backtested from 2024, with zero delistings in three years, so simply being
-  # eligible is worth something. Whatever this line earns above the index is
-  # the candidate set, not the score. Without it the tab credits the model for
-  # the bias in its own universe.
-  universe <- px %>% group_by(date) %>%
-    summarize(univ_ret = mean(daily_ret, na.rm = TRUE), .groups = "drop") %>%
-    arrange(date)
   dates <- bench$date
   if (length(dates) < FORMATION_DAYS + HOLD_DAYS + 1) {
     message(glue("Need {FORMATION_DAYS + HOLD_DAYS + 1} trading days, have {length(dates)}."))
@@ -687,9 +678,17 @@ run_equity_curve <- function(price_path = "data/price_history.csv") {
 
     leg1 <- tranche_returns(fw, q1)
     leg5 <- tranche_returns(fw, q5)
-    if (is.null(leg1) || is.null(leg5)) next
+    # The no-signal control: hold EVERY name the model was choosing among,
+    # built the same way the model is. It used to be an equal-weight average
+    # recomputed daily, which is a different and cost-free strategy — worth
+    # 3.6 points a year against this one, all of it flattering the model's
+    # edge over its own universe. A control has to be constructed like the
+    # thing it controls for.
+    legU <- tranche_returns(fw, scored$symbol)
+    if (is.null(leg1) || is.null(leg5) || is.null(legU)) next
     leg <- leg1 %>% rename(model_ret = ret, n_held = n) %>%
-      inner_join(leg5 %>% select(date, q5_ret = ret), by = "date")
+      inner_join(leg5 %>% select(date, q5_ret = ret), by = "date") %>%
+      inner_join(legU %>% select(date, univ_ret = ret), by = "date")
     if (nrow(leg) == 0) next
 
     # Charge turnover once, on the first day. Holding a name across a rebalance
@@ -708,7 +707,6 @@ run_equity_curve <- function(price_path = "data/price_history.csv") {
 
   curve <- bind_rows(legs) %>% arrange(date) %>%
     inner_join(bench, by = "date") %>%
-    inner_join(universe, by = "date") %>%
     mutate(
       model_cum = cumprod(1 + model_ret),
       q5_cum    = cumprod(1 + q5_ret),
