@@ -20,8 +20,14 @@ if (have_pkgs("dplyr", "tibble", "readr")) {
     }
   }
 
+  # Six consecutive TRADING days. The fixture used to be six consecutive
+  # calendar days, which quietly included a Saturday and a Sunday — the same
+  # confusion between "a day" and "a day the market was open" that the lookback
+  # itself got wrong.
+  BIZ <- as.Date(c("2026-09-01", "2026-09-02", "2026-09-03",
+                   "2026-09-04", "2026-09-07", "2026-09-08"))
   hist <- function() tibble(
-    date = rep(as.Date("2026-09-01") + 0:5, each = 3),
+    date = rep(BIZ, each = 3),
     symbol = rep(c("AAA", "BBB", "CCC"), 6),
     rank = c(1,2,3,  1,2,3,  2,1,3,  3,1,2,  3,2,1,  3,1,2),
     n_universe = 3L
@@ -72,6 +78,45 @@ if (have_pkgs("dplyr", "tibble", "readr")) {
     # One session back: AAA is rank 3 on both of the last two days -> no move.
     d1 <- rank_delta(lookback = 1, sh = hist())
     expect_equal(d1$delta[d1$symbol == "AAA"], 0L)
+  })
+
+  # Found by probing during the audit, against the live file. The history has
+  # one row per day the pipeline RAN, not per trading day, so counting rows
+  # backwards measured 13 calendar days and labelled it "5D".
+  test_that("the lookback is measured in trading days, not rows", {
+    skip_if_not(have_helpers, "global.R helpers unavailable")
+    # Fri 2026-09-04 .. Thu 2026-09-24, but the pipeline missed several runs.
+    ran <- as.Date(c("2026-09-04", "2026-09-08", "2026-09-11",
+                     "2026-09-17", "2026-09-22", "2026-09-24"))
+    h <- tibble(date = rep(ran, each = 2),
+                symbol = rep(c("AAA", "BBB"), 6),
+                rank = rep(c(1L, 2L), 6), n_universe = 2L)
+    # Five trading days before Thu 09-24 is Wed 09-17 — which is on file.
+    # Counting five rows back would have reached 09-04, three weeks earlier.
+    d <- rank_delta(lookback = 5, sh = h)
+    expect_false(is.null(d))
+    expect_equal(nrow(d), 2)
+  })
+
+  test_that("a gap wider than the tolerance reports nothing", {
+    skip_if_not(have_helpers, "global.R helpers unavailable")
+    # Nothing within four days of the five-trading-day mark (Wed 09-17).
+    ran <- as.Date(c("2026-09-04", "2026-09-24"))
+    h <- tibble(date = rep(ran, each = 2),
+                symbol = rep(c("AAA", "BBB"), 2),
+                rank = rep(c(1L, 2L), 2), n_universe = 2L)
+    expect_null(rank_delta(lookback = 5, sh = h))
+  })
+
+  test_that("a weekend is never counted as a trading day", {
+    skip_if_not(have_helpers, "global.R helpers unavailable")
+    # Mon 2026-09-07 back one trading day is Fri 2026-09-04, not Sun 09-06.
+    ran <- as.Date(c("2026-09-04", "2026-09-06", "2026-09-07"))
+    h <- tibble(date = rep(ran, each = 2),
+                symbol = rep(c("AAA", "BBB"), 3),
+                rank = c(1L,2L,  1L,2L,  2L,1L), n_universe = 2L)
+    d <- rank_delta(lookback = 1, sh = h)
+    expect_equal(d$delta[d$symbol == "AAA"], -1L)   # 1 -> 2 against Friday
   })
 
   test_that("arrows are coloured by direction and a gap shows a dash", {

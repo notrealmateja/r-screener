@@ -44,20 +44,52 @@ corporate_action <- function(daily_ret, vol_ratio) {
 # routinely; it has since withdrawn the BRCC bar that this pipeline recorded as
 # +872%, yet the phantom value persisted and kept feeding the score.
 merge_history <- function(existing, fresh, keep_days = NULL, today = Sys.Date()) {
-  if (is.null(fresh) || nrow(fresh) == 0) fresh <- fresh[0, , drop = FALSE]
-  # An undated row cannot be merged against anything, and leaving one in makes
-  # min() below return Inf, which keeps every stored row and quietly restores
-  # the stale-value bug this function exists to prevent.
-  if (nrow(fresh) > 0) fresh <- fresh[!is.na(fresh$date), , drop = FALSE]
+  # An undated row cannot be merged against anything. On the fresh side it made
+  # min() return Inf, so `existing$date < Inf` kept every stored row and quietly
+  # restored the stale-value bug this function exists to prevent. On the stored
+  # side it survived the comparison as NA, and `df[NA, ]` injects an entire row
+  # of NAs — into a file the pipeline commits. Both sides are dropped up front.
+  dated <- function(d) !is.null(d) && nrow(d) > 0 && "date" %in% names(d)
+  if (dated(fresh))    fresh    <- fresh[!is.na(fresh$date), , drop = FALSE]
+  if (dated(existing)) existing <- existing[!is.na(existing$date), , drop = FALSE]
+
   if (is.null(existing) || nrow(existing) == 0) {
     out <- fresh
-  } else if (nrow(fresh) == 0) {
+  } else if (is.null(fresh) || nrow(fresh) == 0) {
     out <- existing
   } else {
-    fresh_from <- min(fresh$date)
-    out <- dplyr::bind_rows(existing[existing$date < fresh_from, , drop = FALSE], fresh)
+    # How far back the pull reached is a PER-SYMBOL fact. Taking one min()
+    # across the whole pull applied the longest series' start date to every
+    # symbol, so a ticker that came back short — or did not come back at all —
+    # had every stored row after that date deleted. On a 3-symbol fixture a
+    # symbol returning 5 of 366 days lost the other 361, and a symbol absent
+    # from the pull was erased outright. This is not hypothetical: CRNX and WBS
+    # both pull short today.
+    #
+    # Comparing each symbol against its own reach keeps the anti-stale property
+    # exactly where it belongs — a restated bar is still overwritten, because
+    # the pull that restates it necessarily reaches it.
+    # Bounded at BOTH ends, because "everything from here on" over-reaches.
+    # A stored row after the pull's last date is a row the pull says nothing
+    # about, exactly like one before its first. That matters for score_history,
+    # where fresh is a single day: dropping every row at-or-after it deletes
+    # later days whenever the as-of date moves backward, which it can now that
+    # the date is taken from the data rather than the wall clock.
+    # Inside the range the pull remains authoritative, so a bar Yahoo has since
+    # withdrawn still disappears — the case this function was written for.
+    sym  <- as.character(fresh$symbol)
+    lo   <- tapply(as.numeric(fresh$date), sym, min)
+    hi   <- tapply(as.numeric(fresh$date), sym, max)
+    esym <- as.character(existing$symbol)
+    ed   <- as.numeric(existing$date)
+    keep <- ed < lo[esym] | ed > hi[esym]
+    # NA means the pull said nothing about that symbol, so it cannot correct it.
+    keep[is.na(keep)] <- TRUE
+    out <- dplyr::bind_rows(existing[keep, , drop = FALSE], fresh)
   }
   out <- dplyr::distinct(out, symbol, date, .keep_all = TRUE)
-  if (!is.null(keep_days)) out <- out[out$date >= today - keep_days, , drop = FALSE]
+  # which() rather than a bare logical: an NA date here would subset in another
+  # row of NAs, which is the failure mode above wearing a different hat.
+  if (!is.null(keep_days)) out <- out[which(out$date >= today - keep_days), , drop = FALSE]
   dplyr::arrange(out, symbol, date)
 }

@@ -598,20 +598,36 @@ tv_embed_url <- function(channel) {
 # got smaller. Comparisons are skipped when the universe changed size between
 # the two dates: the list went from 50 names to 195 on 2026-08-05, and a rank
 # move across that boundary is the list growing, not the stock moving.
-rank_delta <- function(lookback = 5, sh = score_history) {
+rank_delta <- function(lookback = 5, sh = score_history, tol = 4) {
   if (is.null(sh) || nrow(sh) == 0) return(NULL)
   need <- c("date", "symbol", "rank", "n_universe")
   if (!all(need %in% names(sh))) return(NULL)
   sh  <- sh %>% mutate(date = as.Date(date))
   dts <- sort(unique(sh$date))
   if (length(dts) < 2) return(NULL)
-  # Require a full lookback. Clamping to the oldest available date instead
-  # would label a 3-day move as "5D": with only four dates on file, lookback 5
-  # and lookback 99 both returned the same number. A dash is honest; a
-  # mislabelled delta is not.
-  if (length(dts) <= lookback) return(NULL)
+  # Counting rows backwards does not measure days. The file holds one row per
+  # day the PIPELINE RAN, and it does not run every day — a nightly can fail,
+  # and until the as-of date was taken from the price pull it also wrote rows
+  # dated Saturday and Sunday. Five rows back was thirteen calendar days on the
+  # live file while the column header said "5D".
+  #
+  # Walk the calendar instead, then take the newest date at or before that
+  # target. The same principle as the guard below it replaced: a dash is
+  # honest, a mislabelled delta is not.
   latest <- dts[length(dts)]
-  prior  <- dts[length(dts) - lookback]
+  is_biz <- function(d) { w <- as.POSIXlt(d)$wday; w >= 1 && w <= 5 }
+  target <- latest
+  k <- 0L
+  while (k < lookback) {
+    target <- target - 1
+    if (is_biz(target)) k <- k + 1L
+  }
+  cand <- dts[dts <= target]
+  if (!length(cand)) return(NULL)
+  prior <- cand[length(cand)]
+  # Holidays and the odd missed run leave small gaps; anything wider than that
+  # is not the window the header claims, so report nothing.
+  if (as.integer(target - prior) > tol) return(NULL)
   now  <- sh %>% filter(date == latest) %>% select(symbol, r_now = rank,  n_now = n_universe)
   then <- sh %>% filter(date == prior)  %>% select(symbol, r_then = rank, n_then = n_universe)
   out <- inner_join(now, then, by = "symbol") %>%

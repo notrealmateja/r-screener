@@ -134,4 +134,95 @@ if (have_pkgs("dplyr", "tibble")) {
     fresh    <- tibble(symbol = "A", date = as.Date(NA),           daily_alpha = 2)
     expect_silent(merge_history(existing, fresh))
   })
+
+  # Found by a debugging pass. How far back the pull reached was taken as one
+  # min() over the whole pull, so the longest series' start date was applied to
+  # every symbol. A ticker that came back short lost the stored rows the pull
+  # never covered, and a ticker missing from the pull was deleted outright —
+  # from a file the pipeline commits. CRNX and WBS pull short in live data.
+  test_that("a short pull does not delete the stored rows it never reached", {
+    days <- seq(as.Date("2024-01-01"), as.Date("2024-12-31"), by = "day")
+    existing <- bind_rows(
+      tibble(symbol = "AAA", date = days, daily_alpha = 0.001),
+      tibble(symbol = "BBB", date = days, daily_alpha = 0.001))
+    # AAA pulls the full year; BBB comes back with only the last five days.
+    fresh <- bind_rows(
+      tibble(symbol = "AAA", date = days,          daily_alpha = 0.002),
+      tibble(symbol = "BBB", date = tail(days, 5), daily_alpha = 0.002))
+    got <- merge_history(existing, fresh)
+    expect_equal(sum(got$symbol == "BBB"), length(days))     # was 5
+    # The five days the pull DID reach are still refreshed.
+    expect_equal(unique(got$daily_alpha[got$symbol == "BBB" &
+                                        got$date %in% tail(days, 5)]), 0.002)
+    # The rest is the stored history, untouched.
+    expect_equal(unique(got$daily_alpha[got$symbol == "BBB" &
+                                        !(got$date %in% tail(days, 5))]), 0.001)
+  })
+
+  test_that("a symbol missing from the pull keeps its history", {
+    existing <- bind_rows(
+      tibble(symbol = "AAA", date = as.Date("2024-01-01") + 0:9, daily_alpha = 0.001),
+      tibble(symbol = "CCC", date = as.Date("2024-01-01") + 0:9, daily_alpha = 0.001))
+    fresh <- tibble(symbol = "AAA", date = as.Date("2024-01-01") + 0:9, daily_alpha = 0.002)
+    got <- merge_history(existing, fresh)
+    expect_true("CCC" %in% got$symbol)          # was erased entirely
+    expect_equal(sum(got$symbol == "CCC"), 10)
+  })
+
+  test_that("one symbol's restatement does not reach across to another", {
+    # The anti-stale property has to survive the per-symbol fix: BRCC's bad bar
+    # is still overwritten, because the pull that restates it reaches it.
+    existing <- bind_rows(
+      tibble(symbol = "BRCC", date = as.Date("2026-08-25"), daily_alpha = 8.716),
+      tibble(symbol = "AAA",  date = as.Date("2026-08-25"), daily_alpha = 0.01))
+    fresh <- tibble(symbol = "BRCC", date = as.Date("2026-08-25"), daily_alpha = 0)
+    got <- merge_history(existing, fresh)
+    expect_equal(got$daily_alpha[got$symbol == "BRCC"], 0)      # corrected
+    expect_equal(got$daily_alpha[got$symbol == "AAA"],  0.01)   # untouched
+  })
+
+  test_that("an undated stored row cannot inject a row of NAs", {
+    # `existing$date < fresh_from` is NA for an undated stored row, and
+    # `df[NA, ]` returns a whole row of NAs rather than nothing.
+    existing <- bind_rows(
+      tibble(symbol = "AAA", date = as.Date("2024-01-01") + 0:9, daily_alpha = 0.001),
+      tibble(symbol = "BBB", date = as.Date(NA),                 daily_alpha = 0.002))
+    fresh <- tibble(symbol = "AAA", date = as.Date("2024-01-08") + 0:2, daily_alpha = 0.009)
+    got <- merge_history(existing, fresh, keep_days = 1120, today = as.Date("2024-01-11"))
+    expect_equal(sum(is.na(got$symbol)), 0)
+    expect_equal(sum(is.na(got$date)), 0)
+  })
+
+  # score_history's fresh frame is a single day. Dropping every stored row
+  # at-or-after it deleted later days whenever the as-of date moved backward —
+  # which it can now that the date comes from the price pull, not the clock.
+  test_that("a single-day refresh does not delete the days after it", {
+    existing <- tibble(symbol = "AAA",
+                       date = as.Date(c("2026-09-19", "2026-09-20", "2026-09-22")),
+                       master_score = c(1, 2, 3))
+    fresh <- tibble(symbol = "AAA", date = as.Date("2026-09-19"), master_score = 99)
+    got <- merge_history(existing, fresh)
+    expect_equal(nrow(got), 3)                                    # was 1
+    expect_equal(got$master_score[got$date == as.Date("2026-09-19")], 99)  # restated
+    expect_equal(got$master_score[got$date == as.Date("2026-09-22")], 3)   # untouched
+  })
+
+  test_that("a bar withdrawn inside the pull's range still disappears", {
+    # The bound must not weaken the case merge_history exists for: Yahoo
+    # withdrew the BRCC bar, and a pull that spans it has to drop it.
+    existing <- tibble(symbol = "BRCC",
+                       date = as.Date(c("2026-08-24", "2026-08-25", "2026-08-26")),
+                       daily_alpha = c(0.01, 8.716, 0.02))
+    fresh <- tibble(symbol = "BRCC",
+                    date = as.Date(c("2026-08-24", "2026-08-26")),
+                    daily_alpha = c(0.01, 0.02))
+    got <- merge_history(existing, fresh)
+    expect_false(as.Date("2026-08-25") %in% got$date)   # phantom bar gone
+    expect_equal(nrow(got), 2)
+  })
+
+  test_that("a NULL fresh pull returns the stored history instead of erroring", {
+    existing <- tibble(symbol = "AAA", date = as.Date("2026-01-01"), daily_alpha = 1)
+    expect_equal(nrow(merge_history(existing, NULL)), 1)
+  })
 }

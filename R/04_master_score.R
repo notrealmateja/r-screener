@@ -465,7 +465,23 @@ run_module4 <- function(fund_data = NULL) {
   }
   if (exists("merge_history")) {
     sh_path <- "data/score_history.csv"
-    as_of <- if ("date" %in% names(df)) max(as.Date(df$date), na.rm = TRUE) else Sys.Date()
+    # Stamp the trading date the scores DESCRIBE, not the date the job happened
+    # to run. The two are not the same: the 2026-09-24 run scored a price pull
+    # that ends 2026-09-22 and filed the result under 2026-09-24. Worse, the job
+    # runs seven days a week, so the file had rows dated Saturday and Sunday —
+    # 30 of roughly 100 days — and those are not duplicates of Friday, because
+    # sentiment, news and analyst inputs keep moving while the market is shut.
+    # The app's 5D rank-movement column walks this file by row, so a wall-clock
+    # stamp made it measure "five runs ago" and label the answer "5D".
+    as_of <- local({
+      if ("date" %in% names(df)) return(max(as.Date(df$date), na.rm = TRUE))
+      ph <- "data/price_history.csv"
+      d <- if (file.exists(ph)) tryCatch(suppressWarnings(
+        max(as.Date(read_csv(ph, col_select = "date", show_col_types = FALSE,
+                             progress = FALSE)$date), na.rm = TRUE)),
+        error = function(e) NA) else NA
+      if (length(d) == 1 && !is.na(d) && is.finite(d)) as.Date(d) else Sys.Date()
+    })
     today_scores <- df %>%
       filter(!is.na(symbol), !is.na(master_score)) %>%
       transmute(date = as_of, symbol = as.character(symbol),

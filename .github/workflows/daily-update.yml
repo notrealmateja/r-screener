@@ -152,7 +152,14 @@ jobs:
 
             # Drop anything the app no longer reads, so a file removed from the
             # list above does not linger in the bundle forever.
-            stale <- setdiff(list.files("app", pattern="\\.csv$"), APP_FILES)
+            #
+            # recursive: the non-recursive listing only ever saw the top level,
+            # so four CSVs under app/data/ were invisible to this cleanup while
+            # still being listed in manifest.json and shipped to Connect Cloud.
+            # Nothing reads them: APP_DATA_DIR resolves to "." or "app", never
+            # "app/data", so load_csv() cannot reach that directory at all.
+            stale <- setdiff(list.files("app", pattern="\\.csv$", recursive=TRUE),
+                             APP_FILES)
             # A truncated APP_FILES would empty the bundle rather than trim it:
             # the copy above silently skips names it cannot find, and this would
             # then delete those same files from app/. Editing that list wrongly
@@ -354,6 +361,17 @@ jobs:
           git add data/alpha_history.csv data/av_cache.csv data/polygon_cache.csv \
                   data/*.csv data/*.rds app/*.csv app/*.rds app/data/*.rds \
                   app/manifest.json || true
+
+          # Stage deletions too. The globs above are expanded by the shell, so
+          # they can only ever name files that still EXIST — a file the cleanup
+          # step just unlink()ed is never passed to git, its removal is never
+          # recorded, and the next checkout restores it so the cleanup deletes
+          # it again. Every night, forever, while the bundle never shrinks.
+          # Verified in a scratch repo: `git add app/*.csv` after deleting
+          # app/stale.csv stages zero deletions and the file survives in HEAD.
+          # -u touches only already-tracked paths, so no build junk sneaks in.
+          git add -u -- data app || true
+
           git diff --quiet && git diff --staged --quiet || \
             git commit -m "Auto-update: Daily alpha refresh $(date +'%Y-%m-%d')"
           git push || true
