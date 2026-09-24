@@ -43,3 +43,46 @@ test_that("the linter still catches a dangling variable reference", {
   expect_equal(r$status, 1L, info = r$text)
   expect_true(grepl("a_name_that_is_never_assigned", r$text, fixed = TRUE))
 })
+
+# Found by probing the linter itself during the audit. It closed a block on the
+# next line whose only content is a quote — but a one-liner closes on its OWN
+# line, so the scan ran past it and swallowed everything up to the following
+# block's terminator. The report came out as a syntax error quoting raw YAML,
+# and the swallowed block was never checked, so a genuine dangling reference
+# inside it went unreported.
+test_that("a one-line Rscript -e block does not swallow the next one", {
+  skip_if_not(file.exists(lint), "linter not present")
+  tmp <- file.path(tempdir(), "wflint_oneline")
+  dir.create(tmp, showWarnings = FALSE)
+  writeLines(c(
+    "jobs:", "  x:", "    steps:",
+    "      - name: one-liner",
+    "        run: Rscript -e 'message(undefined_one)'",
+    "      - name: later block",
+    "        run: |",
+    "          Rscript -e '",
+    "            message(undefined_two)",
+    "          '"
+  ), file.path(tmp, "a.yml"))
+
+  r <- run_lint(tmp)
+  expect_equal(r$status, 1L, info = r$text)
+  expect_true(grepl("undefined_one", r$text, fixed = TRUE))
+  expect_true(grepl("undefined_two", r$text, fixed = TRUE))  # was never reached
+  expect_false(grepl("syntax", r$text, fixed = TRUE))        # not a YAML parse error
+})
+
+test_that("an unterminated block is named rather than mis-sliced", {
+  skip_if_not(file.exists(lint), "linter not present")
+  tmp <- file.path(tempdir(), "wflint_unterminated")
+  dir.create(tmp, showWarnings = FALSE)
+  writeLines(c(
+    "jobs:", "  x:", "    steps:", "      - run: |",
+    "          Rscript -e '",
+    "            message(\"never closed\")"
+  ), file.path(tmp, "a.yml"))
+
+  r <- run_lint(tmp)
+  expect_equal(r$status, 1L, info = r$text)
+  expect_true(grepl("unterminated", r$text, fixed = TRUE))
+})

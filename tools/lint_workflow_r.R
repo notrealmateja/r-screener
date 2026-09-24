@@ -20,13 +20,35 @@ extract_blocks <- function(path) {
   blocks <- list(); i <- 1
   while (i <= length(lines)) {
     if (grepl("Rscript -e '", lines[i], fixed = TRUE)) {
+      # A one-liner closes its own quote on the same line. Scanning ahead for a
+      # lone quote regardless swallowed every line up to the NEXT block's
+      # terminator: the diagnostic came out as a syntax error quoting raw YAML,
+      # and the block that got swallowed was never checked at all — so a real
+      # dangling reference sitting in it went unreported.
+      after <- sub("^.*Rscript -e '", "", lines[i])
+      if (grepl("'", after, fixed = TRUE)) {
+        blocks[[length(blocks) + 1]] <- list(line = i, code = sub("'.*$", "", after))
+        i <- i + 1
+        next
+      }
       start <- i
       # Blocks close on a line whose only content is a single quote.
       j <- i + 1
       while (j <= length(lines) && !grepl("^\\s*'\\s*$", lines[j])) j <- j + 1
-      body <- lines[(start + 1):(min(j, length(lines)) - 1)]
-      indent <- min(nchar(sub("[^ ].*$", "", body[nzchar(trimws(body))])))
-      body <- substring(body, indent + 1)
+      if (j > length(lines)) {
+        # Unterminated: report it rather than slicing an arbitrary range, which
+        # for a block near the end of the file reverses and lints the wrong
+        # lines.
+        blocks[[length(blocks) + 1]] <- list(line = start, code = NULL,
+                                             unterminated = TRUE)
+        break
+      }
+      body <- if (j > start + 1) lines[(start + 1):(j - 1)] else character(0)
+      keep <- nzchar(trimws(body))
+      if (any(keep)) {
+        indent <- min(nchar(sub("[^ ].*$", "", body[keep])))
+        body <- substring(body, indent + 1)
+      }
       blocks[[length(blocks) + 1]] <- list(line = start, code = body)
       i <- j + 1
     } else i <- i + 1
@@ -41,6 +63,11 @@ if (!length(files)) { cat("No workflow files found in", wf_dir, "\n"); quit(stat
 for (f in files) {
   for (b in extract_blocks(f)) {
     label <- sprintf("%s:%d", f, b$line)
+    if (isTRUE(b$unterminated)) {
+      cat(sprintf("FAIL %s\n  unterminated Rscript -e block (no closing quote)\n", label))
+      problems <- problems + 1L
+      next
+    }
     exprs <- tryCatch(parse(text = b$code), error = function(e) e)
     if (inherits(exprs, "error")) {
       cat(sprintf("FAIL %s\n  syntax: %s\n", label, conditionMessage(exprs)))
