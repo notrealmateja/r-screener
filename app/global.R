@@ -605,9 +605,13 @@ rank_delta <- function(lookback = 5, sh = score_history) {
   sh  <- sh %>% mutate(date = as.Date(date))
   dts <- sort(unique(sh$date))
   if (length(dts) < 2) return(NULL)
+  # Require a full lookback. Clamping to the oldest available date instead
+  # would label a 3-day move as "5D": with only four dates on file, lookback 5
+  # and lookback 99 both returned the same number. A dash is honest; a
+  # mislabelled delta is not.
+  if (length(dts) <= lookback) return(NULL)
   latest <- dts[length(dts)]
-  prior  <- dts[max(1, length(dts) - lookback)]
-  if (prior == latest) return(NULL)
+  prior  <- dts[length(dts) - lookback]
   now  <- sh %>% filter(date == latest) %>% select(symbol, r_now = rank,  n_now = n_universe)
   then <- sh %>% filter(date == prior)  %>% select(symbol, r_then = rank, n_then = n_universe)
   out <- inner_join(now, then, by = "symbol") %>%

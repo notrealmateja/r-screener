@@ -48,6 +48,17 @@ if (have_pkgs("dplyr", "tibble", "readr")) {
     expect_true(is.null(d) || nrow(d) == 0)
   })
 
+  # Found by probing during the audit. Clamping to the oldest date meant a
+  # lookback of 5 and a lookback of 99 returned the same delta on a four-day
+  # history, while the column header still said "5D".
+  test_that("a lookback longer than the history returns nothing, not a shorter one", {
+    skip_if_not(have_helpers, "global.R helpers unavailable")
+    h <- hist()                                 # six dates
+    expect_equal(nrow(rank_delta(lookback = 5,  sh = h)), 3)   # fits
+    expect_null(rank_delta(lookback = 6,  sh = h))             # exactly too long
+    expect_null(rank_delta(lookback = 99, sh = h))
+  })
+
   test_that("too little history yields nothing rather than a wrong number", {
     skip_if_not(have_helpers, "global.R helpers unavailable")
     one <- hist() %>% filter(date == min(date))
