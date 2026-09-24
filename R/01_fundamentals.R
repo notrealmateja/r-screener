@@ -151,6 +151,13 @@ run_module1 <- function(tickers = NULL) {
       suppressWarnings(getSymbols(sym, src = "yahoo", env = env, auto.assign = TRUE,
                                   from = Sys.Date() - 365))
       px    <- Cl(env[[sym]])
+      # Drop unsettled bars before taking the last one. Yahoo returns a row for
+      # the current session with an NA close until it settles, and last() then
+      # handed back NA: 160 of 195 symbols carried price = NA, exactly the 160
+      # whose data did not reach the final date in the pull. It is the same
+      # trailing-partial-bar fault that put a 35-of-194 day on the end of the
+      # equity curve and a Friday print behind a live badge.
+      if (!is.null(px)) px <- px[!is.na(px)]
       if (is.null(px) || length(px) == 0) stop("no price data returned")
       tibble(symbol   = sym,
              price    = round(as.numeric(last(px)), 2),
