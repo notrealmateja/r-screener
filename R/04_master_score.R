@@ -628,7 +628,17 @@ run_module4 <- function(fund_data = NULL) {
     last_updated     = format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
     n_stocks         = n,
     max_days_tracked = max(df$days_tracked, na.rm = TRUE),
-    top_alpha_stock  = df$symbol[which.max(df$hist_alpha_ann)],
+    # Gate on a full window. hist_alpha_ann annualises a daily mean, so a
+    # thin history reads enormous: CRNX has 17 observations — one of them a
+    # genuine +62.6% trial readout from 2023 — and scores 1179%/yr with an
+    # IR of 4.7. The master score is protected from that by confidence_weight
+    # (CRNX lands 85th of 195, rated Neutral); this field was not, so the run
+    # log has been announcing a 17-day artifact as the day's best alpha.
+    top_alpha_stock  = local({
+      ok <- which(df$days_tracked >= 63 & is.finite(df$hist_alpha_ann))
+      if (!length(ok)) NA_character_
+      else df$symbol[ok[which.max(df$hist_alpha_ann[ok])]]
+    }),
     regime           = regime
   )
   if (!dir.exists("data")) dir.create("data", recursive = TRUE)

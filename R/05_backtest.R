@@ -535,6 +535,10 @@ run_reversal_test <- function(history_path = "data/alpha_history.csv") {
 
 EQ_COST_BPS <- 10   # round-trip cost per unit turnover, in basis points
 
+# Minimum share of the universe that must have a price before a day counts as
+# a day the book can be marked. See the trailing-edge trim in run_equity_curve.
+COVERAGE_FLOOR <- 0.80
+
 # Corporate actions are identified and neutralised at ingest by 02_momentum.R,
 # but this module reads price_history.csv directly and may be run against a
 # file written before that guard existed, so it applies the same test itself.
@@ -644,6 +648,30 @@ run_equity_curve <- function(price_path = "data/price_history.csv") {
 
   px <- px %>% filter(!is.na(daily_ret), !is.na(spy_ret)) %>% arrange(date, symbol)
   if (nrow(px) == 0) { message("No usable price rows."); return(invisible(NULL)) }
+
+  # A day where most of the universe has no price is not a day the book can be
+  # marked. tranche_returns fills a missing cell with 0, which FREEZES that
+  # position rather than excluding it, so a thin day quietly dilutes the whole
+  # portfolio toward flat instead of failing. 2026-09-22 arrived with 35 of 194
+  # symbols — the trailing edge of a pull still landing — and moved the model's
+  # measured excess by 0.08pp on its own. Small at one day, unbounded at more,
+  # and invisible either way, so it is cut here rather than absorbed downstream.
+  #
+  # Trailing edge only. A thin day in the middle of the history is a universe
+  # that was genuinely smaller then; a thin day at the end is tonight's pull.
+  cov <- px %>% count(date, name = "n_sym") %>% arrange(date)
+  ref <- stats::median(cov$n_sym)
+  trimmed <- as.Date(character(0))
+  while (nrow(cov) > 1 && cov$n_sym[nrow(cov)] < COVERAGE_FLOOR * ref) {
+    trimmed <- c(trimmed, cov$date[nrow(cov)])
+    cov <- cov[-nrow(cov), ]
+  }
+  if (length(trimmed)) {
+    px <- px %>% filter(!(date %in% trimmed))
+    message(glue("Dropped {length(trimmed)} trailing day(s) under ",
+                 "{round(COVERAGE_FLOOR * 100)}% universe coverage: ",
+                 "{paste(format(trimmed), collapse = ', ')}"))
+  }
 
   bench <- px %>% distinct(date, spy_ret) %>% arrange(date)
 

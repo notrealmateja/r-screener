@@ -412,7 +412,13 @@ run_module2 <- function(tickers = NULL) {
   )
 
   message("Saved: data/momentum_scored.csv + data/price_history.csv")
-  top_alpha <- summary_out %>% arrange(desc(hist_alpha_ann)) %>% slice(1)
+  # Only names with a full window. Annualising a mean over 17 observations
+  # gave CRNX 1179%/yr and this line reported it as the day's top alpha.
+  top_alpha <- summary_out %>%
+    filter(days_tracked >= 63, is.finite(hist_alpha_ann)) %>%
+    arrange(desc(hist_alpha_ann)) %>% slice(1)
+  if (nrow(top_alpha) == 0)
+    top_alpha <- summary_out %>% arrange(desc(hist_alpha_ann)) %>% slice(1)
   message(glue("Top alpha stock today: {top_alpha$symbol} ",
                "(ann. alpha {round(top_alpha$hist_alpha_ann*100,1)}%, ",
                "IR {round(top_alpha$hist_ir,2)}, ",

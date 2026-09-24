@@ -176,6 +176,24 @@ if (exists("tranche_returns") && have_pkgs("tidyr")) {
     expect_equal(nrow(got), 5)          # all five dates survive
     expect_false(any(is.na(got$ret)))
   })
+
+  # ...but surviving is not the same as being right. The 0-fill is a HOLD, not
+  # an exclusion: a missing cell freezes that position at its last value, so a
+  # day where most of the book has no price reads as flat rather than as
+  # unknown. That is why run_equity_curve trims thin trailing days before they
+  # ever reach this function.
+  test_that("a missing cell freezes the position rather than excluding it", {
+    skip_if_not(exists("tranche_returns"), "05_backtest.R not sourced")
+    d <- as.Date("2024-01-01") + 0:1
+    fw <- tibble::tibble(
+      date      = c(d, d[1]),           # B has no row on day 2
+      symbol    = c("A", "A", "B"),
+      daily_ret = c(0.00, 0.10, 0.00)
+    )
+    got <- tranche_returns(fw, c("A", "B"))
+    # A gained 10% and B was frozen, so the book reads +5% — diluted, not +10%.
+    expect_equal(got$ret[2], 0.05, tolerance = 1e-12)
+  })
 }
 
 # ── the honesty controls ────────────────────────────────────────────────────
@@ -196,6 +214,22 @@ if (have_pkgs("dplyr", "readr")) {
     expect_false(isTRUE(all.equal(d$univ_ret, d$model_ret)))
     u <- s[s$series == "univ", ]
     expect_equal(u$total_return[1], tail(d$univ_cum, 1) - 1, tolerance = 1e-8)
+  })
+
+  # The curve used to end on 2026-09-22, a day carrying 35 of 194 symbols
+  # because the pull was still landing. Every absent name was marked flat.
+  test_that("the curve does not end on a day most of the universe is missing", {
+    pp <- repo_path("data", "price_history.csv")
+    ps <- repo_path("data", "backtest_equity_stats.csv")
+    skip_if_not(file.exists(pp) && file.exists(ps), "not generated yet")
+    px <- read_csv(pp, col_select = c(symbol, date, daily_ret),
+                   show_col_types = FALSE) %>% filter(!is.na(daily_ret))
+    cov <- px %>% count(date, name = "n_sym")
+    ref <- stats::median(cov$n_sym)
+    end <- as.Date(read_csv(ps, show_col_types = FALSE)$end_date[1])
+    n_end <- cov$n_sym[cov$date == end]
+    skip_if(length(n_end) != 1, "end date not present in price history")
+    expect_gte(n_end, 0.80 * ref)
   })
 
   test_that("significance is measured per rebalance, not per day", {

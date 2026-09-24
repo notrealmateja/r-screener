@@ -663,16 +663,39 @@ delta_map <- function(lookback = 5, sh = score_history) {
 # one, because the reader cannot tell the difference.
 pick_price <- function(live_price = NA_real_, live_chg = NA_real_,
                        live_time = NULL, stored_close = NA_real_,
-                       stored_chg = NA_real_, stored_date = NULL) {
+                       stored_chg = NA_real_, stored_date = NULL,
+                       now = Sys.time()) {
   usable <- length(live_price) == 1 && !is.na(live_price) && is.finite(live_price) &&
             live_price > 0
   if (usable) {
-    stamp <- if (!is.null(live_time) && !is.na(live_time))
-      format(as.POSIXct(live_time), "%H:%M") else NULL
-    return(list(price = as.numeric(live_price),
-                chg = if (length(live_chg) == 1 && !is.na(live_chg)) as.numeric(live_chg) else NA_real_,
-                is_live = TRUE,
-                label = if (is.null(stamp)) "LIVE" else paste("LIVE", stamp)))
+    chg <- if (length(live_chg) == 1 && !is.na(live_chg)) as.numeric(live_chg) else NA_real_
+    # A quote is live only if the TRADE behind it happened today. Yahoo returns
+    # Friday's last trade all weekend, and the fetch that retrieves it really is
+    # fresh, so the cache TTL — which ages the fetch, never the trade — cannot
+    # tell the two apart. The badge read a green "LIVE 16:00" over a price two
+    # days old, and carried no day on it to give that away.
+    #
+    # Dates are compared as formatted local strings: as.Date() on a POSIXct
+    # converts in UTC by default, which would shift the day for anyone west of
+    # Greenwich and reintroduce the same class of error.
+    lt <- NULL
+    if (!is.null(live_time) && length(live_time) == 1 && !is.na(live_time)) {
+      lt <- suppressWarnings(as.POSIXct(live_time))
+      if (is.na(lt)) lt <- NULL
+    }
+    if (is.null(lt))
+      # Nothing to check it against. The fetch is at most QUOTE_TTL old, so the
+      # price is current; there is simply no timestamp to print beside it.
+      return(list(price = as.numeric(live_price), chg = chg,
+                  is_live = TRUE, label = "LIVE"))
+    if (format(lt, "%Y-%m-%d") >= format(now, "%Y-%m-%d"))
+      return(list(price = as.numeric(live_price), chg = chg,
+                  is_live = TRUE, label = paste("LIVE", format(lt, "%H:%M"))))
+    # A real trade, but struck in an earlier session. Still the best price to
+    # show — it is the last one anybody paid — just not a live one, so it gets
+    # the close treatment and carries the day it belongs to.
+    return(list(price = as.numeric(live_price), chg = chg,
+                is_live = FALSE, label = paste("close", format(lt, "%b %d %H:%M"))))
   }
   stamp <- if (!is.null(stored_date) && !is.na(stored_date))
     format(as.Date(stored_date), "%b %d") else NULL
@@ -707,7 +730,8 @@ STORED_AS_OF <- local({
 #
 # The added point is flagged so the chart can mark it as live rather than let
 # it pass for a settled bar.
-append_live_point <- function(p, live_price = NA_real_, live_time = NULL) {
+append_live_point <- function(p, live_price = NA_real_, live_time = NULL,
+                              now = Sys.time()) {
   if (is.null(p) || !is.data.frame(p) || !nrow(p) || !"date" %in% names(p) ||
       !"close" %in% names(p)) return(p)
   if (length(live_price) != 1 || is.na(live_price) || !is.finite(live_price) ||
@@ -715,12 +739,32 @@ append_live_point <- function(p, live_price = NA_real_, live_time = NULL) {
 
   p <- p[order(p$date), , drop = FALSE]
   p$is_live <- FALSE
-  qd <- if (!is.null(live_time) && !all(is.na(live_time)))
-          as.Date(live_time[1]) else Sys.Date()
-  last_date <- as.Date(p$date[nrow(p)])
 
+  # Days are compared as formatted local strings, the same way pick_price does
+  # it. as.Date() on a POSIXct converts in UTC whatever the viewer's clock says,
+  # so an after-hours trade — Yahoo reports them until 20:00 ET, which is past
+  # midnight UTC — came back stamped tomorrow and was drawn as a point in the
+  # future, beyond the end of the chart.
+  today <- format(now, "%Y-%m-%d")
+  qd <- NULL
+  if (!is.null(live_time) && !all(is.na(live_time))) {
+    lt <- live_time[1]
+    qd <- if (inherits(lt, "Date")) format(lt, "%Y-%m-%d") else {
+      z <- suppressWarnings(as.POSIXct(lt))
+      if (is.na(z)) NULL else format(z, "%Y-%m-%d")
+    }
+  }
+  if (is.null(qd)) qd <- today
+
+  # A trade struck before today is not live, whatever the feed says. Over a
+  # weekend Yahoo keeps returning Friday's last print, which lands exactly on
+  # the chart's final bar and used to overwrite it and draw a green "Live"
+  # marker there — on a Sunday, beside a header that now reads "close Sep 18".
+  if (qd < today) return(p)
+
+  last_date <- format(as.Date(p$date[nrow(p)]), "%Y-%m-%d")
   # A quote older than the chart's last bar tells us nothing; leave it alone.
-  if (is.na(qd) || qd < last_date) return(p)
+  if (qd < last_date) return(p)
 
   # Same session: the stored close is provisional, so replace it in place
   # rather than drawing two points on one date.
@@ -732,7 +776,7 @@ append_live_point <- function(p, live_price = NA_real_, live_time = NULL) {
 
   new <- p[nrow(p), , drop = FALSE]
   new[] <- lapply(new, function(col) col[NA_integer_])  # NA of each column's type
-  new$date    <- qd
+  new$date    <- as.Date(qd)
   new$close   <- live_price
   new$is_live <- TRUE
   rbind(p, new)

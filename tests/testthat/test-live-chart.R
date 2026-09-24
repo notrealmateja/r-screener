@@ -28,7 +28,8 @@ if (have_pkgs("dplyr")) {
 
   test_that("a newer quote extends the line by one point", {
     skip_if_not(have_fn, "append_live_point unavailable")
-    out <- append_live_point(bars(), 15.5, as.POSIXct("2026-09-23 16:00:00"))
+    out <- append_live_point(bars(), 15.5, as.POSIXct("2026-09-23 16:00:00"),
+                             now = as.POSIXct("2026-09-23 16:00:30"))
     expect_equal(nrow(out), 6)
     expect_equal(as.Date(out$date[6]), as.Date("2026-09-23"))
     expect_equal(out$close[6], 15.5)
@@ -39,7 +40,8 @@ if (have_pkgs("dplyr")) {
   # The point of the whole exercise: do not invent a bar.
   test_that("only the close is filled in on the added point", {
     skip_if_not(have_fn, "append_live_point unavailable")
-    out <- append_live_point(bars(), 15.5, as.POSIXct("2026-09-23 16:00:00"))
+    out <- append_live_point(bars(), 15.5, as.POSIXct("2026-09-23 16:00:00"),
+                             now = as.POSIXct("2026-09-23 16:00:30"))
     expect_true(is.na(out$ma20[6]))
     expect_true(is.na(out$volume[6]))
     # and the settled history is untouched
@@ -49,7 +51,8 @@ if (have_pkgs("dplyr")) {
 
   test_that("a quote from the same session replaces rather than duplicates", {
     skip_if_not(have_fn, "append_live_point unavailable")
-    out <- append_live_point(bars(), 14.9, as.POSIXct("2026-09-21 16:00:00"))
+    out <- append_live_point(bars(), 14.9, as.POSIXct("2026-09-21 16:00:00"),
+                             now = as.POSIXct("2026-09-21 16:00:30"))
     expect_equal(nrow(out), 5)                 # no duplicate x value
     expect_equal(out$close[5], 14.9)           # provisional close updated
     expect_true(out$is_live[5])
@@ -58,7 +61,8 @@ if (have_pkgs("dplyr")) {
 
   test_that("a quote older than the chart is ignored", {
     skip_if_not(have_fn, "append_live_point unavailable")
-    out <- append_live_point(bars(), 99, as.POSIXct("2026-09-18 16:00:00"))
+    out <- append_live_point(bars(), 99, as.POSIXct("2026-09-18 16:00:00"),
+                             now = as.POSIXct("2026-09-21 16:00:30"))
     expect_equal(nrow(out), 5)
     expect_equal(out$close, bars()$close)      # nothing rewritten
     expect_false(any(out$is_live))
@@ -67,7 +71,8 @@ if (have_pkgs("dplyr")) {
   test_that("unusable quotes leave the chart alone", {
     skip_if_not(have_fn, "append_live_point unavailable")
     for (bad in list(NA_real_, 0, -3, NaN, Inf, numeric(0), c(1, 2))) {
-      out <- append_live_point(bars(), bad, as.POSIXct("2026-09-23 16:00:00"))
+      out <- append_live_point(bars(), bad, as.POSIXct("2026-09-23 16:00:00"),
+                               now = as.POSIXct("2026-09-23 16:00:30"))
       expect_equal(nrow(out), 5,
                    info = paste("accepted:", paste(bad, collapse = ",")))
     }
@@ -84,8 +89,33 @@ if (have_pkgs("dplyr")) {
   test_that("unsorted input is ordered before the point is added", {
     skip_if_not(have_fn, "append_live_point unavailable")
     b <- bars()[c(3, 1, 5, 2, 4), ]
-    out <- append_live_point(b, 15.5, as.POSIXct("2026-09-23 16:00:00"))
+    out <- append_live_point(b, 15.5, as.POSIXct("2026-09-23 16:00:00"),
+                             now = as.POSIXct("2026-09-23 16:00:30"))
     expect_false(is.unsorted(as.Date(out$date)))
+    expect_true(out$is_live[nrow(out)])
+  })
+
+  # Found by probing during the audit, alongside the same error in pick_price.
+  # Over a weekend Yahoo keeps returning Friday's last print. It lands exactly
+  # on the chart's final bar, so it overwrote that close and drew a green
+  # "Live" marker on it — two days after the trade.
+  test_that("a quote from an earlier session does not mark the last bar live", {
+    skip_if_not(have_fn, "append_live_point unavailable")
+    out <- append_live_point(bars(), 14.9, as.POSIXct("2026-09-21 16:00:00"),
+                             now = as.POSIXct("2026-09-23 10:00:00"))
+    expect_equal(nrow(out), 5)                  # nothing appended
+    expect_false(any(out$is_live))              # and nothing badged
+    expect_equal(out$close[5], bars()$close[5]) # the stored close stands
+  })
+
+  # as.Date() on a POSIXct converts in UTC no matter where the viewer is, so an
+  # after-hours print past midnight UTC was dated tomorrow and drawn past the
+  # end of the chart.
+  test_that("an after-hours trade is dated by the local clock, not UTC", {
+    skip_if_not(have_fn, "append_live_point unavailable")
+    tt  <- as.POSIXct("2026-09-22 19:45:00")    # 19:45 local, past midnight UTC
+    out <- append_live_point(bars(), 15.5, tt, now = as.POSIXct("2026-09-22 19:45:30"))
+    expect_equal(format(as.Date(out$date[nrow(out)]), "%Y-%m-%d"), "2026-09-22")
     expect_true(out$is_live[nrow(out)])
   })
 }
