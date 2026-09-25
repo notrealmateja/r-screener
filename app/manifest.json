@@ -2541,97 +2541,85 @@
   },
   "files": {
     "app.R": {
-      "checksum": "e49c825a825e0ccafd17532d5e7e32b6"
+      "checksum": "ed965498a01dd9484cdfb3dbe482b621"
     },
     "backtest_components.csv": {
-      "checksum": "aef5405e9dc54c13877c3f21eacf4eae"
+      "checksum": "4223d1dab7234fed68dd485bd929344b"
     },
     "backtest_equity_stats.csv": {
-      "checksum": "bd52cdc9977d11603b566f0a6aecac5b"
+      "checksum": "cef66fe400f5789603fe21170234e55e"
     },
     "backtest_equity.csv": {
-      "checksum": "448335e50629f6013bccd134170428ec"
+      "checksum": "9376ba2bffebec8bf127477824c2ce83"
     },
     "backtest_headline.csv": {
-      "checksum": "71d8d4366502e8fefcd0038c134e357d"
+      "checksum": "b79a12fb1e7ec74e634e7b4713a7497f"
     },
     "backtest_ic.csv": {
-      "checksum": "7b10b2bef734827251c960f7442079ff"
+      "checksum": "dbc81897725188de59ab8d74126605c3"
     },
     "backtest_summary.csv": {
-      "checksum": "2022689c040d32e5a82ce5d9f90784c6"
+      "checksum": "2e084e11bbb8a6715e9b9d2bc8074961"
     },
     "data/batch_tracker.rds": {
       "checksum": "6f1dddc156f656f2d4c4d382e7b64017"
     },
-    "data/fundamentals_scored.csv": {
-      "checksum": "615002863ae77cf27b1b2003da4add9d"
-    },
-    "data/master_scored.csv": {
-      "checksum": "165aa567b2075aa695a1d55ba19aec2e"
-    },
     "data/meta.rds": {
-      "checksum": "0723a39970519722677c156e82c72123"
+      "checksum": "2b48083992fa917347fb6cf82a3c9ad8"
     },
     "data/price_series_cache.rds": {
       "checksum": "266a1b7cfa8bbf9180380a4969dbc886"
     },
-    "data/top15_sweetspot.csv": {
-      "checksum": "81b60d9a6039f53e40224d2a915a6cbc"
-    },
-    "data/top15_unicorns.csv": {
-      "checksum": "b9260e096fb89fc630076a716d838da7"
-    },
     "earnings_calendar.csv": {
-      "checksum": "9e74040dacb7d8aacb1809a71fa764b7"
+      "checksum": "893b7e1a474ff610343486a88df8d3b9"
     },
     "global.R": {
-      "checksum": "7d01bad68c46c8896e9f8bd51475d22b"
+      "checksum": "1c224ed2c96d041093cb2bf877bf3120"
     },
     "macro_data.csv": {
-      "checksum": "1d14ca71e3cc37f450ab92310e41325b"
+      "checksum": "52bed59e278db73bfa8df5ae20415b19"
     },
     "market_news.csv": {
-      "checksum": "3bf5dec3a0c4c3a6bd1eaf3d3dd5042d"
+      "checksum": "488f25a52a5b70dccb1c535b050a7396"
     },
     "master_scored.csv": {
-      "checksum": "71846f15757b330d58792a1751d1ddfd"
+      "checksum": "37de100dd651f1d44c326d5b155668b1"
     },
     "meta.rds": {
-      "checksum": "0723a39970519722677c156e82c72123"
+      "checksum": "2b48083992fa917347fb6cf82a3c9ad8"
     },
     "price_history.csv": {
-      "checksum": "307eb5aa655d2e3e7b4239202a969c5a"
+      "checksum": "e6d37a44084526452a1c66a96e5966fb"
     },
     "reversal_results.csv": {
-      "checksum": "60336acd9883c5df36a80489508042e9"
+      "checksum": "af440eb2ff953ab06606569362c0e341"
     },
     "score_history.csv": {
-      "checksum": "7c55494211ff1f73e285a63a998a9a9f"
+      "checksum": "7d9c7395ed654a84534644cbbab36e63"
     },
     "sec_filings.csv": {
-      "checksum": "9c744699c9e0bf4aa4adaab1adf0bca3"
+      "checksum": "b234cbbda2883620bbf76a963d49bfcd"
     },
     "sector_performance.csv": {
-      "checksum": "9a57273a09650cfa563b003c95c65bcb"
+      "checksum": "24e9da9fe5e75b9fdabc94c8bbd3482a"
     },
     "stock_news.csv": {
-      "checksum": "e63418f6ed96e57ced325131af8b164b"
+      "checksum": "1358cc0ef65fb7647bf0c18e252d17d4"
     },
     "stocktwits_trending.csv": {
-      "checksum": "2597bd0d48ceef259a11c2a898cbeec5"
+      "checksum": "01bdb1c9f634fc3aba6f132345165c62"
     },
     "top15_sweetspot.csv": {
-      "checksum": "96faf08623c32b04434f8d49f191bf1d"
+      "checksum": "8b826f8c2baa5d1ce007419093508205"
     },
     "top15_unicorns.csv": {
-      "checksum": "55ab89f9a730fed5a8d926d0641fd6c9"
+      "checksum": "aeb33787e2c4fa0c183e07adb24d95e5"
     },
     "tv_channels.csv": {
-      "checksum": "b5bd66b0fb268046492ce5bdb8c46b4c"
+      "checksum": "e2d7b9a339727ad3485c09eec7f84731"
     },
     "wsb_trending.csv": {
-      "checksum": "5c7ecf0cbc1be4e8f2ee7bb3b8997566"
+      "checksum": "20887e62339b90253914042c29b93dac"
     }
   },
   "users": null
