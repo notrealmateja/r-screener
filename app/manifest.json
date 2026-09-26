@@ -2512,12 +2512,12 @@
       }
     },
     "zoo": {
-      "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Source": "CRAN",
+      "Repository": "https://cran.rstudio.com",
       "description": {
         "Package": "zoo",
-        "Version": "1.9-0",
-        "Date": "2026-07-30",
+        "Version": "1.9-1",
+        "Date": "2026-09-18",
         "Title": "S3 Infrastructure for Regular and Irregular Time Series (Z's\nOrdered Observations)",
         "Authors@R": "c(person(given = \"Achim\", family = \"Zeileis\", role = c(\"aut\", \"cre\"), email = \"Achim.Zeileis@R-project.org\", comment = c(ORCID = \"0000-0003-0918-3766\")),\n             person(given = \"Gabor\", family = \"Grothendieck\", role = \"aut\", email = \"ggrothendieck@gmail.com\"),\n             person(given = c(\"Jeffrey\", \"A.\"), family = \"Ryan\", role = \"aut\", email = \"jeff.a.ryan@gmail.com\"),\n             person(given = c(\"Joshua\", \"M.\"), family = \"Ulrich\", role = \"ctb\", email = \"josh.m.ulrich@gmail.com\"),\n             person(given = \"Felix\", family = \"Andrews\", role = \"ctb\", email = \"felix@nfrac.org\"))",
         "Description": "An S3 class with methods for working with regular and irregular time series.\n             The class stores data as numeric vectors/matrices (or factors) along with a time index of arbitrary class\n             (including numeric, Date, POSIXct, chron, yearmon, yearqtr, etc.). Functions and methods\n             are consistent with the ts class and base R and also extend standard generics. Tools include:\n             Data import/export, coercion, visualization (with base R, 'ggplot2', 'lattice', 'tinyplot'), alignment and merging,\n             aggregation, lags and subsets, rolling analytics, and time-based interpolation/filling.\n             The design is introduced in Zeileis and Grothendieck (2005) <doi:10.18637/jss.v014.i06>.",
@@ -2529,13 +2529,12 @@
         "URL": "https://zeileis.codeberg.page/zoo/",
         "BugReports": "https://codeberg.org/zeileis/zoo/issues",
         "NeedsCompilation": "yes",
-        "Packaged": "2026-07-30 22:27:31 UTC; zeileis",
+        "Packaged": "2026-09-18 16:02:28 UTC; zeileis",
         "Author": "Achim Zeileis [aut, cre] (ORCID:\n    <https://orcid.org/0000-0003-0918-3766>),\n  Gabor Grothendieck [aut],\n  Jeffrey A. Ryan [aut],\n  Joshua M. Ulrich [ctb],\n  Felix Andrews [ctb]",
         "Maintainer": "Achim Zeileis <Achim.Zeileis@R-project.org>",
-        "Repository": "RSPM",
-        "Date/Publication": "2026-07-31 06:00:02 UTC",
-        "Encoding": "UTF-8",
-        "Built": "R 4.4.0; x86_64-pc-linux-gnu; 2026-08-12 19:07:09 UTC; unix"
+        "Repository": "CRAN",
+        "Date/Publication": "2026-09-25 09:10:02 UTC",
+        "Built": "R 4.4.0; x86_64-pc-linux-gnu; 2026-09-26 00:01:02 UTC; unix"
       }
     }
   },
@@ -2544,82 +2543,82 @@
       "checksum": "ed965498a01dd9484cdfb3dbe482b621"
     },
     "backtest_components.csv": {
-      "checksum": "4223d1dab7234fed68dd485bd929344b"
+      "checksum": "fb93313112288731a46b82d67f6e743b"
     },
     "backtest_equity_stats.csv": {
-      "checksum": "cef66fe400f5789603fe21170234e55e"
+      "checksum": "b3295ef42dbd690efabbb50e74663531"
     },
     "backtest_equity.csv": {
-      "checksum": "9376ba2bffebec8bf127477824c2ce83"
+      "checksum": "660b6855c957de7ff6f3f9cf4ecfd7e0"
     },
     "backtest_headline.csv": {
-      "checksum": "b79a12fb1e7ec74e634e7b4713a7497f"
+      "checksum": "0d6bef8d7ec3c32f41a5a01dcb36088e"
     },
     "backtest_ic.csv": {
-      "checksum": "dbc81897725188de59ab8d74126605c3"
+      "checksum": "b7bd441c72d93cbcf1e22d073820309e"
     },
     "backtest_summary.csv": {
-      "checksum": "2e084e11bbb8a6715e9b9d2bc8074961"
+      "checksum": "d40abe789f17c2c152d84b3dbca84a5c"
     },
     "data/batch_tracker.rds": {
       "checksum": "6f1dddc156f656f2d4c4d382e7b64017"
     },
     "data/meta.rds": {
-      "checksum": "2b48083992fa917347fb6cf82a3c9ad8"
+      "checksum": "8284eee5ab97c0acb7c05a8f38e337c2"
     },
     "data/price_series_cache.rds": {
       "checksum": "266a1b7cfa8bbf9180380a4969dbc886"
     },
     "earnings_calendar.csv": {
-      "checksum": "893b7e1a474ff610343486a88df8d3b9"
+      "checksum": "26b9e24f72e7a9c5b05750d41ccd1966"
     },
     "global.R": {
       "checksum": "1c224ed2c96d041093cb2bf877bf3120"
     },
     "macro_data.csv": {
-      "checksum": "52bed59e278db73bfa8df5ae20415b19"
+      "checksum": "7e53fa3843b04d91cd5a9c9143ad40ff"
     },
     "market_news.csv": {
-      "checksum": "488f25a52a5b70dccb1c535b050a7396"
+      "checksum": "196d45a553b52d4307621a914a849017"
     },
     "master_scored.csv": {
-      "checksum": "37de100dd651f1d44c326d5b155668b1"
+      "checksum": "e4f0903385422de826807de154e70c3a"
     },
     "meta.rds": {
-      "checksum": "2b48083992fa917347fb6cf82a3c9ad8"
+      "checksum": "8284eee5ab97c0acb7c05a8f38e337c2"
     },
     "price_history.csv": {
-      "checksum": "e6d37a44084526452a1c66a96e5966fb"
+      "checksum": "f55944329387a4f869d62e2404912203"
     },
     "reversal_results.csv": {
-      "checksum": "af440eb2ff953ab06606569362c0e341"
+      "checksum": "343434ca80eb14a92be0f2c58833b74d"
     },
     "score_history.csv": {
-      "checksum": "7d9c7395ed654a84534644cbbab36e63"
+      "checksum": "85bff1913f788cbd8d325cd90a0ef752"
     },
     "sec_filings.csv": {
-      "checksum": "b234cbbda2883620bbf76a963d49bfcd"
+      "checksum": "18fd500be430abffa68d630ae0e2db27"
     },
     "sector_performance.csv": {
-      "checksum": "24e9da9fe5e75b9fdabc94c8bbd3482a"
+      "checksum": "a1e847784370a374b395b0a97ae78b08"
     },
     "stock_news.csv": {
-      "checksum": "1358cc0ef65fb7647bf0c18e252d17d4"
+      "checksum": "9e16415aaef572e24825e4d3d597c935"
     },
     "stocktwits_trending.csv": {
-      "checksum": "01bdb1c9f634fc3aba6f132345165c62"
+      "checksum": "aecbfd1b6a143691d0629d4d6c19f164"
     },
     "top15_sweetspot.csv": {
-      "checksum": "8b826f8c2baa5d1ce007419093508205"
+      "checksum": "5a905b3dbf2bf41ef9e17be5e18c5dc2"
     },
     "top15_unicorns.csv": {
-      "checksum": "aeb33787e2c4fa0c183e07adb24d95e5"
+      "checksum": "5c99c0a44d31cccc7a267ffc72941abb"
     },
     "tv_channels.csv": {
-      "checksum": "e2d7b9a339727ad3485c09eec7f84731"
+      "checksum": "a0a2c2000715e0a96634cc997747c828"
     },
     "wsb_trending.csv": {
-      "checksum": "20887e62339b90253914042c29b93dac"
+      "checksum": "9d45f83e65de7b2d7e7fd3fa99723e1f"
     }
   },
   "users": null
