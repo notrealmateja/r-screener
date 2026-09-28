@@ -4,11 +4,11 @@ ZM,10-Q,2026-08-26,10-Q,https://www.sec.gov/Archives/edgar/data/1585521/00015855
 ZM,8-K,2026-08-25,8-K,https://www.sec.gov/Archives/edgar/data/1585521/000158552126000119/zm-20260825.htm,14,FALSE,8
 ZM,8-K,2026-07-28,8-K,https://www.sec.gov/Archives/edgar/data/1585521/000162828026050155/zm-20260727.htm,14,FALSE,8
 ZM,8-K,2026-06-15,8-K,https://www.sec.gov/Archives/edgar/data/1585521/000162828026043169/zm-20260611.htm,14,FALSE,8
-ACAD,8-K,2026-09-24,8-K,https://www.sec.gov/Archives/edgar/data/1070494/000119312526401157/d168737d8k.htm,3,FALSE,11
-ACAD,8-K,2026-09-11,8-K,https://www.sec.gov/Archives/edgar/data/1070494/000119312526389400/d143428d8k.htm,3,FALSE,11
-ACAD,10-Q,2026-08-05,10-Q,https://www.sec.gov/Archives/edgar/data/1070494/000119312526333243/acad-20260630.htm,3,FALSE,11
-ACAD,8-K,2026-08-04,8-K,https://www.sec.gov/Archives/edgar/data/1070494/000119312526332858/acad-20260804.htm,3,FALSE,11
-ACAD,8-K,2026-05-29,8-K,https://www.sec.gov/Archives/edgar/data/1070494/000119312526248242/d140910d8k.htm,3,FALSE,11
+ACAD,8-K,2026-09-24,8-K,https://www.sec.gov/Archives/edgar/data/1070494/000119312526401157/d168737d8k.htm,2,FALSE,11
+ACAD,8-K,2026-09-11,8-K,https://www.sec.gov/Archives/edgar/data/1070494/000119312526389400/d143428d8k.htm,2,FALSE,11
+ACAD,10-Q,2026-08-05,10-Q,https://www.sec.gov/Archives/edgar/data/1070494/000119312526333243/acad-20260630.htm,2,FALSE,11
+ACAD,8-K,2026-08-04,8-K,https://www.sec.gov/Archives/edgar/data/1070494/000119312526332858/acad-20260804.htm,2,FALSE,11
+ACAD,8-K,2026-05-29,8-K,https://www.sec.gov/Archives/edgar/data/1070494/000119312526248242/d140910d8k.htm,2,FALSE,11
 AFRM,10-K,2026-08-27,10-K,https://www.sec.gov/Archives/edgar/data/1820953/000162828026059279/afrm-20260630.htm,25,FALSE,7
 AFRM,8-K,2026-08-27,8-K,https://www.sec.gov/Archives/edgar/data/1820953/000162828026059271/afrm-20260825.htm,25,FALSE,7
 AFRM,8-K,2026-06-25,8-K,https://www.sec.gov/Archives/edgar/data/1820953/000162828026045491/afrm-20260618.htm,25,FALSE,7
@@ -24,11 +24,11 @@ WAL,8-K,2026-07-30,8-K,https://www.sec.gov/Archives/edgar/data/1212545/000162828
 WAL,8-K,2026-07-21,8-K,https://www.sec.gov/Archives/edgar/data/1212545/000162828026049001/wal-20260721.htm,28,FALSE,18
 WAL,8-K,2026-06-11,8-K,https://www.sec.gov/Archives/edgar/data/1212545/000162828026042555/wal-20260610.htm,28,FALSE,18
 WAL,8-K,2026-05-12,8-K,https://www.sec.gov/Archives/edgar/data/1212545/000162828026033851/wal-20260508.htm,28,FALSE,18
-HON,8-K,2026-08-19,8-K,https://www.sec.gov/Archives/edgar/data/773840/000077384026000130/hon-20260819.htm,36,FALSE,24
-HON,10-Q,2026-07-23,10-Q,https://www.sec.gov/Archives/edgar/data/773840/000077384026000124/hon-20260630.htm,36,FALSE,24
-HON,8-K,2026-07-23,8-K,https://www.sec.gov/Archives/edgar/data/773840/000077384026000120/hon-20260723.htm,36,FALSE,24
-HON,8-K,2026-06-29,8-K,https://www.sec.gov/Archives/edgar/data/773840/000077384026000084/hon-20260625.htm,36,FALSE,24
-HON,8-K,2026-06-15,8-K,https://www.sec.gov/Archives/edgar/data/773840/000077384026000080/hon-20260615.htm,36,FALSE,24
+HON,8-K,2026-08-19,8-K,https://www.sec.gov/Archives/edgar/data/773840/000077384026000130/hon-20260819.htm,30,FALSE,24
+HON,10-Q,2026-07-23,10-Q,https://www.sec.gov/Archives/edgar/data/773840/000077384026000124/hon-20260630.htm,30,FALSE,24
+HON,8-K,2026-07-23,8-K,https://www.sec.gov/Archives/edgar/data/773840/000077384026000120/hon-20260723.htm,30,FALSE,24
+HON,8-K,2026-06-29,8-K,https://www.sec.gov/Archives/edgar/data/773840/000077384026000084/hon-20260625.htm,30,FALSE,24
+HON,8-K,2026-06-15,8-K,https://www.sec.gov/Archives/edgar/data/773840/000077384026000080/hon-20260615.htm,30,FALSE,24
 DECK,8-K,2026-09-15,8-K,https://www.sec.gov/Archives/edgar/data/910521/000091052126000026/deck-20260914.htm,23,FALSE,6
 DECK,8-K,2026-08-31,8-K,https://www.sec.gov/Archives/edgar/data/910521/000091052126000024/deck-20260827.htm,23,FALSE,6
 DECK,10-Q,2026-07-30,10-Q,https://www.sec.gov/Archives/edgar/data/910521/000091052126000022/deck-20260630.htm,23,FALSE,6
@@ -64,11 +64,16 @@ PD,8-K,2026-08-27,8-K,https://www.sec.gov/Archives/edgar/data/1568100/0001568100
 PD,8-K,2026-07-14,8-K,https://www.sec.gov/Archives/edgar/data/1568100/000156810026000040/pd-20260711.htm,7,FALSE,11
 PD,8-K,2026-06-22,8-K,https://www.sec.gov/Archives/edgar/data/1568100/000156810026000035/pd-20260618.htm,7,FALSE,11
 PD,8-K,2026-06-22,8-K,https://www.sec.gov/Archives/edgar/data/1568100/000156810026000033/pd-20260622.htm,7,FALSE,11
-GOOGL,8-K,2026-08-10,8-K,https://www.sec.gov/Archives/edgar/data/1652044/000119312526342390/d171253d8k.htm,52,FALSE,16
-GOOGL,10-Q,2026-07-23,10-Q,https://www.sec.gov/Archives/edgar/data/1652044/000165204426000071/goog-20260630.htm,52,FALSE,16
-GOOGL,8-K,2026-07-22,8-K,https://www.sec.gov/Archives/edgar/data/1652044/000165204426000066/goog-20260722.htm,52,FALSE,16
-GOOGL,8-K,2026-06-11,8-K,https://www.sec.gov/Archives/edgar/data/1652044/000119312526267578/d57679d8k.htm,52,FALSE,16
-GOOGL,8-K,2026-06-05,8-K,https://www.sec.gov/Archives/edgar/data/1652044/000119312526259830/d36818d8k.htm,52,FALSE,16
+JPM,10-Q,2026-08-06,10-Q,https://www.sec.gov/Archives/edgar/data/19617/000162828026054343/jpm-20260630.htm,9,FALSE,25
+JPM,8-K,2026-07-23,8-K,https://www.sec.gov/Archives/edgar/data/19617/000119312526314128/d103985d8k.htm,9,FALSE,25
+JPM,8-K,2026-07-23,8-K,https://www.sec.gov/Archives/edgar/data/19617/000001961726000288/jpm-20260721.htm,9,FALSE,25
+JPM,8-K,2026-07-14,8-K,https://www.sec.gov/Archives/edgar/data/19617/000162828026048086/jpm-20260714.htm,9,FALSE,25
+JPM,8-K,2026-07-14,8-K,https://www.sec.gov/Archives/edgar/data/19617/000162828026048078/jpm-20260714.htm,9,FALSE,25
+GOOGL,8-K,2026-08-10,8-K,https://www.sec.gov/Archives/edgar/data/1652044/000119312526342390/d171253d8k.htm,46,FALSE,16
+GOOGL,10-Q,2026-07-23,10-Q,https://www.sec.gov/Archives/edgar/data/1652044/000165204426000071/goog-20260630.htm,46,FALSE,16
+GOOGL,8-K,2026-07-22,8-K,https://www.sec.gov/Archives/edgar/data/1652044/000165204426000066/goog-20260722.htm,46,FALSE,16
+GOOGL,8-K,2026-06-11,8-K,https://www.sec.gov/Archives/edgar/data/1652044/000119312526267578/d57679d8k.htm,46,FALSE,16
+GOOGL,8-K,2026-06-05,8-K,https://www.sec.gov/Archives/edgar/data/1652044/000119312526259830/d36818d8k.htm,46,FALSE,16
 EXP,8-K,2026-07-31,8-K,https://www.sec.gov/Archives/edgar/data/918646/000119312526328712/d149871d8k.htm,20,FALSE,8
 EXP,10-Q,2026-07-29,10-Q,https://www.sec.gov/Archives/edgar/data/918646/000119312526323823/exp-20260630.htm,20,FALSE,8
 EXP,8-K,2026-07-29,8-K,https://www.sec.gov/Archives/edgar/data/918646/000119312526322090/d127735d8k.htm,20,FALSE,8
@@ -94,6 +99,11 @@ JAZZ,8-K,2026-09-15,8-K,https://www.sec.gov/Archives/edgar/data/1232524/00016282
 JAZZ,8-K,2026-08-31,8-K,https://www.sec.gov/Archives/edgar/data/1232524/000119312526377073/d127542d8k.htm,34,FALSE,16
 JAZZ,8-K,2026-08-25,8-K,https://www.sec.gov/Archives/edgar/data/1232524/000162828026058864/jazz-20260825.htm,34,FALSE,16
 JAZZ,8-K,2026-08-10,8-K,https://www.sec.gov/Archives/edgar/data/1232524/000119312526342667/d151973d8k.htm,34,FALSE,16
+ACN,8-K,2026-07-10,8-K,https://www.sec.gov/Archives/edgar/data/1467373/000119312526300813/d181172d8k.htm,43,FALSE,7
+ACN,8-K,2026-06-23,8-K,https://www.sec.gov/Archives/edgar/data/1467373/000146737326000035/acn-20260623.htm,43,FALSE,7
+ACN,10-Q,2026-06-18,10-Q,https://www.sec.gov/Archives/edgar/data/1467373/000146737326000032/acn-20260531.htm,43,FALSE,7
+ACN,8-K,2026-06-18,8-K,https://www.sec.gov/Archives/edgar/data/1467373/000146737326000031/acn-20260618.htm,43,FALSE,7
+ACN,8-K,2026-04-24,8-K,https://www.sec.gov/Archives/edgar/data/1467373/000146737326000019/acn-20260422.htm,43,FALSE,7
 MLI,8-K,2026-08-10,8-K,https://www.sec.gov/Archives/edgar/data/89439/000008943926000036/mli-20260806.htm,11,FALSE,11
 MLI,10-Q,2026-07-22,10-Q,https://www.sec.gov/Archives/edgar/data/89439/000008943926000032/mli-20260627.htm,11,FALSE,11
 MLI,8-K,2026-07-21,8-K,https://www.sec.gov/Archives/edgar/data/89439/000008943926000029/mli-20260721.htm,11,FALSE,11
@@ -109,21 +119,21 @@ NEE,8-K,2026-09-03,8-K,https://www.sec.gov/Archives/edgar/data/753308/0000753308
 NEE,8-K,2026-08-25,FORM 8-K,https://www.sec.gov/Archives/edgar/data/753308/000110465926100476/tm2623831d1_8k.htm,5,TRUE,28
 NEE,8-K,2026-08-11,8-K,https://www.sec.gov/Archives/edgar/data/753308/000075330826000065/nee-20260810.htm,5,TRUE,28
 NEE,10-Q,2026-07-24,10-Q,https://www.sec.gov/Archives/edgar/data/753308/000075330826000060/nee-20260630.htm,5,TRUE,28
-JPM,10-Q,2026-08-06,10-Q,https://www.sec.gov/Archives/edgar/data/19617/000162828026054343/jpm-20260630.htm,9,FALSE,25
-JPM,8-K,2026-07-23,8-K,https://www.sec.gov/Archives/edgar/data/19617/000119312526314128/d103985d8k.htm,9,FALSE,25
-JPM,8-K,2026-07-23,8-K,https://www.sec.gov/Archives/edgar/data/19617/000001961726000288/jpm-20260721.htm,9,FALSE,25
-JPM,8-K,2026-07-14,8-K,https://www.sec.gov/Archives/edgar/data/19617/000162828026048086/jpm-20260714.htm,9,FALSE,25
-JPM,8-K,2026-07-14,8-K,https://www.sec.gov/Archives/edgar/data/19617/000162828026048078/jpm-20260714.htm,9,FALSE,25
 NTRS,8-K,2026-08-03,8-K,https://www.sec.gov/Archives/edgar/data/73124/000007312426000051/ntrs-20260803.htm,13,FALSE,9
 NTRS,10-Q,2026-07-30,10-Q,https://www.sec.gov/Archives/edgar/data/73124/000007312426000047/ntrs-20260630.htm,13,FALSE,9
 NTRS,8-K,2026-07-22,8-K,https://www.sec.gov/Archives/edgar/data/73124/000007312426000043/ntrs-20260722.htm,13,FALSE,9
 NTRS,10-Q,2026-04-30,10-Q,https://www.sec.gov/Archives/edgar/data/73124/000007312426000035/ntrs-20260331.htm,13,FALSE,9
 NTRS,8-K,2026-04-22,8-K,https://www.sec.gov/Archives/edgar/data/73124/000007312426000031/ntrs-20260421.htm,13,FALSE,9
-ORCL,DEF 14A,2026-09-25,DEF 14A,https://www.sec.gov/Archives/edgar/data/1341439/000119312526402816/orcl-20260925.htm,13,FALSE,12
-ORCL,8-K,2026-09-14,8-K,https://www.sec.gov/Archives/edgar/data/1341439/000119312526389753/d20034d8k.htm,13,FALSE,12
-ORCL,10-Q,2026-09-11,10-Q,https://www.sec.gov/Archives/edgar/data/1341439/000119312526389274/orcl-20260831.htm,13,FALSE,12
-ORCL,8-K,2026-09-10,8-K,https://www.sec.gov/Archives/edgar/data/1341439/000119312526387905/orcl-20260910.htm,13,FALSE,12
-ORCL,10-K,2026-06-22,10-K,https://www.sec.gov/Archives/edgar/data/1341439/000119312526277521/orcl-20260531.htm,13,FALSE,12
+INTU,10-K,2026-09-09,10-K,https://www.sec.gov/Archives/edgar/data/896878/000089687826000037/intu-20260731.htm,36,FALSE,11
+INTU,8-K,2026-08-25,8-K,https://www.sec.gov/Archives/edgar/data/896878/000089687826000029/intu-20260825.htm,36,FALSE,11
+INTU,8-K,2026-06-11,8-K,https://www.sec.gov/Archives/edgar/data/896878/000119312526267866/d159651d8k.htm,36,FALSE,11
+INTU,10-Q,2026-05-20,10-Q,https://www.sec.gov/Archives/edgar/data/896878/000089687826000025/intu-20260430.htm,36,FALSE,11
+INTU,8-K,2026-05-20,8-K,https://www.sec.gov/Archives/edgar/data/896878/000089687826000024/intu-20260520.htm,36,FALSE,11
+ORCL,DEF 14A,2026-09-25,DEF 14A,https://www.sec.gov/Archives/edgar/data/1341439/000119312526402816/orcl-20260925.htm,13,FALSE,11
+ORCL,8-K,2026-09-14,8-K,https://www.sec.gov/Archives/edgar/data/1341439/000119312526389753/d20034d8k.htm,13,FALSE,11
+ORCL,10-Q,2026-09-11,10-Q,https://www.sec.gov/Archives/edgar/data/1341439/000119312526389274/orcl-20260831.htm,13,FALSE,11
+ORCL,8-K,2026-09-10,8-K,https://www.sec.gov/Archives/edgar/data/1341439/000119312526387905/orcl-20260910.htm,13,FALSE,11
+ORCL,10-K,2026-06-22,10-K,https://www.sec.gov/Archives/edgar/data/1341439/000119312526277521/orcl-20260531.htm,13,FALSE,11
 CFR,8-K,2026-08-17,8-K,https://www.sec.gov/Archives/edgar/data/39263/000003926326000049/cfr-20260817.htm,0,FALSE,8
 CFR,10-Q,2026-07-30,10-Q,https://www.sec.gov/Archives/edgar/data/39263/000003926326000046/cfr-20260630.htm,0,FALSE,8
 CFR,8-K,2026-07-30,8-K - 2Q26 PRESS RELEASE,https://www.sec.gov/Archives/edgar/data/39263/000003926326000045/cfr-20260730.htm,0,FALSE,8
@@ -144,11 +154,6 @@ SENEA,8-K,2026-08-11,FORM 8-K,https://www.sec.gov/Archives/edgar/data/88948/0001
 SENEA,10-Q,2026-08-06,FORM 10-Q,https://www.sec.gov/Archives/edgar/data/88948/000143774926026264/senea20260627_10q.htm,7,FALSE,2
 SENEA,DEF 14A,2026-07-07,FORM DEF 14A,https://www.sec.gov/Archives/edgar/data/88948/000143774926022933/senea20260618_def14a.htm,7,FALSE,2
 SENEA,10-K,2026-06-11,FORM 10-K,https://www.sec.gov/Archives/edgar/data/88948/000143774926020290/senea20260331_10k.htm,7,FALSE,2
-ACN,8-K,2026-07-10,8-K,https://www.sec.gov/Archives/edgar/data/1467373/000119312526300813/d181172d8k.htm,43,FALSE,7
-ACN,8-K,2026-06-23,8-K,https://www.sec.gov/Archives/edgar/data/1467373/000146737326000035/acn-20260623.htm,43,FALSE,7
-ACN,10-Q,2026-06-18,10-Q,https://www.sec.gov/Archives/edgar/data/1467373/000146737326000032/acn-20260531.htm,43,FALSE,7
-ACN,8-K,2026-06-18,8-K,https://www.sec.gov/Archives/edgar/data/1467373/000146737326000031/acn-20260618.htm,43,FALSE,7
-ACN,8-K,2026-04-24,8-K,https://www.sec.gov/Archives/edgar/data/1467373/000146737326000019/acn-20260422.htm,43,FALSE,7
 PEP,8-K,2026-09-17,8-K,https://www.sec.gov/Archives/edgar/data/77476/000007747626000042/pep-20260917.htm,4,FALSE,10
 PEP,8-K,2026-07-09,8-K,https://www.sec.gov/Archives/edgar/data/77476/000007747626000037/pep-20260709.htm,4,FALSE,10
 PEP,10-Q,2026-07-09,FORM 10-Q,https://www.sec.gov/Archives/edgar/data/77476/000007747626000035/pep-20260613.htm,4,FALSE,10
@@ -194,11 +199,6 @@ IBM,10-Q,2026-07-23,10-Q,https://www.sec.gov/Archives/edgar/data/51143/000005114
 IBM,8-K,2026-07-22,8-K,https://www.sec.gov/Archives/edgar/data/51143/000005114326000077/ibm-20260722.htm,15,FALSE,13
 IBM,8-K,2026-07-14,8-K,https://www.sec.gov/Archives/edgar/data/51143/000005114326000070/ibm-20260714.htm,15,FALSE,13
 IBM,8-K,2026-06-23,8-K,https://www.sec.gov/Archives/edgar/data/51143/000005114326000061/ibm-20260622.htm,15,FALSE,13
-INTU,10-K,2026-09-09,10-K,https://www.sec.gov/Archives/edgar/data/896878/000089687826000037/intu-20260731.htm,36,FALSE,11
-INTU,8-K,2026-08-25,8-K,https://www.sec.gov/Archives/edgar/data/896878/000089687826000029/intu-20260825.htm,36,FALSE,11
-INTU,8-K,2026-06-11,8-K,https://www.sec.gov/Archives/edgar/data/896878/000119312526267866/d159651d8k.htm,36,FALSE,11
-INTU,10-Q,2026-05-20,10-Q,https://www.sec.gov/Archives/edgar/data/896878/000089687826000025/intu-20260430.htm,36,FALSE,11
-INTU,8-K,2026-05-20,8-K,https://www.sec.gov/Archives/edgar/data/896878/000089687826000024/intu-20260520.htm,36,FALSE,11
 GGG,8-K,2026-09-14,8-K,https://www.sec.gov/Archives/edgar/data/42888/000119312526389891/d127483d8k.htm,8,FALSE,10
 GGG,8-K,2026-09-01,8-K,https://www.sec.gov/Archives/edgar/data/42888/000119312526377613/d100947d8k.htm,8,FALSE,10
 GGG,10-Q,2026-07-22,10-Q,https://www.sec.gov/Archives/edgar/data/42888/000004288826000123/ggg-20260626.htm,8,FALSE,10
@@ -244,16 +244,16 @@ MA,8-K,2026-07-30,8-K,https://www.sec.gov/Archives/edgar/data/1141391/0001141391
 MA,8-K,2026-06-17,8-K,https://www.sec.gov/Archives/edgar/data/1141391/000114139126000041/ma-20260616.htm,15,FALSE,11
 MA,8-K,2026-06-08,8-K,https://www.sec.gov/Archives/edgar/data/1141391/000119312526261669/d128075d8k.htm,15,FALSE,11
 MA,8-K,2026-06-02,8-K,https://www.sec.gov/Archives/edgar/data/1141391/000114139126000037/ma-20260529.htm,15,FALSE,11
-NVDA,8-K,2026-09-03,8-K,https://www.sec.gov/Archives/edgar/data/1045810/000104581026000078/nvda-20260902.htm,25,FALSE,13
-NVDA,10-Q,2026-08-26,10-Q,https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm,25,FALSE,13
-NVDA,8-K,2026-08-26,8-K,https://www.sec.gov/Archives/edgar/data/1045810/000104581026000073/nvda-20260826.htm,25,FALSE,13
-NVDA,8-K,2026-08-17,8-K,https://www.sec.gov/Archives/edgar/data/1045810/000104581026000069/nvda-20260817.htm,25,FALSE,13
-NVDA,8-K,2026-07-02,8-K,https://www.sec.gov/Archives/edgar/data/1045810/000104581026000060/nvda-20260628.htm,25,FALSE,13
-V,8-K,2026-09-23,8-K,https://www.sec.gov/Archives/edgar/data/1403161/000140316126000121/v-20260918.htm,11,TRUE,18
-V,10-Q,2026-07-29,10-Q,https://www.sec.gov/Archives/edgar/data/1403161/000140316126000104/v-20260630.htm,11,TRUE,18
-V,8-K,2026-07-28,8-K,https://www.sec.gov/Archives/edgar/data/1403161/000140316126000103/v-20260728.htm,11,TRUE,18
-V,8-K,2026-07-15,8-K,https://www.sec.gov/Archives/edgar/data/1403161/000140316126000096/v-20260714.htm,11,TRUE,18
-V,8-K,2026-06-26,8-K,https://www.sec.gov/Archives/edgar/data/1403161/000140316126000086/v-20260624.htm,11,TRUE,18
+NVDA,8-K,2026-09-03,8-K,https://www.sec.gov/Archives/edgar/data/1045810/000104581026000078/nvda-20260902.htm,16,FALSE,13
+NVDA,10-Q,2026-08-26,10-Q,https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm,16,FALSE,13
+NVDA,8-K,2026-08-26,8-K,https://www.sec.gov/Archives/edgar/data/1045810/000104581026000073/nvda-20260826.htm,16,FALSE,13
+NVDA,8-K,2026-08-17,8-K,https://www.sec.gov/Archives/edgar/data/1045810/000104581026000069/nvda-20260817.htm,16,FALSE,13
+NVDA,8-K,2026-07-02,8-K,https://www.sec.gov/Archives/edgar/data/1045810/000104581026000060/nvda-20260628.htm,16,FALSE,13
+V,8-K,2026-09-23,8-K,https://www.sec.gov/Archives/edgar/data/1403161/000140316126000121/v-20260918.htm,11,TRUE,17
+V,10-Q,2026-07-29,10-Q,https://www.sec.gov/Archives/edgar/data/1403161/000140316126000104/v-20260630.htm,11,TRUE,17
+V,8-K,2026-07-28,8-K,https://www.sec.gov/Archives/edgar/data/1403161/000140316126000103/v-20260728.htm,11,TRUE,17
+V,8-K,2026-07-15,8-K,https://www.sec.gov/Archives/edgar/data/1403161/000140316126000096/v-20260714.htm,11,TRUE,17
+V,8-K,2026-06-26,8-K,https://www.sec.gov/Archives/edgar/data/1403161/000140316126000086/v-20260624.htm,11,TRUE,17
 BLK,10-Q,2026-08-06,10-Q,https://www.sec.gov/Archives/edgar/data/2012383/000119312526337177/blk-20260630.htm,14,FALSE,9
 BLK,8-K,2026-07-15,8-K,https://www.sec.gov/Archives/edgar/data/2012383/000119312526304013/blk-20260715.htm,14,FALSE,9
 BLK,8-K,2026-06-30,8-K,https://www.sec.gov/Archives/edgar/data/2012383/000119312526290830/d108689d8k.htm,14,FALSE,9
@@ -339,11 +339,11 @@ QRVO,10-Q,2026-07-28,10-Q,https://www.sec.gov/Archives/edgar/data/1604778/000162
 QRVO,8-K,2026-07-28,8-K,https://www.sec.gov/Archives/edgar/data/1604778/000162828026050149/rfmd-20260728.htm,31,FALSE,13
 QRVO,DEF 14A,2026-06-26,DEF 14A,https://www.sec.gov/Archives/edgar/data/1604778/000119312526285512/d22973ddef14a.htm,31,FALSE,13
 QRVO,8-K,2026-06-12,FORM 8-K,https://www.sec.gov/Archives/edgar/data/1604778/000095010326008888/dp248325_8k.htm,31,FALSE,13
-AVGO,S-4,2026-09-10,S-4,https://www.sec.gov/Archives/edgar/data/1730168/000119312526387881/d154803ds4.htm,9,TRUE,13
-AVGO,10-Q,2026-09-10,10-Q,https://www.sec.gov/Archives/edgar/data/1730168/000173016826000080/avgo-20260802.htm,9,TRUE,13
-AVGO,8-K,2026-09-02,8-K,https://www.sec.gov/Archives/edgar/data/1730168/000173016826000076/avgo-20260902.htm,9,TRUE,13
-AVGO,8-K,2026-07-06,8-K,https://www.sec.gov/Archives/edgar/data/1730168/000119312526295589/d84378d8k.htm,9,TRUE,13
-AVGO,8-K,2026-06-18,8-K,https://www.sec.gov/Archives/edgar/data/1730168/000119312526275077/d149683d8k.htm,9,TRUE,13
+AVGO,S-4,2026-09-10,S-4,https://www.sec.gov/Archives/edgar/data/1730168/000119312526387881/d154803ds4.htm,8,TRUE,13
+AVGO,10-Q,2026-09-10,10-Q,https://www.sec.gov/Archives/edgar/data/1730168/000173016826000080/avgo-20260802.htm,8,TRUE,13
+AVGO,8-K,2026-09-02,8-K,https://www.sec.gov/Archives/edgar/data/1730168/000173016826000076/avgo-20260902.htm,8,TRUE,13
+AVGO,8-K,2026-07-06,8-K,https://www.sec.gov/Archives/edgar/data/1730168/000119312526295589/d84378d8k.htm,8,TRUE,13
+AVGO,8-K,2026-06-18,8-K,https://www.sec.gov/Archives/edgar/data/1730168/000119312526275077/d149683d8k.htm,8,TRUE,13
 LLY,10-Q,2026-08-05,10-Q,https://www.sec.gov/Archives/edgar/data/59478/000005947826000081/lly-20260630.htm,19,FALSE,7
 LLY,8-K,2026-08-05,8-K,https://www.sec.gov/Archives/edgar/data/59478/000005947826000077/lly-20260805.htm,19,FALSE,7
 LLY,8-K,2026-05-20,8-K,https://www.sec.gov/Archives/edgar/data/59478/000119312526232707/d148580d8k.htm,19,FALSE,7
@@ -354,11 +354,11 @@ KRYS,10-Q,2026-08-03,10-Q,https://www.sec.gov/Archives/edgar/data/1711279/000171
 KRYS,8-K,2026-07-21,8-K,https://www.sec.gov/Archives/edgar/data/1711279/000171127926000050/krys-20260721.htm,9,FALSE,10
 KRYS,8-K,2026-05-20,8-K,https://www.sec.gov/Archives/edgar/data/1711279/000171127926000047/krys-20260515.htm,9,FALSE,10
 KRYS,8-K,2026-05-04,8-K,https://www.sec.gov/Archives/edgar/data/1711279/000171127926000044/krys-20260504.htm,9,FALSE,10
-TER,8-K,2026-08-10,8-K,https://www.sec.gov/Archives/edgar/data/97210/000119312526342367/ter-20260807.htm,13,FALSE,7
-TER,10-Q,2026-07-31,10-Q,https://www.sec.gov/Archives/edgar/data/97210/000119312526327715/ter-20260628.htm,13,FALSE,7
-TER,8-K,2026-07-29,8-K,https://www.sec.gov/Archives/edgar/data/97210/000119312526321933/ter-20260728.htm,13,FALSE,7
-TER,8-K,2026-05-11,8-K,https://www.sec.gov/Archives/edgar/data/97210/000119312526215848/ter-20260508.htm,13,FALSE,7
-TER,10-Q,2026-05-01,10-Q,https://www.sec.gov/Archives/edgar/data/97210/000119312526201058/ter-20260329.htm,13,FALSE,7
+TER,8-K,2026-08-10,8-K,https://www.sec.gov/Archives/edgar/data/97210/000119312526342367/ter-20260807.htm,10,FALSE,7
+TER,10-Q,2026-07-31,10-Q,https://www.sec.gov/Archives/edgar/data/97210/000119312526327715/ter-20260628.htm,10,FALSE,7
+TER,8-K,2026-07-29,8-K,https://www.sec.gov/Archives/edgar/data/97210/000119312526321933/ter-20260728.htm,10,FALSE,7
+TER,8-K,2026-05-11,8-K,https://www.sec.gov/Archives/edgar/data/97210/000119312526215848/ter-20260508.htm,10,FALSE,7
+TER,10-Q,2026-05-01,10-Q,https://www.sec.gov/Archives/edgar/data/97210/000119312526201058/ter-20260329.htm,10,FALSE,7
 LMB,8-K,2026-09-09,8-K,https://www.sec.gov/Archives/edgar/data/1606163/000162828026061042/lmb-20260909.htm,4,FALSE,11
 LMB,8-K,2026-09-01,8-K,https://www.sec.gov/Archives/edgar/data/1606163/000162828026059713/lmb-20260901.htm,4,FALSE,11
 LMB,10-Q,2026-08-04,10-Q,https://www.sec.gov/Archives/edgar/data/1606163/000162828026052622/lmb-20260630.htm,4,FALSE,11
@@ -374,11 +374,11 @@ RTX,10-Q,2026-07-23,10-Q,https://www.sec.gov/Archives/edgar/data/101829/00001018
 RTX,8-K,2026-07-23,8-K,https://www.sec.gov/Archives/edgar/data/101829/000010182926000025/rtx-20260723.htm,5,FALSE,8
 RTX,8-K,2026-05-04,8-K,https://www.sec.gov/Archives/edgar/data/101829/000114036126018932/ef20072402_8k.htm,5,FALSE,8
 RTX,10-Q,2026-04-21,10-Q,https://www.sec.gov/Archives/edgar/data/101829/000010182926000011/rtx-20260331.htm,5,FALSE,8
-CAT,8-K,2026-09-01,FORM 8-K,https://www.sec.gov/Archives/edgar/data/18230/000110465926104197/tm2624321d1_8k.htm,11,FALSE,10
-CAT,10-Q,2026-08-05,10-Q,https://www.sec.gov/Archives/edgar/data/18230/000001823026000046/cat-20260630.htm,11,FALSE,10
-CAT,8-K,2026-08-04,8-K,https://www.sec.gov/Archives/edgar/data/18230/000001823026000040/cat-20260804.htm,11,FALSE,10
-CAT,8-K,2026-06-11,FORM 8-K,https://www.sec.gov/Archives/edgar/data/18230/000110465926072929/tm2617177d1_8k.htm,11,FALSE,10
-CAT,10-Q,2026-05-06,10-Q,https://www.sec.gov/Archives/edgar/data/18230/000001823026000021/cat-20260331.htm,11,FALSE,10
+CAT,8-K,2026-09-01,FORM 8-K,https://www.sec.gov/Archives/edgar/data/18230/000110465926104197/tm2624321d1_8k.htm,8,FALSE,10
+CAT,10-Q,2026-08-05,10-Q,https://www.sec.gov/Archives/edgar/data/18230/000001823026000046/cat-20260630.htm,8,FALSE,10
+CAT,8-K,2026-08-04,8-K,https://www.sec.gov/Archives/edgar/data/18230/000001823026000040/cat-20260804.htm,8,FALSE,10
+CAT,8-K,2026-06-11,FORM 8-K,https://www.sec.gov/Archives/edgar/data/18230/000110465926072929/tm2617177d1_8k.htm,8,FALSE,10
+CAT,10-Q,2026-05-06,10-Q,https://www.sec.gov/Archives/edgar/data/18230/000001823026000021/cat-20260331.htm,8,FALSE,10
 TMO,10-Q,2026-07-31,10-Q,https://www.sec.gov/Archives/edgar/data/97745/000009774526000144/tmo-20260627.htm,23,FALSE,11
 TMO,8-K,2026-07-23,8-K,https://www.sec.gov/Archives/edgar/data/97745/000009774526000138/tmo-20260723.htm,23,FALSE,11
 TMO,8-K,2026-05-26,8-K,https://www.sec.gov/Archives/edgar/data/97745/000009774526000117/tmo-20260520.htm,23,FALSE,11
@@ -429,11 +429,11 @@ GE,8-K,2026-09-08,FORM 8-K,https://www.sec.gov/Archives/edgar/data/40545/0000950
 GE,10-Q,2026-07-16,10-Q,https://www.sec.gov/Archives/edgar/data/40545/000004054526000049/ge-20260630.htm,5,FALSE,11
 GE,8-K,2026-07-16,8-K,https://www.sec.gov/Archives/edgar/data/40545/000004054526000047/ge-20260716.htm,5,FALSE,11
 GE,8-K,2026-06-25,8-K,https://www.sec.gov/Archives/edgar/data/40545/000004054526000042/ge-20260625.htm,5,FALSE,11
-KEYS,10-Q,2026-09-02,10-Q,https://www.sec.gov/Archives/edgar/data/1601046/000160104626000036/keys-20260731.htm,10,FALSE,10
-KEYS,8-K,2026-08-26,8-K,https://www.sec.gov/Archives/edgar/data/1601046/000160104626000032/keys-20260826.htm,10,FALSE,10
-KEYS,8-K,2026-08-18,8-K,https://www.sec.gov/Archives/edgar/data/1601046/000160104626000029/keys-20260818.htm,10,FALSE,10
-KEYS,10-Q,2026-06-04,10-Q,https://www.sec.gov/Archives/edgar/data/1601046/000160104626000024/keys-20260430.htm,10,FALSE,10
-KEYS,8-K,2026-05-19,8-K,https://www.sec.gov/Archives/edgar/data/1601046/000160104626000019/keys-20260519.htm,10,FALSE,10
+KEYS,10-Q,2026-09-02,10-Q,https://www.sec.gov/Archives/edgar/data/1601046/000160104626000036/keys-20260731.htm,9,FALSE,10
+KEYS,8-K,2026-08-26,8-K,https://www.sec.gov/Archives/edgar/data/1601046/000160104626000032/keys-20260826.htm,9,FALSE,10
+KEYS,8-K,2026-08-18,8-K,https://www.sec.gov/Archives/edgar/data/1601046/000160104626000029/keys-20260818.htm,9,FALSE,10
+KEYS,10-Q,2026-06-04,10-Q,https://www.sec.gov/Archives/edgar/data/1601046/000160104626000024/keys-20260430.htm,9,FALSE,10
+KEYS,8-K,2026-05-19,8-K,https://www.sec.gov/Archives/edgar/data/1601046/000160104626000019/keys-20260519.htm,9,FALSE,10
 CRS,DEF 14A,2026-09-11,DEF 14A,https://www.sec.gov/Archives/edgar/data/17843/000119312526389294/crs-20260910.htm,17,FALSE,17
 CRS,8-K,2026-08-25,8-K,https://www.sec.gov/Archives/edgar/data/17843/000001784326000038/crs-20260825.htm,17,FALSE,17
 CRS,8-K,2026-08-12,8-K,https://www.sec.gov/Archives/edgar/data/17843/000001784326000036/crs-20260812.htm,17,FALSE,17
@@ -469,16 +469,16 @@ ABBV,8-K,2026-08-18,FORM 8-K,https://www.sec.gov/Archives/edgar/data/1551152/000
 ABBV,8-K,2026-08-05,FORM 8-K,https://www.sec.gov/Archives/edgar/data/1551152/000110465926091269/tm2621452d4_8k.htm,3,FALSE,15
 ABBV,10-Q,2026-08-03,10-Q,https://www.sec.gov/Archives/edgar/data/1551152/000155115226000026/abbv-20260630.htm,3,FALSE,15
 ABBV,8-K,2026-07-31,8-K,https://www.sec.gov/Archives/edgar/data/1551152/000155115226000023/abbv-20260731.htm,3,FALSE,15
-STRL,10-Q,2026-08-04,FORM 10-Q,https://www.sec.gov/Archives/edgar/data/874238/000087423826000103/strl-20260630.htm,4,FALSE,12
-STRL,8-K,2026-08-03,FORM 8-K,https://www.sec.gov/Archives/edgar/data/874238/000087423826000100/strl-20260803.htm,4,FALSE,12
-STRL,8-K,2026-07-10,FORM 8-K,https://www.sec.gov/Archives/edgar/data/874238/000087423826000095/strl-20260706.htm,4,FALSE,12
-STRL,8-K,2026-07-08,FORM 8-K,https://www.sec.gov/Archives/edgar/data/874238/000087423826000093/strl-20260702.htm,4,FALSE,12
-STRL,8-K,2026-06-09,FORM 8-K,https://www.sec.gov/Archives/edgar/data/874238/000087423826000087/strl-20260609.htm,4,FALSE,12
-HOOD,10-Q,2026-07-30,10-Q,https://www.sec.gov/Archives/edgar/data/1783879/000178387926000114/hood-20260630.htm,50,FALSE,13
-HOOD,8-K,2026-07-29,8-K,https://www.sec.gov/Archives/edgar/data/1783879/000178387926000113/hood-20260729.htm,50,FALSE,13
-HOOD,8-K,2026-06-26,8-K,https://www.sec.gov/Archives/edgar/data/1783879/000178387926000083/hood-20260625.htm,50,FALSE,13
-HOOD,8-K,2026-06-25,8-K,https://www.sec.gov/Archives/edgar/data/1783879/000178387926000077/hood-20260622.htm,50,FALSE,13
-HOOD,8-K,2026-06-23,8-K,https://www.sec.gov/Archives/edgar/data/1783879/000178387926000074/hood-20260622.htm,50,FALSE,13
+STRL,10-Q,2026-08-04,FORM 10-Q,https://www.sec.gov/Archives/edgar/data/874238/000087423826000103/strl-20260630.htm,3,FALSE,12
+STRL,8-K,2026-08-03,FORM 8-K,https://www.sec.gov/Archives/edgar/data/874238/000087423826000100/strl-20260803.htm,3,FALSE,12
+STRL,8-K,2026-07-10,FORM 8-K,https://www.sec.gov/Archives/edgar/data/874238/000087423826000095/strl-20260706.htm,3,FALSE,12
+STRL,8-K,2026-07-08,FORM 8-K,https://www.sec.gov/Archives/edgar/data/874238/000087423826000093/strl-20260702.htm,3,FALSE,12
+STRL,8-K,2026-06-09,FORM 8-K,https://www.sec.gov/Archives/edgar/data/874238/000087423826000087/strl-20260609.htm,3,FALSE,12
+HOOD,10-Q,2026-07-30,10-Q,https://www.sec.gov/Archives/edgar/data/1783879/000178387926000114/hood-20260630.htm,49,FALSE,13
+HOOD,8-K,2026-07-29,8-K,https://www.sec.gov/Archives/edgar/data/1783879/000178387926000113/hood-20260729.htm,49,FALSE,13
+HOOD,8-K,2026-06-26,8-K,https://www.sec.gov/Archives/edgar/data/1783879/000178387926000083/hood-20260625.htm,49,FALSE,13
+HOOD,8-K,2026-06-25,8-K,https://www.sec.gov/Archives/edgar/data/1783879/000178387926000077/hood-20260622.htm,49,FALSE,13
+HOOD,8-K,2026-06-23,8-K,https://www.sec.gov/Archives/edgar/data/1783879/000178387926000074/hood-20260622.htm,49,FALSE,13
 VEEV,10-Q,2026-08-27,10-Q,https://www.sec.gov/Archives/edgar/data/1393052/000139305226000036/veev-20260731.htm,18,FALSE,10
 VEEV,8-K,2026-08-26,8-K,https://www.sec.gov/Archives/edgar/data/1393052/000139305226000032/veev-20260826.htm,18,FALSE,10
 VEEV,8-K,2026-08-20,CURRENT REPORT,https://www.sec.gov/Archives/edgar/data/1393052/000121390026092096/ea0302765-8k_veeva.htm,18,FALSE,10
@@ -504,11 +504,11 @@ MPWR,10-Q,2026-08-05,10-Q,https://www.sec.gov/Archives/edgar/data/1280452/000162
 MPWR,8-K,2026-07-30,8-K,https://www.sec.gov/Archives/edgar/data/1280452/000162828026051029/mpwr-20260730.htm,11,FALSE,9
 MPWR,8-K,2026-06-12,8-K,https://www.sec.gov/Archives/edgar/data/1280452/000162828026042820/mpwr-20260611.htm,11,FALSE,9
 MPWR,10-Q,2026-05-04,FORM 10-Q,https://www.sec.gov/Archives/edgar/data/1280452/000143774926014647/mpwr20260331_10q.htm,11,FALSE,9
-SOFI,10-Q,2026-08-06,10-Q,https://www.sec.gov/Archives/edgar/data/1818874/000181887426000054/sofi-20260630.htm,23,FALSE,11
-SOFI,8-K,2026-07-29,8-K,https://www.sec.gov/Archives/edgar/data/1818874/000181887426000050/sofi-20260729.htm,23,FALSE,11
-SOFI,8-K,2026-06-18,8-K,https://www.sec.gov/Archives/edgar/data/1818874/000181887426000043/sofi-20260617.htm,23,FALSE,11
-SOFI,10-Q,2026-05-07,10-Q,https://www.sec.gov/Archives/edgar/data/1818874/000181887426000037/sofi-20260331.htm,23,FALSE,11
-SOFI,DEF 14A,2026-04-30,DEF 14A,https://www.sec.gov/Archives/edgar/data/1818874/000181887426000032/sofi-20260430.htm,23,FALSE,11
+SOFI,10-Q,2026-08-06,10-Q,https://www.sec.gov/Archives/edgar/data/1818874/000181887426000054/sofi-20260630.htm,22,FALSE,11
+SOFI,8-K,2026-07-29,8-K,https://www.sec.gov/Archives/edgar/data/1818874/000181887426000050/sofi-20260729.htm,22,FALSE,11
+SOFI,8-K,2026-06-18,8-K,https://www.sec.gov/Archives/edgar/data/1818874/000181887426000043/sofi-20260617.htm,22,FALSE,11
+SOFI,10-Q,2026-05-07,10-Q,https://www.sec.gov/Archives/edgar/data/1818874/000181887426000037/sofi-20260331.htm,22,FALSE,11
+SOFI,DEF 14A,2026-04-30,DEF 14A,https://www.sec.gov/Archives/edgar/data/1818874/000181887426000032/sofi-20260430.htm,22,FALSE,11
 DHR,8-K,2026-08-03,8-K,https://www.sec.gov/Archives/edgar/data/313616/000119312526330652/d161342d8k.htm,20,FALSE,13
 DHR,8-K,2026-07-21,8-K,https://www.sec.gov/Archives/edgar/data/313616/000031361626000163/dhr-20260721.htm,20,FALSE,13
 DHR,10-Q,2026-07-21,10-Q,https://www.sec.gov/Archives/edgar/data/313616/000031361626000161/dhr-20260626.htm,20,FALSE,13
@@ -544,16 +544,16 @@ ATI,8-K,2026-08-06,8-K,https://www.sec.gov/Archives/edgar/data/1018963/000162828
 ATI,8-K,2026-06-08,8-K,https://www.sec.gov/Archives/edgar/data/1018963/000119312526261769/d163250d8k.htm,10,FALSE,11
 ATI,8-K,2026-06-03,8-K,https://www.sec.gov/Archives/edgar/data/1018963/000119312526255755/d74245d8k.htm,10,FALSE,11
 ATI,8-K,2026-06-03,8-K,https://www.sec.gov/Archives/edgar/data/1018963/000119312526254681/d100672d8k.htm,10,FALSE,11
-PLNT,10-Q,2026-08-06,10-Q,https://www.sec.gov/Archives/edgar/data/1637207/000163720726000044/plnt-20260630.htm,10,FALSE,14
-PLNT,8-K,2026-08-06,8-K,https://www.sec.gov/Archives/edgar/data/1637207/000163720726000042/plnt-20260806.htm,10,FALSE,14
-PLNT,8-K,2026-06-25,8-K,https://www.sec.gov/Archives/edgar/data/1637207/000163720726000038/plnt-20260619.htm,10,FALSE,14
-PLNT,8-K,2026-05-11,8-K,https://www.sec.gov/Archives/edgar/data/1637207/000163720726000033/plnt-20260505.htm,10,FALSE,14
-PLNT,10-Q,2026-05-07,10-Q,https://www.sec.gov/Archives/edgar/data/1637207/000163720726000030/plnt-20260331.htm,10,FALSE,14
-WDAY,10-Q,2026-08-27,10-Q,https://www.sec.gov/Archives/edgar/data/1327811/000132781126000044/wday-20260731.htm,20,FALSE,9
-WDAY,8-K,2026-08-27,8-K,https://www.sec.gov/Archives/edgar/data/1327811/000132781126000042/wday-20260827.htm,20,FALSE,9
-WDAY,8-K,2026-06-22,8-K,https://www.sec.gov/Archives/edgar/data/1327811/000132781126000031/wday-20260616.htm,20,FALSE,9
-WDAY,10-Q,2026-05-22,10-Q,https://www.sec.gov/Archives/edgar/data/1327811/000132781126000026/wday-20260430.htm,20,FALSE,9
-WDAY,8-K,2026-05-21,8-K,https://www.sec.gov/Archives/edgar/data/1327811/000132781126000024/wday-20260521.htm,20,FALSE,9
+PLNT,10-Q,2026-08-06,10-Q,https://www.sec.gov/Archives/edgar/data/1637207/000163720726000044/plnt-20260630.htm,9,FALSE,14
+PLNT,8-K,2026-08-06,8-K,https://www.sec.gov/Archives/edgar/data/1637207/000163720726000042/plnt-20260806.htm,9,FALSE,14
+PLNT,8-K,2026-06-25,8-K,https://www.sec.gov/Archives/edgar/data/1637207/000163720726000038/plnt-20260619.htm,9,FALSE,14
+PLNT,8-K,2026-05-11,8-K,https://www.sec.gov/Archives/edgar/data/1637207/000163720726000033/plnt-20260505.htm,9,FALSE,14
+PLNT,10-Q,2026-05-07,10-Q,https://www.sec.gov/Archives/edgar/data/1637207/000163720726000030/plnt-20260331.htm,9,FALSE,14
+WDAY,10-Q,2026-08-27,10-Q,https://www.sec.gov/Archives/edgar/data/1327811/000132781126000044/wday-20260731.htm,19,FALSE,9
+WDAY,8-K,2026-08-27,8-K,https://www.sec.gov/Archives/edgar/data/1327811/000132781126000042/wday-20260827.htm,19,FALSE,9
+WDAY,8-K,2026-06-22,8-K,https://www.sec.gov/Archives/edgar/data/1327811/000132781126000031/wday-20260616.htm,19,FALSE,9
+WDAY,10-Q,2026-05-22,10-Q,https://www.sec.gov/Archives/edgar/data/1327811/000132781126000026/wday-20260430.htm,19,FALSE,9
+WDAY,8-K,2026-05-21,8-K,https://www.sec.gov/Archives/edgar/data/1327811/000132781126000024/wday-20260521.htm,19,FALSE,9
 WING,8-K,2026-08-25,8-K,https://www.sec.gov/Archives/edgar/data/1636222/000162828026058878/wing-20260824.htm,1,FALSE,9
 WING,8-K,2026-08-06,8-K,https://www.sec.gov/Archives/edgar/data/1636222/000162828026054376/wing-20260806.htm,1,FALSE,9
 WING,10-Q,2026-07-29,10-Q,https://www.sec.gov/Archives/edgar/data/1636222/000162828026050580/wing-20260627.htm,1,FALSE,9
@@ -569,6 +569,11 @@ AMD,8-K,2026-08-17,8-K,https://www.sec.gov/Archives/edgar/data/2488/000119312526
 AMD,10-Q,2026-08-05,10-Q,https://www.sec.gov/Archives/edgar/data/2488/000000248826000123/amd-20260627.htm,28,FALSE,14
 AMD,8-K,2026-08-04,8-K,https://www.sec.gov/Archives/edgar/data/2488/000000248826000121/amd-20260804.htm,28,FALSE,14
 AMD,8-K,2026-07-01,8-K,https://www.sec.gov/Archives/edgar/data/2488/000000248826000115/amd-20260626.htm,28,FALSE,14
+MCD,8-K,2026-09-23,8-K,https://www.sec.gov/Archives/edgar/data/63908/000006390826000076/mcd-20260923.htm,4,FALSE,8
+MCD,10-Q,2026-08-07,10-Q,https://www.sec.gov/Archives/edgar/data/63908/000006390826000073/mcd-20260630.htm,4,FALSE,8
+MCD,8-K,2026-08-04,8-K,https://www.sec.gov/Archives/edgar/data/63908/000006390826000069/mcd-20260803.htm,4,FALSE,8
+MCD,8-K,2026-08-04,8-K,https://www.sec.gov/Archives/edgar/data/63908/000006390826000067/mcd-20260804.htm,4,FALSE,8
+MCD,8-K,2026-05-22,8-K,https://www.sec.gov/Archives/edgar/data/63908/000006390826000055/mcd-20260520.htm,4,FALSE,8
 MTZ,8-K,2026-08-17,8-K,https://www.sec.gov/Archives/edgar/data/15615/000119312526354111/d299977d8k.htm,10,FALSE,10
 MTZ,8-K,2026-08-10,8-K,https://www.sec.gov/Archives/edgar/data/15615/000119312526342507/d165744d8k.htm,10,FALSE,10
 MTZ,8-K,2026-07-31,8-K,https://www.sec.gov/Archives/edgar/data/15615/000119312526328848/d118637d8k.htm,10,FALSE,10
@@ -649,11 +654,6 @@ SMPL,8-K,2026-07-09,8-K,https://www.sec.gov/Archives/edgar/data/1702744/00017027
 SMPL,8-K,2026-04-21,FORM 8-K,https://www.sec.gov/Archives/edgar/data/1702744/000110465926045701/tm2612272d1_8k.htm,2,FALSE,8
 SMPL,10-Q,2026-04-09,10-Q,https://www.sec.gov/Archives/edgar/data/1702744/000170274426000012/atk-20260228.htm,2,FALSE,8
 SMPL,8-K,2026-04-09,8-K,https://www.sec.gov/Archives/edgar/data/1702744/000170274426000010/atk-20260409.htm,2,FALSE,8
-MCD,8-K,2026-09-23,8-K,https://www.sec.gov/Archives/edgar/data/63908/000006390826000076/mcd-20260923.htm,4,FALSE,8
-MCD,10-Q,2026-08-07,10-Q,https://www.sec.gov/Archives/edgar/data/63908/000006390826000073/mcd-20260630.htm,4,FALSE,8
-MCD,8-K,2026-08-04,8-K,https://www.sec.gov/Archives/edgar/data/63908/000006390826000069/mcd-20260803.htm,4,FALSE,8
-MCD,8-K,2026-08-04,8-K,https://www.sec.gov/Archives/edgar/data/63908/000006390826000067/mcd-20260804.htm,4,FALSE,8
-MCD,8-K,2026-05-22,8-K,https://www.sec.gov/Archives/edgar/data/63908/000006390826000055/mcd-20260520.htm,4,FALSE,8
 SRPT,8-K,2026-09-23,8-K,https://www.sec.gov/Archives/edgar/data/873303/000119312526399416/srpt-20260923.htm,5,FALSE,12
 SRPT,8-K,2026-08-05,8-K,https://www.sec.gov/Archives/edgar/data/873303/000119312526335056/srpt-20260805.htm,5,FALSE,12
 SRPT,10-Q,2026-08-05,10-Q,https://www.sec.gov/Archives/edgar/data/873303/000119312526335003/srpt-20260630.htm,5,FALSE,12
@@ -769,11 +769,11 @@ TDUP,8-K,2026-08-05,8-K,https://www.sec.gov/Archives/edgar/data/1484778/00014847
 TDUP,8-K,2026-05-21,8-K,https://www.sec.gov/Archives/edgar/data/1484778/000162828026036985/tdup-20260520.htm,8,FALSE,7
 TDUP,10-Q,2026-05-04,10-Q,https://www.sec.gov/Archives/edgar/data/1484778/000148477826000016/tdup-20260331.htm,8,FALSE,7
 TDUP,8-K,2026-05-04,8-K,https://www.sec.gov/Archives/edgar/data/1484778/000148477826000015/tdup-20260504.htm,8,FALSE,7
-CAVA,8-K,2026-09-18,8-K,https://www.sec.gov/Archives/edgar/data/1639438/000162828026062616/cava-20260917.htm,4,FALSE,11
-CAVA,10-Q,2026-08-12,10-Q,https://www.sec.gov/Archives/edgar/data/1639438/000162828026055864/cava-20260712.htm,4,FALSE,11
-CAVA,8-K,2026-08-11,8-K,https://www.sec.gov/Archives/edgar/data/1639438/000162828026055709/cava-20260811.htm,4,FALSE,11
-CAVA,8-K,2026-08-03,8-K,https://www.sec.gov/Archives/edgar/data/1639438/000162828026051556/cava-20260729.htm,4,FALSE,11
-CAVA,8-K,2026-06-24,8-K,https://www.sec.gov/Archives/edgar/data/1639438/000162828026045042/cava-20260622.htm,4,FALSE,11
+CAVA,8-K,2026-09-18,8-K,https://www.sec.gov/Archives/edgar/data/1639438/000162828026062616/cava-20260917.htm,4,FALSE,10
+CAVA,10-Q,2026-08-12,10-Q,https://www.sec.gov/Archives/edgar/data/1639438/000162828026055864/cava-20260712.htm,4,FALSE,10
+CAVA,8-K,2026-08-11,8-K,https://www.sec.gov/Archives/edgar/data/1639438/000162828026055709/cava-20260811.htm,4,FALSE,10
+CAVA,8-K,2026-08-03,8-K,https://www.sec.gov/Archives/edgar/data/1639438/000162828026051556/cava-20260729.htm,4,FALSE,10
+CAVA,8-K,2026-06-24,8-K,https://www.sec.gov/Archives/edgar/data/1639438/000162828026045042/cava-20260622.htm,4,FALSE,10
 VERX,10-Q,2026-08-04,10-Q,https://www.sec.gov/Archives/edgar/data/1806837/000110465926090420/verx-20260630x10q.htm,0,FALSE,8
 VERX,8-K,2026-08-03,8-K,https://www.sec.gov/Archives/edgar/data/1806837/000110465926089802/verx-20260803x8k.htm,0,FALSE,8
 VERX,8-K,2026-06-11,8-K,https://www.sec.gov/Archives/edgar/data/1806837/000110465926072971/verx-20260610x8k.htm,0,FALSE,8
@@ -809,11 +809,11 @@ HNST,8-K,2026-08-05,8-K,https://www.sec.gov/Archives/edgar/data/1530979/00016282
 HNST,8-K,2026-06-18,8-K,https://www.sec.gov/Archives/edgar/data/1530979/000162828026044390/hnst-20260614.htm,10,FALSE,8
 HNST,8-K,2026-05-27,8-K,https://www.sec.gov/Archives/edgar/data/1530979/000162828026038504/hnst-20260520.htm,10,FALSE,8
 HNST,8-K,2026-05-12,8-K,https://www.sec.gov/Archives/edgar/data/1530979/000162828026033725/hnst-20260511.htm,10,FALSE,8
-DDOG,10-Q,2026-08-06,10-Q,https://www.sec.gov/Archives/edgar/data/1561550/000162828026054458/ddog-20260630.htm,42,FALSE,7
-DDOG,8-K,2026-08-06,8-K,https://www.sec.gov/Archives/edgar/data/1561550/000162828026053829/ddog-20260806.htm,42,FALSE,7
-DDOG,8-K,2026-06-16,8-K,https://www.sec.gov/Archives/edgar/data/1561550/000162828026043590/ddog-20260615.htm,42,FALSE,7
-DDOG,10-Q,2026-05-07,10-Q,https://www.sec.gov/Archives/edgar/data/1561550/000162828026032328/ddog-20260331.htm,42,FALSE,7
-DDOG,8-K,2026-05-07,8-K,https://www.sec.gov/Archives/edgar/data/1561550/000162828026031677/ddog-20260507.htm,42,FALSE,7
+DDOG,10-Q,2026-08-06,10-Q,https://www.sec.gov/Archives/edgar/data/1561550/000162828026054458/ddog-20260630.htm,41,FALSE,7
+DDOG,8-K,2026-08-06,8-K,https://www.sec.gov/Archives/edgar/data/1561550/000162828026053829/ddog-20260806.htm,41,FALSE,7
+DDOG,8-K,2026-06-16,8-K,https://www.sec.gov/Archives/edgar/data/1561550/000162828026043590/ddog-20260615.htm,41,FALSE,7
+DDOG,10-Q,2026-05-07,10-Q,https://www.sec.gov/Archives/edgar/data/1561550/000162828026032328/ddog-20260331.htm,41,FALSE,7
+DDOG,8-K,2026-05-07,8-K,https://www.sec.gov/Archives/edgar/data/1561550/000162828026031677/ddog-20260507.htm,41,FALSE,7
 SANA,8-K,2026-09-08,8-K,https://www.sec.gov/Archives/edgar/data/1770121/000119312526384405/d170343d8k.htm,2,FALSE,11
 SANA,10-Q,2026-08-10,10-Q,https://www.sec.gov/Archives/edgar/data/1770121/000119312526342395/sana-20260630.htm,2,FALSE,11
 SANA,8-K,2026-08-10,8-K,https://www.sec.gov/Archives/edgar/data/1770121/000119312526342371/sana-20260810.htm,2,FALSE,11
@@ -839,11 +839,11 @@ MDB,8-K,2026-09-01,8-K,https://www.sec.gov/Archives/edgar/data/1441816/000162828
 MDB,8-K,2026-07-06,8-K,https://www.sec.gov/Archives/edgar/data/1441816/000162828026047228/mdb-20260630.htm,15,FALSE,6
 MDB,10-Q,2026-05-29,10-Q,https://www.sec.gov/Archives/edgar/data/1441816/000162828026039150/mdb-20260430.htm,15,FALSE,6
 MDB,8-K,2026-05-28,8-K,https://www.sec.gov/Archives/edgar/data/1441816/000162828026038798/mdb-20260528.htm,15,FALSE,6
-CRWD,10-Q,2026-08-27,10-Q,https://www.sec.gov/Archives/edgar/data/1535527/000153552726000031/crwd-20260731.htm,56,FALSE,8
-CRWD,8-K,2026-08-26,8-K,https://www.sec.gov/Archives/edgar/data/1535527/000153552726000029/crwd-20260826.htm,56,FALSE,8
-CRWD,8-K,2026-06-22,FORM 8-K,https://www.sec.gov/Archives/edgar/data/1535527/000110465926076376/tm2618192d1_8k.htm,56,FALSE,8
-CRWD,10-Q,2026-06-04,10-Q,https://www.sec.gov/Archives/edgar/data/1535527/000153552726000025/crwd-20260430.htm,56,FALSE,8
-CRWD,8-K,2026-06-03,8-K,https://www.sec.gov/Archives/edgar/data/1535527/000153552726000022/crwd-20260603.htm,56,FALSE,8
+CRWD,10-Q,2026-08-27,10-Q,https://www.sec.gov/Archives/edgar/data/1535527/000153552726000031/crwd-20260731.htm,54,FALSE,8
+CRWD,8-K,2026-08-26,8-K,https://www.sec.gov/Archives/edgar/data/1535527/000153552726000029/crwd-20260826.htm,54,FALSE,8
+CRWD,8-K,2026-06-22,FORM 8-K,https://www.sec.gov/Archives/edgar/data/1535527/000110465926076376/tm2618192d1_8k.htm,54,FALSE,8
+CRWD,10-Q,2026-06-04,10-Q,https://www.sec.gov/Archives/edgar/data/1535527/000153552726000025/crwd-20260430.htm,54,FALSE,8
+CRWD,8-K,2026-06-03,8-K,https://www.sec.gov/Archives/edgar/data/1535527/000153552726000022/crwd-20260603.htm,54,FALSE,8
 U,8-K,2026-08-19,8-K,https://www.sec.gov/Archives/edgar/data/1810806/000181080626000046/unity-20260817.htm,9,FALSE,12
 U,10-Q,2026-08-06,10-Q,https://www.sec.gov/Archives/edgar/data/1810806/000181080626000043/unity-20260630.htm,9,FALSE,12
 U,8-K,2026-08-06,8-K,https://www.sec.gov/Archives/edgar/data/1810806/000181080626000041/unity-20260806.htm,9,FALSE,12
@@ -924,11 +924,11 @@ AMPL,8-K,2026-08-05,8-K,https://www.sec.gov/Archives/edgar/data/1866692/00011931
 AMPL,8-K,2026-06-10,8-K,https://www.sec.gov/Archives/edgar/data/1866692/000119312526265850/d227822d8k.htm,9,FALSE,6
 AMPL,10-Q,2026-05-07,10-Q,https://www.sec.gov/Archives/edgar/data/1866692/000119312526209631/ampl-20260331.htm,9,FALSE,6
 AMPL,8-K,2026-05-06,8-K,https://www.sec.gov/Archives/edgar/data/1866692/000119312526209264/ampl-20260506.htm,9,FALSE,6
-ERAS,8-K,2026-08-24,8-K,https://www.sec.gov/Archives/edgar/data/1761918/000119312526361895/eras-20260824.htm,7,FALSE,16
-ERAS,10-Q,2026-08-11,10-Q,https://www.sec.gov/Archives/edgar/data/1761918/000119312526344611/eras-20260630.htm,7,FALSE,16
-ERAS,8-K,2026-08-11,8-K,https://www.sec.gov/Archives/edgar/data/1761918/000119312526344584/eras-20260811.htm,7,FALSE,16
-ERAS,8-K,2026-08-10,8-K,https://www.sec.gov/Archives/edgar/data/1761918/000119312526342669/eras-20260810.htm,7,FALSE,16
-ERAS,8-K,2026-07-14,8-K,https://www.sec.gov/Archives/edgar/data/1761918/000119312526303357/d371010d8k.htm,7,FALSE,16
+ERAS,8-K,2026-08-24,8-K,https://www.sec.gov/Archives/edgar/data/1761918/000119312526361895/eras-20260824.htm,1,FALSE,16
+ERAS,10-Q,2026-08-11,10-Q,https://www.sec.gov/Archives/edgar/data/1761918/000119312526344611/eras-20260630.htm,1,FALSE,16
+ERAS,8-K,2026-08-11,8-K,https://www.sec.gov/Archives/edgar/data/1761918/000119312526344584/eras-20260811.htm,1,FALSE,16
+ERAS,8-K,2026-08-10,8-K,https://www.sec.gov/Archives/edgar/data/1761918/000119312526342669/eras-20260810.htm,1,FALSE,16
+ERAS,8-K,2026-07-14,8-K,https://www.sec.gov/Archives/edgar/data/1761918/000119312526303357/d371010d8k.htm,1,FALSE,16
 ZS,8-K,2026-09-24,8-K,https://www.sec.gov/Archives/edgar/data/1713683/000171368326000193/zs-20260924.htm,11,FALSE,7
 ZS,10-K,2026-09-03,10-K,https://www.sec.gov/Archives/edgar/data/1713683/000171368326000157/zs-20260731.htm,11,FALSE,7
 ZS,8-K,2026-09-03,8-K,https://www.sec.gov/Archives/edgar/data/1713683/000171368326000156/zs-20260901.htm,11,FALSE,7
