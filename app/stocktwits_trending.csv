@@ -1,31 +1,31 @@
 symbol,title,watchlist_count,st_rank,trending_score,messages,bullish,bearish,sentiment_label,fetched_at
-ETH.X,Ethereum,338447,1,7.60293,1,0,0,Neutral,2026-09-28T00:02:00Z
-QNT,Quantinuum Inc.,3393,2,7.08099,0,0,0,Neutral,2026-09-28T00:02:00Z
-MU,Micron Technology Inc,217088,3,6.8681,4,0,0,Neutral,2026-09-28T00:02:00Z
-NEAR.X,Near,5379,4,6.79549,0,0,0,Neutral,2026-09-28T00:02:00Z
-NEAR,iShares Short Duration Bond Active ETF,129,5,5.93979,0,0,0,Neutral,2026-09-28T00:02:00Z
-KOLD,ProShares UltraShort Bloomberg Natural Gas,10344,6,5.71387,0,0,0,Neutral,2026-09-28T00:02:00Z
-BOIL,ProShares Ultra Bloomberg Natural Gas,17355,7,4.90913,0,0,0,Neutral,2026-09-28T00:02:00Z
-DASH,DoorDash Inc - Ordinary Shares - Class A,18624,8,4.77429,0,0,0,Neutral,2026-09-28T00:02:00Z
-SPY,SPDR S&P 500 ETF Trust,638083,9,4.33181,13,3,1,Very Bullish,2026-09-28T00:02:00Z
-MRNA,Moderna Inc,116322,10,5.46667,3,1,2,Bearish,2026-09-28T00:02:00Z
-CMPS,COMPASS Pathways,9966,11,3.53869,0,0,0,Neutral,2026-09-28T00:02:00Z
-DAL,"Delta Air Lines, Inc.",83804,12,3.2307,0,0,0,Neutral,2026-09-28T00:02:00Z
-VOO,Vanguard S&P 500 ETF,53185,13,3.16951,0,0,0,Neutral,2026-09-28T00:02:00Z
-BABA,Alibaba Group Holding Ltd,425332,14,4.36232,0,0,0,Neutral,2026-09-28T00:02:00Z
-S,SentinelOne Inc,32138,15,2.56498,0,0,0,Neutral,2026-09-28T00:02:00Z
-ALGO.X,Algorand,32082,16,2.48226,0,0,0,Neutral,2026-09-28T00:02:00Z
-BONK.X,BONK,15338,17,2.45441,1,1,0,Very Bullish,2026-09-28T00:02:00Z
-DDOG,Datadog Inc,25832,18,2.3249,0,0,0,Neutral,2026-09-28T00:02:00Z
-RBRK,Rubrik Inc. - Class A,6290,19,2.3249,0,0,0,Neutral,2026-09-28T00:02:00Z
-QQQ,Invesco QQQ Trust Series 1,280278,20,2.28301,4,2,0,Very Bullish,2026-09-28T00:02:00Z
-CCL,Carnival Corp,89429,21,2.18422,0,0,0,Neutral,2026-09-28T00:02:00Z
-RYCEY,Rolls-Royce Holdings Plc - ADR,23194,22,2.14176,0,0,0,Neutral,2026-09-28T00:02:00Z
-PEP,PepsiCo Inc,23754,23,2.08572,0,0,0,Neutral,2026-09-28T00:02:00Z
-AMD,Advanced Micro Devices Inc,565324,24,1.95923,0,0,0,Neutral,2026-09-28T00:02:00Z
-UUUU,Energy Fuels Inc,23530,25,1.84016,0,0,0,Neutral,2026-09-28T00:02:00Z
-CAR,Avis Budget Group Inc,11299,26,1.84016,0,0,0,Neutral,2026-09-28T00:02:00Z
-JASMY.X,JasmyCoin,25335,27,1.81672,1,1,0,Very Bullish,2026-09-28T00:02:00Z
-KLAC,KLA Corp.,6336,28,1.81242,0,0,0,Neutral,2026-09-28T00:02:00Z
-ABCL,AbCellera Biologics Inc,9620,29,1.74084,0,0,0,Neutral,2026-09-28T00:02:00Z
-ANET,Arista Networks Inc,21073,30,1.74084,0,0,0,Neutral,2026-09-28T00:02:00Z
+SMMT,Summit Therapeutics Inc,10354,1,9.14294,3,0,0,Neutral,2026-09-29T01:18:48Z
+BA,Boeing Co,197579,2,8.86143,2,0,1,Very Bearish,2026-09-29T01:18:48Z
+KOD,Kodiak Sciences Inc,4875,3,8.55782,9,1,2,Bearish,2026-09-29T01:18:48Z
+NVTS,Navitas Semiconductor Corp,26953,4,6.55585,0,0,0,Neutral,2026-09-29T01:18:48Z
+FICO,"Fair, Isaac Corp.",2672,5,6.46105,1,1,0,Very Bullish,2026-09-29T01:18:48Z
+ZBCN.X,Zebec Network,5743,6,6.45036,2,1,0,Very Bullish,2026-09-29T01:18:48Z
+HBAR.X,Hedera Hashgraph,36268,7,5.41232,0,0,0,Neutral,2026-09-29T01:18:48Z
+ARWR,Arrowhead Pharmaceuticals Inc.,12504,8,4.83749,0,0,0,Neutral,2026-09-29T01:18:48Z
+BW,Babcock & Wilcox Enterprises Inc,6998,9,4.82967,1,0,1,Very Bearish,2026-09-29T01:18:48Z
+IBRX,ImmunityBio Inc,30573,10,4.74166,2,2,0,Very Bullish,2026-09-29T01:18:48Z
+O,Realty Income Corp.,26039,11,4.69675,0,0,0,Neutral,2026-09-29T01:18:48Z
+LINK.X,ChainLink,38528,12,4.59036,1,1,0,Very Bullish,2026-09-29T01:18:48Z
+HD,"Home Depot, Inc.",46016,13,4.54332,0,0,0,Neutral,2026-09-29T01:18:48Z
+TLT,iShares 20+ Year Treasury Bond ETF,31187,14,4.38096,1,0,0,Neutral,2026-09-29T01:18:48Z
+ENPH,Enphase Energy Inc,49402,15,3.97019,2,0,1,Very Bearish,2026-09-29T01:18:48Z
+LUMN,Lumen Technologies Inc,19032,16,3.92331,1,0,1,Very Bearish,2026-09-29T01:18:48Z
+WLD.X,Worldcoin,2933,17,3.90423,0,0,0,Neutral,2026-09-29T01:18:48Z
+RIG,Transocean Ltd,25052,18,3.8222,0,0,0,Neutral,2026-09-29T01:18:48Z
+XLM.X,Stellar Lumens,70381,19,3.74914,0,0,0,Neutral,2026-09-29T01:18:48Z
+RCAT,Red Cat Holdings Inc,28594,20,3.65542,2,0,0,Neutral,2026-09-29T01:18:48Z
+RKT,Rocket Companies Inc,58223,21,3.6403,0,0,0,Neutral,2026-09-29T01:18:48Z
+RDW,Redwire Corp,23971,22,3.44088,0,0,0,Neutral,2026-09-29T01:18:48Z
+AC.TSX,Air Canada Inc.,15378,23,3.43695,0,0,0,Neutral,2026-09-29T01:18:48Z
+KURA,Kura Oncology Inc,3932,24,3.2559,0,0,0,Neutral,2026-09-29T01:18:48Z
+ABEO,Abeona Therapeutics Inc,11065,25,3.2307,0,0,0,Neutral,2026-09-29T01:18:48Z
+MP,MP Materials Corporation,36218,26,3.20596,0,0,0,Neutral,2026-09-29T01:18:48Z
+MLTX,MoonLake Immunotherapeutics,6555,27,3.10589,0,0,0,Neutral,2026-09-29T01:18:48Z
+DOG.X,Dog (Bitcoin),2007,28,3.07465,0,0,0,Neutral,2026-09-29T01:18:48Z
+XERS,Xeris Biopharma Holdings Inc,10725,29,3.00165,0,0,0,Neutral,2026-09-29T01:18:48Z
+OCUL,Ocular Therapeutix Inc,12239,30,2.95053,0,0,0,Neutral,2026-09-29T01:18:48Z
