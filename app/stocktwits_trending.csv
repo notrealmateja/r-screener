@@ -1,31 +1,31 @@
 symbol,title,watchlist_count,st_rank,trending_score,messages,bullish,bearish,sentiment_label,fetched_at
-SMMT,Summit Therapeutics Inc,10354,1,9.14294,3,0,0,Neutral,2026-09-29T01:18:48Z
-BA,Boeing Co,197579,2,8.86143,2,0,1,Very Bearish,2026-09-29T01:18:48Z
-KOD,Kodiak Sciences Inc,4875,3,8.55782,9,1,2,Bearish,2026-09-29T01:18:48Z
-NVTS,Navitas Semiconductor Corp,26953,4,6.55585,0,0,0,Neutral,2026-09-29T01:18:48Z
-FICO,"Fair, Isaac Corp.",2672,5,6.46105,1,1,0,Very Bullish,2026-09-29T01:18:48Z
-ZBCN.X,Zebec Network,5743,6,6.45036,2,1,0,Very Bullish,2026-09-29T01:18:48Z
-HBAR.X,Hedera Hashgraph,36268,7,5.41232,0,0,0,Neutral,2026-09-29T01:18:48Z
-ARWR,Arrowhead Pharmaceuticals Inc.,12504,8,4.83749,0,0,0,Neutral,2026-09-29T01:18:48Z
-BW,Babcock & Wilcox Enterprises Inc,6998,9,4.82967,1,0,1,Very Bearish,2026-09-29T01:18:48Z
-IBRX,ImmunityBio Inc,30573,10,4.74166,2,2,0,Very Bullish,2026-09-29T01:18:48Z
-O,Realty Income Corp.,26039,11,4.69675,0,0,0,Neutral,2026-09-29T01:18:48Z
-LINK.X,ChainLink,38528,12,4.59036,1,1,0,Very Bullish,2026-09-29T01:18:48Z
-HD,"Home Depot, Inc.",46016,13,4.54332,0,0,0,Neutral,2026-09-29T01:18:48Z
-TLT,iShares 20+ Year Treasury Bond ETF,31187,14,4.38096,1,0,0,Neutral,2026-09-29T01:18:48Z
-ENPH,Enphase Energy Inc,49402,15,3.97019,2,0,1,Very Bearish,2026-09-29T01:18:48Z
-LUMN,Lumen Technologies Inc,19032,16,3.92331,1,0,1,Very Bearish,2026-09-29T01:18:48Z
-WLD.X,Worldcoin,2933,17,3.90423,0,0,0,Neutral,2026-09-29T01:18:48Z
-RIG,Transocean Ltd,25052,18,3.8222,0,0,0,Neutral,2026-09-29T01:18:48Z
-XLM.X,Stellar Lumens,70381,19,3.74914,0,0,0,Neutral,2026-09-29T01:18:48Z
-RCAT,Red Cat Holdings Inc,28594,20,3.65542,2,0,0,Neutral,2026-09-29T01:18:48Z
-RKT,Rocket Companies Inc,58223,21,3.6403,0,0,0,Neutral,2026-09-29T01:18:48Z
-RDW,Redwire Corp,23971,22,3.44088,0,0,0,Neutral,2026-09-29T01:18:48Z
-AC.TSX,Air Canada Inc.,15378,23,3.43695,0,0,0,Neutral,2026-09-29T01:18:48Z
-KURA,Kura Oncology Inc,3932,24,3.2559,0,0,0,Neutral,2026-09-29T01:18:48Z
-ABEO,Abeona Therapeutics Inc,11065,25,3.2307,0,0,0,Neutral,2026-09-29T01:18:48Z
-MP,MP Materials Corporation,36218,26,3.20596,0,0,0,Neutral,2026-09-29T01:18:48Z
-MLTX,MoonLake Immunotherapeutics,6555,27,3.10589,0,0,0,Neutral,2026-09-29T01:18:48Z
-DOG.X,Dog (Bitcoin),2007,28,3.07465,0,0,0,Neutral,2026-09-29T01:18:48Z
-XERS,Xeris Biopharma Holdings Inc,10725,29,3.00165,0,0,0,Neutral,2026-09-29T01:18:48Z
-OCUL,Ocular Therapeutix Inc,12239,30,2.95053,0,0,0,Neutral,2026-09-29T01:18:48Z
+CAPR,Capricor Therapeutics Inc,33044,1,14.7883,7,3,1,Very Bullish,2026-09-30T00:48:24Z
+MU,Micron Technology Inc,217409,2,10.4467,4,3,0,Very Bullish,2026-09-30T00:48:24Z
+DKNG,DraftKings Inc,120429,3,9.12992,3,1,1,Neutral,2026-09-30T00:48:24Z
+MSOS,AdvisorShares Pure US Cannabis ETF,13234,4,8.48364,1,1,0,Very Bullish,2026-09-30T00:48:24Z
+FICO,"Fair, Isaac Corp.",3082,5,8.3615,1,0,0,Neutral,2026-09-30T00:48:24Z
+VNDA,Vanda Pharmaceuticals Inc,5417,6,7.37145,2,0,0,Neutral,2026-09-30T00:48:24Z
+MCD,McDonald's Corp,42259,7,6.68481,1,0,0,Neutral,2026-09-30T00:48:24Z
+IOVA,Iovance Biotherapeutics Inc,20878,8,6.65776,1,0,0,Neutral,2026-09-30T00:48:24Z
+LUNR,Intuitive Machines Inc,39070,9,6.13975,0,0,0,Neutral,2026-09-30T00:48:24Z
+NEAR.X,Near,5435,10,5.88023,1,1,0,Very Bullish,2026-09-30T00:48:24Z
+TRLV,Trulieve Cannabis Corp ,7798,11,5.74939,0,0,0,Neutral,2026-09-30T00:48:24Z
+LIT.X,lighter,611,12,5.70659,0,0,0,Neutral,2026-09-30T00:48:24Z
+IBRX,ImmunityBio Inc,30580,13,5.58403,1,0,0,Neutral,2026-09-30T00:48:24Z
+HOOD,Robinhood Markets Inc,101125,14,5.52844,0,0,0,Neutral,2026-09-30T00:48:24Z
+UEC,Uranium Energy Corp,19198,15,5.44985,0,0,0,Neutral,2026-09-30T00:48:24Z
+ENPH,Enphase Energy Inc,49403,16,5.44398,0,0,0,Neutral,2026-09-30T00:48:24Z
+NTAP,Netapp Inc,4892,17,5.23674,1,0,0,Neutral,2026-09-30T00:48:24Z
+ONDS,Ondas Inc,36981,18,5.10874,2,0,1,Very Bearish,2026-09-30T00:48:24Z
+CELH,Celsius Holdings Inc,30991,19,5.04214,0,0,0,Neutral,2026-09-30T00:48:24Z
+MDB,MongoDB Inc,21955,20,4.95587,0,0,0,Neutral,2026-09-30T00:48:24Z
+ARWR,Arrowhead Pharmaceuticals Inc.,12503,21,4.90096,0,0,0,Neutral,2026-09-30T00:48:24Z
+NOC,Northrop Grumman Corp.,11527,22,4.66275,0,0,0,Neutral,2026-09-30T00:48:24Z
+WULF,TeraWulf Inc,31736,23,4.64195,0,0,0,Neutral,2026-09-30T00:48:24Z
+LMT,Lockheed Martin Corp.,37436,24,4.29815,0,0,0,Neutral,2026-09-30T00:48:24Z
+RDW,Redwire Corp,23959,25,4.19622,0,0,0,Neutral,2026-09-30T00:48:24Z
+TOSHI.X,TOSHI,5669,26,4.17755,1,1,0,Very Bullish,2026-09-30T00:48:24Z
+BA,Boeing Co,197615,27,4.12053,0,0,0,Neutral,2026-09-30T00:48:24Z
+POET,POET Technologies Inc,29614,28,4.05458,1,1,0,Very Bullish,2026-09-30T00:48:24Z
+AAOI,Applied Optoelectronics Inc,25944,29,3.95231,0,0,0,Neutral,2026-09-30T00:48:24Z
+FRVO,Fervo Energy Co,1745,30,3.87022,0,0,0,Neutral,2026-09-30T00:48:24Z
