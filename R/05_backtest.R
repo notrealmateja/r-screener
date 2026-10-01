@@ -614,7 +614,12 @@ tranche_returns <- function(fw, held) {
          n    = ncol(mat))
 }
 
-run_equity_curve <- function(price_path = "data/price_history.csv") {
+# `exclude` / `write` / `robustness` exist for the concentration check at the
+# end of this function, which re-enters it once with the two biggest winners
+# removed. See the comment there for why that check is the one that matters.
+run_equity_curve <- function(price_path = "data/price_history.csv",
+                             exclude = character(0), write = TRUE,
+                             robustness = TRUE) {
   if (!file.exists(price_path)) {
     message("No price history at ", price_path, " — skipping equity curve.")
     return(invisible(NULL))
@@ -627,6 +632,7 @@ run_equity_curve <- function(price_path = "data/price_history.csv") {
     return(invisible(NULL))
   }
 
+  if (length(exclude)) px <- px %>% filter(!symbol %in% exclude)
   px <- px %>% select(all_of(need)) %>% arrange(symbol, date) %>%
     group_by(symbol) %>% mutate(vol_ratio = volume / lag(volume)) %>% ungroup()
 
@@ -1011,12 +1017,52 @@ run_equity_curve <- function(price_path = "data/price_history.csv") {
            phase_top_beats_bottom = mean(sweep$spread > 0),
            phase_beats_univ       = mean(sweep$edge_vs_univ > 0))
 
-  write_csv(curve %>% select(date, block, n_books, model_ret, q5_ret, spy_ret,
-                             univ_ret, model_cum, q5_cum, spy_cum, univ_cum,
-                             rel_cum, model_dd, spy_dd, n_held),
-            "data/backtest_equity.csv")
-  write_csv(stats, "data/backtest_equity_stats.csv")
-  write_csv(sweep, "data/backtest_phase_sweep.csv")
+  # Does the edge survive deleting the biggest winners?
+  #
+  # This is the check that matters most, because the candidate list was not
+  # assembled neutrally. 68 of the 195 names sit in a block whose own comment
+  # says they exist to "make the Unicorn screen meaningful", chosen in August
+  # 2026 — with hindsight — and the two largest total returns in the whole file
+  # (QBTS +1589%, RGTI +1120%) are among them. Both sit on BOTH sides of
+  # model-minus-universe, so which side they move more is an empirical
+  # question, not something to reason about.
+  #
+  # Measured: removing them RAISES the edge, from +13.6pp to +15.1pp, and takes
+  # the share of calendars where the top quintile beats the bottom from 87% to
+  # 100%. They inflate the no-signal control more than they flatter the model,
+  # so the headline is carrying a headwind rather than resting on two names.
+  # Re-run nightly rather than asserted once, because the answer can change.
+  ex_top2 <- NA_real_; ex_top2_names <- NA_character_; ex_top2_win <- NA_real_
+  if (robustness && !length(exclude)) {
+    growth <- px %>% filter(!is.na(daily_ret)) %>% group_by(symbol) %>%
+      summarize(g = prod(1 + daily_ret), .groups = "drop") %>% arrange(desc(g))
+    drop2 <- utils::head(growth$symbol, 2)
+    if (length(drop2) == 2) {
+      alt <- tryCatch(
+        run_equity_curve(price_path, exclude = drop2, write = FALSE,
+                         robustness = FALSE),
+        error = function(e) NULL)
+      if (!is.null(alt)) {
+        a <- alt$stats[alt$stats$series == "model", ]
+        ex_top2       <- a$edge_vs_univ_cagr[1]
+        ex_top2_win   <- mean(alt$sweep$spread > 0)
+        ex_top2_names <- paste(drop2, collapse = ", ")
+      }
+    }
+  }
+  # Carried on every row, the way tranches and cost_bps already are.
+  stats$edge_vs_univ_ex_top2       <- ex_top2
+  stats$edge_vs_univ_ex_top2_win   <- ex_top2_win
+  stats$edge_vs_univ_ex_top2_names <- ex_top2_names
+
+  if (write) {
+    write_csv(curve %>% select(date, block, n_books, model_ret, q5_ret, spy_ret,
+                               univ_ret, model_cum, q5_cum, spy_cum, univ_cum,
+                               rel_cum, model_dd, spy_dd, n_held),
+              "data/backtest_equity.csv")
+    write_csv(stats, "data/backtest_equity_stats.csv")
+    write_csv(sweep, "data/backtest_phase_sweep.csv")
+  }
 
   message(glue("\nGrowth of $1, {min(curve$date)} to {max(curve$date)} ({m$days} days, ",
                "{length(books)} overlapping calendars):"))
@@ -1034,6 +1080,11 @@ run_equity_curve <- function(price_path = "data/price_history.csv") {
                "({round(m$edge_vs_univ_beta_adj * 100, 1)}pp beta-adjusted), ",
                "t {round(m$edge_vs_univ_t_tranche, 2)} over {length(whole)} periods ",
                "(daily {round(m$edge_vs_univ_t, 2)}, NW {round(m$edge_vs_univ_t_nw, 2)})"))
+  if (!is.na(ex_top2))
+    message(glue("  Dropping the two biggest winners ({ex_top2_names}): edge over ",
+                 "universe {round(ex_top2 * 100, 1)}pp/yr vs ",
+                 "{round(m$edge_vs_univ_cagr * 100, 1)}pp with them, top beats bottom in ",
+                 "{round(ex_top2_win * 100)}% of calendars."))
   message(glue("  Calendar sweep: top quintile {round(min(sweep$top) * 100, 1)}% to ",
                "{round(max(sweep$top) * 100, 1)}%/yr across {nrow(sweep)} calendars; ",
                "top beat bottom in {sum(sweep$spread > 0)}/{nrow(sweep)}, ",

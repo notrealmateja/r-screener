@@ -3796,6 +3796,14 @@ server <- function(input, output, session) {
     if (nrow(row) == 0 || !field %in% names(row)) return(NA_real_)
     suppressWarnings(as.numeric(row[[field]][1]))
   }
+  # eq_stat coerces to numeric; this is its text sibling, for the few fields
+  # that carry names rather than numbers.
+  eq_chr <- function(series, field) {
+    if (is.null(bt_eq_stats) || nrow(bt_eq_stats) == 0) return(NA_character_)
+    row <- bt_eq_stats[bt_eq_stats$series == series, , drop = FALSE]
+    if (nrow(row) == 0 || !field %in% names(row)) return(NA_character_)
+    as.character(row[[field]][1])
+  }
   pct1 <- function(x, sign = FALSE) {
     if (is.na(x)) return("N/A")
     sprintf("%s%.1f%%", if (sign && x > 0) "+" else "", x * 100)
@@ -3970,6 +3978,16 @@ server <- function(input, output, session) {
     eu_hi   <- eq_stat("model", "edge_vs_univ_t_align_max")
     ed_share <- eq_stat("model", "edge_vs_univ_top_block_share")
     ed_jack  <- eq_stat("model", "edge_vs_univ_jack_min")
+    ex2      <- eq_stat("model", "edge_vs_univ_ex_top2")
+    ex2_win  <- eq_stat("model", "edge_vs_univ_ex_top2_win")
+    ex2_nm   <- eq_chr("model",  "edge_vs_univ_ex_top2_names")
+    # How much a book with NO signal at all moves when you shift the calendar.
+    # It is the null band for the scatter above: sensitivity below this is just
+    # rebalancing, not the score.
+    null_sd  <- if (!is.null(bt_phase_sweep) && nrow(bt_phase_sweep) > 2)
+                  sd(bt_phase_sweep$univ, na.rm = TRUE) else NA_real_
+    top_sd   <- if (!is.null(bt_phase_sweep) && nrow(bt_phase_sweep) > 2)
+                  sd(bt_phase_sweep$top, na.rm = TRUE) else NA_real_
 
     HTML(paste0(
       "<p><b>How this is built.</b> At each rebalance the score is computed from the previous ",
@@ -4066,11 +4084,32 @@ server <- function(input, output, session) {
       "is one decision”. That was wrong, and an adversarial review of this page caught it. ",
       "Holding the same names does not make today’s return predict tomorrow’s, and for ",
       "independent daily returns the two statistics are the same number. Measured here, the ",
-      "daily series has essentially no autocorrelation: the Newey-West variance inflation is ",
-      if (is.na(vif_u)) "N/A" else sprintf("%.2f", vif_u),
-      " against the universe, so the overlap correction is roughly nil, and the per-period ",
-      "figure comes out close to the daily one rather than eight times smaller. The real ",
-      "limit is simply the sample: two and a half years.</p>",
+      "daily series has essentially no autocorrelation, and the Newey-West variance inflation ",
+      "comes out around ",
+      if (is.na(vif_u)) "N/A" else sprintf("%.1f", vif_u),
+      " against the universe — near one on any bandwidth, where an eightfold inflation of the ",
+      "t would have needed roughly sixty. (The exact figure drifts with the bandwidth you ",
+      "choose, which is why it is quoted loosely here; the point is the order of magnitude, ",
+      "not the second decimal.) The per-period figure comes out close to the daily one rather ",
+      "than eight times smaller. The real limit is simply the sample: two and a half years.</p>",
+
+      "<p><b>It is not resting on the two moonshots.</b> This candidate list was not assembled ",
+      "neutrally: 68 of the 195 names sit in a block whose own comment says they exist to make ",
+      "the small-cap screen meaningful, picked in August 2026 with full hindsight, and the two ",
+      "largest total returns in the whole file are among them. Because the figure above is the ",
+      "model minus its own universe, those names sit on both sides of the subtraction, so which ",
+      "side they move more has to be measured rather than argued. Deleting ",
+      if (is.na(ex2_nm)) "the two biggest winners" else ex2_nm,
+      " outright ",
+      if (is.na(ex2) || is.na(ed_u)) "does not change the conclusion" else
+        sprintf("moves the edge from %+.1f to %+.1f points a year", ed_u * 100, ex2 * 100),
+      if (!is.na(ex2) && !is.na(ed_u) && ex2 > ed_u)
+        " — it goes up, because those names inflate the no-signal control more than they
+           flatter the model" else "",
+      if (is.na(ex2_win)) "" else
+        sprintf(", and the top quintile then beats the bottom on %.0f%% of calendars", ex2_win * 100),
+      ". The result is carrying those two as a headwind, not standing on them. This is re-measured ",
+      "every night rather than asserted once.</p>",
 
       "<p><b>And the calendars still disagree.</b> The individual calendars disagree sharply — the ",
       "top quintile runs from ",
@@ -4079,6 +4118,12 @@ server <- function(input, output, session) {
       if (is.na(ph_win)) "N/A" else sprintf("%.0f%% of them", ph_win * 100),
       ". That spread is the honest measure of how much this rests on an arbitrary choice; it ",
       "is not a confidence interval, because all 63 calendars trade nearly the same returns. ",
+      "For scale, a book with no signal in it at all — the purple line, holding every name — ",
+      "still swings ",
+      if (is.na(null_sd)) "N/A" else sprintf("%.1f points", null_sd * 100),
+      " across the same calendars simply from rebalancing on different days, against ",
+      if (is.na(top_sd)) "N/A" else sprintf("%.1f points", top_sd * 100),
+      " for the ranked book. Some of that scatter is the calendar, not the score. ",
       "There is no bear market in the window, and the formation and holding periods were ",
       "chosen after trying several, with no multiple-testing penalty applied.</p>",
 
