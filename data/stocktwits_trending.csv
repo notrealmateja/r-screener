@@ -1,31 +1,31 @@
 symbol,title,watchlist_count,st_rank,trending_score,messages,bullish,bearish,sentiment_label,fetched_at
-CAPR,Capricor Therapeutics Inc,33044,1,14.7883,7,3,1,Very Bullish,2026-09-30T00:48:24Z
-MU,Micron Technology Inc,217409,2,10.4467,4,3,0,Very Bullish,2026-09-30T00:48:24Z
-DKNG,DraftKings Inc,120429,3,9.12992,3,1,1,Neutral,2026-09-30T00:48:24Z
-MSOS,AdvisorShares Pure US Cannabis ETF,13234,4,8.48364,1,1,0,Very Bullish,2026-09-30T00:48:24Z
-FICO,"Fair, Isaac Corp.",3082,5,8.3615,1,0,0,Neutral,2026-09-30T00:48:24Z
-VNDA,Vanda Pharmaceuticals Inc,5417,6,7.37145,2,0,0,Neutral,2026-09-30T00:48:24Z
-MCD,McDonald's Corp,42259,7,6.68481,1,0,0,Neutral,2026-09-30T00:48:24Z
-IOVA,Iovance Biotherapeutics Inc,20878,8,6.65776,1,0,0,Neutral,2026-09-30T00:48:24Z
-LUNR,Intuitive Machines Inc,39070,9,6.13975,0,0,0,Neutral,2026-09-30T00:48:24Z
-NEAR.X,Near,5435,10,5.88023,1,1,0,Very Bullish,2026-09-30T00:48:24Z
-TRLV,Trulieve Cannabis Corp ,7798,11,5.74939,0,0,0,Neutral,2026-09-30T00:48:24Z
-LIT.X,lighter,611,12,5.70659,0,0,0,Neutral,2026-09-30T00:48:24Z
-IBRX,ImmunityBio Inc,30580,13,5.58403,1,0,0,Neutral,2026-09-30T00:48:24Z
-HOOD,Robinhood Markets Inc,101125,14,5.52844,0,0,0,Neutral,2026-09-30T00:48:24Z
-UEC,Uranium Energy Corp,19198,15,5.44985,0,0,0,Neutral,2026-09-30T00:48:24Z
-ENPH,Enphase Energy Inc,49403,16,5.44398,0,0,0,Neutral,2026-09-30T00:48:24Z
-NTAP,Netapp Inc,4892,17,5.23674,1,0,0,Neutral,2026-09-30T00:48:24Z
-ONDS,Ondas Inc,36981,18,5.10874,2,0,1,Very Bearish,2026-09-30T00:48:24Z
-CELH,Celsius Holdings Inc,30991,19,5.04214,0,0,0,Neutral,2026-09-30T00:48:24Z
-MDB,MongoDB Inc,21955,20,4.95587,0,0,0,Neutral,2026-09-30T00:48:24Z
-ARWR,Arrowhead Pharmaceuticals Inc.,12503,21,4.90096,0,0,0,Neutral,2026-09-30T00:48:24Z
-NOC,Northrop Grumman Corp.,11527,22,4.66275,0,0,0,Neutral,2026-09-30T00:48:24Z
-WULF,TeraWulf Inc,31736,23,4.64195,0,0,0,Neutral,2026-09-30T00:48:24Z
-LMT,Lockheed Martin Corp.,37436,24,4.29815,0,0,0,Neutral,2026-09-30T00:48:24Z
-RDW,Redwire Corp,23959,25,4.19622,0,0,0,Neutral,2026-09-30T00:48:24Z
-TOSHI.X,TOSHI,5669,26,4.17755,1,1,0,Very Bullish,2026-09-30T00:48:24Z
-BA,Boeing Co,197615,27,4.12053,0,0,0,Neutral,2026-09-30T00:48:24Z
-POET,POET Technologies Inc,29614,28,4.05458,1,1,0,Very Bullish,2026-09-30T00:48:24Z
-AAOI,Applied Optoelectronics Inc,25944,29,3.95231,0,0,0,Neutral,2026-09-30T00:48:24Z
-FRVO,Fervo Energy Co,1745,30,3.87022,0,0,0,Neutral,2026-09-30T00:48:24Z
+MU,Micron Technology Inc,218213,1,19.2786,16,7,1,Very Bullish,2026-10-01T00:51:03Z
+TLT,iShares 20+ Year Treasury Bond ETF,31315,2,10.7859,3,0,1,Very Bearish,2026-10-01T00:51:03Z
+IBRX,ImmunityBio Inc,30741,3,9.96269,3,1,0,Very Bullish,2026-10-01T00:51:03Z
+RKLB,Rocket Lab USA Inc,68538,4,8.4407,0,0,0,Neutral,2026-10-01T00:51:03Z
+NKE,Nike Inc,140689,5,8.15461,0,0,0,Neutral,2026-10-01T00:51:03Z
+XRPN,Evernorth Holdings Inc.,939,6,7.38664,2,2,0,Very Bullish,2026-10-01T00:51:03Z
+LQDA,Liquidia Corp,4765,7,6.82632,0,0,0,Neutral,2026-10-01T00:51:03Z
+NU,Nu Holdings Ltd,16614,8,6.47348,0,0,0,Neutral,2026-10-01T00:51:03Z
+GOOG,Alphabet Inc - Ordinary Shares - Class C,312189,9,5.28034,0,0,0,Neutral,2026-10-01T00:51:03Z
+CAT,Caterpillar Inc.,35877,10,4.96924,0,0,0,Neutral,2026-10-01T00:51:03Z
+PSKY,Paramount Skydance Corp. - Ordinary Shares - Class B,26781,11,4.72953,1,0,0,Neutral,2026-10-01T00:51:03Z
+CRVS,Corvus Pharmaceuticals Inc,6764,12,4.68354,0,0,0,Neutral,2026-10-01T00:51:03Z
+IWM,iShares Russell 2000 ETF,49850,13,4.67639,0,0,0,Neutral,2026-10-01T00:51:03Z
+RBLX,Roblox Corp.,66137,14,4.41484,0,0,0,Neutral,2026-10-01T00:51:03Z
+NET,Cloudflare Inc,35355,15,4.39494,0,0,0,Neutral,2026-10-01T00:51:03Z
+QUANT,Quant Traders and Investors,280,16,4.35253,0,0,0,Neutral,2026-10-01T00:51:03Z
+TDOC,Teladoc Health Inc,40243,17,4.32123,0,0,0,Neutral,2026-10-01T00:51:03Z
+STUDY,Stocktwits Education,5995,18,4.31073,0,0,0,Neutral,2026-10-01T00:51:03Z
+DIA,SPDR Dow Jones Industrial Average ETF,76831,19,4.29452,0,0,0,Neutral,2026-10-01T00:51:03Z
+XBI,SPDR S&P Biotech ETF,28975,20,4.29356,0,0,0,Neutral,2026-10-01T00:51:03Z
+XPEV,XPeng Inc - ADR,57109,21,4.24036,0,0,0,Neutral,2026-10-01T00:51:03Z
+GLD.X,GoldCoin,436,22,4.1029,0,0,0,Neutral,2026-10-01T00:51:03Z
+HYG,iShares iBoxx USD High Yield Corporate Bond ETF,3893,23,4.0641,0,0,0,Neutral,2026-10-01T00:51:03Z
+VICR,Vicor Corp.,2130,24,4.0249,0,0,0,Neutral,2026-10-01T00:51:03Z
+SOFI,SoFi Technologies Inc,156722,25,3.98944,1,0,0,Neutral,2026-10-01T00:51:03Z
+COMP.X,Compound,5625,26,3.88688,0,0,0,Neutral,2026-10-01T00:51:03Z
+GOOGL,Alphabet Inc Class A,232057,27,3.65687,1,0,0,Neutral,2026-10-01T00:51:03Z
+LPTH,"Lightpath Technologies, Inc. - Ordinary Shares - Class A",8802,28,3.58932,0,0,0,Neutral,2026-10-01T00:51:03Z
+ACN,Accenture plc - Ordinary Shares - Class A,8730,29,3.5546,0,0,0,Neutral,2026-10-01T00:51:03Z
+MARA,Marathon Digital Holdings Inc,158087,30,3.52854,0,0,0,Neutral,2026-10-01T00:51:03Z
