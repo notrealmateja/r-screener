@@ -676,66 +676,149 @@ run_equity_curve <- function(price_path = "data/price_history.csv") {
   bench <- px %>% distinct(date, spy_ret) %>% arrange(date)
 
   dates <- bench$date
-  if (length(dates) < FORMATION_DAYS + HOLD_DAYS + 1) {
-    message(glue("Need {FORMATION_DAYS + HOLD_DAYS + 1} trading days, have {length(dates)}."))
+  # The composite needs enough history for the LAST calendar to come online
+  # (FORMATION_DAYS + HOLD_DAYS) and then two whole blocks on top of that. The
+  # old guard admitted FORMATION_DAYS + HOLD_DAYS + 1 days, which is enough for
+  # one single-calendar tranche but not for a composite — so a short history
+  # did ~95 seconds of work and then returned NULL from the coverage check
+  # below with no explanation of why.
+  need <- FORMATION_DAYS + HOLD_DAYS + HOLD_DAYS * 2
+  if (length(dates) < need) {
+    message(glue("Need {need} trading days for a {HOLD_DAYS}-calendar composite, ",
+                 "have {length(dates)}."))
     return(invisible(NULL))
   }
 
-  # Run to the END of the data. Stopping at the last FULL tranche discarded the
-  # most recent 56 trading days, and which days get discarded depends only on
-  # where the grid happens to start — a phase choice that moved the result.
-  starts <- seq(FORMATION_DAYS + 1, length(dates) - 1, by = HOLD_DAYS)
+  # Every rebalance calendar, not one of them.
+  #
+  # `starts` used to be a single grid, seq(FORMATION_DAYS + 1, n - 1, by =
+  # HOLD_DAYS). That is one arbitrary PHASE of the formation calendar, and the
+  # price window rolls: as old days fall off the front, dates[127] moves and
+  # every tranche boundary is redrawn. One week of new data moved the bottom
+  # quintile from 25.3%/yr to 39.3%/yr and flipped the top-minus-bottom spread
+  # from +10.1pp to -5.4pp, on five days of fresh returns. Sweeping all 63
+  # phases of one day's data put that spread anywhere between -9.6pp and
+  # +40.3pp, standard deviation 12.9pp. The single number was reporting where
+  # the grid happened to land at least as much as what the score did.
+  #
+  # So hold every calendar at once: 1/HOLD_DAYS of capital in each phase, each
+  # book still buy-and-hold for HOLD_DAYS, which rebalances 1/HOLD_DAYS of the
+  # book per day. This is the standard overlapping-portfolio construction, and
+  # unlike a single phase it is a strategy somebody could actually run. The
+  # per-phase results are not discarded — they are written out as a published
+  # diagnostic, because how much the calendar matters is itself a finding.
+  #
+  # Cost accounting stays INSIDE each book. Turnover is the overlap between
+  # consecutive baskets of the SAME calendar; two different calendars holding
+  # different names is not turnover, it is diversification.
+  first_ix <- FORMATION_DAYS + 1
+  last_ix  <- length(dates) - 1
   message(glue("Equity curve: formation {FORMATION_DAYS}d, hold {HOLD_DAYS}d, ",
-               "{length(starts)} non-overlapping tranches, {EQ_COST_BPS}bp turnover cost."))
+               "{HOLD_DAYS} overlapping rebalance calendars, ",
+               "{EQ_COST_BPS}bp turnover cost."))
 
-  legs <- list(); prev_q1 <- character(0); prev_q5 <- character(0)
+  build_book <- function(starts) {
+    legs <- list(); prev_q1 <- character(0); prev_q5 <- character(0)
+    for (ix in starts) {
+      fm <- px %>% filter(date %in% dates[(ix - FORMATION_DAYS):(ix - 1)]) %>%
+        select(date, symbol, daily_alpha, daily_ret, spy_ret)
+      scored <- score_formation(fm)
+      if (is.null(scored)) next
 
-  for (ix in starts) {
-    fm <- px %>% filter(date %in% dates[(ix - FORMATION_DAYS):(ix - 1)]) %>%
-      select(date, symbol, daily_alpha, daily_ret, spy_ret)
-    scored <- score_formation(fm)
-    if (is.null(scored)) next
+      scored <- scored %>% mutate(bucket = ntile(desc(score), N_BUCKETS))
+      q1 <- scored$symbol[scored$bucket == 1]
+      q5 <- scored$symbol[scored$bucket == N_BUCKETS]
+      if (length(q1) == 0 || length(q5) == 0) next
 
-    scored <- scored %>% mutate(bucket = ntile(desc(score), N_BUCKETS))
-    q1 <- scored$symbol[scored$bucket == 1]
-    q5 <- scored$symbol[scored$bucket == N_BUCKETS]
-    if (length(q1) == 0 || length(q5) == 0) next
+      fw_dates <- dates[ix:min(ix + HOLD_DAYS - 1, length(dates))]
+      fw <- px %>% filter(date %in% fw_dates)
 
-    fw_dates <- dates[ix:min(ix + HOLD_DAYS - 1, length(dates))]
-    fw <- px %>% filter(date %in% fw_dates)
+      leg1 <- tranche_returns(fw, q1)
+      leg5 <- tranche_returns(fw, q5)
+      # The no-signal control: hold EVERY name the model was choosing among,
+      # built the same way the model is. It used to be an equal-weight average
+      # recomputed daily, which is a different and cost-free strategy — worth
+      # 3.6 points a year against this one, all of it flattering the model's
+      # edge over its own universe. A control has to be constructed like the
+      # thing it controls for.
+      legU <- tranche_returns(fw, scored$symbol)
+      if (is.null(leg1) || is.null(leg5) || is.null(legU)) next
+      leg <- leg1 %>% rename(model_ret = ret, n_held = n) %>%
+        inner_join(leg5 %>% select(date, q5_ret = ret), by = "date") %>%
+        inner_join(legU %>% select(date, univ_ret = ret), by = "date")
+      if (nrow(leg) == 0) next
 
-    leg1 <- tranche_returns(fw, q1)
-    leg5 <- tranche_returns(fw, q5)
-    # The no-signal control: hold EVERY name the model was choosing among,
-    # built the same way the model is. It used to be an equal-weight average
-    # recomputed daily, which is a different and cost-free strategy — worth
-    # 3.6 points a year against this one, all of it flattering the model's
-    # edge over its own universe. A control has to be constructed like the
-    # thing it controls for.
-    legU <- tranche_returns(fw, scored$symbol)
-    if (is.null(leg1) || is.null(leg5) || is.null(legU)) next
-    leg <- leg1 %>% rename(model_ret = ret, n_held = n) %>%
-      inner_join(leg5 %>% select(date, q5_ret = ret), by = "date") %>%
-      inner_join(legU %>% select(date, univ_ret = ret), by = "date")
-    if (nrow(leg) == 0) next
+      # Charge turnover once, on the first day. Holding a name across a
+      # rebalance costs nothing; only the switched fraction does.
+      turn1 <- if (length(prev_q1) == 0) 1 else 1 - length(intersect(prev_q1, q1)) / length(q1)
+      turn5 <- if (length(prev_q5) == 0) 1 else 1 - length(intersect(prev_q5, q5)) / length(q5)
+      leg$model_ret[1] <- leg$model_ret[1] - turn1 * EQ_COST_BPS / 10000
+      leg$q5_ret[1]    <- leg$q5_ret[1]    - turn5 * EQ_COST_BPS / 10000
 
-    # Charge turnover once, on the first day. Holding a name across a rebalance
-    # costs nothing; only the switched fraction does.
-    turn1 <- if (length(prev_q1) == 0) 1 else 1 - length(intersect(prev_q1, q1)) / length(q1)
-    turn5 <- if (length(prev_q5) == 0) 1 else 1 - length(intersect(prev_q5, q5)) / length(q5)
-    leg$model_ret[1] <- leg$model_ret[1] - turn1 * EQ_COST_BPS / 10000
-    leg$q5_ret[1]    <- leg$q5_ret[1]    - turn5 * EQ_COST_BPS / 10000
-
-    prev_q1 <- q1; prev_q5 <- q5
-    leg$tranche <- length(legs) + 1L
-    legs[[length(legs) + 1]] <- leg
+      prev_q1 <- q1; prev_q5 <- q5
+      leg$tranche <- length(legs) + 1L
+      legs[[length(legs) + 1]] <- leg
+    }
+    if (length(legs) == 0) NULL else bind_rows(legs)
   }
 
-  if (length(legs) == 0) { message("No tranches produced."); return(invisible(NULL)) }
+  books <- list()
+  for (p in seq_len(HOLD_DAYS) - 1L) {
+    bk <- build_book(seq(first_ix + p, last_ix, by = HOLD_DAYS))
+    if (!is.null(bk)) books[[length(books) + 1]] <- bk %>% mutate(phase = p)
+  }
+  if (length(books) == 0) { message("No tranches produced."); return(invisible(NULL)) }
+  all_legs <- bind_rows(books)
 
-  curve <- bind_rows(legs) %>% arrange(date) %>%
+  # The composite: average the books that are live on each date.
+  #
+  # Only dates where EVERY calendar is live. The last book comes online at
+  # index FORMATION_DAYS + HOLD_DAYS, so earlier dates average over fewer books
+  # and are noisier than the rest by construction — mixing them in would make
+  # the start of the curve look more volatile than the strategy actually is.
+  # Against HOLD_DAYS, not length(books). If a calendar silently produced no
+  # legs at all, length(books) shrinks to match and every date still looks
+  # "fully covered" — the curve would quietly be built from 62 calendars while
+  # claiming 63.
+  if (length(books) != HOLD_DAYS)
+    message(glue("WARNING: {HOLD_DAYS - length(books)} of {HOLD_DAYS} calendars ",
+                 "produced no tranches; the composite is built from {length(books)}."))
+  active <- all_legs %>% count(date, name = "n_books")
+  full_dates <- active$date[active$n_books == length(books)]
+  if (length(full_dates) < HOLD_DAYS * 2) {
+    message(glue("Only {length(full_dates)} dates have all {length(books)} calendars ",
+                 "live — need {HOLD_DAYS * 2} for a composite. Skipping."))
+    return(invisible(NULL))
+  }
+  comp <- all_legs %>% filter(date %in% full_dates) %>%
+    group_by(date) %>%
+    summarize(model_ret = mean(model_ret), q5_ret = mean(q5_ret),
+              univ_ret  = mean(univ_ret),  n_held = mean(n_held),
+              n_books   = dplyr::n(), .groups = "drop") %>%
+    arrange(date)
+
+  curve <- comp %>%
     inner_join(bench, by = "date") %>%
     mutate(
+      # Non-overlapping blocks, for the significance test below.
+      #
+      # NOT because the daily t is inflated. This file used to claim the daily
+      # figure "counts all 623 days as separate evidence when each 63-day hold
+      # is one decision", implying a sqrt(623/10) ~ 7.9x overstatement. That is
+      # wrong, and an adversarial review caught it. Holding the same names does
+      # not make today's return predict tomorrow's: overlap creates dependence
+      # between overlapping 63-DAY returns, not within the daily series. And
+      # under i.i.d. daily returns the two statistics are algebraically the
+      # same — mean*sqrt(T)/sd either way — so there was never a factor to
+      # correct. Measured on this curve: acf(1) = -0.02, Newey-West variance
+      # inflation 0.70, and the block t comes out HIGHER than the daily t
+      # (2.21 against 1.96), not eight times lower.
+      #
+      # Blocks are kept because they are robust to within-block dependence if
+      # it ever appears, and because one holding period is the honest unit to
+      # count when describing the sample. The real constraint is the sample
+      # itself: about two and a half years.
+      block     = ((dplyr::row_number() - 1L) %/% HOLD_DAYS) + 1L,
       model_cum = cumprod(1 + model_ret),
       q5_cum    = cumprod(1 + q5_ret),
       spy_cum   = cumprod(1 + spy_ret),
@@ -752,12 +835,14 @@ run_equity_curve <- function(price_path = "data/price_history.csv") {
   b  <- equity_stats(curve$spy_ret,   curve$spy_ret, curve$date)
   u  <- equity_stats(curve$univ_ret,  curve$spy_ret, curve$date)
 
-  # Significance on INDEPENDENT decisions. The daily excess t divides by
-  # sqrt(623) when the strategy only rebalances ~10 times, and every day inside
-  # a 63-day hold is the same decision still playing out — not fresh evidence.
-  tranche_t <- function(col) {
-    per <- curve %>% group_by(tranche) %>%
-      summarize(ex = prod(1 + .data[[col]]) / prod(1 + spy_ret) - 1, .groups = "drop")
+  # Only whole blocks count: a part-block measures a shorter holding period and
+  # is not comparable to the others.
+  whole <- curve %>% count(block) %>% filter(n == HOLD_DAYS) %>% pull(block)
+  tranche_t <- function(col, vs = "spy_ret") {
+    if (length(whole) < 2) return(NA_real_)
+    per <- curve %>% filter(block %in% whole) %>% group_by(block) %>%
+      summarize(ex = prod(1 + .data[[col]]) / prod(1 + .data[[vs]]) - 1,
+                .groups = "drop")
     if (nrow(per) < 2 || sd(per$ex) == 0) return(NA_real_)
     mean(per$ex) / (sd(per$ex) / sqrt(nrow(per)))
   }
@@ -765,8 +850,132 @@ run_equity_curve <- function(price_path = "data/price_history.csv") {
   q5$excess_t_tranche <- tranche_t("q5_ret")
   b$excess_t_tranche  <- NA_real_
   u$excess_t_tranche  <- tranche_t("univ_ret")
-  m$n_decisions  <- length(legs); q5$n_decisions <- length(legs)
-  b$n_decisions  <- length(legs); u$n_decisions  <- length(legs)
+  for (s in c("m", "q5", "b", "u")) assign(s, `[[<-`(get(s), "n_decisions", length(whole)))
+
+  # The significance figure that actually matches the claim.
+  #
+  # Every t above is measured against SPY, but this page's own argument is that
+  # the no-signal universe is the right baseline — most of the gap to the index
+  # is the candidate list, not the score. So the question "does the score add
+  # anything" has to be asked against the universe leg, which is also the more
+  # powerful test, because both legs carry the same market exposure and the
+  # pairing cancels it for free. Measured on this curve the answer is t ~ 1.2
+  # against the universe while it is ~2.2 against the index. Reporting only the
+  # second would be answering the easier question.
+  ann <- function(r) if (!length(r)) NA_real_ else prod(1 + r)^(252 / length(r)) - 1
+  daily_t <- function(x) {
+    x <- x[is.finite(x)]
+    if (length(x) < 3 || sd(x) == 0) return(NA_real_)
+    mean(x) / (sd(x) / sqrt(length(x)))
+  }
+  # Newey-West Bartlett variance inflation, published so a reader can see for
+  # themselves how large the overlap correction is. It is about 1.0 — which is
+  # why the "daily t is inflated eightfold" claim this file used to make was
+  # wrong.
+  nw_vif <- function(x, q = HOLD_DAYS - 1L) {
+    x <- x[is.finite(x)]; n <- length(x)
+    if (n < q + 2) return(NA_real_)
+    x <- x - mean(x); g0 <- sum(x^2) / n
+    if (g0 == 0) return(NA_real_)
+    s <- g0
+    for (l in seq_len(q)) {
+      s <- s + 2 * (1 - l / (q + 1)) * sum(x[-(1:l)] * x[1:(n - l)]) / n
+    }
+    s / g0
+  }
+  ex_u  <- curve$model_ret - curve$univ_ret
+  vif_u <- nw_vif(ex_u)
+  # Beta-adjusted: the long-model / short-universe spread still carries net
+  # market exposure, because the model's beta exceeds the universe's. The
+  # intercept of that spread on the index is the part neither explains.
+  fit_u <- stats::lm(ex_u ~ curve$spy_ret)
+  edge_beta_adj <- unname(stats::coef(fit_u)[1]) * 252
+
+  m$edge_vs_univ_cagr     <- m$cagr - u$cagr
+  m$edge_vs_univ_t         <- daily_t(ex_u)
+  m$edge_vs_univ_t_tranche <- tranche_t("model_ret", vs = "univ_ret")
+  m$edge_vs_univ_t_nw      <- if (is.na(vif_u)) NA_real_ else daily_t(ex_u) / sqrt(vif_u)
+  m$edge_vs_univ_beta_adj  <- edge_beta_adj
+  m$nw_vif_vs_univ         <- vif_u
+  m$nw_vif_vs_spy          <- nw_vif(curve$model_ret - curve$spy_ret)
+  m$excess_t_nw            <- {
+    v <- m$nw_vif_vs_spy
+    if (is.na(v)) NA_real_ else daily_t(curve$model_ret - curve$spy_ret) / sqrt(v)
+  }
+
+  # Same annualisation as the per-calendar sweep below, so the composite can be
+  # drawn against that cloud without a convention shift between them. The
+  # headline cagr uses equity_stats' calendar-day basis; mixing the two on one
+  # chart put the composite marker a fifth of a point off where it belongs,
+  # which is precisely the "the composite must BE the average of what is
+  # printed beside it" property this rebuild exists to establish.
+  m$composite_top_ann    <- ann(curve$model_ret)
+  m$composite_bottom_ann <- ann(curve$q5_ret)
+  m$composite_univ_ann   <- ann(curve$univ_ret)
+
+  # Leave-one-period-out. With only a handful of independent periods a single
+  # good quarter can carry the entire result, and a reader is owed that rather
+  # than a point estimate that quietly depends on it.
+  blk_u <- curve %>% filter(block %in% whole) %>% group_by(block) %>%
+    summarize(ex = prod(1 + model_ret) / prod(1 + univ_ret) - 1, .groups = "drop")
+  m$edge_vs_univ_jack_min <- if (nrow(blk_u) < 3) NA_real_ else
+    min(vapply(seq_len(nrow(blk_u)), function(i) mean(blk_u$ex[-i]), numeric(1)))
+  m$edge_vs_univ_top_block_share <- if (nrow(blk_u) < 2 || sum(blk_u$ex) <= 0)
+    NA_real_ else max(blk_u$ex) / sum(blk_u$ex)
+
+  # The BLOCK boundaries have a phase too. Reporting one alignment's t would
+  # reproduce, inside the significance figure, exactly the arbitrary-grid
+  # problem the curve was just rebuilt to remove.
+  align_t <- function(num, den) {
+    out <- vapply(seq_len(HOLD_DAYS) - 1L, function(off) {
+      bl <- ((seq_len(nrow(curve)) - 1L + off) %/% HOLD_DAYS) + 1L
+      tb <- table(bl)
+      ok <- bl %in% as.integer(names(tb)[tb == HOLD_DAYS])
+      if (sum(ok) < HOLD_DAYS * 2) return(NA_real_)
+      i  <- seq_len(nrow(curve))[ok]
+      per <- tapply(i, bl[ok], function(j)
+        prod(1 + curve[[num]][j]) / prod(1 + curve[[den]][j]) - 1)
+      if (length(per) < 2 || stats::sd(per) == 0) return(NA_real_)
+      mean(per) / (stats::sd(per) / sqrt(length(per)))
+    }, numeric(1))
+    out[is.finite(out)]
+  }
+  at_spy <- align_t("model_ret", "spy_ret")
+  at_u   <- align_t("model_ret", "univ_ret")
+  m$excess_t_align_min       <- if (!length(at_spy)) NA_real_ else min(at_spy)
+  m$excess_t_align_max       <- if (!length(at_spy)) NA_real_ else max(at_spy)
+  m$edge_vs_univ_t_align_min <- if (!length(at_u))   NA_real_ else min(at_u)
+  m$edge_vs_univ_t_align_max <- if (!length(at_u))   NA_real_ else max(at_u)
+
+  for (s in c("q5", "b", "u")) {
+    o <- get(s)
+    for (f in c("edge_vs_univ_cagr", "edge_vs_univ_t", "edge_vs_univ_t_tranche",
+                "edge_vs_univ_t_nw", "edge_vs_univ_beta_adj",
+                "nw_vif_vs_univ", "nw_vif_vs_spy", "excess_t_nw",
+                "composite_top_ann", "composite_bottom_ann", "composite_univ_ann",
+                "edge_vs_univ_jack_min", "edge_vs_univ_top_block_share",
+                "excess_t_align_min", "excess_t_align_max",
+                "edge_vs_univ_t_align_min", "edge_vs_univ_t_align_max"))
+      o[[f]] <- NA_real_
+    assign(s, o)
+  }
+
+  # The per-calendar diagnostic. This is the spread the old single-phase number
+  # was silently drawing one sample from, so it belongs on the page.
+  sweep <- all_legs %>%
+    # Restricted to the composite's own dates, so each calendar is measured over
+    # exactly the window the headline covers. Letting every phase run over its
+    # own longer span made the spread a comparison of different windows as much
+    # as of different calendars, and the composite was then not the average of
+    # the numbers printed beside it.
+    filter(date %in% full_dates) %>%
+    inner_join(bench, by = "date") %>%
+    group_by(phase) %>%
+    summarize(n_tranches = dplyr::n_distinct(tranche), days = dplyr::n(),
+              top = ann(model_ret), bottom = ann(q5_ret),
+              univ = ann(univ_ret), spy = ann(spy_ret), .groups = "drop") %>%
+    mutate(spread = top - bottom, edge_vs_univ = top - univ, excess = top - spy) %>%
+    arrange(phase)
 
   ca_in_window <- sum(px$is_ca & px$date >= min(curve$date) &
                         px$date <= max(curve$date), na.rm = TRUE)
@@ -777,24 +986,58 @@ run_equity_curve <- function(price_path = "data/price_history.csv") {
     tibble(series = "univ",  label = "Universe, equal weight (no signal)", !!!u),
     tibble(series = "spy",   label = "S&P 500 (SPY)",           !!!b)
   ) %>%
-    mutate(tranches = length(legs), cost_bps = EQ_COST_BPS,
+    mutate(tranches = nrow(dplyr::distinct(all_legs, phase, tranche)),
+           # Explicit, rather than leaving the page to infer the sample size
+           # from `tranches` (which counts every basket across every calendar,
+           # ~630) or from `phases` (63). Neither is the independent-evidence
+           # count, and printing either beside a t-statistic would overstate
+           # the sample by a factor of 60 or more.
+           n_independent_blocks = length(whole),
+           cost_bps = EQ_COST_BPS,
            corporate_actions_neutralised = ca_in_window,
-           start_date = min(curve$date), end_date = max(curve$date))
+           start_date = min(curve$date), end_date = max(curve$date),
+           # Calendar-sensitivity diagnostic, identical on every row the way
+           # tranches and cost_bps already are. These are NOT a confidence
+           # interval: they measure how much the rebalance calendar moves the
+           # answer, not sampling error. The 63 calendars share nearly all of
+           # the same underlying returns, so sd/sqrt(63) would be meaningless.
+           phases                 = length(books),
+           phase_model_cagr_min   = min(sweep$top),
+           phase_model_cagr_med   = stats::median(sweep$top),
+           phase_model_cagr_max   = max(sweep$top),
+           phase_spread_min       = min(sweep$spread),
+           phase_spread_med       = stats::median(sweep$spread),
+           phase_spread_max       = max(sweep$spread),
+           phase_top_beats_bottom = mean(sweep$spread > 0),
+           phase_beats_univ       = mean(sweep$edge_vs_univ > 0))
 
-  write_csv(curve %>% select(date, tranche, model_ret, q5_ret, spy_ret, univ_ret,
-                             model_cum, q5_cum, spy_cum, univ_cum, rel_cum,
-                             model_dd, spy_dd, n_held),
+  write_csv(curve %>% select(date, block, n_books, model_ret, q5_ret, spy_ret,
+                             univ_ret, model_cum, q5_cum, spy_cum, univ_cum,
+                             rel_cum, model_dd, spy_dd, n_held),
             "data/backtest_equity.csv")
   write_csv(stats, "data/backtest_equity_stats.csv")
+  write_csv(sweep, "data/backtest_phase_sweep.csv")
 
-  message(glue("\nGrowth of $1, {min(curve$date)} to {max(curve$date)} ({m$days} days):"))
+  message(glue("\nGrowth of $1, {min(curve$date)} to {max(curve$date)} ({m$days} days, ",
+               "{length(books)} overlapping calendars):"))
   message(glue("  Model Q1  {round(m$cagr * 100, 1)}%/yr  maxDD {round(m$max_drawdown * 100, 1)}%  ",
                "beta {round(m$beta, 2)}  excess t {round(m$excess_t, 2)}"))
   message(glue("  S&P 500   {round(b$cagr * 100, 1)}%/yr  maxDD {round(b$max_drawdown * 100, 1)}%"))
   message(glue("  Universe  {round(u$cagr * 100, 1)}%/yr  (equal weight, NO signal)"))
   message(glue("  Model Q5  {round(q5$cagr * 100, 1)}%/yr  (falsification control)"))
-  message(glue("  Excess t over {length(legs)} independent rebalances: ",
-               "{round(m$excess_t_tranche, 2)}"))
+  message(glue("  Excess t over {length(whole)} independent holding periods: ",
+               "{round(m$excess_t_tranche, 2)} vs the index ",
+               "(daily {round(m$excess_t, 2)}, Newey-West {round(m$excess_t_nw, 2)}, ",
+               "variance inflation {round(m$nw_vif_vs_spy, 2)})"))
+  # The figure that answers the claim the page actually makes.
+  message(glue("  Against its OWN UNIVERSE: {round(m$edge_vs_univ_cagr * 100, 1)}pp/yr ",
+               "({round(m$edge_vs_univ_beta_adj * 100, 1)}pp beta-adjusted), ",
+               "t {round(m$edge_vs_univ_t_tranche, 2)} over {length(whole)} periods ",
+               "(daily {round(m$edge_vs_univ_t, 2)}, NW {round(m$edge_vs_univ_t_nw, 2)})"))
+  message(glue("  Calendar sweep: top quintile {round(min(sweep$top) * 100, 1)}% to ",
+               "{round(max(sweep$top) * 100, 1)}%/yr across {nrow(sweep)} calendars; ",
+               "top beat bottom in {sum(sweep$spread > 0)}/{nrow(sweep)}, ",
+               "beat its universe in {sum(sweep$edge_vs_univ > 0)}/{nrow(sweep)}."))
   if (!is.na(u$excess_cagr) && u$excess_cagr > 0)
     message(glue("  NOTE: holding the whole universe with no signal beat the index by ",
                  "{round(u$excess_cagr * 100, 1)}pp/yr. That much of the model's edge is ",
@@ -803,7 +1046,7 @@ run_equity_curve <- function(price_path = "data/price_history.csv") {
     message("  NOTE: the bottom quintile also beat the index — the ranking is ",
             "sorting substantially on market exposure, not skill.")
 
-  list(curve = curve, stats = stats)
+  list(curve = curve, stats = stats, sweep = sweep)
 }
 
 if (!exists("SOURCED_BY_MASTER")) {

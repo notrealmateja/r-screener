@@ -1363,6 +1363,13 @@ ui <- fluidPage(
       ),
       div(class="panel",
         div(class="panel-head",
+          div(class="panel-head-title","EVERY REBALANCE CALENDAR"),
+          div(class="panel-head-meta",
+              "each dot is one of 63 start days, same window · the book holds all of them")),
+        div(class="panel-body", plotlyOutput("val_phases", height="260px"))
+      ),
+      div(class="panel",
+        div(class="panel-head",
           div(class="panel-head-title","WHAT THIS DOES AND DOES NOT SHOW")),
         div(class="panel-body", div(class="doc", uiOutput("val_caveats")))
       )
@@ -3825,8 +3832,13 @@ server <- function(input, output, session) {
   output$val_curve_meta <- renderUI({
     if (is.null(bt_eq_stats) || nrow(bt_eq_stats) == 0) return(HTML("no backtest yet"))
     s <- bt_eq_stats[1, ]
-    HTML(sprintf("%s to %s &nbsp;·&nbsp; %s tranches &nbsp;·&nbsp; buy-and-hold, net of %sbp turnover &nbsp;·&nbsp; %s corporate actions neutralised",
-                 s$start_date, s$end_date, s$tranches, s$cost_bps,
+    HTML(sprintf(paste0("%s to %s &nbsp;·&nbsp; %s overlapping rebalance calendars ",
+                        "&nbsp;·&nbsp; %s independent holding periods &nbsp;·&nbsp; ",
+                        "buy-and-hold, net of %sbp turnover &nbsp;·&nbsp; ",
+                        "%s corporate actions neutralised"),
+                 s$start_date, s$end_date,
+                 if ("phases" %in% names(s)) s$phases else s$tranches,
+                 s$n_decisions, s$cost_bps,
                  s$corporate_actions_neutralised))
   })
 
@@ -3884,6 +3896,51 @@ server <- function(input, output, session) {
       dk(mt = 10, mb = 30)
   })
 
+  # The distribution the old single-calendar number was drawing one sample from.
+  # Plotted as the top quintile against the bottom for each calendar, so the
+  # eight calendars where the ranking inverts are visible rather than averaged
+  # away — they sit below the diagonal.
+  output$val_phases <- renderPlotly({
+    if (is.null(bt_phase_sweep) || nrow(bt_phase_sweep) == 0)
+      return(no_data("Run R/05_backtest.R to generate the calendar sweep"))
+    d <- bt_phase_sweep
+    lim <- range(c(d$top, d$bottom), na.rm = TRUE)
+    pad <- diff(lim) * 0.06
+    lim <- c(lim[1] - pad, lim[2] + pad)
+    # The composite's own figures on the SAME annualisation the sweep uses.
+    # Falling back to `cagr` would put the marker a fifth of a point off the
+    # cloud purely by convention, on the one chart whose entire point is that
+    # the book sits among the calendars it averages.
+    mdl <- eq_stat("model", "composite_top_ann")
+    bot <- eq_stat("model", "composite_bottom_ann")
+    if (is.na(mdl)) mdl <- eq_stat("model", "cagr")
+    if (is.na(bot)) bot <- eq_stat("q5", "cagr")
+    plot_ly(d) %>%
+      # y = x. Above it the ranking worked for that calendar; below it the
+      # falsification control won.
+      add_lines(x = lim, y = lim, inherit = FALSE, hoverinfo = "skip",
+                name = "ranking inverts below this line",
+                line = list(color = "#555", width = 1, dash = "dash")) %>%
+      add_markers(x = ~bottom, y = ~top, inherit = FALSE,
+                  name = "one calendar",
+                  marker = list(color = "#FF9E1B", size = 7,
+                                line = list(color = "#0A0A0A", width = 1)),
+                  text = ~sprintf("start day %d", phase),
+                  hovertemplate = paste0("%{text}<br>top <b>%{y:.1%}</b>",
+                                         "<br>bottom %{x:.1%}<extra></extra>")) %>%
+      add_markers(x = bot, y = mdl, inherit = FALSE, name = "the book (all 63)",
+                  marker = list(color = "#00C853", size = 13, symbol = "diamond",
+                                line = list(color = "#0A0A0A", width = 1)),
+                  hovertemplate = paste0("all 63 calendars<br>top <b>%{y:.1%}</b>",
+                                         "<br>bottom %{x:.1%}<extra></extra>")) %>%
+      layout(xaxis = list(title = "Bottom quintile, annualised",
+                          tickformat = ".0%", range = lim, zeroline = FALSE),
+             yaxis = list(title = "Top quintile, annualised",
+                          tickformat = ".0%", range = lim, zeroline = FALSE),
+             legend = list(orientation = "h", y = -0.18)) %>%
+      dk(mt = 10, mb = 40)
+  })
+
   output$val_caveats <- renderUI({
     q5x    <- eq_stat("q5", "excess_cagr")
     beta   <- eq_stat("model", "beta")
@@ -3896,14 +3953,40 @@ server <- function(input, output, session) {
     u_cagr  <- eq_stat("univ", "cagr")
     u_beta  <- eq_stat("univ", "beta")
     n_ca    <- eq_stat("model", "corporate_actions_neutralised")
+    ph_lo   <- eq_stat("model", "phase_model_cagr_min")
+    ph_hi   <- eq_stat("model", "phase_model_cagr_max")
+    ph_win  <- eq_stat("model", "phase_top_beats_bottom")
+    # Against the no-signal universe, which is the comparison this page argues
+    # for. The t against the index answers an easier question.
+    ed_u    <- eq_stat("model", "edge_vs_univ_cagr")
+    ed_u_t  <- eq_stat("model", "edge_vs_univ_t_tranche")
+    ed_u_ba <- eq_stat("model", "edge_vs_univ_beta_adj")
+    vif_u   <- eq_stat("model", "nw_vif_vs_univ")
+    # Ranges, because where the 63-day periods start is as arbitrary as where
+    # the rebalance calendar starts, and it moves the t by about as much.
+    et_lo   <- eq_stat("model", "excess_t_align_min")
+    et_hi   <- eq_stat("model", "excess_t_align_max")
+    eu_lo   <- eq_stat("model", "edge_vs_univ_t_align_min")
+    eu_hi   <- eq_stat("model", "edge_vs_univ_t_align_max")
+    ed_share <- eq_stat("model", "edge_vs_univ_top_block_share")
+    ed_jack  <- eq_stat("model", "edge_vs_univ_jack_min")
 
     HTML(paste0(
       "<p><b>How this is built.</b> At each rebalance the score is computed from the previous ",
       "126 trading days only, the top quintile (~39 names) is bought equal-weighted and held ",
       "63 days without intervening trades, then the basket is rebuilt. Weights drift with the ",
-      "prices, as they would in a real account. Tranches do not overlap, so the curve is one ",
-      "pool of capital. Returns are net of a ", eq_stat("model", "cost_bps"),
+      "prices, as they would in a real account. Returns are net of a ",
+      eq_stat("model", "cost_bps"),
       " basis point charge on the fraction of the book that actually turns over.</p>",
+
+      "<p><b>Every rebalance calendar, not one of them.</b> A single calendar has to start ",
+      "somewhere, and that choice alone moved this page a great deal: because the price window ",
+      "rolls, one week of new data used to redraw every basket boundary and could flip the ",
+      "bottom quintile above the top. So the book is split across all 63 possible start days — ",
+      "a 63rd of capital on each, every one still held a full 63 days — which rebalances a ",
+      "63rd of the book daily. That is a strategy you could actually run, and the answer no ",
+      "longer depends on which Monday you happened to begin. The chart below shows what the ",
+      "old single-calendar number was drawing one sample from.</p>",
 
       "<p><b>The bottom quintile is the control.</b> If the names the model ranks <i>worst</i> ",
       "also beat the index, the ranking is sorting on market exposure rather than skill. ",
@@ -3954,20 +4037,50 @@ server <- function(input, output, session) {
       "point-in-time index membership history, which this pipeline does not have. Whatever it ",
       "is worth, it flatters every number on this page.</p>",
 
-      "<p><b>What this cannot prove.</b> Over the ",
+      "<p><b>What this cannot prove.</b> Against the index the excess return carries a ",
+      "t-statistic somewhere between ",
+      if (is.na(et_lo)) "N/A" else sprintf("%.1f and %.1f", et_lo, et_hi),
+      " — the range, not a typo, because where you start counting 63-day periods is itself ",
+      "an arbitrary choice and it moves the answer that much. But the index is the easy ",
+      "comparison. Against the no-signal universe, which this page has already argued is ",
+      "the baseline that matters, the score adds ",
+      if (is.na(ed_u)) "N/A" else sprintf("%+.1f points a year", ed_u * 100),
+      " — ", if (is.na(ed_u_ba)) "N/A" else sprintf("%+.1f", ed_u_ba * 100),
+      " after adjusting for the model's higher beta — and its t-statistic runs ",
+      if (is.na(eu_lo)) "N/A" else sprintf("%.1f to %.1f", eu_lo, eu_hi),
+      " across those same alignments. It does not reach 2 under any of them. On the ",
+      "question this page is actually asking, the answer is not distinguishable from luck.</p>",
+
+      "<p><b>And one quarter is doing most of it.</b> There are only ",
       if (is.na(n_dec)) "N/A" else sprintf("%.0f", n_dec),
-      " independent rebalances this strategy actually makes, the excess return carries a ",
-      "t-statistic of ",
-      if (is.na(ex_t_tr)) "N/A" else sprintf("%.2f", ex_t_tr),
-      " — short of the conventional bar of 2, so the outperformance is not distinguishable ",
-      "from luck. (The daily figure of ",
-      if (is.na(ex_t)) "N/A" else sprintf("%.2f", ex_t),
-      " is higher only because it counts all 623 days as separate evidence when each 63-day ",
-      "hold is one decision.) The result is also sensitive to an arbitrary choice: shifting ",
-      "the rebalance calendar by a few weeks, changing nothing else, moves the model between ",
-      "roughly 25% and 46% a year and can flip the bottom quintile above the top. There is no ",
-      "bear market in the window, and the formation and holding periods were chosen after ",
-      "trying several, with no multiple-testing penalty applied.</p>",
+      " independent 63-day periods in this sample. The single best of them accounts for ",
+      if (is.na(ed_share)) "N/A" else sprintf("%.0f%%", ed_share * 100),
+      " of the entire edge over the universe; drop the most favourable one and the average ",
+      "period falls to ",
+      if (is.na(ed_jack)) "N/A" else sprintf("%+.1f%%", ed_jack * 100),
+      ". A result that rests on one quarter out of eight is a result you should expect to ",
+      "move.</p>",
+
+      "<p><b>One correction.</b> An earlier version of this page said the daily t-statistic ",
+      "was inflated because it “counts every day as separate evidence when each 63-day hold ",
+      "is one decision”. That was wrong, and an adversarial review of this page caught it. ",
+      "Holding the same names does not make today’s return predict tomorrow’s, and for ",
+      "independent daily returns the two statistics are the same number. Measured here, the ",
+      "daily series has essentially no autocorrelation: the Newey-West variance inflation is ",
+      if (is.na(vif_u)) "N/A" else sprintf("%.2f", vif_u),
+      " against the universe, so the overlap correction is roughly nil, and the per-period ",
+      "figure comes out close to the daily one rather than eight times smaller. The real ",
+      "limit is simply the sample: two and a half years.</p>",
+
+      "<p><b>And the calendars still disagree.</b> The individual calendars disagree sharply — the ",
+      "top quintile runs from ",
+      if (is.na(ph_lo)) "N/A" else sprintf("%.0f%% to %.0f%% a year", ph_lo * 100, ph_hi * 100),
+      " depending only on which day you start, and the top quintile beats the bottom in ",
+      if (is.na(ph_win)) "N/A" else sprintf("%.0f%% of them", ph_win * 100),
+      ". That spread is the honest measure of how much this rests on an arbitrary choice; it ",
+      "is not a confidence interval, because all 63 calendars trade nearly the same returns. ",
+      "There is no bear market in the window, and the formation and holding periods were ",
+      "chosen after trying several, with no multiple-testing penalty applied.</p>",
 
       "<p><b>Data note.</b> Prices are Yahoo\'s raw close, never adjusted backwards for splits, ",
       "so a reverse split would otherwise arrive as a fake one-day gain of several hundred ",

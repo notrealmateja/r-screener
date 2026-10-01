@@ -244,3 +244,92 @@ if (have_pkgs("dplyr", "readr")) {
     expect_false(is.na(m$excess_t_tranche[1]))
   })
 }
+
+# ── the overlapping composite ───────────────────────────────────────────────
+# A single rebalance calendar has to start somewhere, and because the price
+# window rolls, one week of new data redrew every basket boundary: the bottom
+# quintile went 25.3% -> 39.3%/yr and the top-minus-bottom spread flipped from
+# +10.1pp to -5.4pp. Sweeping all 63 start days put that spread between -10.3pp
+# and +41.6pp. The curve now holds every calendar at once, and the sweep is
+# published so the sensitivity is visible rather than drawn from blindly.
+if (have_pkgs("dplyr", "readr")) {
+  suppressMessages({ library(dplyr); library(readr) })
+
+  test_that("the calendar sweep is published and complete", {
+    p <- repo_path("data", "backtest_phase_sweep.csv")
+    skip_if_not(file.exists(p), "phase sweep not generated yet")
+    d <- read_csv(p, show_col_types = FALSE)
+    expect_true(all(c("phase","n_tranches","days","top","bottom","univ","spy",
+                      "spread","edge_vs_univ","excess") %in% names(d)))
+    expect_gt(nrow(d), 1)
+    expect_equal(anyDuplicated(d$phase), 0)
+    # Each calendar must cover the SAME dates, or the spread measures different
+    # windows as much as different calendars.
+    expect_equal(length(unique(d$days)), 1)
+    expect_equal(d$spread, d$top - d$bottom, tolerance = 1e-12)
+  })
+
+  test_that("the headline is the average of the calendars, not one of them", {
+    ps <- repo_path("data", "backtest_equity_stats.csv")
+    pw <- repo_path("data", "backtest_phase_sweep.csv")
+    skip_if_not(file.exists(ps) && file.exists(pw), "not generated yet")
+    s <- read_csv(ps, show_col_types = FALSE)
+    w <- read_csv(pw, show_col_types = FALSE)
+    skip_if(nrow(w) < 2, "too few calendars")
+    for (ser in c("model", "q5", "univ")) {
+      col <- c(model = "top", q5 = "bottom", univ = "univ")[[ser]]
+      got <- s$cagr[s$series == ser]
+      # The composite averages daily returns across calendars, so it is not
+      # identical to the mean of the per-calendar CAGRs — but it must sit
+      # inside their range, and close to their centre.
+      expect_gte(got, min(w[[col]]), label = paste(ser, "below every calendar"))
+      expect_lte(got, max(w[[col]]), label = paste(ser, "above every calendar"))
+      expect_equal(got, mean(w[[col]]), tolerance = 0.03,
+                   label = paste(ser, "far from the calendar mean"))
+    }
+  })
+
+  test_that("every date in the curve has all calendars live", {
+    p <- repo_path("data", "backtest_equity.csv")
+    pw <- repo_path("data", "backtest_phase_sweep.csv")
+    skip_if_not(file.exists(p) && file.exists(pw), "not generated yet")
+    d <- read_csv(p, show_col_types = FALSE)
+    skip_if(!"n_books" %in% names(d), "pre-composite curve")
+    w <- read_csv(pw, show_col_types = FALSE)
+    # A date averaging fewer books is noisier by construction and would make
+    # the start of the curve look more volatile than the strategy is.
+    expect_equal(unique(d$n_books), nrow(w))
+  })
+
+  test_that("averaging calendars does not inflate the independent sample", {
+    ps <- repo_path("data", "backtest_equity_stats.csv")
+    pc <- repo_path("data", "backtest_equity.csv")
+    skip_if_not(file.exists(ps) && file.exists(pc), "not generated yet")
+    s <- read_csv(ps, show_col_types = FALSE)
+    d <- read_csv(pc, show_col_types = FALSE)
+    skip_if(!"block" %in% names(d), "pre-composite curve")
+    n_dec <- s$n_decisions[s$series == "model"]
+    # 63 overlapping calendars are not 63x the evidence: on any day 62/63 of
+    # the book is yesterday's. The independent unit is still one holding
+    # period, so n_decisions counts whole 63-day blocks, not days or calendars.
+    whole <- d %>% count(block) %>% filter(n == 63) %>% nrow()
+    expect_equal(n_dec, whole)
+    expect_lt(n_dec, nrow(d) / 50)        # nowhere near one per day
+    n_cal <- nrow(read_csv(repo_path("data", "backtest_phase_sweep.csv"),
+                           show_col_types = FALSE))
+    expect_lt(n_dec, n_cal)               # nor one per calendar
+  })
+
+  test_that("the calendar spread is reported, and not as a confidence interval", {
+    ps <- repo_path("data", "backtest_equity_stats.csv")
+    pw <- repo_path("data", "backtest_phase_sweep.csv")
+    skip_if_not(file.exists(ps) && file.exists(pw), "not generated yet")
+    s <- read_csv(ps, show_col_types = FALSE); w <- read_csv(pw, show_col_types = FALSE)
+    skip_if(!"phase_spread_min" %in% names(s), "pre-composite stats")
+    expect_equal(s$phase_model_cagr_min[1], min(w$top), tolerance = 1e-12)
+    expect_equal(s$phase_model_cagr_max[1], max(w$top), tolerance = 1e-12)
+    expect_equal(s$phase_spread_med[1], median(w$spread), tolerance = 1e-12)
+    expect_equal(s$phase_top_beats_bottom[1], mean(w$spread > 0), tolerance = 1e-12)
+    expect_equal(s$phases[1], nrow(w))
+  })
+}
