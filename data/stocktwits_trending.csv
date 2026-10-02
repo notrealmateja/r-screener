@@ -1,31 +1,31 @@
 symbol,title,watchlist_count,st_rank,trending_score,messages,bullish,bearish,sentiment_label,fetched_at
-MU,Micron Technology Inc,218213,1,19.2786,16,7,1,Very Bullish,2026-10-01T00:51:03Z
-TLT,iShares 20+ Year Treasury Bond ETF,31315,2,10.7859,3,0,1,Very Bearish,2026-10-01T00:51:03Z
-IBRX,ImmunityBio Inc,30741,3,9.96269,3,1,0,Very Bullish,2026-10-01T00:51:03Z
-RKLB,Rocket Lab USA Inc,68538,4,8.4407,0,0,0,Neutral,2026-10-01T00:51:03Z
-NKE,Nike Inc,140689,5,8.15461,0,0,0,Neutral,2026-10-01T00:51:03Z
-XRPN,Evernorth Holdings Inc.,939,6,7.38664,2,2,0,Very Bullish,2026-10-01T00:51:03Z
-LQDA,Liquidia Corp,4765,7,6.82632,0,0,0,Neutral,2026-10-01T00:51:03Z
-NU,Nu Holdings Ltd,16614,8,6.47348,0,0,0,Neutral,2026-10-01T00:51:03Z
-GOOG,Alphabet Inc - Ordinary Shares - Class C,312189,9,5.28034,0,0,0,Neutral,2026-10-01T00:51:03Z
-CAT,Caterpillar Inc.,35877,10,4.96924,0,0,0,Neutral,2026-10-01T00:51:03Z
-PSKY,Paramount Skydance Corp. - Ordinary Shares - Class B,26781,11,4.72953,1,0,0,Neutral,2026-10-01T00:51:03Z
-CRVS,Corvus Pharmaceuticals Inc,6764,12,4.68354,0,0,0,Neutral,2026-10-01T00:51:03Z
-IWM,iShares Russell 2000 ETF,49850,13,4.67639,0,0,0,Neutral,2026-10-01T00:51:03Z
-RBLX,Roblox Corp.,66137,14,4.41484,0,0,0,Neutral,2026-10-01T00:51:03Z
-NET,Cloudflare Inc,35355,15,4.39494,0,0,0,Neutral,2026-10-01T00:51:03Z
-QUANT,Quant Traders and Investors,280,16,4.35253,0,0,0,Neutral,2026-10-01T00:51:03Z
-TDOC,Teladoc Health Inc,40243,17,4.32123,0,0,0,Neutral,2026-10-01T00:51:03Z
-STUDY,Stocktwits Education,5995,18,4.31073,0,0,0,Neutral,2026-10-01T00:51:03Z
-DIA,SPDR Dow Jones Industrial Average ETF,76831,19,4.29452,0,0,0,Neutral,2026-10-01T00:51:03Z
-XBI,SPDR S&P Biotech ETF,28975,20,4.29356,0,0,0,Neutral,2026-10-01T00:51:03Z
-XPEV,XPeng Inc - ADR,57109,21,4.24036,0,0,0,Neutral,2026-10-01T00:51:03Z
-GLD.X,GoldCoin,436,22,4.1029,0,0,0,Neutral,2026-10-01T00:51:03Z
-HYG,iShares iBoxx USD High Yield Corporate Bond ETF,3893,23,4.0641,0,0,0,Neutral,2026-10-01T00:51:03Z
-VICR,Vicor Corp.,2130,24,4.0249,0,0,0,Neutral,2026-10-01T00:51:03Z
-SOFI,SoFi Technologies Inc,156722,25,3.98944,1,0,0,Neutral,2026-10-01T00:51:03Z
-COMP.X,Compound,5625,26,3.88688,0,0,0,Neutral,2026-10-01T00:51:03Z
-GOOGL,Alphabet Inc Class A,232057,27,3.65687,1,0,0,Neutral,2026-10-01T00:51:03Z
-LPTH,"Lightpath Technologies, Inc. - Ordinary Shares - Class A",8802,28,3.58932,0,0,0,Neutral,2026-10-01T00:51:03Z
-ACN,Accenture plc - Ordinary Shares - Class A,8730,29,3.5546,0,0,0,Neutral,2026-10-01T00:51:03Z
-MARA,Marathon Digital Holdings Inc,158087,30,3.52854,0,0,0,Neutral,2026-10-01T00:51:03Z
+NKE,Nike Inc,141235,1,18.9671,15,1,9,Very Bearish,2026-10-02T01:06:42Z
+NFLX,Netflix Inc,522030,2,11.3916,3,1,0,Very Bullish,2026-10-02T01:06:42Z
+APP,Applovin Corp,24805,3,9.59754,3,0,1,Very Bearish,2026-10-02T01:06:42Z
+SPCX,SpaceX,106090,4,8.99838,1,0,0,Neutral,2026-10-02T01:06:42Z
+CTVA,Corteva Inc,2263,5,8.55782,0,0,0,Neutral,2026-10-02T01:06:42Z
+XRPN,Evernorth Holdings Inc.,1264,6,7.82792,2,2,0,Very Bullish,2026-10-02T01:06:42Z
+ON,ON Semiconductor Corp.,13245,7,7.69023,0,0,0,Neutral,2026-10-02T01:06:42Z
+APLD,Applied Digital Corporation,46612,8,7.57782,2,2,0,Very Bullish,2026-10-02T01:06:42Z
+BB.TSX,BlackBerry Ltd,1067,9,6.38895,0,0,0,Neutral,2026-10-02T01:06:42Z
+CIEN,CIENA Corp.,7323,10,6.38231,0,0,0,Neutral,2026-10-02T01:06:42Z
+ACN,Accenture plc - Ordinary Shares - Class A,8910,11,5.59325,0,0,0,Neutral,2026-10-02T01:06:42Z
+MAT,"Mattel, Inc.",6744,12,5.57178,0,0,0,Neutral,2026-10-02T01:06:42Z
+GLD.X,GoldCoin,442,13,5.55252,0,0,0,Neutral,2026-10-02T01:06:42Z
+HNT.X,Helium,5920,14,5.32095,0,0,0,Neutral,2026-10-02T01:06:42Z
+PFE,Pfizer Inc,106406,15,5.25863,0,0,0,Neutral,2026-10-02T01:06:42Z
+HBAR.X,Hedera Hashgraph,36297,16,5.17906,0,0,0,Neutral,2026-10-02T01:06:42Z
+ZETA,Zeta Global Holdings Corp,15422,17,4.95083,0,0,0,Neutral,2026-10-02T01:06:42Z
+DIA,SPDR Dow Jones Industrial Average ETF,76841,18,4.90515,0,0,0,Neutral,2026-10-02T01:06:42Z
+CMCSA,Comcast Corp,13288,19,4.85377,0,0,0,Neutral,2026-10-02T01:06:42Z
+TMF,Direxion Daily 20+ Year Treasury Bull 3X Shares,5628,20,4.78873,0,0,0,Neutral,2026-10-02T01:06:42Z
+DIS,Walt Disney Co,289969,21,4.7717,0,0,0,Neutral,2026-10-02T01:06:42Z
+WBD,Warner Bros Discovery Inc,10091,22,4.55183,0,0,0,Neutral,2026-10-02T01:06:42Z
+DRB.X,DebtReliefBot,201,23,4.54717,1,0,0,Neutral,2026-10-02T01:06:42Z
+WYFI,"WhiteFiber, Inc.",7297,24,4.23318,0,0,0,Neutral,2026-10-02T01:06:42Z
+JNUG,Direxion Shares ETF Trust - Direxion Daily Junior Gold Miners Index Bull 2X ETF,78758,25,4.01138,0,0,0,Neutral,2026-10-02T01:06:42Z
+ASTS,AST SpaceMobile Inc,71461,26,3.96905,0,0,0,Neutral,2026-10-02T01:06:42Z
+TDOC,Teladoc Health Inc,40242,27,3.82388,0,0,0,Neutral,2026-10-02T01:06:42Z
+IBM,International Business Machines Corp.,69546,28,3.77638,0,0,0,Neutral,2026-10-02T01:06:42Z
+HD,"Home Depot, Inc.",46077,29,3.61158,0,0,0,Neutral,2026-10-02T01:06:42Z
+BASECAT.X,Basecat,95,30,3.60972,0,0,0,Neutral,2026-10-02T01:06:42Z
