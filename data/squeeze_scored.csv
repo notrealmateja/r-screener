@@ -1,5 +1,5 @@
 symbol,shares_short,shares_short_prior,short_ratio,settlement_date,float_shares,short_percent_float,short_source,shares_outstanding,short_pct_basis,short_trend,improvement_count,fundamentals_improving,sf_score,dtc_score,fi_score,st_score,squeeze_score_raw,squeeze_mult,squeeze_score,squeeze_tier,short_float_pct
-CGEM,9629017,10371763,10.88,2026-09-15,NA,0.15,finra,64355000,shares outstanding,Decreasing,0,FALSE,89.58,94.79,0,80,53.35,1,53.35,Low Signal,15%
+CGEM,9629017,10371763,10.88,2026-09-15,NA,0.16,finra,61458000,shares outstanding,Decreasing,0,FALSE,89.58,94.79,0,80,53.35,1,53.35,Low Signal,15.7%
 AI,42395077,46699653,6.93,2026-09-15,NA,0.27,finra,157280000,shares outstanding,Decreasing,0,FALSE,97.4,83.33,0,80,53.02,1,53.02,Low Signal,27%
 VERA,17035040,19873297,6.18,2026-09-15,NA,0.24,finra,72063000,shares outstanding,Decreasing,0,FALSE,95.31,80.73,0,80,51.97,1,51.97,Low Signal,23.6%
 KRYS,3163642,3347813,13.23,2026-09-15,NA,0.11,finra,29598800,shares outstanding,Decreasing,0,FALSE,79.17,97.4,0,80,51.27,1,51.27,Low Signal,10.7%
