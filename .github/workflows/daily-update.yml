@@ -285,6 +285,52 @@ jobs:
               }
             }
 
+            # Per-symbol price coverage. Row counts cannot see this: the file
+            # can be the right size while individual tickers carry nothing.
+            # WBS has had ZERO price rows and CRNX eight for over a week, and
+            # every check passed every night. Both were still scored, ranked
+            # and displayed, and a 17-observation CRNX was being announced in
+            # the run log as the day's best alpha.
+            if (file.exists("data/price_history.csv") &&
+                file.exists("data/master_scored.csv")) {
+              ph <- tryCatch(read_csv("data/price_history.csv",
+                                      col_select = c("symbol", "daily_ret"),
+                                      show_col_types = FALSE), error = function(e) NULL)
+              ms <- tryCatch(read_csv("data/master_scored.csv",
+                                      col_select = "symbol",
+                                      show_col_types = FALSE), error = function(e) NULL)
+              if (!is.null(ph) && !is.null(ms) && nrow(ph) > 0 && nrow(ms) > 0) {
+                cov  <- table(ph$symbol[!is.na(ph$daily_ret)])
+                ref  <- stats::median(as.numeric(cov))
+                none <- setdiff(unique(ms$symbol), names(cov))
+                thin <- names(cov)[as.numeric(cov) < 0.5 * ref]
+                out <- c(out, "",
+                         sprintf("**Price coverage:** %d/%d symbols have history (median %d days).",
+                                 length(unique(ms$symbol)) - length(none),
+                                 length(unique(ms$symbol)), as.integer(ref)))
+                if (length(none))
+                  out <- c(out, sprintf("No price history at all: %s.",
+                                        paste(sort(none), collapse = ", ")))
+                if (length(thin))
+                  out <- c(out, sprintf("Under half the median: %s.",
+                                        paste(sort(thin), collapse = ", ")))
+                # Warn, do not fail: these names are scored with a confidence
+                # weight that shrinks them toward neutral, so they degrade the
+                # output rather than breaking it. Failing the run would stop a
+                # healthy nightly over two stale tickers.
+                if (length(none) + length(thin) > 0)
+                  problems <- c(problems,
+                                sprintf("%d symbol(s) with missing or thin price history",
+                                        length(none) + length(thin)))
+                # A broad collapse IS fatal: that is the pull breaking, not a
+                # couple of delisted names.
+                if (length(none) + length(thin) > 0.1 * length(unique(ms$symbol)))
+                  hard <- c(hard, sprintf("price coverage collapsed: %d of %d symbols unusable",
+                                          length(none) + length(thin),
+                                          length(unique(ms$symbol))))
+              }
+            }
+
             if (file.exists("data/tv_channels.csv")) {
               tv <- tryCatch(read_csv("data/tv_channels.csv", show_col_types = FALSE),
                              error = function(e) NULL)

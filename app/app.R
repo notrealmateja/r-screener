@@ -3953,8 +3953,15 @@ server <- function(input, output, session) {
     q5x    <- eq_stat("q5", "excess_cagr")
     beta   <- eq_stat("model", "beta")
     m_cagr <- eq_stat("model", "cagr"); b_cagr <- eq_stat("spy", "cagr")
-    beta_adj <- if (!is.na(beta) && !is.na(m_cagr) && !is.na(b_cagr))
-                  m_cagr - beta * b_cagr else NA_real_
+    # The regression intercept, which is what "not explained by market exposure"
+    # means — and is already the estimator used for the universe comparison
+    # further down. The old `m_cagr - beta * b_cagr` shortcut gave +19.7pp
+    # against this +16.6pp, so the page was carrying two definitions of alpha
+    # four paragraphs apart.
+    beta_adj <- eq_stat("model", "alpha_vs_spy")
+    if (is.na(beta_adj) && !is.na(beta) && !is.na(m_cagr) && !is.na(b_cagr))
+      beta_adj <- m_cagr - beta * b_cagr
+    beta_adj_t <- eq_stat("model", "alpha_vs_spy_t")
     ex_t    <- eq_stat("model", "excess_t")
     ex_t_tr <- eq_stat("model", "excess_t_tranche")
     n_dec   <- eq_stat("model", "n_decisions")
@@ -3978,6 +3985,13 @@ server <- function(input, output, session) {
     eu_hi   <- eq_stat("model", "edge_vs_univ_t_align_max")
     ed_share <- eq_stat("model", "edge_vs_univ_top_block_share")
     ed_jack  <- eq_stat("model", "edge_vs_univ_jack_min")
+    # The effect measured on the window the t-statistic actually covers, plus
+    # the p-values and the real 5% threshold at this many degrees of freedom.
+    ed_u_t2  <- eq_stat("model", "edge_vs_univ_cagr_tested")
+    ed_u_p   <- eq_stat("model", "edge_vs_univ_p_tranche")
+    ex_p     <- eq_stat("model", "excess_p_tranche")
+    df_tr    <- eq_stat("model", "df_tranche")
+    t_crit   <- eq_stat("model", "t_crit_95")
     ex2      <- eq_stat("model", "edge_vs_univ_ex_top2")
     ex2_win  <- eq_stat("model", "edge_vs_univ_ex_top2_win")
     ex2_nm   <- eq_chr("model",  "edge_vs_univ_ex_top2_names")
@@ -4019,9 +4033,10 @@ server <- function(input, output, session) {
 
       "<p><b>Beta does much of the work.</b> The portfolio carries a beta of ",
       if (is.na(beta)) "N/A" else sprintf("%.2f", beta),
-      ", so a rising market alone lifts it above the index. The return not explained by market ",
-      "exposure is roughly ",
+      ", so a rising market alone lifts it above the index. Regressing the daily excess on the ",
+      "index, the part market exposure does not explain is ",
       if (is.na(beta_adj)) "N/A" else sprintf("%+.1f%% a year", beta_adj * 100),
+      if (is.na(beta_adj_t)) "" else sprintf(" (t = %.1f)", beta_adj_t),
       ", against a headline gap of ",
       if (is.na(m_cagr) || is.na(b_cagr)) "N/A" else sprintf("%+.1f%%", (m_cagr - b_cagr) * 100),
       ". That figure assumes cash pays nothing; measured against T-bills it would be smaller.</p>",
@@ -4041,10 +4056,19 @@ server <- function(input, output, session) {
       "called it survivorship. Measuring it says otherwise: the no-signal universe carries a ",
       "beta of ",
       if (is.na(u_beta)) "N/A" else sprintf("%.2f", u_beta),
-      ", and the part of its return the market does not explain is only ",
+      ", and the part of its return the market does not explain is ",
       if (is.na(u_beta) || is.na(u_cagr) || is.na(b_cagr)) "N/A"
         else sprintf("%+.1f points a year", (u_cagr - u_beta * b_cagr) * 100),
-      ". Checked on 2026-09-23, the reason is visible in the ticker list\'s own history: 145 of ",
+      ". That is not a small number, and an earlier version of this paragraph called it ",
+      "“only”. Set it beside the thing it is the control for: the score’s own ",
+      "beta-adjusted edge over this same list is ",
+      if (is.na(ed_u_ba)) "N/A" else sprintf("%+.1f points", ed_u_ba * 100),
+      ". So picking the list contributed roughly ",
+      if (is.na(u_beta) || is.na(u_cagr) || is.na(b_cagr) || is.na(ed_u_ba) || ed_u_ba == 0)
+        "as much as" else
+        sprintf("%.0f%% as much as", 100 * (u_cagr - u_beta * b_cagr) / ed_u_ba),
+      " ranking it did, and the list was picked with hindsight while the ranking was not. ",
+      "Checked on 2026-09-23, the reason is visible in the ticker list\'s own history: 145 of ",
       "the names were added in August 2026 and are smaller and more volatile, while the 50 ",
       "tracked before that returned 17.7% a year against the index\'s 17.7% — no excess at all. ",
       "Adding them raised the universe\'s beta, and a rising market did the rest.</p>",
@@ -4055,19 +4079,31 @@ server <- function(input, output, session) {
       "point-in-time index membership history, which this pipeline does not have. Whatever it ",
       "is worth, it flatters every number on this page.</p>",
 
-      "<p><b>What this cannot prove.</b> Against the index the excess return carries a ",
-      "t-statistic somewhere between ",
-      if (is.na(et_lo)) "N/A" else sprintf("%.1f and %.1f", et_lo, et_hi),
-      " — the range, not a typo, because where you start counting 63-day periods is itself ",
-      "an arbitrary choice and it moves the answer that much. But the index is the easy ",
-      "comparison. Against the no-signal universe, which this page has already argued is ",
-      "the baseline that matters, the score adds ",
-      if (is.na(ed_u)) "N/A" else sprintf("%+.1f points a year", ed_u * 100),
-      " — ", if (is.na(ed_u_ba)) "N/A" else sprintf("%+.1f", ed_u_ba * 100),
-      " after adjusting for the model's higher beta — and its t-statistic runs ",
+      "<p><b>What this cannot prove.</b> The significance test uses the most recent ",
+      if (is.na(n_dec)) "N/A" else sprintf("%.0f", n_dec),
+      " complete 63-day holding periods, over which the score beat the no-signal universe by ",
+      if (is.na(ed_u_t2)) "N/A" else sprintf("%+.1f points a year", ed_u_t2 * 100),
+      " — that is the figure the statistic below tests, and it is quoted here rather than the ",
+      "headline because the two cover slightly different windows. That gives ",
+      if (is.na(ed_u_t)) "N/A" else sprintf("t = %.2f", ed_u_t),
+      " on ", if (is.na(df_tr)) "N/A" else sprintf("%.0f", df_tr),
+      " degrees of freedom, so ",
+      if (is.na(ed_u_p)) "N/A" else sprintf("<b>p = %.2f</b>", ed_u_p),
+      ". At this sample size the 5% threshold is t = ",
+      if (is.na(t_crit)) "N/A" else sprintf("%.2f", t_crit),
+      ", not 2. Against the index — the easier comparison — the same test gives ",
+      if (is.na(ex_t_tr)) "N/A" else sprintf("t = %.2f, p = %.2f", ex_t_tr, ex_p),
+      ". Neither clears it. On the question this page is actually asking, the answer is not ",
+      "distinguishable from luck.</p>",
+
+      "<p><b>Nor does any other way of cutting it.</b> Where you start counting those periods ",
+      "is itself an arbitrary choice, so it is worth sweeping. Against the universe the ",
+      "t-statistic runs ",
       if (is.na(eu_lo)) "N/A" else sprintf("%.1f to %.1f", eu_lo, eu_hi),
-      " across those same alignments. It does not reach 2 under any of them. On the ",
-      "question this page is actually asking, the answer is not distinguishable from luck.</p>",
+      " across all 63 alignments and reaches 2 under none of them. Against the index it runs ",
+      if (is.na(et_lo)) "N/A" else sprintf("%.1f to %.1f", et_lo, et_hi),
+      " — wide enough that a single chosen alignment could be made to say almost anything, ",
+      "which is why the range is printed instead of a pick.</p>",
 
       "<p><b>And one quarter is doing most of it.</b> There are only ",
       if (is.na(n_dec)) "N/A" else sprintf("%.0f", n_dec),

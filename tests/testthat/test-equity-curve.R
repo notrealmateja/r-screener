@@ -284,8 +284,11 @@ if (have_pkgs("dplyr", "readr")) {
       # inside their range, and close to their centre.
       expect_gte(got, min(w[[col]]), label = paste(ser, "below every calendar"))
       expect_lte(got, max(w[[col]]), label = paste(ser, "above every calendar"))
-      expect_equal(got, mean(w[[col]]), tolerance = 0.03,
-                   label = paste(ser, "far from the calendar mean"))
+      # Absolute, and tight. A relative tolerance of 0.03 on a figure near 0.41
+      # permits a 1.2pp error while the thing it guards is 0.03pp — it would
+      # have passed through the annualisation mismatch it was written to catch.
+      expect_lt(abs(got - mean(w[[col]])), 0.006,
+                label = paste(ser, "composite far from the calendar mean"))
     }
   })
 

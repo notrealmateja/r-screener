@@ -539,6 +539,18 @@ EQ_COST_BPS <- 10   # round-trip cost per unit turnover, in basis points
 # a day the book can be marked. See the trailing-edge trim in run_equity_curve.
 COVERAGE_FLOOR <- 0.80
 
+# How many whole holding periods the significance test uses. PINNED, not
+# derived from the data's length.
+#
+# The composite was built because the answer must not depend on an arbitrary
+# grid the rolling price window happens to move. Counting whole blocks out of
+# whatever the window currently holds left exactly that defect inside the
+# statistic: 561 days divided by 63 is 8.90, so one good week of data ticks the
+# count to 9 and the t-statistic moves with it. Fixing the count fixes the
+# degrees of freedom too, which is what the published p-value is read against.
+# Revisit if PRICE_LOOKBACK_DAYS changes.
+EQ_TEST_BLOCKS <- 8L
+
 # Corporate actions are identified and neutralised at ingest by 02_momentum.R,
 # but this module reads price_history.csv directly and may be run against a
 # file written before that guard existed, so it applies the same test itself.
@@ -824,7 +836,8 @@ run_equity_curve <- function(price_path = "data/price_history.csv",
       # it ever appears, and because one holding period is the honest unit to
       # count when describing the sample. The real constraint is the sample
       # itself: about two and a half years.
-      block     = ((dplyr::row_number() - 1L) %/% HOLD_DAYS) + 1L,
+      # Assigned below, anchored to the most recent data.
+      block     = NA_integer_,
       model_cum = cumprod(1 + model_ret),
       q5_cum    = cumprod(1 + q5_ret),
       spy_cum   = cumprod(1 + spy_ret),
@@ -843,10 +856,21 @@ run_equity_curve <- function(price_path = "data/price_history.csv",
 
   # Only whole blocks count: a part-block measures a shorter holding period and
   # is not comparable to the others.
-  whole <- curve %>% count(block) %>% filter(n == HOLD_DAYS) %>% pull(block)
+  # Anchored to the END of the sample. Blocks used to be laid from row 1, which
+  # both let the count drift with the window and threw away the most RECENT
+  # part-block — testing the oldest 504 days and discarding the newest 57.
+  n_blocks <- min(EQ_TEST_BLOCKS, nrow(curve) %/% HOLD_DAYS)
+  if (n_blocks < EQ_TEST_BLOCKS)
+    message(glue("Only {n_blocks} whole holding periods available, ",
+                 "wanted {EQ_TEST_BLOCKS} — the t-statistic is on thinner evidence."))
+  if (n_blocks >= 2) {
+    rows <- utils::tail(seq_len(nrow(curve)), n_blocks * HOLD_DAYS)
+    curve$block[rows] <- ((seq_along(rows) - 1L) %/% HOLD_DAYS) + 1L
+  }
+  whole <- sort(unique(curve$block[!is.na(curve$block)]))
   tranche_t <- function(col, vs = "spy_ret") {
     if (length(whole) < 2) return(NA_real_)
-    per <- curve %>% filter(block %in% whole) %>% group_by(block) %>%
+    per <- curve %>% filter(!is.na(block), block %in% whole) %>% group_by(block) %>%
       summarize(ex = prod(1 + .data[[col]]) / prod(1 + .data[[vs]]) - 1,
                 .groups = "drop")
     if (nrow(per) < 2 || sd(per$ex) == 0) return(NA_real_)
@@ -915,6 +939,47 @@ run_equity_curve <- function(price_path = "data/price_history.csv",
   # chart put the composite marker a fifth of a point off where it belongs,
   # which is precisely the "the composite must BE the average of what is
   # printed beside it" property this rebuild exists to establish.
+  # The effect size on the window the t-statistic ACTUALLY tests.
+  #
+  # The headline cagr spans every day of the composite; the t spans only the
+  # whole holding periods. They are different quantities, and the page used to
+  # print them in one sentence as though the second tested the first — "+13.4
+  # points a year with a t-statistic of 1.1", where 1.1 is the t of a +17.6pp
+  # effect. Both are now published so the pairing on the page can be honest.
+  tested <- curve %>% filter(!is.na(block))
+  m$n_tested_days          <- nrow(tested)
+  m$excess_cagr_tested     <- if (!nrow(tested)) NA_real_ else
+    ann(tested$model_ret) - ann(tested$spy_ret)
+  m$edge_vs_univ_cagr_tested <- if (!nrow(tested)) NA_real_ else
+    ann(tested$model_ret) - ann(tested$univ_ret)
+
+  # p-values, at the degrees of freedom this sample actually has. With
+  # EQ_TEST_BLOCKS periods the two-sided 5% bar is t = 2.365, not 2 — a reader
+  # told "t of about 2, against a conventional bar of 2" concludes "just
+  # significant" when the truth is p = 0.09. A p-value cannot be misread that
+  # way, and it carries the degrees of freedom with it.
+  dfree <- length(whole) - 1L
+  pv <- function(t) if (is.na(t) || dfree < 1) NA_real_ else
+    2 * stats::pt(-abs(t), dfree)
+  m$df_tranche            <- dfree
+  m$t_crit_95             <- if (dfree < 1) NA_real_ else stats::qt(0.975, dfree)
+  m$excess_p_tranche      <- pv(m$excess_t_tranche)
+  m$edge_vs_univ_p_tranche <- pv(m$edge_vs_univ_t_tranche)
+
+  # One definition of alpha, not two.
+  #
+  # The page computed its headline "return not explained by market exposure" as
+  # cagr - beta * spy_cagr (+19.7pp) while computing the universe-relative
+  # figure from a regression intercept (+9.1pp). Two estimators four paragraphs
+  # apart, differing by 3.1pp on the same series. The regression is the right
+  # one and it is already used for the universe leg, so the SPY leg adopts it.
+  fit_s <- stats::lm(I(curve$model_ret - curve$spy_ret) ~ curve$spy_ret)
+  m$alpha_vs_spy   <- unname(stats::coef(fit_s)[1]) * 252
+  m$alpha_vs_spy_t <- {
+    co <- summary(fit_s)$coefficients
+    if (nrow(co) < 1 || ncol(co) < 3) NA_real_ else unname(co[1, 3])
+  }
+
   m$composite_top_ann    <- ann(curve$model_ret)
   m$composite_bottom_ann <- ann(curve$q5_ret)
   m$composite_univ_ann   <- ann(curve$univ_ret)
@@ -922,7 +987,7 @@ run_equity_curve <- function(price_path = "data/price_history.csv",
   # Leave-one-period-out. With only a handful of independent periods a single
   # good quarter can carry the entire result, and a reader is owed that rather
   # than a point estimate that quietly depends on it.
-  blk_u <- curve %>% filter(block %in% whole) %>% group_by(block) %>%
+  blk_u <- curve %>% filter(!is.na(block), block %in% whole) %>% group_by(block) %>%
     summarize(ex = prod(1 + model_ret) / prod(1 + univ_ret) - 1, .groups = "drop")
   m$edge_vs_univ_jack_min <- if (nrow(blk_u) < 3) NA_real_ else
     min(vapply(seq_len(nrow(blk_u)), function(i) mean(blk_u$ex[-i]), numeric(1)))
@@ -934,12 +999,15 @@ run_equity_curve <- function(price_path = "data/price_history.csv",
   # problem the curve was just rebuilt to remove.
   align_t <- function(num, den) {
     out <- vapply(seq_len(HOLD_DAYS) - 1L, function(off) {
-      bl <- ((seq_len(nrow(curve)) - 1L + off) %/% HOLD_DAYS) + 1L
-      tb <- table(bl)
-      ok <- bl %in% as.integer(names(tb)[tb == HOLD_DAYS])
-      if (sum(ok) < HOLD_DAYS * 2) return(NA_real_)
-      i  <- seq_len(nrow(curve))[ok]
-      per <- tapply(i, bl[ok], function(j)
+      # Each alignment ends `off` days earlier and then takes the same number
+      # of whole blocks, so every one is measured on n_blocks periods. Laying
+      # blocks from row 1 instead gave 8 periods at some offsets and 9 at
+      # others, which compares t-statistics on different degrees of freedom.
+      avail <- nrow(curve) - off
+      if (avail < n_blocks * HOLD_DAYS) return(NA_real_)
+      i  <- utils::tail(seq_len(avail), n_blocks * HOLD_DAYS)
+      bl <- ((seq_along(i) - 1L) %/% HOLD_DAYS) + 1L
+      per <- tapply(i, bl, function(j)
         prod(1 + curve[[num]][j]) / prod(1 + curve[[den]][j]) - 1)
       if (length(per) < 2 || stats::sd(per) == 0) return(NA_real_)
       mean(per) / (stats::sd(per) / sqrt(length(per)))
@@ -955,7 +1023,10 @@ run_equity_curve <- function(price_path = "data/price_history.csv",
 
   for (s in c("q5", "b", "u")) {
     o <- get(s)
-    for (f in c("edge_vs_univ_cagr", "edge_vs_univ_t", "edge_vs_univ_t_tranche",
+    for (f in c("n_tested_days", "excess_cagr_tested", "edge_vs_univ_cagr_tested",
+                "df_tranche", "t_crit_95", "excess_p_tranche",
+                "edge_vs_univ_p_tranche", "alpha_vs_spy", "alpha_vs_spy_t",
+                "edge_vs_univ_cagr", "edge_vs_univ_t", "edge_vs_univ_t_tranche",
                 "edge_vs_univ_t_nw", "edge_vs_univ_beta_adj",
                 "nw_vif_vs_univ", "nw_vif_vs_spy", "excess_t_nw",
                 "composite_top_ann", "composite_bottom_ann", "composite_univ_ann",
