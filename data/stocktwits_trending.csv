@@ -1,31 +1,31 @@
 symbol,title,watchlist_count,st_rank,trending_score,messages,bullish,bearish,sentiment_label,fetched_at
-BTC.X,Bitcoin,682865,1,14.8281,4,2,0,Very Bullish,2026-10-05T00:12:33Z
-MSTR,Strategy,83435,2,6.44943,4,3,0,Very Bullish,2026-10-05T00:12:33Z
-VST,Vistra Corp,17079,3,6.18805,2,0,0,Neutral,2026-10-05T00:12:33Z
-WOLF,Wolfspeed Inc,20167,4,5.58423,0,0,0,Neutral,2026-10-05T00:12:33Z
-MSTY,YieldMax MSTR Option Income Strategy ETF,9281,5,5.25103,0,0,0,Neutral,2026-10-05T00:12:33Z
-KTA.X,Keeta,2593,6,4.88932,0,0,0,Neutral,2026-10-05T00:12:33Z
-UEC,Uranium Energy Corp,19228,7,4.83749,0,0,0,Neutral,2026-10-05T00:12:33Z
-SDEV,Stablecoin Development Corp.,20617,8,4.46698,4,4,0,Very Bullish,2026-10-05T00:12:33Z
-UUUU,Energy Fuels Inc,23523,9,4.11472,0,0,0,Neutral,2026-10-05T00:12:33Z
-ADA.X,Cardano,131554,10,3.77825,0,0,0,Neutral,2026-10-05T00:12:33Z
-WDC,Western Digital Corp.,21758,11,3.59333,0,0,0,Neutral,2026-10-05T00:12:33Z
-BMNR,BitMine Immersion Technologies Inc,29528,12,3.55235,0,0,0,Neutral,2026-10-05T00:12:33Z
-DOGE.X,Dogecoin,351955,13,3.53485,0,0,0,Neutral,2026-10-05T00:12:33Z
-AGEN,Agenus Inc,12793,14,3.48573,0,0,0,Neutral,2026-10-05T00:12:33Z
-XRPN,Evernorth Holdings Inc.,1857,15,3.38887,5,4,0,Very Bullish,2026-10-05T00:12:33Z
-OWL,Blue Owl Capital Inc - Ordinary Shares - Class A,3781,16,3.2307,0,0,0,Neutral,2026-10-05T00:12:33Z
-MSTU,T-Rex 2X Long MSTR Daily Target ETF,4113,17,3.2307,0,0,0,Neutral,2026-10-05T00:12:33Z
-WYNN,Wynn Resorts Ltd.,25741,18,3.20333,0,0,0,Neutral,2026-10-05T00:12:33Z
-TSM,Taiwan Semiconductor Manufacturing - ADR,69977,19,3.0364,0,0,0,Neutral,2026-10-05T00:12:33Z
-LITE,Lumentum Holdings Inc,15699,20,3.01065,0,0,0,Neutral,2026-10-05T00:12:33Z
-AERO.X,Aerodrome Finance,4651,21,2.99601,0,0,0,Neutral,2026-10-05T00:12:33Z
-DRAM,Roundhill ETF Trust - Roundhill Memory ETF,14872,22,2.83574,0,0,0,Neutral,2026-10-05T00:12:33Z
-PZZA,"Papa John`s International, Inc.",5305,23,2.8204,0,0,0,Neutral,2026-10-05T00:12:33Z
-GLD,SPDR Gold Shares ETF,96661,24,2.81597,1,0,0,Neutral,2026-10-05T00:12:33Z
-RDW,Redwire Corp,24007,25,2.80177,0,0,0,Neutral,2026-10-05T00:12:33Z
-SHIB.X,Shiba Inu,189783,26,2.61666,0,0,0,Neutral,2026-10-05T00:12:33Z
-JNJ,Johnson & Johnson,49303,27,2.53738,0,0,0,Neutral,2026-10-05T00:12:33Z
-VOO,Vanguard S&P 500 ETF,53289,28,2.51903,0,0,0,Neutral,2026-10-05T00:12:33Z
-IWM,iShares Russell 2000 ETF,49893,29,2.49372,0,0,0,Neutral,2026-10-05T00:12:33Z
-GLXY,Galaxy Digital Inc. - Ordinary Shares - Class A,18866,30,2.44845,0,0,0,Neutral,2026-10-05T00:12:33Z
+SPCX,SpaceX,106635,1,13.8817,4,1,0,Very Bullish,2026-10-06T01:58:07Z
+NVAX,Novavax Inc,108090,2,8.50353,4,3,0,Very Bullish,2026-10-06T01:58:07Z
+ADA.X,Cardano,131633,3,7.70283,1,1,0,Very Bullish,2026-10-06T01:58:07Z
+CEG,Constellation Energy Corporation,12143,4,7.3863,2,0,0,Neutral,2026-10-06T01:58:07Z
+USAR,USA Rare Earth Inc,20465,5,7.24556,3,0,0,Neutral,2026-10-06T01:58:07Z
+PCVX,Vaxcyte Inc,931,6,6.53763,0,0,0,Neutral,2026-10-06T01:58:07Z
+TSLA,Tesla Inc,1068116,7,6.1429,0,0,0,Neutral,2026-10-06T01:58:07Z
+EBS,Emergent Biosolutions Inc,8415,8,5.40247,0,0,0,Neutral,2026-10-06T01:58:07Z
+GOOGL,Alphabet Inc Class A,232754,9,5.31547,1,0,0,Neutral,2026-10-06T01:58:07Z
+CMG,Chipotle Mexican Grill,62226,10,5.20396,1,0,0,Neutral,2026-10-06T01:58:07Z
+CHPY,YieldMax Semiconductor Portfolio Option Income ETF,1615,11,4.92916,0,0,0,Neutral,2026-10-06T01:58:07Z
+CBRS,Cerebras Systems Inc,14086,12,4.50405,0,0,0,Neutral,2026-10-06T01:58:07Z
+MSFT,Microsoft Corp,551874,13,4.34053,1,1,0,Very Bullish,2026-10-06T01:58:07Z
+RDW,Redwire Corp,24055,14,4.07428,0,0,0,Neutral,2026-10-06T01:58:07Z
+KTOS,Kratos Defense & Security Solutions Inc,21819,15,3.74528,0,0,0,Neutral,2026-10-06T01:58:07Z
+PYPL,PayPal Holdings Inc,166397,16,3.51966,0,0,0,Neutral,2026-10-06T01:58:07Z
+TLT,iShares 20+ Year Treasury Bond ETF,31508,17,3.40883,0,0,0,Neutral,2026-10-06T01:58:07Z
+MAT,"Mattel, Inc.",6794,18,3.39967,0,0,0,Neutral,2026-10-06T01:58:07Z
+WYNN,Wynn Resorts Ltd.,25748,19,3.29341,0,0,0,Neutral,2026-10-06T01:58:07Z
+CVS,CVS Health Corp,29810,20,3.27928,1,1,0,Very Bullish,2026-10-06T01:58:07Z
+UNH,Unitedhealth Group Inc,55688,21,3.2728,1,1,0,Very Bullish,2026-10-06T01:58:07Z
+XLF,Financial Select Sector SPDR Fund,18495,22,3.27038,0,0,0,Neutral,2026-10-06T01:58:07Z
+APPS,Digital Turbine Inc,25046,23,3.2461700000000002,0,0,0,Neutral,2026-10-06T01:58:07Z
+NOC,Northrop Grumman Corp.,11552,24,3.23866,0,0,0,Neutral,2026-10-06T01:58:07Z
+CRSR,Corsair Gaming Inc,24285,25,3.2307,0,0,0,Neutral,2026-10-06T01:58:07Z
+DJT,Trump Media & Technology Group Corp.,115658,26,3.13621,9,2,0,Very Bullish,2026-10-06T01:58:07Z
+BRUN,Boost Run Inc.,2836,27,3.03403,0,0,0,Neutral,2026-10-06T01:58:07Z
+ET,Energy Transfer LP Unit,23055,28,3.00216,0,0,0,Neutral,2026-10-06T01:58:07Z
+GTBIF,Green Thumb Industries,6363,29,2.97762,0,0,0,Neutral,2026-10-06T01:58:07Z
+MRK,Merck & Co Inc,26540,30,2.951,0,0,0,Neutral,2026-10-06T01:58:07Z
