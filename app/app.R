@@ -4129,7 +4129,16 @@ server <- function(input, output, session) {
       "not the second decimal.) The per-period figure comes out close to the daily one rather ",
       "than eight times smaller. The real limit is simply the sample: two and a half years.</p>",
 
-      "<p><b>It is not resting on the two moonshots.</b> This candidate list was not assembled ",
+      "<p><b>",
+      # The heading and the closing sentence BOTH have to follow the measured
+      # direction. They were written as fixed text on a night when removing the
+      # two names raised the edge, and four days later it lowered it instead —
+      # leaving the page asserting they were "a headwind" directly underneath
+      # numbers showing the opposite. Anything stated here is derived now.
+      if (is.na(ex2) || is.na(ed_u)) "Without the two biggest winners."
+      else if (ex2 >= ed_u) "It is not resting on the two moonshots."
+      else "Part of it is the two moonshots.",
+      "</b> This candidate list was not assembled ",
       "neutrally: 68 of the 195 names sit in a block whose own comment says they exist to make ",
       "the small-cap screen meaningful, picked in August 2026 with full hindsight, and the two ",
       "largest total returns in the whole file are among them. Because the figure above is the ",
@@ -4139,13 +4148,21 @@ server <- function(input, output, session) {
       " outright ",
       if (is.na(ex2) || is.na(ed_u)) "does not change the conclusion" else
         sprintf("moves the edge from %+.1f to %+.1f points a year", ed_u * 100, ex2 * 100),
-      if (!is.na(ex2) && !is.na(ed_u) && ex2 > ed_u)
-        " — it goes up, because those names inflate the no-signal control more than they
-           flatter the model" else "",
+      if (is.na(ex2) || is.na(ed_u)) "" else if (ex2 >= ed_u)
+        " — it goes up, because those names inflate the no-signal control more than they flatter the model"
+      else
+        " — it goes down, so some of the edge genuinely is those two names",
       if (is.na(ex2_win)) "" else
         sprintf(", and the top quintile then beats the bottom on %.0f%% of calendars", ex2_win * 100),
-      ". The result is carrying those two as a headwind, not standing on them. This is re-measured ",
-      "every night rather than asserted once.</p>",
+      ". ",
+      if (is.na(ex2) || is.na(ed_u)) "" else if (ex2 >= ed_u)
+        "The result is carrying those two as a headwind, not standing on them."
+      else
+        sprintf(paste0("What is left without them, %+.1f points a year, is the part that does ",
+                       "not depend on the single best outcome in a list chosen after the fact."),
+                ex2 * 100),
+      " This is re-measured every night rather than asserted once — and it has already ",
+      "changed sign once, which is the reason it is measured rather than claimed.</p>",
 
       "<p><b>And the calendars still disagree.</b> The individual calendars disagree sharply — the ",
       "top quintile runs from ",
