@@ -1365,8 +1365,9 @@ ui <- fluidPage(
         div(class="panel-head",
           div(class="panel-head-title","EVERY REBALANCE CALENDAR"),
           div(class="panel-head-meta",
-              "each dot is one of 63 start days, same window · the book holds all of them")),
-        div(class="panel-body", plotlyOutput("val_phases", height="260px"))
+              paste0("63 views of the same 2.5 years, sharing nearly all the same returns ",
+                     "· a range, not a confidence interval"))),
+        div(class="panel-body", plotlyOutput("val_phases", height="320px"))
       ),
       div(class="panel",
         div(class="panel-head",
@@ -3905,14 +3906,25 @@ server <- function(input, output, session) {
   })
 
   # The distribution the old single-calendar number was drawing one sample from.
-  # Plotted as the top quintile against the bottom for each calendar, so the
-  # eight calendars where the ranking inverts are visible rather than averaged
-  # away — they sit below the diagonal.
+  #
+  # Plotted against the NO-SIGNAL UNIVERSE, not against the bottom quintile.
+  # The axes used to be top-vs-bottom, which measured the quintile spread — a
+  # quantity the headline no longer uses, since the page leads with the edge
+  # over the universe. It also invited the misreading the statistics review
+  # warned about: a cloud of dots above a diagonal reads as "it worked 92% of
+  # the time", as though 63 calendars were 63 trials. They are 63 views of the
+  # same two and a half years, sharing nearly all the same returns, which is
+  # why the panel header calls this a range rather than a confidence interval.
+  #
+  # The diagonal is now the honest null: on it the score added nothing that
+  # holding the whole list would not have given you anyway.
   output$val_phases <- renderPlotly({
     if (is.null(bt_phase_sweep) || nrow(bt_phase_sweep) == 0)
       return(no_data("Run R/05_backtest.R to generate the calendar sweep"))
     d <- bt_phase_sweep
-    lim <- range(c(d$top, d$bottom), na.rm = TRUE)
+    if (!all(c("top", "univ") %in% names(d)))
+      return(no_data("Calendar sweep predates the universe comparison"))
+    lim <- range(c(d$top, d$univ), na.rm = TRUE)
     pad <- diff(lim) * 0.06
     lim <- c(lim[1] - pad, lim[2] + pad)
     # The composite's own figures on the SAME annualisation the sweep uses.
@@ -3920,33 +3932,36 @@ server <- function(input, output, session) {
     # cloud purely by convention, on the one chart whose entire point is that
     # the book sits among the calendars it averages.
     mdl <- eq_stat("model", "composite_top_ann")
-    bot <- eq_stat("model", "composite_bottom_ann")
+    unv <- eq_stat("model", "composite_univ_ann")
     if (is.na(mdl)) mdl <- eq_stat("model", "cagr")
-    if (is.na(bot)) bot <- eq_stat("q5", "cagr")
+    if (is.na(unv)) unv <- eq_stat("univ",  "cagr")
     plot_ly(d) %>%
-      # y = x. Above it the ranking worked for that calendar; below it the
-      # falsification control won.
       add_lines(x = lim, y = lim, inherit = FALSE, hoverinfo = "skip",
-                name = "ranking inverts below this line",
+                name = "the score adds nothing on this line",
                 line = list(color = "#555", width = 1, dash = "dash")) %>%
-      add_markers(x = ~bottom, y = ~top, inherit = FALSE,
+      add_markers(x = ~univ, y = ~top, inherit = FALSE,
                   name = "one calendar",
                   marker = list(color = "#FF9E1B", size = 7,
                                 line = list(color = "#0A0A0A", width = 1)),
                   text = ~sprintf("start day %d", phase),
-                  hovertemplate = paste0("%{text}<br>top <b>%{y:.1%}</b>",
-                                         "<br>bottom %{x:.1%}<extra></extra>")) %>%
-      add_markers(x = bot, y = mdl, inherit = FALSE, name = "the book (all 63)",
+                  hovertemplate = paste0("%{text}<br>ranked <b>%{y:.1%}</b>",
+                                         "<br>same list, unranked %{x:.1%}<extra></extra>")) %>%
+      add_markers(x = unv, y = mdl, inherit = FALSE, name = "the book (all 63)",
                   marker = list(color = "#00C853", size = 13, symbol = "diamond",
                                 line = list(color = "#0A0A0A", width = 1)),
-                  hovertemplate = paste0("all 63 calendars<br>top <b>%{y:.1%}</b>",
-                                         "<br>bottom %{x:.1%}<extra></extra>")) %>%
-      layout(xaxis = list(title = "Bottom quintile, annualised",
+                  hovertemplate = paste0("all 63 calendars<br>ranked <b>%{y:.1%}</b>",
+                                         "<br>same list, unranked %{x:.1%}<extra></extra>")) %>%
+      # Both axes share one range so the diagonal reads at 45 degrees and
+      # vertical distance above it IS the edge. That leaves the x data in a
+      # narrow band, which is the point: the unranked list barely moves across
+      # calendars (sd ~2pp) while the ranked book swings five times as far.
+      layout(xaxis = list(title = "Same list, no ranking \u2014 annualised",
                           tickformat = ".0%", range = lim, zeroline = FALSE),
              yaxis = list(title = "Top quintile, annualised",
                           tickformat = ".0%", range = lim, zeroline = FALSE),
-             legend = list(orientation = "h", y = -0.18)) %>%
-      dk(mt = 10, mb = 40)
+             # Clear of the x-axis title, which it used to sit on top of.
+             legend = list(orientation = "h", y = -0.30, x = 0)) %>%
+      dk(mt = 10, mb = 76)
   })
 
   output$val_caveats <- renderUI({
@@ -4073,11 +4088,22 @@ server <- function(input, output, session) {
       "tracked before that returned 17.7% a year against the index\'s 17.7% — no excess at all. ",
       "Adding them raised the universe\'s beta, and a rising market did the rest.</p>",
 
-      "<p><b>Delisting bias is still unmeasured, and it runs the other way.</b> No name has ever ",
-      "been removed from this list, so no company that went bankrupt or was acquired appears ",
-      "anywhere above — not in the model, not in the controls. Measuring that needs a ",
-      "point-in-time index membership history, which this pipeline does not have. Whatever it ",
-      "is worth, it flatters every number on this page.</p>",
+      "<p><b>Survivorship was introduced deliberately, and it cannot be bounded.</b> An earlier ",
+      "version of this paragraph said no name had ever been removed from the list, which made ",
+      "the bias sound like an oversight. The commit that built the list says otherwise: when it ",
+      "was assembled in August 2026, <b>15 candidates were dropped for being delisted or lacking ",
+      "history</b>. That is a survival filter, applied once, with full knowledge of who had ",
+      "survived — and then every number above was computed by running that list backwards from ",
+      "2024. The companies that failed in between were removed from the sample before the sample ",
+      "was measured, and they are missing from the controls as much as from the model, so the ",
+      "no-signal universe is no defence against this one.</p>",
+
+      "<p>How much is it worth? The honest answer is that nobody can say from this repository. ",
+      "The 15 names were filtered out before they were ever written to a file, so they are not ",
+      "recoverable from the commit history — there is no list to go and price. Bounding it would ",
+      "need point-in-time index membership, which this pipeline does not have and would have to ",
+      "be bought. What can be said is the direction: it flatters every figure on this page, ",
+      "including the controls, and it is the one caveat here with no measurement attached.</p>",
 
       "<p><b>What this cannot prove.</b> The significance test uses the most recent ",
       if (is.na(n_dec)) "N/A" else sprintf("%.0f", n_dec),
