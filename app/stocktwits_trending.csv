@@ -1,31 +1,31 @@
 symbol,title,watchlist_count,st_rank,trending_score,messages,bullish,bearish,sentiment_label,fetched_at
-SPCX,SpaceX,106635,1,13.8817,4,1,0,Very Bullish,2026-10-06T01:58:07Z
-NVAX,Novavax Inc,108090,2,8.50353,4,3,0,Very Bullish,2026-10-06T01:58:07Z
-ADA.X,Cardano,131633,3,7.70283,1,1,0,Very Bullish,2026-10-06T01:58:07Z
-CEG,Constellation Energy Corporation,12143,4,7.3863,2,0,0,Neutral,2026-10-06T01:58:07Z
-USAR,USA Rare Earth Inc,20465,5,7.24556,3,0,0,Neutral,2026-10-06T01:58:07Z
-PCVX,Vaxcyte Inc,931,6,6.53763,0,0,0,Neutral,2026-10-06T01:58:07Z
-TSLA,Tesla Inc,1068116,7,6.1429,0,0,0,Neutral,2026-10-06T01:58:07Z
-EBS,Emergent Biosolutions Inc,8415,8,5.40247,0,0,0,Neutral,2026-10-06T01:58:07Z
-GOOGL,Alphabet Inc Class A,232754,9,5.31547,1,0,0,Neutral,2026-10-06T01:58:07Z
-CMG,Chipotle Mexican Grill,62226,10,5.20396,1,0,0,Neutral,2026-10-06T01:58:07Z
-CHPY,YieldMax Semiconductor Portfolio Option Income ETF,1615,11,4.92916,0,0,0,Neutral,2026-10-06T01:58:07Z
-CBRS,Cerebras Systems Inc,14086,12,4.50405,0,0,0,Neutral,2026-10-06T01:58:07Z
-MSFT,Microsoft Corp,551874,13,4.34053,1,1,0,Very Bullish,2026-10-06T01:58:07Z
-RDW,Redwire Corp,24055,14,4.07428,0,0,0,Neutral,2026-10-06T01:58:07Z
-KTOS,Kratos Defense & Security Solutions Inc,21819,15,3.74528,0,0,0,Neutral,2026-10-06T01:58:07Z
-PYPL,PayPal Holdings Inc,166397,16,3.51966,0,0,0,Neutral,2026-10-06T01:58:07Z
-TLT,iShares 20+ Year Treasury Bond ETF,31508,17,3.40883,0,0,0,Neutral,2026-10-06T01:58:07Z
-MAT,"Mattel, Inc.",6794,18,3.39967,0,0,0,Neutral,2026-10-06T01:58:07Z
-WYNN,Wynn Resorts Ltd.,25748,19,3.29341,0,0,0,Neutral,2026-10-06T01:58:07Z
-CVS,CVS Health Corp,29810,20,3.27928,1,1,0,Very Bullish,2026-10-06T01:58:07Z
-UNH,Unitedhealth Group Inc,55688,21,3.2728,1,1,0,Very Bullish,2026-10-06T01:58:07Z
-XLF,Financial Select Sector SPDR Fund,18495,22,3.27038,0,0,0,Neutral,2026-10-06T01:58:07Z
-APPS,Digital Turbine Inc,25046,23,3.2461700000000002,0,0,0,Neutral,2026-10-06T01:58:07Z
-NOC,Northrop Grumman Corp.,11552,24,3.23866,0,0,0,Neutral,2026-10-06T01:58:07Z
-CRSR,Corsair Gaming Inc,24285,25,3.2307,0,0,0,Neutral,2026-10-06T01:58:07Z
-DJT,Trump Media & Technology Group Corp.,115658,26,3.13621,9,2,0,Very Bullish,2026-10-06T01:58:07Z
-BRUN,Boost Run Inc.,2836,27,3.03403,0,0,0,Neutral,2026-10-06T01:58:07Z
-ET,Energy Transfer LP Unit,23055,28,3.00216,0,0,0,Neutral,2026-10-06T01:58:07Z
-GTBIF,Green Thumb Industries,6363,29,2.97762,0,0,0,Neutral,2026-10-06T01:58:07Z
-MRK,Merck & Co Inc,26540,30,2.951,0,0,0,Neutral,2026-10-06T01:58:07Z
+APLD,Applied Digital Corporation,47447,1,14.9892,5,3,1,Very Bullish,2026-10-08T01:19:06Z
+BULL,Webull Corp,25219,2,11.0194,7,5,0,Very Bullish,2026-10-08T01:19:06Z
+WOLF,Wolfspeed Inc,20331,3,7.62208,1,0,0,Neutral,2026-10-08T01:19:06Z
+PEP,PepsiCo Inc,23989,4,6.6669,0,0,0,Neutral,2026-10-08T01:19:06Z
+LULU,Lululemon Athletica Inc,50679,5,6.2858,1,1,0,Very Bullish,2026-10-08T01:19:06Z
+ANET,Arista Networks Inc,21142,6,5.93486,0,0,0,Neutral,2026-10-08T01:19:06Z
+ZETA,Zeta Global Holdings Corp,15518,7,5.88283,0,0,0,Neutral,2026-10-08T01:19:06Z
+BRUN,Boost Run Inc.,2912,8,5.55022,1,0,0,Neutral,2026-10-08T01:19:06Z
+JOBY,Joby Aviation Inc,29195,9,5.45814,0,0,0,Neutral,2026-10-08T01:19:06Z
+DJT,Trump Media & Technology Group Corp.,115638,10,5.35008,5,0,0,Neutral,2026-10-08T01:19:06Z
+GLW,"Corning, Inc.",16195,11,5.14158,0,0,0,Neutral,2026-10-08T01:19:06Z
+SNDK,Sandisk Corp,36313,12,5.04837,2,1,0,Very Bullish,2026-10-08T01:19:06Z
+HD,"Home Depot, Inc.",46161,13,4.66085,0,0,0,Neutral,2026-10-08T01:19:06Z
+KORU,Direxion Daily South Korea Bull 3X Shares,3545,14,4.65456,0,0,0,Neutral,2026-10-08T01:19:06Z
+LQDA,Liquidia Corp,4926,15,4.36526,0,0,0,Neutral,2026-10-08T01:19:06Z
+MP,MP Materials Corporation,36323,16,4.33882,0,0,0,Neutral,2026-10-08T01:19:06Z
+LLY,Lilly(Eli) & Co,34881,17,3.99699,0,0,0,Neutral,2026-10-08T01:19:06Z
+SLS,SELLAS Life Sciences Group Inc,62174,18,3.99667,3,1,0,Very Bullish,2026-10-08T01:19:06Z
+UNH,Unitedhealth Group Inc,55675,19,3.98744,0,0,0,Neutral,2026-10-08T01:19:06Z
+IONQ,IonQ Inc,61035,20,3.88717,0,0,0,Neutral,2026-10-08T01:19:06Z
+APP,Applovin Corp,25107,21,3.84886,0,0,0,Neutral,2026-10-08T01:19:06Z
+DELL,Dell Technologies Inc,31415,22,3.59705,0,0,0,Neutral,2026-10-08T01:19:06Z
+B,Barrick Mining Corp,32235,23,3.57973,0,0,0,Neutral,2026-10-08T01:19:06Z
+NLST,Netlist Inc,28066,24,3.543,1,0,0,Neutral,2026-10-08T01:19:06Z
+RIVN,Rivian Automotive Inc,88368,25,3.33597,1,0,0,Neutral,2026-10-08T01:19:06Z
+MPC,Marathon Petroleum Corp,8180,26,3.31695,0,0,0,Neutral,2026-10-08T01:19:06Z
+DKS,"Dicks Sporting Goods, Inc.",9524,27,3.2307,0,0,0,Neutral,2026-10-08T01:19:06Z
+QXO,QXO Inc.,5025,28,3.12674,0,0,0,Neutral,2026-10-08T01:19:06Z
+LPTH,"Lightpath Technologies, Inc. - Ordinary Shares - Class A",8805,29,3.0823,0,0,0,Neutral,2026-10-08T01:19:06Z
+FLO,"Flowers Foods, Inc.",1590,30,3.07921,0,0,0,Neutral,2026-10-08T01:19:06Z
