@@ -78,6 +78,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,AAPL,70,Strong,34,195
 2026-10-06,AAPL,71.7,Strong,31,195
 2026-10-08,AAPL,78.1,Very Strong,22,195
+2026-10-09,AAPL,78.2,Very Strong,22,195
 2026-05-05,ABBV,49.4,Hold,18,50
 2026-06-01,ABBV,47.7,Hold,32,50
 2026-06-02,ABBV,46.4,Hold,34,50
@@ -157,6 +158,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,ABBV,76.8,Strong,19,195
 2026-10-06,ABBV,78.8,Very Strong,15,195
 2026-10-08,ABBV,79.7,Very Strong,17,195
+2026-10-09,ABBV,79.9,Very Strong,17,195
 2026-08-05,ACAD,52.6,Hold,83,195
 2026-08-07,ACAD,53.2,Hold,72,195
 2026-08-10,ACAD,54.8,Hold,70,195
@@ -196,6 +198,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,ACAD,40.9,Weak,125,195
 2026-10-06,ACAD,35,Weak,142,195
 2026-10-08,ACAD,32.8,Weak,146,195
+2026-10-09,ACAD,33,Weak,144,195
 2026-05-05,ACN,33.9,Underperform,48,50
 2026-06-01,ACN,46.8,Hold,36,50
 2026-06-02,ACN,48.6,Hold,29,50
@@ -275,6 +278,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,ACN,60,Neutral,60,195
 2026-10-06,ACN,60.8,Neutral,58,195
 2026-10-08,ACN,75.2,Strong,29,195
+2026-10-09,ACN,74.4,Strong,29,195
 2026-08-05,AFRM,54.6,Hold,75,195
 2026-08-07,AFRM,70.1,Buy,23,195
 2026-08-10,AFRM,65.2,Buy,34,195
@@ -314,6 +318,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,AFRM,63.8,Neutral,52,195
 2026-10-06,AFRM,62.1,Neutral,54,195
 2026-10-08,AFRM,71.1,Strong,35,195
+2026-10-09,AFRM,71,Strong,36,195
 2026-08-05,AI,34.5,Underperform,154,195
 2026-08-07,AI,21.1,Avoid,186,195
 2026-08-10,AI,23.1,Avoid,185,195
@@ -353,6 +358,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,AI,57.9,Neutral,71,195
 2026-10-06,AI,63.5,Neutral,47,195
 2026-10-08,AI,70,Strong,40,195
+2026-10-09,AI,70.2,Strong,38,195
 2026-08-05,ALGM,43.6,Underperform,121,195
 2026-08-07,ALGM,31.5,Underperform,163,195
 2026-08-10,ALGM,33.3,Underperform,156,195
@@ -392,6 +398,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,ALGM,33.7,Weak,145,195
 2026-10-06,ALGM,31.8,Weak,153,195
 2026-10-08,ALGM,23.3,Very Weak,171,195
+2026-10-09,ALGM,23.5,Very Weak,171,195
 2026-08-05,ALNY,18.5,Avoid,192,195
 2026-08-07,ALNY,29.7,Avoid,167,195
 2026-08-10,ALNY,30.9,Underperform,170,195
@@ -431,6 +438,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,ALNY,29.1,Very Weak,154,195
 2026-10-06,ALNY,32.5,Weak,150,195
 2026-10-08,ALNY,34,Weak,140,195
+2026-10-09,ALNY,34,Weak,141,195
 2026-08-05,ALRM,48.5,Hold,106,195
 2026-08-07,ALRM,43.8,Underperform,124,195
 2026-08-10,ALRM,44.1,Underperform,122,195
@@ -470,6 +478,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,ALRM,78.1,Very Strong,15,195
 2026-10-06,ALRM,75.4,Strong,23,195
 2026-10-08,ALRM,73.3,Strong,32,195
+2026-10-09,ALRM,73.4,Strong,32,195
 2026-05-05,AMD,45.5,Hold,21,50
 2026-06-01,AMD,56.6,Hold,6,50
 2026-06-02,AMD,56.3,Hold,8,50
@@ -549,6 +558,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,AMD,77.4,Strong,17,195
 2026-10-06,AMD,80.9,Very Strong,9,195
 2026-10-08,AMD,74.1,Strong,30,195
+2026-10-09,AMD,74.2,Strong,30,195
 2026-05-05,AMGN,57.7,Buy,3,50
 2026-06-01,AMGN,47.2,Hold,35,50
 2026-06-02,AMGN,46.7,Hold,33,50
@@ -628,6 +638,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,AMGN,53.6,Neutral,84,195
 2026-10-06,AMGN,53.7,Neutral,82,195
 2026-10-08,AMGN,55.7,Neutral,76,195
+2026-10-09,AMGN,56.3,Neutral,74,195
 2026-08-05,AMKR,63.1,Hold,47,195
 2026-08-07,AMKR,51,Hold,83,195
 2026-08-10,AMKR,51.4,Hold,90,195
@@ -667,6 +678,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,AMKR,39.2,Weak,129,195
 2026-10-06,AMKR,35.1,Weak,141,195
 2026-10-08,AMKR,26.3,Very Weak,166,195
+2026-10-09,AMKR,26.1,Very Weak,166,195
 2026-08-05,AMPL,54.6,Hold,75,195
 2026-08-07,AMPL,61.5,Hold,51,195
 2026-08-10,AMPL,62.5,Hold,44,195
@@ -706,6 +718,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,AMPL,87.1,Very Strong,2,195
 2026-10-06,AMPL,81.1,Very Strong,7,195
 2026-10-08,AMPL,85.5,Very Strong,2,195
+2026-10-09,AMPL,85.5,Very Strong,2,195
 2026-05-05,AMZN,39.5,Underperform,32,50
 2026-06-01,AMZN,55.6,Hold,12,50
 2026-06-02,AMZN,53,Hold,18,50
@@ -785,6 +798,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,AMZN,48.3,Neutral,103,195
 2026-10-06,AMZN,52,Neutral,87,195
 2026-10-08,AMZN,46.3,Neutral,104,195
+2026-10-09,AMZN,46.3,Neutral,104,195
 2026-08-05,ANAB,63.6,Hold,44,195
 2026-08-07,ANAB,57.5,Hold,60,195
 2026-08-10,ANAB,60.5,Hold,51,195
@@ -824,6 +838,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,ANAB,44,Weak,110,195
 2026-10-06,ANAB,37,Weak,137,195
 2026-10-08,ANAB,34.7,Weak,138,195
+2026-10-09,ANAB,35.8,Weak,135,195
 2026-08-05,ANET,74.4,Buy,16,195
 2026-08-07,ANET,79.4,Strong Buy,6,195
 2026-08-10,ANET,77.9,Buy,10,195
@@ -863,6 +878,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,ANET,72.6,Strong,31,195
 2026-10-06,ANET,74.9,Strong,24,195
 2026-10-08,ANET,69.1,Strong,43,195
+2026-10-09,ANET,69.1,Strong,43,195
 2026-08-05,APPN,57.1,Hold,65,195
 2026-08-07,APPN,45.3,Hold,119,195
 2026-08-10,APPN,47.4,Hold,108,195
@@ -902,6 +918,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,APPN,76.6,Strong,20,195
 2026-10-06,APPN,72.8,Strong,27,195
 2026-10-08,APPN,80.6,Very Strong,12,195
+2026-10-09,APPN,80.5,Very Strong,13,195
 2026-08-05,ARHS,44.5,Underperform,119,195
 2026-08-07,ARHS,51.1,Hold,80,195
 2026-08-10,ARHS,46.2,Hold,112,195
@@ -941,6 +958,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,ARHS,69.5,Strong,37,195
 2026-10-06,ARHS,69.7,Strong,35,195
 2026-10-08,ARHS,67.5,Strong,47,195
+2026-10-09,ARHS,67.4,Strong,45,195
 2026-08-05,ARWR,78.3,Strong Buy,4,195
 2026-08-07,ARWR,64.6,Hold,38,195
 2026-08-10,ARWR,66.9,Buy,31,195
@@ -980,6 +998,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,ARWR,23,Very Weak,168,195
 2026-10-06,ARWR,20.5,Very Weak,175,195
 2026-10-08,ARWR,19.8,Very Weak,179,195
+2026-10-09,ARWR,20.3,Very Weak,177,195
 2026-08-05,ASAN,41.4,Underperform,132,195
 2026-08-07,ASAN,29.5,Avoid,171,195
 2026-08-10,ASAN,35.3,Underperform,150,195
@@ -1019,6 +1038,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,ASAN,67,Strong,43,195
 2026-10-06,ASAN,70.9,Strong,34,195
 2026-10-08,ASAN,75.6,Strong,27,195
+2026-10-09,ASAN,75.6,Strong,27,195
 2026-08-05,ATI,80.1,Strong Buy,3,195
 2026-08-07,ATI,85.3,Strong Buy,1,195
 2026-08-10,ATI,84.9,Strong Buy,1,195
@@ -1058,6 +1078,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,ATI,50.2,Neutral,96,195
 2026-10-06,ATI,55.6,Neutral,77,195
 2026-10-08,ATI,49.3,Neutral,95,195
+2026-10-09,ATI,49.7,Neutral,94,195
 2026-05-05,AVGO,46.8,Hold,19,50
 2026-06-01,AVGO,56.4,Hold,8,50
 2026-06-02,AVGO,58.7,Hold,4,50
@@ -1137,6 +1158,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,AVGO,42.7,Weak,119,195
 2026-10-06,AVGO,44,Weak,116,195
 2026-10-08,AVGO,29.9,Very Weak,155,195
+2026-10-09,AVGO,29.8,Very Weak,155,195
 2026-08-05,AXON,50,Hold,96,195
 2026-08-07,AXON,66.4,Buy,32,195
 2026-08-10,AXON,71.4,Buy,23,195
@@ -1176,6 +1198,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,AXON,22.6,Very Weak,170,195
 2026-10-06,AXON,32.8,Weak,149,195
 2026-10-08,AXON,38,Weak,129,195
+2026-10-09,AXON,37.6,Weak,131,195
 2026-05-05,BAC,35.8,Underperform,42,50
 2026-06-01,BAC,51.4,Hold,22,50
 2026-06-02,BAC,52.2,Hold,21,50
@@ -1255,6 +1278,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,BAC,51.1,Neutral,91,195
 2026-10-06,BAC,47.6,Neutral,105,195
 2026-10-08,BAC,47.5,Neutral,100,195
+2026-10-09,BAC,47.5,Neutral,102,195
 2026-08-05,BARK,27.1,Avoid,173,195
 2026-08-07,BARK,17,Avoid,192,195
 2026-08-10,BARK,28.3,Avoid,176,195
@@ -1294,6 +1318,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,BARK,26.1,Very Weak,161,195
 2026-10-06,BARK,35,Weak,142,195
 2026-10-08,BARK,42.2,Weak,117,195
+2026-10-09,BARK,41.4,Weak,119,195
 2026-08-05,BBAI,23,Avoid,180,195
 2026-08-07,BBAI,37.4,Underperform,140,195
 2026-08-10,BBAI,41.7,Underperform,128,195
@@ -1333,6 +1358,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,BBAI,10.7,Very Weak,192,195
 2026-10-06,BBAI,10.8,Very Weak,192,195
 2026-10-08,BBAI,9.6,Very Weak,191,195
+2026-10-09,BBAI,9.5,Very Weak,191,195
 2026-05-05,BLK,34.5,Underperform,46,50
 2026-06-01,BLK,47.9,Hold,30,50
 2026-06-02,BLK,44.6,Underperform,39,50
@@ -1412,6 +1438,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,BLK,43,Weak,115,195
 2026-10-06,BLK,48.9,Neutral,99,195
 2026-10-08,BLK,46.1,Neutral,106,195
+2026-10-09,BLK,45.8,Neutral,105,195
 2026-08-05,BMRN,38.4,Underperform,140,195
 2026-08-07,BMRN,36,Underperform,146,195
 2026-08-10,BMRN,39.8,Underperform,133,195
@@ -1451,6 +1478,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,BMRN,44,Weak,110,195
 2026-10-06,BMRN,37.8,Weak,134,195
 2026-10-08,BMRN,36.1,Weak,134,195
+2026-10-09,BMRN,36.2,Weak,134,195
 2026-08-05,BRCC,35.2,Underperform,150,195
 2026-08-07,BRCC,18.6,Avoid,190,195
 2026-08-10,BRCC,20.6,Avoid,189,195
@@ -1490,6 +1518,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,BRCC,65.1,Strong,48,195
 2026-10-06,BRCC,59.6,Neutral,62,195
 2026-10-08,BRCC,66,Strong,52,195
+2026-10-09,BRCC,65.8,Strong,51,195
 2026-08-05,BRZE,55.4,Hold,72,195
 2026-08-07,BRZE,42.9,Underperform,125,195
 2026-08-10,BRZE,44.6,Underperform,116,195
@@ -1529,6 +1558,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,BRZE,64,Neutral,51,195
 2026-10-06,BRZE,63.2,Neutral,50,195
 2026-10-08,BRZE,75.4,Strong,28,195
+2026-10-09,BRZE,75.3,Strong,28,195
 2026-08-05,CALM,33.1,Underperform,158,195
 2026-08-07,CALM,54.4,Hold,69,195
 2026-08-10,CALM,52.8,Hold,75,195
@@ -1568,6 +1598,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,CALM,24.1,Very Weak,163,195
 2026-10-06,CALM,24.4,Very Weak,169,195
 2026-10-08,CALM,27.4,Very Weak,163,195
+2026-10-09,CALM,27.6,Very Weak,162,195
 2026-05-05,CAT,55.1,Buy,9,50
 2026-06-01,CAT,56.5,Hold,7,50
 2026-06-02,CAT,55.5,Hold,11,50
@@ -1647,6 +1678,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,CAT,43,Weak,115,195
 2026-10-06,CAT,47.8,Neutral,104,195
 2026-10-08,CAT,29.2,Very Weak,159,195
+2026-10-09,CAT,29.4,Very Weak,158,195
 2026-08-05,CAVA,23.9,Avoid,179,195
 2026-08-07,CAVA,33.5,Underperform,154,195
 2026-08-10,CAVA,32.4,Underperform,161,195
@@ -1686,6 +1718,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,CAVA,16.2,Very Weak,185,195
 2026-10-06,CAVA,13.2,Very Weak,186,195
 2026-10-08,CAVA,17.2,Very Weak,185,195
+2026-10-09,CAVA,17.2,Very Weak,185,195
 2026-08-05,CELH,26.9,Avoid,174,195
 2026-08-07,CELH,13.6,Avoid,194,195
 2026-08-10,CELH,19.3,Avoid,190,195
@@ -1725,6 +1758,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,CELH,27.6,Very Weak,157,195
 2026-10-06,CELH,24.8,Very Weak,168,195
 2026-10-08,CELH,26.5,Very Weak,164,195
+2026-10-09,CELH,26.7,Very Weak,164,195
 2026-08-05,CFR,58.5,Hold,60,195
 2026-08-07,CFR,51.7,Hold,78,195
 2026-08-10,CFR,49.6,Hold,102,195
@@ -1764,6 +1798,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,CFR,58.5,Neutral,69,195
 2026-10-06,CFR,57.9,Neutral,67,195
 2026-10-08,CFR,57.9,Neutral,70,195
+2026-10-09,CFR,58,Neutral,70,195
 2026-08-05,CGEM,64.1,Hold,43,195
 2026-08-07,CGEM,65.2,Buy,35,195
 2026-08-10,CGEM,57.6,Hold,63,195
@@ -1803,6 +1838,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,CGEM,39.9,Weak,127,195
 2026-10-06,CGEM,41,Weak,123,195
 2026-10-08,CGEM,32.3,Weak,149,195
+2026-10-09,CGEM,32.8,Weak,145,195
 2026-08-05,COIN,22.2,Avoid,185,195
 2026-08-07,COIN,35.8,Underperform,147,195
 2026-08-10,COIN,38.6,Underperform,139,195
@@ -1842,6 +1878,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,COIN,42.8,Weak,118,195
 2026-10-06,COIN,37.9,Weak,132,195
 2026-10-08,COIN,33.4,Weak,143,195
+2026-10-09,COIN,32.7,Weak,146,195
 2026-05-05,COST,52.5,Hold,11,50
 2026-06-01,COST,42.1,Underperform,45,50
 2026-06-02,COST,41.7,Underperform,47,50
@@ -1921,6 +1958,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,COST,50,Neutral,98,195
 2026-10-06,COST,53.7,Neutral,82,195
 2026-10-08,COST,56.5,Neutral,73,195
+2026-10-09,COST,57.1,Neutral,72,195
 2026-05-05,CRM,34.4,Underperform,47,50
 2026-06-01,CRM,49,Hold,27,50
 2026-06-02,CRM,50.4,Hold,26,50
@@ -2000,6 +2038,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,CRM,63.5,Neutral,53,195
 2026-10-06,CRM,63.1,Neutral,52,195
 2026-10-08,CRM,67.9,Strong,45,195
+2026-10-09,CRM,67.4,Strong,45,195
 2026-08-05,CRNX,72,Buy,19,195
 2026-08-07,CRNX,75.2,Buy,11,195
 2026-08-10,CRNX,69.5,Buy,24,195
@@ -2039,6 +2078,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,CRNX,50.6,Neutral,94,195
 2026-10-06,CRNX,49,Neutral,98,195
 2026-10-08,CRNX,48.9,Neutral,97,195
+2026-10-09,CRNX,48.9,Neutral,97,195
 2026-08-05,CROX,71.2,Buy,21,195
 2026-08-07,CROX,57.2,Hold,62,195
 2026-08-10,CROX,58.9,Hold,56,195
@@ -2078,6 +2118,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,CROX,52.5,Neutral,88,195
 2026-10-06,CROX,56.6,Neutral,72,195
 2026-10-08,CROX,47.3,Neutral,101,195
+2026-10-09,CROX,47.8,Neutral,101,195
 2026-08-05,CRS,76.6,Buy,11,195
 2026-08-07,CRS,77.4,Buy,8,195
 2026-08-10,CRS,81.3,Strong Buy,3,195
@@ -2117,6 +2158,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,CRS,25.3,Very Weak,162,195
 2026-10-06,CRS,29.7,Very Weak,160,195
 2026-10-08,CRS,22.5,Very Weak,173,195
+2026-10-09,CRS,22.4,Very Weak,173,195
 2026-08-05,CRWD,77.7,Buy,6,195
 2026-08-07,CRWD,79.8,Strong Buy,4,195
 2026-08-10,CRWD,81.7,Strong Buy,2,195
@@ -2156,6 +2198,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,CRWD,83,Very Strong,7,195
 2026-10-06,CRWD,85.9,Very Strong,3,195
 2026-10-08,CRWD,81.6,Very Strong,10,195
+2026-10-09,CRWD,81.6,Very Strong,10,195
 2026-05-05,CVX,56.4,Buy,6,50
 2026-06-01,CVX,48.5,Hold,29,50
 2026-06-02,CVX,51,Hold,24,50
@@ -2235,6 +2278,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,CVX,77.9,Strong,16,195
 2026-10-06,CVX,78.7,Very Strong,16,195
 2026-10-08,CVX,77.2,Strong,23,195
+2026-10-09,CVX,77.2,Strong,24,195
 2026-08-05,CXM,46.3,Hold,113,195
 2026-08-07,CXM,38.3,Underperform,137,195
 2026-08-10,CXM,39.3,Underperform,135,195
@@ -2274,6 +2318,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,CXM,43.7,Weak,113,195
 2026-10-06,CXM,39.8,Weak,126,195
 2026-10-08,CXM,53.2,Neutral,85,195
+2026-10-09,CXM,53.2,Neutral,83,195
 2026-08-05,DDOG,71.5,Buy,20,195
 2026-08-07,DDOG,58.1,Hold,58,195
 2026-08-10,DDOG,58.6,Hold,59,195
@@ -2313,6 +2358,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,DDOG,78.2,Very Strong,14,195
 2026-10-06,DDOG,81,Very Strong,8,195
 2026-10-08,DDOG,80.4,Very Strong,14,195
+2026-10-09,DDOG,80.3,Very Strong,14,195
 2026-08-05,DECK,32,Underperform,160,195
 2026-08-07,DECK,33.5,Underperform,154,195
 2026-08-10,DECK,31.6,Underperform,164,195
@@ -2352,6 +2398,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,DECK,24.1,Very Weak,163,195
 2026-10-06,DECK,26.9,Very Weak,161,195
 2026-10-08,DECK,25.3,Very Weak,169,195
+2026-10-09,DECK,25.2,Very Weak,169,195
 2026-05-05,DHR,35.3,Underperform,44,50
 2026-06-01,DHR,44.6,Underperform,42,50
 2026-06-02,DHR,43.8,Underperform,42,50
@@ -2431,6 +2478,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,DHR,68.6,Strong,39,195
 2026-10-06,DHR,62.6,Neutral,53,195
 2026-10-08,DHR,62.5,Neutral,59,195
+2026-10-09,DHR,62.2,Neutral,59,195
 2026-08-05,DKNG,20.8,Avoid,187,195
 2026-08-07,DKNG,29.1,Avoid,173,195
 2026-08-10,DKNG,32.2,Underperform,162,195
@@ -2470,6 +2518,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,DKNG,27.9,Very Weak,156,195
 2026-10-06,DKNG,30.3,Weak,157,195
 2026-10-08,DKNG,32.5,Weak,147,195
+2026-10-09,DKNG,32.4,Weak,148,195
 2026-08-05,DKS,30.6,Underperform,165,195
 2026-08-07,DKS,37.3,Underperform,141,195
 2026-08-10,DKS,42.9,Underperform,126,195
@@ -2509,6 +2558,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,DKS,26.5,Very Weak,160,195
 2026-10-06,DKS,19.7,Very Weak,179,195
 2026-10-08,DKS,21,Very Weak,176,195
+2026-10-09,DKS,21.1,Very Weak,175,195
 2026-08-05,DOCN,63.2,Hold,46,195
 2026-08-07,DOCN,54.2,Hold,70,195
 2026-08-10,DOCN,55.7,Hold,66,195
@@ -2548,6 +2598,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,DOCN,57.4,Neutral,74,195
 2026-10-06,DOCN,50.9,Neutral,92,195
 2026-10-08,DOCN,50.1,Neutral,91,195
+2026-10-09,DOCN,50.1,Neutral,91,195
 2026-08-05,DOCU,48.8,Hold,104,195
 2026-08-07,DOCU,48.6,Hold,98,195
 2026-08-10,DOCU,51.7,Hold,87,195
@@ -2587,6 +2638,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,DOCU,75.4,Strong,24,195
 2026-10-06,DOCU,71.2,Strong,32,195
 2026-10-08,DOCU,78.6,Very Strong,20,195
+2026-10-09,DOCU,78.4,Very Strong,21,195
 2026-08-05,DUOL,41.4,Underperform,132,195
 2026-08-07,DUOL,47.2,Hold,107,195
 2026-08-10,DUOL,53.1,Hold,74,195
@@ -2626,6 +2678,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,DUOL,80.5,Very Strong,11,195
 2026-10-06,DUOL,84.5,Very Strong,4,195
 2026-10-08,DUOL,81.1,Very Strong,11,195
+2026-10-09,DUOL,81,Very Strong,12,195
 2026-08-05,ENTG,67.1,Buy,34,195
 2026-08-07,ENTG,46,Hold,113,195
 2026-08-10,ENTG,53.5,Hold,73,195
@@ -2665,6 +2718,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,ENTG,48.4,Neutral,102,195
 2026-10-06,ENTG,45.1,Neutral,111,195
 2026-10-08,ENTG,44.8,Weak,109,195
+2026-10-09,ENTG,45,Neutral,108,195
 2026-08-05,ERAS,80.9,Strong Buy,2,195
 2026-08-07,ERAS,74.4,Buy,14,195
 2026-08-10,ERAS,76.3,Buy,13,195
@@ -2704,6 +2758,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,ERAS,28.6,Very Weak,155,195
 2026-10-06,ERAS,25.5,Very Weak,166,195
 2026-10-08,ERAS,37.3,Weak,131,195
+2026-10-09,ERAS,37.8,Weak,130,195
 2026-08-05,ETSY,70.3,Buy,23,195
 2026-08-07,ETSY,48.5,Hold,100,195
 2026-08-10,ETSY,52.2,Hold,79,195
@@ -2743,6 +2798,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,ETSY,58.4,Neutral,70,195
 2026-10-06,ETSY,63.8,Neutral,45,195
 2026-10-08,ETSY,70.2,Strong,38,195
+2026-10-09,ETSY,70,Strong,39,195
 2026-08-05,EXP,34.9,Underperform,153,195
 2026-08-07,EXP,32.6,Underperform,159,195
 2026-08-10,EXP,35.1,Underperform,152,195
@@ -2782,6 +2838,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,EXP,20.7,Very Weak,174,195
 2026-10-06,EXP,25.1,Very Weak,167,195
 2026-10-08,EXP,21.1,Very Weak,175,195
+2026-10-09,EXP,20.9,Very Weak,176,195
 2026-08-05,FHN,50.3,Hold,95,195
 2026-08-07,FHN,51.6,Hold,79,195
 2026-08-10,FHN,49.7,Hold,100,195
@@ -2821,6 +2878,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,FHN,38.1,Weak,132,195
 2026-10-06,FHN,37.9,Weak,132,195
 2026-10-08,FHN,40.1,Weak,124,195
+2026-10-09,FHN,40.2,Weak,124,195
 2026-08-05,FIGS,49.3,Hold,102,195
 2026-08-07,FIGS,49,Hold,97,195
 2026-08-10,FIGS,59.2,Hold,54,195
@@ -2860,6 +2918,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,FIGS,56.3,Neutral,76,195
 2026-10-06,FIGS,60,Neutral,61,195
 2026-10-08,FIGS,62.1,Neutral,60,195
+2026-10-09,FIGS,62,Neutral,60,195
 2026-08-05,FIVE,63.1,Hold,47,195
 2026-08-07,FIVE,55.8,Hold,67,195
 2026-08-10,FIVE,58.8,Hold,57,195
@@ -2899,6 +2958,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,FIVE,47.1,Neutral,107,195
 2026-10-06,FIVE,45.6,Neutral,109,195
 2026-10-08,FIVE,49.1,Neutral,96,195
+2026-10-09,FIVE,49.1,Neutral,96,195
 2026-08-05,FIZZ,20.1,Avoid,189,195
 2026-08-07,FIZZ,19.5,Avoid,189,195
 2026-08-10,FIZZ,18.1,Avoid,191,195
@@ -2938,6 +2998,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,FIZZ,36,Weak,141,195
 2026-10-06,FIZZ,41.3,Weak,122,195
 2026-10-08,FIZZ,44.3,Weak,112,195
+2026-10-09,FIZZ,44.5,Weak,110,195
 2026-08-05,FROG,77.8,Buy,5,195
 2026-08-07,FROG,63.8,Hold,45,195
 2026-08-10,FROG,72.3,Buy,21,195
@@ -2977,6 +3038,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,FROG,74.4,Strong,26,195
 2026-10-06,FROG,77.4,Strong,20,195
 2026-10-08,FROG,71.7,Strong,34,195
+2026-10-09,FROG,71.7,Strong,34,195
 2026-08-05,FSLY,69.6,Buy,27,195
 2026-08-07,FSLY,52.6,Hold,73,195
 2026-08-10,FSLY,60.2,Hold,52,195
@@ -3016,6 +3078,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,FSLY,42.7,Weak,119,195
 2026-10-06,FSLY,39.9,Weak,125,195
 2026-10-08,FSLY,50,Neutral,92,195
+2026-10-09,FSLY,49.2,Neutral,95,195
 2026-08-05,FTNT,77.6,Buy,7,195
 2026-08-07,FTNT,74.4,Buy,14,195
 2026-08-10,FTNT,72.6,Buy,20,195
@@ -3055,6 +3118,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,FTNT,86.7,Very Strong,3,195
 2026-10-06,FTNT,87.6,Very Strong,1,195
 2026-10-08,FTNT,85.5,Very Strong,2,195
+2026-10-09,FTNT,85.5,Very Strong,2,195
 2026-05-05,GE,52.5,Hold,11,50
 2026-06-01,GE,53,Hold,18,50
 2026-06-02,GE,54.3,Hold,17,50
@@ -3134,6 +3198,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,GE,33.5,Weak,147,195
 2026-10-06,GE,39,Weak,129,195
 2026-10-08,GE,34.9,Weak,136,195
+2026-10-09,GE,34.8,Weak,140,195
 2026-08-05,GGG,35.2,Underperform,150,195
 2026-08-07,GGG,37.9,Underperform,138,195
 2026-08-10,GGG,31.4,Underperform,168,195
@@ -3173,6 +3238,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,GGG,38,Weak,134,195
 2026-10-06,GGG,34.5,Weak,144,195
 2026-10-08,GGG,36.4,Weak,133,195
+2026-10-09,GGG,36.4,Weak,133,195
 2026-05-05,GOOGL,46,Hold,20,50
 2026-06-01,GOOGL,57.8,Hold,4,50
 2026-06-02,GOOGL,55.9,Hold,9,50
@@ -3252,6 +3318,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,GOOGL,48.5,Neutral,101,195
 2026-10-06,GOOGL,45.7,Neutral,108,195
 2026-10-08,GOOGL,48.6,Neutral,98,195
+2026-10-09,GOOGL,48.5,Neutral,99,195
 2026-08-05,GRMN,57.5,Hold,63,195
 2026-08-07,GRMN,71.6,Buy,21,195
 2026-08-10,GRMN,73.6,Buy,18,195
@@ -3291,6 +3358,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,GRMN,55.4,Neutral,81,195
 2026-10-06,GRMN,48.6,Neutral,103,195
 2026-10-08,GRMN,43,Weak,114,195
+2026-10-09,GRMN,42.9,Weak,114,195
 2026-08-05,HALO,59.6,Hold,55,195
 2026-08-07,HALO,69.3,Buy,26,195
 2026-08-10,HALO,77.4,Buy,11,195
@@ -3330,6 +3398,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,HALO,76.2,Strong,21,195
 2026-10-06,HALO,82.1,Very Strong,6,195
 2026-10-08,HALO,76.7,Strong,25,195
+2026-10-09,HALO,76.9,Strong,25,195
 2026-05-05,HD,36.6,Underperform,37,50
 2026-06-01,HD,43.6,Underperform,43,50
 2026-06-02,HD,43.1,Underperform,44,50
@@ -3409,6 +3478,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,HD,17.7,Very Weak,180,195
 2026-10-06,HD,23.3,Very Weak,172,195
 2026-10-08,HD,26.3,Very Weak,166,195
+2026-10-09,HD,26.1,Very Weak,166,195
 2026-08-05,HNST,52.4,Hold,84,195
 2026-08-07,HNST,74.6,Buy,13,195
 2026-08-10,HNST,74.5,Buy,16,195
@@ -3448,6 +3518,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,HNST,68.5,Strong,40,195
 2026-10-06,HNST,66.1,Strong,40,195
 2026-10-08,HNST,66.2,Strong,51,195
+2026-10-09,HNST,66.1,Strong,49,195
 2026-05-05,HON,56.9,Buy,5,50
 2026-06-01,HON,55.5,Hold,13,50
 2026-06-02,HON,55.4,Hold,12,50
@@ -3527,6 +3598,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,HON,30.3,Weak,151,195
 2026-10-06,HON,30.5,Weak,156,195
 2026-10-08,HON,23.2,Very Weak,172,195
+2026-10-09,HON,23.3,Very Weak,172,195
 2026-08-05,HOOD,45.6,Hold,116,195
 2026-08-07,HOOD,66.6,Buy,30,195
 2026-08-10,HOOD,67.9,Buy,28,195
@@ -3566,6 +3638,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,HOOD,55.5,Neutral,80,195
 2026-10-06,HOOD,52,Neutral,87,195
 2026-10-08,HOOD,51.5,Neutral,88,195
+2026-10-09,HOOD,51.6,Neutral,87,195
 2026-08-05,HUBB,45.2,Hold,118,195
 2026-08-07,HUBB,51.1,Hold,80,195
 2026-08-10,HUBB,52.1,Hold,80,195
@@ -3605,6 +3678,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,HUBB,41.6,Weak,124,195
 2026-10-06,HUBB,43.6,Weak,117,195
 2026-10-08,HUBB,33.8,Weak,141,195
+2026-10-09,HUBB,35.8,Weak,135,195
 2026-08-05,HUBS,35.3,Underperform,149,195
 2026-08-07,HUBS,20.5,Avoid,188,195
 2026-08-10,HUBS,23.8,Avoid,180,195
@@ -3644,6 +3718,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,HUBS,50.4,Neutral,95,195
 2026-10-06,HUBS,50.2,Neutral,97,195
 2026-10-08,HUBS,66.9,Strong,48,195
+2026-10-09,HUBS,66.1,Strong,49,195
 2026-08-05,IBKR,50.7,Hold,93,195
 2026-08-07,IBKR,62.3,Hold,47,195
 2026-08-10,IBKR,63.4,Hold,41,195
@@ -3683,6 +3758,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,IBKR,43.9,Weak,112,195
 2026-10-06,IBKR,54.6,Neutral,80,195
 2026-10-08,IBKR,45,Neutral,108,195
+2026-10-09,IBKR,44.6,Weak,109,195
 2026-05-05,IBM,36.8,Underperform,36,50
 2026-06-01,IBM,54.5,Hold,16,50
 2026-06-02,IBM,57,Hold,7,50
@@ -3762,6 +3838,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,IBM,36.5,Weak,138,195
 2026-10-06,IBM,37.1,Weak,136,195
 2026-10-08,IBM,42.8,Weak,115,195
+2026-10-09,IBM,42.6,Weak,115,195
 2026-08-05,IDYA,62.3,Hold,49,195
 2026-08-07,IDYA,64.5,Hold,40,195
 2026-08-10,IDYA,64.6,Hold,36,195
@@ -3801,6 +3878,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,IDYA,50.1,Neutral,97,195
 2026-10-06,IDYA,44.7,Weak,113,195
 2026-10-08,IDYA,44.7,Weak,111,195
+2026-10-09,IDYA,43.3,Weak,113,195
 2026-08-05,IESC,76.5,Buy,12,195
 2026-08-07,IESC,80.7,Strong Buy,3,195
 2026-08-10,IESC,79.1,Strong Buy,5,195
@@ -3840,6 +3918,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,IESC,58.8,Neutral,66,195
 2026-10-06,IESC,58.8,Neutral,65,195
 2026-10-08,IESC,41.8,Weak,118,195
+2026-10-09,IESC,42,Weak,117,195
 2026-08-05,INCY,67.3,Buy,33,195
 2026-08-07,INCY,56.2,Hold,64,195
 2026-08-10,INCY,58.4,Hold,61,195
@@ -3879,6 +3958,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,INCY,57.2,Neutral,75,195
 2026-10-06,INCY,57.8,Neutral,68,195
 2026-10-08,INCY,55.4,Neutral,77,195
+2026-10-09,INCY,56.3,Neutral,74,195
 2026-08-05,INTA,48,Hold,108,195
 2026-08-07,INTA,52.5,Hold,74,195
 2026-08-10,INTA,54.3,Hold,72,195
@@ -3918,6 +3998,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,INTA,69.6,Strong,36,195
 2026-10-06,INTA,66.2,Strong,38,195
 2026-10-08,INTA,80.2,Very Strong,15,195
+2026-10-09,INTA,80.2,Very Strong,15,195
 2026-05-05,INTU,33.4,Underperform,49,50
 2026-06-01,INTU,41.3,Underperform,49,50
 2026-06-02,INTU,43.4,Underperform,43,50
@@ -3997,6 +4078,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,INTU,33.6,Weak,146,195
 2026-10-06,INTU,39,Weak,129,195
 2026-10-08,INTU,51.2,Neutral,89,195
+2026-10-09,INTU,50.9,Neutral,90,195
 2026-08-05,IONQ,48.2,Hold,107,195
 2026-08-07,IONQ,50.7,Hold,85,195
 2026-08-10,IONQ,56.6,Hold,65,195
@@ -4036,6 +4118,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,IONQ,42.5,Weak,121,195
 2026-10-06,IONQ,42.7,Weak,119,195
 2026-10-08,IONQ,38,Weak,129,195
+2026-10-09,IONQ,38,Weak,129,195
 2026-08-05,IONS,37.5,Underperform,144,195
 2026-08-07,IONS,28,Avoid,176,195
 2026-08-10,IONS,29.4,Avoid,173,195
@@ -4075,6 +4158,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,IONS,7.4,Very Weak,195,195
 2026-10-06,IONS,12.3,Very Weak,191,195
 2026-10-08,IONS,7.7,Very Weak,194,195
+2026-10-09,IONS,7.7,Very Weak,194,195
 2026-05-05,ISRG,41.3,Hold,29,50
 2026-06-01,ISRG,39,Underperform,50,50
 2026-06-02,ISRG,38.2,Underperform,50,50
@@ -4154,6 +4238,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,ISRG,36.2,Weak,139,195
 2026-10-06,ISRG,32,Weak,152,195
 2026-10-08,ISRG,41.8,Weak,118,195
+2026-10-09,ISRG,41.6,Weak,118,195
 2026-08-05,JAZZ,77.6,Buy,7,195
 2026-08-07,JAZZ,61.2,Hold,53,195
 2026-08-10,JAZZ,58.8,Hold,57,195
@@ -4193,6 +4278,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,JAZZ,59.8,Neutral,62,195
 2026-10-06,JAZZ,55.5,Neutral,79,195
 2026-10-08,JAZZ,50.9,Neutral,90,195
+2026-10-09,JAZZ,51.6,Neutral,87,195
 2026-08-05,JBSS,50.6,Hold,94,195
 2026-08-07,JBSS,34.4,Underperform,153,195
 2026-08-10,JBSS,31.1,Underperform,169,195
@@ -4232,6 +4318,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,JBSS,26.9,Very Weak,158,195
 2026-10-06,JBSS,25.9,Very Weak,163,195
 2026-10-08,JBSS,32.2,Weak,150,195
+2026-10-09,JBSS,32.5,Weak,147,195
 2026-05-05,JNJ,57,Buy,4,50
 2026-06-01,JNJ,47.7,Hold,32,50
 2026-06-02,JNJ,47.6,Hold,32,50
@@ -4311,6 +4398,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,JNJ,56,Neutral,77,195
 2026-10-06,JNJ,61.6,Neutral,55,195
 2026-10-08,JNJ,57.4,Neutral,71,195
+2026-10-09,JNJ,57.7,Neutral,71,195
 2026-05-05,JPM,36.5,Underperform,38,50
 2026-06-01,JPM,47.3,Hold,34,50
 2026-06-02,JPM,48.4,Hold,31,50
@@ -4390,6 +4478,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,JPM,52.4,Neutral,89,195
 2026-10-06,JPM,50.8,Neutral,95,195
 2026-10-08,JPM,51.7,Neutral,87,195
+2026-10-09,JPM,51.4,Neutral,89,195
 2026-08-05,KEYS,68.6,Buy,28,195
 2026-08-07,KEYS,64.1,Hold,43,195
 2026-08-10,KEYS,64.4,Hold,37,195
@@ -4429,6 +4518,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,KEYS,62.7,Neutral,54,195
 2026-10-06,KEYS,65.1,Strong,43,195
 2026-10-08,KEYS,59.9,Neutral,66,195
+2026-10-09,KEYS,60.1,Neutral,66,195
 2026-05-05,KO,52.4,Hold,13,50
 2026-06-01,KO,52.4,Hold,20,50
 2026-06-02,KO,53,Hold,18,50
@@ -4508,6 +4598,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,KO,65.7,Strong,46,195
 2026-10-06,KO,63.2,Neutral,50,195
 2026-10-08,KO,67.9,Strong,45,195
+2026-10-09,KO,68.7,Strong,44,195
 2026-08-05,KRYS,65.6,Buy,35,195
 2026-08-07,KRYS,61.1,Hold,54,195
 2026-08-10,KRYS,60.9,Hold,50,195
@@ -4547,6 +4638,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,KRYS,64.2,Neutral,50,195
 2026-10-06,KRYS,58,Neutral,66,195
 2026-10-08,KRYS,62.1,Neutral,60,195
+2026-10-09,KRYS,61.9,Neutral,61,195
 2026-08-05,KYMR,69.8,Buy,25,195
 2026-08-07,KYMR,73.3,Buy,18,195
 2026-08-10,KYMR,73,Buy,19,195
@@ -4586,6 +4678,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,KYMR,57.7,Neutral,73,195
 2026-10-06,KYMR,53,Neutral,85,195
 2026-10-08,KYMR,61,Neutral,63,195
+2026-10-09,KYMR,60.9,Neutral,64,195
 2026-05-05,LIN,54.1,Hold,10,50
 2026-06-01,LIN,50.1,Hold,25,50
 2026-06-02,LIN,51.1,Hold,23,50
@@ -4665,6 +4758,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,LIN,47.5,Neutral,105,195
 2026-10-06,LIN,50.9,Neutral,92,195
 2026-10-08,LIN,41.1,Weak,120,195
+2026-10-09,LIN,41.4,Weak,119,195
 2026-05-05,LLY,45.1,Hold,24,50
 2026-06-01,LLY,54.8,Hold,15,50
 2026-06-02,LLY,55,Hold,14,50
@@ -4744,6 +4838,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,LLY,59.4,Neutral,64,195
 2026-10-06,LLY,63.7,Neutral,46,195
 2026-10-08,LLY,61,Neutral,63,195
+2026-10-09,LLY,61.1,Neutral,63,195
 2026-08-05,LMB,30,Underperform,167,195
 2026-08-07,LMB,42.2,Underperform,129,195
 2026-08-10,LMB,43.7,Underperform,124,195
@@ -4783,6 +4878,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,LMB,26.7,Very Weak,159,195
 2026-10-06,LMB,33.6,Weak,148,195
 2026-10-08,LMB,29.1,Very Weak,160,195
+2026-10-09,LMB,29.1,Very Weak,160,195
 2026-08-05,LOVE,52.7,Hold,82,195
 2026-08-07,LOVE,38.7,Underperform,136,195
 2026-08-10,LOVE,41.5,Underperform,129,195
@@ -4822,6 +4918,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,LOVE,42.5,Weak,121,195
 2026-10-06,LOVE,37,Weak,137,195
 2026-10-08,LOVE,39.1,Weak,126,195
+2026-10-09,LOVE,39,Weak,127,195
 2026-08-05,LSCC,69.7,Buy,26,195
 2026-08-07,LSCC,51.9,Hold,76,195
 2026-08-10,LSCC,52.1,Hold,80,195
@@ -4861,6 +4958,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,LSCC,48.1,Neutral,104,195
 2026-10-06,LSCC,47.4,Neutral,106,195
 2026-10-08,LSCC,40.7,Weak,121,195
+2026-10-09,LSCC,40.9,Weak,121,195
 2026-05-05,MA,37.1,Underperform,35,50
 2026-06-01,MA,45.5,Hold,40,50
 2026-06-02,MA,46.4,Hold,34,50
@@ -4940,6 +5038,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,MA,65.3,Strong,47,195
 2026-10-06,MA,68.5,Strong,36,195
 2026-10-08,MA,71,Strong,36,195
+2026-10-09,MA,71.3,Strong,35,195
 2026-05-05,MCD,50.1,Hold,17,50
 2026-06-01,MCD,42.3,Underperform,44,50
 2026-06-02,MCD,41.3,Underperform,48,50
@@ -5019,6 +5118,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,MCD,23.4,Very Weak,166,195
 2026-10-06,MCD,17.4,Very Weak,182,195
 2026-10-08,MCD,21.8,Very Weak,174,195
+2026-10-09,MCD,21.9,Very Weak,174,195
 2026-08-05,MCHP,38,Underperform,142,195
 2026-08-07,MCHP,22.5,Avoid,184,195
 2026-08-10,MCHP,32.7,Underperform,159,195
@@ -5058,6 +5158,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,MCHP,38.8,Weak,130,195
 2026-10-06,MCHP,36,Weak,140,195
 2026-10-08,MCHP,26.5,Very Weak,164,195
+2026-10-09,MCHP,26.4,Very Weak,165,195
 2026-08-05,MDB,68.4,Buy,29,195
 2026-08-07,MDB,47.3,Hold,106,195
 2026-08-10,MDB,50.6,Hold,93,195
@@ -5097,6 +5198,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,MDB,55.6,Neutral,79,195
 2026-10-06,MDB,55.9,Neutral,75,195
 2026-10-08,MDB,69.8,Strong,41,195
+2026-10-09,MDB,69.7,Strong,41,195
 2026-08-05,MEDP,59.4,Hold,57,195
 2026-08-07,MEDP,66.6,Buy,30,195
 2026-08-10,MEDP,69.3,Buy,26,195
@@ -5136,6 +5238,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,MEDP,73,Strong,29,195
 2026-10-06,MEDP,64.1,Neutral,44,195
 2026-10-08,MEDP,63.9,Neutral,55,195
+2026-10-09,MEDP,63.9,Neutral,55,195
 2026-05-05,META,40.6,Hold,31,50
 2026-06-01,META,51.4,Hold,22,50
 2026-06-02,META,46,Hold,36,50
@@ -5215,6 +5318,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,META,67,Strong,43,195
 2026-10-06,META,63.4,Neutral,48,195
 2026-10-08,META,61.3,Neutral,62,195
+2026-10-09,META,61.7,Neutral,62,195
 2026-08-05,MITK,72.3,Buy,18,195
 2026-08-07,MITK,49.1,Hold,96,195
 2026-08-10,MITK,61.8,Hold,47,195
@@ -5254,6 +5358,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,MITK,51,Neutral,92,195
 2026-10-06,MITK,48.8,Neutral,101,195
 2026-10-08,MITK,49.9,Neutral,93,195
+2026-10-09,MITK,49.8,Neutral,92,195
 2026-08-05,MLI,65.2,Buy,38,195
 2026-08-07,MLI,74.8,Buy,12,195
 2026-08-10,MLI,67.3,Buy,30,195
@@ -5293,6 +5398,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,MLI,61.2,Neutral,58,195
 2026-10-06,MLI,54.2,Neutral,81,195
 2026-10-08,MLI,49.9,Neutral,93,195
+2026-10-09,MLI,49.8,Neutral,92,195
 2026-08-05,MPWR,51.5,Hold,86,195
 2026-08-07,MPWR,58.4,Hold,56,195
 2026-08-10,MPWR,60.2,Hold,52,195
@@ -5332,6 +5438,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,MPWR,58.8,Neutral,66,195
 2026-10-06,MPWR,50.6,Neutral,96,195
 2026-10-08,MPWR,42.6,Weak,116,195
+2026-10-09,MPWR,42.6,Weak,115,195
 2026-05-05,MRK,55.6,Buy,8,50
 2026-06-01,MRK,53.9,Hold,17,50
 2026-06-02,MRK,48.6,Hold,29,50
@@ -5411,6 +5518,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,MRK,53.5,Neutral,85,195
 2026-10-06,MRK,61.2,Neutral,57,195
 2026-10-08,MRK,58.4,Neutral,69,195
+2026-10-09,MRK,59,Neutral,68,195
 2026-05-05,MS,38.7,Underperform,33,50
 2026-06-01,MS,59.7,Hold,2,50
 2026-06-02,MS,60.4,Hold,1,50
@@ -5490,6 +5598,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,MS,36.2,Weak,139,195
 2026-10-06,MS,34,Weak,147,195
 2026-10-08,MS,29.7,Very Weak,156,195
+2026-10-09,MS,29.7,Very Weak,156,195
 2026-05-05,MSFT,35,Underperform,45,50
 2026-06-01,MSFT,52.8,Hold,19,50
 2026-06-02,MSFT,55.3,Hold,13,50
@@ -5569,6 +5678,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,MSFT,73.3,Strong,28,195
 2026-10-06,MSFT,75.7,Strong,22,195
 2026-10-08,MSFT,70.4,Strong,37,195
+2026-10-09,MSFT,70.4,Strong,37,195
 2026-08-05,MTZ,49.6,Hold,98,195
 2026-08-07,MTZ,47.7,Hold,104,195
 2026-08-10,MTZ,50.1,Hold,97,195
@@ -5608,6 +5718,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,MTZ,17.2,Very Weak,181,195
 2026-10-06,MTZ,20,Very Weak,178,195
 2026-10-08,MTZ,12.9,Very Weak,190,195
+2026-10-09,MTZ,12.9,Very Weak,189,195
 2026-08-05,MYRG,52.8,Hold,81,195
 2026-08-07,MYRG,51.1,Hold,80,195
 2026-08-10,MYRG,52,Hold,82,195
@@ -5647,6 +5758,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,MYRG,35.6,Weak,142,195
 2026-10-06,MYRG,44.5,Weak,114,195
 2026-10-08,MYRG,39.2,Weak,125,195
+2026-10-09,MYRG,39.3,Weak,125,195
 2026-08-05,NBIX,51.4,Hold,88,195
 2026-08-07,NBIX,46.8,Hold,108,195
 2026-08-10,NBIX,48.8,Hold,106,195
@@ -5686,6 +5798,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,NBIX,53.5,Neutral,85,195
 2026-10-06,NBIX,55.8,Neutral,76,195
 2026-10-08,NBIX,47.2,Neutral,102,195
+2026-10-09,NBIX,47.9,Neutral,100,195
 2026-08-05,NDSN,64.5,Hold,39,195
 2026-08-07,NDSN,41.4,Underperform,132,195
 2026-08-10,NDSN,38.9,Underperform,138,195
@@ -5725,6 +5838,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,NDSN,67,Strong,43,195
 2026-10-06,NDSN,66.2,Strong,38,195
 2026-10-08,NDSN,64.2,Neutral,53,195
+2026-10-09,NDSN,64.6,Neutral,53,195
 2026-05-05,NEE,55.7,Buy,7,50
 2026-06-01,NEE,45.6,Hold,39,50
 2026-06-02,NEE,44.1,Underperform,40,50
@@ -5804,6 +5918,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,NEE,24,Very Weak,165,195
 2026-10-06,NEE,31.4,Weak,154,195
 2026-10-08,NEE,28.3,Very Weak,162,195
+2026-10-09,NEE,28.4,Very Weak,161,195
 2026-08-05,NET,68,Buy,31,195
 2026-08-07,NET,73.4,Buy,17,195
 2026-08-10,NET,76.5,Buy,12,195
@@ -5843,6 +5958,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,NET,75.4,Strong,24,195
 2026-10-06,NET,71,Strong,33,195
 2026-10-08,NET,72.8,Strong,33,195
+2026-10-09,NET,72.6,Strong,33,195
 2026-05-05,NFLX,45.4,Hold,22,50
 2026-06-01,NFLX,41.6,Underperform,48,50
 2026-06-02,NFLX,41.8,Underperform,46,50
@@ -5922,6 +6038,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,NFLX,22.9,Very Weak,169,195
 2026-10-06,NFLX,25.8,Very Weak,164,195
 2026-10-08,NFLX,31.8,Weak,152,195
+2026-10-09,NFLX,31.8,Weak,152,195
 2026-08-05,NPWR,28,Avoid,172,195
 2026-08-07,NPWR,11.6,Avoid,195,195
 2026-08-10,NPWR,13.2,Avoid,194,195
@@ -5961,6 +6078,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,NPWR,15.1,Very Weak,187,195
 2026-10-06,NPWR,19.5,Very Weak,180,195
 2026-10-08,NPWR,17.8,Very Weak,183,195
+2026-10-09,NPWR,17.8,Very Weak,183,195
 2026-08-05,NTRA,70.5,Buy,22,195
 2026-08-07,NTRA,73,Buy,19,195
 2026-08-10,NTRA,79.1,Strong Buy,5,195
@@ -6000,6 +6118,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,NTRA,80.9,Very Strong,10,195
 2026-10-06,NTRA,75.9,Strong,21,195
 2026-10-08,NTRA,74,Strong,31,195
+2026-10-09,NTRA,74.1,Strong,31,195
 2026-08-05,NTRS,59.8,Hold,53,195
 2026-08-07,NTRS,72.4,Buy,20,195
 2026-08-10,NTRS,72.2,Buy,22,195
@@ -6039,6 +6158,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,NTRS,55.3,Neutral,82,195
 2026-10-06,NTRS,53.5,Neutral,84,195
 2026-10-08,NTRS,54.8,Neutral,78,195
+2026-10-09,NTRS,54.7,Neutral,78,195
 2026-05-05,NVDA,51.8,Hold,14,50
 2026-06-01,NVDA,56.1,Hold,9,50
 2026-06-02,NVDA,60.4,Hold,1,50
@@ -6118,6 +6238,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,NVDA,60.6,Neutral,59,195
 2026-10-06,NVDA,55.6,Neutral,77,195
 2026-10-08,NVDA,53.9,Neutral,79,195
+2026-10-09,NVDA,54,Neutral,79,195
 2026-08-05,OKTA,67.4,Buy,32,195
 2026-08-07,OKTA,62,Hold,48,195
 2026-08-10,OKTA,64.2,Hold,39,195
@@ -6157,6 +6278,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,OKTA,83.5,Very Strong,6,195
 2026-10-06,OKTA,80.4,Very Strong,10,195
 2026-10-08,OKTA,84.4,Very Strong,6,195
+2026-10-09,OKTA,84.4,Very Strong,6,195
 2026-08-05,OLLI,28.6,Avoid,170,195
 2026-08-07,OLLI,33,Underperform,157,195
 2026-08-10,OLLI,35.3,Underperform,150,195
@@ -6196,6 +6318,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,OLLI,44.7,Weak,108,195
 2026-10-06,OLLI,51.6,Neutral,90,195
 2026-10-08,OLLI,53.9,Neutral,79,195
+2026-10-09,OLLI,53.8,Neutral,80,195
 2026-08-05,OLMA,47.3,Hold,112,195
 2026-08-07,OLMA,47.9,Hold,103,195
 2026-08-10,OLMA,47.8,Hold,107,195
@@ -6235,6 +6358,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,OLMA,8.4,Very Weak,194,195
 2026-10-06,OLMA,7.7,Very Weak,194,195
 2026-10-08,OLMA,7.8,Very Weak,193,195
+2026-10-09,OLMA,7.8,Very Weak,193,195
 2026-08-05,ON,47.9,Hold,109,195
 2026-08-07,ON,30.6,Underperform,166,195
 2026-08-10,ON,31.6,Underperform,164,195
@@ -6274,6 +6398,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,ON,43.2,Weak,114,195
 2026-10-06,ON,40.7,Weak,124,195
 2026-10-08,ON,35.7,Weak,135,195
+2026-10-09,ON,35.5,Weak,137,195
 2026-08-05,ONON,30.7,Underperform,164,195
 2026-08-07,ONON,34.7,Underperform,152,195
 2026-08-10,ONON,34.4,Underperform,154,195
@@ -6313,6 +6438,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,ONON,39.4,Weak,128,195
 2026-10-06,ONON,44.3,Weak,115,195
 2026-10-08,ONON,46.8,Neutral,103,195
+2026-10-09,ONON,46.5,Neutral,103,195
 2026-05-05,ORCL,36.4,Underperform,39,50
 2026-06-01,ORCL,57,Hold,5,50
 2026-06-02,ORCL,58.7,Hold,4,50
@@ -6392,6 +6518,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,ORCL,30.2,Weak,152,195
 2026-10-06,ORCL,38.4,Weak,131,195
 2026-10-08,ORCL,28.6,Very Weak,161,195
+2026-10-09,ORCL,27.2,Very Weak,163,195
 2026-08-05,ORN,42.4,Underperform,126,195
 2026-08-07,ORN,42.9,Underperform,125,195
 2026-08-10,ORN,44.5,Underperform,119,195
@@ -6431,6 +6558,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,ORN,17.9,Very Weak,179,195
 2026-10-06,ORN,17.8,Very Weak,181,195
 2026-10-08,ORN,17.6,Very Weak,184,195
+2026-10-09,ORN,17.4,Very Weak,184,195
 2026-08-05,PANW,81.3,Strong Buy,1,195
 2026-08-07,PANW,77.8,Buy,7,195
 2026-08-10,PANW,79.1,Strong Buy,5,195
@@ -6470,6 +6598,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,PANW,85.7,Very Strong,4,195
 2026-10-06,PANW,86.8,Very Strong,2,195
 2026-10-08,PANW,79.6,Very Strong,18,195
+2026-10-09,PANW,79.5,Very Strong,18,195
 2026-08-05,PD,49.6,Hold,98,195
 2026-08-07,PD,45.7,Hold,115,195
 2026-08-10,PD,47.1,Hold,109,195
@@ -6509,6 +6638,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,PD,87.6,Very Strong,1,195
 2026-10-06,PD,84.3,Very Strong,5,195
 2026-10-08,PD,88.1,Very Strong,1,195
+2026-10-09,PD,88.1,Very Strong,1,195
 2026-05-05,PEP,51.1,Hold,16,50
 2026-06-01,PEP,41.9,Underperform,46,50
 2026-06-02,PEP,42.6,Underperform,45,50
@@ -6588,6 +6718,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,PEP,22,Very Weak,172,195
 2026-10-06,PEP,26.9,Very Weak,161,195
 2026-10-08,PEP,29.4,Very Weak,157,195
+2026-10-09,PEP,29.6,Very Weak,157,195
 2026-05-05,PG,45.2,Hold,23,50
 2026-06-01,PG,45.2,Hold,41,50
 2026-06-02,PG,45.5,Hold,38,50
@@ -6667,6 +6798,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,PG,58.7,Neutral,68,195
 2026-10-06,PG,65.2,Strong,42,195
 2026-10-08,PG,63.6,Neutral,57,195
+2026-10-09,PG,63.8,Neutral,58,195
 2026-08-05,PINS,46,Hold,114,195
 2026-08-07,PINS,40,Underperform,135,195
 2026-08-10,PINS,39,Underperform,136,195
@@ -6706,6 +6838,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,PINS,49.7,Neutral,100,195
 2026-10-06,PINS,45.6,Neutral,109,195
 2026-10-08,PINS,58.5,Neutral,68,195
+2026-10-09,PINS,58.6,Neutral,69,195
 2026-08-05,PLNT,21.9,Avoid,186,195
 2026-08-07,PLNT,21.5,Avoid,185,195
 2026-08-10,PLNT,23.4,Avoid,183,195
@@ -6745,6 +6878,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,PLNT,19.3,Very Weak,177,195
 2026-10-06,PLNT,23.6,Very Weak,171,195
 2026-10-08,PLNT,31.2,Weak,153,195
+2026-10-09,PLNT,31.2,Weak,153,195
 2026-05-05,PM,41.3,Hold,29,50
 2026-06-01,PM,51,Hold,24,50
 2026-06-02,PM,50.7,Hold,25,50
@@ -6824,6 +6958,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,PM,68.8,Strong,38,195
 2026-10-06,PM,74.8,Strong,25,195
 2026-10-08,PM,79.8,Very Strong,16,195
+2026-10-09,PM,80,Very Strong,16,195
 2026-08-05,PRIM,42.7,Underperform,125,195
 2026-08-07,PRIM,45.6,Hold,116,195
 2026-08-10,PRIM,46.5,Hold,111,195
@@ -6863,6 +6998,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,PRIM,36.7,Weak,137,195
 2026-10-06,PRIM,37.2,Weak,135,195
 2026-10-08,PRIM,33.2,Weak,144,195
+2026-10-09,PRIM,33.1,Weak,143,195
 2026-08-05,PRPL,74.5,Buy,15,195
 2026-08-07,PRPL,67.5,Buy,28,195
 2026-08-10,PRPL,69.4,Buy,25,195
@@ -6902,6 +7038,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,PRPL,9.1,Very Weak,193,195
 2026-10-06,PRPL,6.2,Very Weak,195,195
 2026-10-08,PRPL,5.7,Very Weak,195,195
+2026-10-09,PRPL,5.7,Very Weak,195,195
 2026-08-05,PTGX,77,Buy,9,195
 2026-08-07,PTGX,82.3,Strong Buy,2,195
 2026-08-10,PTGX,76.2,Buy,14,195
@@ -6941,6 +7078,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,PTGX,59.6,Neutral,63,195
 2026-10-06,PTGX,56.7,Neutral,71,195
 2026-10-08,PTGX,58.9,Neutral,67,195
+2026-10-09,PTGX,59.2,Neutral,67,195
 2026-08-05,QBTS,58.9,Hold,58,195
 2026-08-07,QBTS,46.4,Hold,110,195
 2026-08-10,QBTS,50.4,Hold,95,195
@@ -6980,6 +7118,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,QBTS,20.4,Very Weak,175,195
 2026-10-06,QBTS,21.8,Very Weak,173,195
 2026-10-08,QBTS,19.6,Very Weak,180,195
+2026-10-09,QBTS,19.3,Very Weak,180,195
 2026-05-05,QCOM,31.8,Underperform,50,50
 2026-06-01,QCOM,61,Hold,1,50
 2026-06-02,QCOM,59.7,Hold,3,50
@@ -7059,6 +7198,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,QCOM,51.8,Neutral,90,195
 2026-10-06,QCOM,51.6,Neutral,90,195
 2026-10-08,QCOM,55.8,Neutral,75,195
+2026-10-09,QCOM,55.9,Neutral,77,195
 2026-08-05,QRVO,49.7,Hold,97,195
 2026-08-07,QRVO,48,Hold,102,195
 2026-08-10,QRVO,49.1,Hold,104,195
@@ -7098,6 +7238,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,QRVO,69.9,Strong,35,195
 2026-10-06,QRVO,57.3,Neutral,69,195
 2026-10-08,QRVO,56.3,Neutral,74,195
+2026-10-09,QRVO,56.3,Neutral,74,195
 2026-08-05,RARE,40.2,Underperform,137,195
 2026-08-07,RARE,29.6,Avoid,168,195
 2026-08-10,RARE,23.9,Avoid,179,195
@@ -7137,6 +7278,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,RARE,13.5,Very Weak,189,195
 2026-10-06,RARE,12.6,Very Weak,190,195
 2026-10-08,RARE,20,Very Weak,178,195
+2026-10-09,RARE,20.1,Very Weak,179,195
 2026-08-05,RBLX,13.3,Avoid,194,195
 2026-08-07,RBLX,29.6,Avoid,168,195
 2026-08-10,RBLX,31.8,Underperform,163,195
@@ -7176,6 +7318,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,RBLX,32.6,Weak,148,195
 2026-10-06,RBLX,34.3,Weak,146,195
 2026-10-08,RBLX,32.5,Weak,147,195
+2026-10-09,RBLX,32.3,Weak,149,195
 2026-08-05,RGTI,51.5,Hold,86,195
 2026-08-07,RGTI,47.5,Hold,105,195
 2026-08-10,RGTI,51.5,Hold,89,195
@@ -7215,6 +7358,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,RGTI,21,Very Weak,173,195
 2026-10-06,RGTI,20.3,Very Weak,176,195
 2026-10-08,RGTI,16.9,Very Weak,186,195
+2026-10-09,RGTI,16.9,Very Weak,186,195
 2026-08-05,RJF,51,Hold,91,195
 2026-08-07,RJF,58.2,Hold,57,195
 2026-08-10,RJF,55.3,Hold,68,195
@@ -7254,6 +7398,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,RJF,57.9,Neutral,71,195
 2026-10-06,RJF,51.7,Neutral,89,195
 2026-10-08,RJF,53.6,Neutral,82,195
+2026-10-09,RJF,53.1,Neutral,84,195
 2026-08-05,ROAD,33.2,Underperform,157,195
 2026-08-07,ROAD,46.3,Hold,111,195
 2026-08-10,ROAD,58.4,Hold,61,195
@@ -7293,6 +7438,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,ROAD,17,Very Weak,182,195
 2026-10-06,ROAD,23.8,Very Weak,170,195
 2026-10-08,ROAD,19.1,Very Weak,181,195
+2026-10-09,ROAD,19.1,Very Weak,181,195
 2026-08-05,ROKU,65.6,Buy,35,195
 2026-08-07,ROKU,64.6,Hold,38,195
 2026-08-10,ROKU,65.3,Buy,33,195
@@ -7332,6 +7478,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,ROKU,67.6,Strong,41,195
 2026-10-06,ROKU,58.9,Neutral,64,195
 2026-10-08,ROKU,66.4,Strong,49,195
+2026-10-09,ROKU,66.5,Strong,48,195
 2026-05-05,RTX,58.3,Buy,1,50
 2026-06-01,RTX,46.2,Hold,38,50
 2026-06-02,RTX,44,Underperform,41,50
@@ -7411,6 +7558,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,RTX,31.3,Weak,150,195
 2026-10-06,RTX,31.1,Weak,155,195
 2026-10-08,RTX,34.9,Weak,136,195
+2026-10-09,RTX,35,Weak,138,195
 2026-08-05,RXRX,30.3,Underperform,166,195
 2026-08-07,RXRX,22.8,Avoid,182,195
 2026-08-10,RXRX,23.8,Avoid,180,195
@@ -7450,6 +7598,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,RXRX,56,Neutral,77,195
 2026-10-06,RXRX,50.9,Neutral,92,195
 2026-10-08,RXRX,43.6,Weak,113,195
+2026-10-09,RXRX,43.4,Weak,112,195
 2026-08-05,SANA,39.1,Underperform,138,195
 2026-08-07,SANA,41.3,Underperform,133,195
 2026-08-10,SANA,44,Underperform,123,195
@@ -7489,6 +7638,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,SANA,17,Very Weak,182,195
 2026-10-06,SANA,15.6,Very Weak,184,195
 2026-10-08,SANA,20.4,Very Weak,177,195
+2026-10-09,SANA,20.2,Very Weak,178,195
 2026-08-05,SENEA,75,Buy,14,195
 2026-08-07,SENEA,74,Buy,16,195
 2026-08-10,SENEA,81.1,Strong Buy,4,195
@@ -7528,6 +7678,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,SENEA,61.5,Neutral,57,195
 2026-10-06,SENEA,56.2,Neutral,73,195
 2026-10-08,SENEA,63.5,Neutral,58,195
+2026-10-09,SENEA,63.9,Neutral,55,195
 2026-08-05,SG,20.8,Avoid,187,195
 2026-08-07,SG,24.4,Avoid,181,195
 2026-08-10,SG,21.1,Avoid,187,195
@@ -7567,6 +7718,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,SG,73.9,Strong,27,195
 2026-10-06,SG,79.3,Very Strong,14,195
 2026-10-08,SG,80.5,Very Strong,13,195
+2026-10-09,SG,81.1,Very Strong,11,195
 2026-08-05,SMPL,15.5,Avoid,193,195
 2026-08-07,SMPL,16.5,Avoid,193,195
 2026-08-10,SMPL,11,Avoid,195,195
@@ -7606,6 +7758,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,SMPL,23.4,Very Weak,166,195
 2026-10-06,SMPL,20.3,Very Weak,176,195
 2026-10-08,SMPL,32.9,Weak,145,195
+2026-10-09,SMPL,32.1,Weak,150,195
 2026-08-05,SNAP,31.2,Underperform,162,195
 2026-08-07,SNAP,26,Avoid,178,195
 2026-08-10,SNAP,27.4,Avoid,177,195
@@ -7645,6 +7798,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,SNAP,42.9,Weak,117,195
 2026-10-06,SNAP,48.9,Neutral,99,195
 2026-10-08,SNAP,53.8,Neutral,81,195
+2026-10-09,SNAP,52.8,Neutral,86,195
 2026-08-05,SOFI,43.1,Underperform,123,195
 2026-08-07,SOFI,53.3,Hold,71,195
 2026-08-10,SOFI,54.8,Hold,70,195
@@ -7684,6 +7838,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,SOFI,22.6,Very Weak,170,195
 2026-10-06,SOFI,21,Very Weak,174,195
 2026-10-08,SOFI,26.3,Very Weak,166,195
+2026-10-09,SOFI,26.1,Very Weak,166,195
 2026-08-05,SOUN,24.3,Avoid,178,195
 2026-08-07,SOUN,49.4,Hold,95,195
 2026-08-10,SOUN,51.3,Hold,91,195
@@ -7723,6 +7878,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,SOUN,16,Very Weak,186,195
 2026-10-06,SOUN,13.2,Very Weak,186,195
 2026-10-08,SOUN,13,Very Weak,189,195
+2026-10-09,SOUN,12.4,Very Weak,190,195
 2026-05-05,SPGI,35.9,Underperform,41,50
 2026-06-01,SPGI,46.8,Hold,36,50
 2026-06-02,SPGI,48.9,Hold,27,50
@@ -7802,6 +7958,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,SPGI,38.1,Weak,132,195
 2026-10-06,SPGI,42.9,Weak,118,195
 2026-10-08,SPGI,46.3,Neutral,104,195
+2026-10-09,SPGI,45.7,Neutral,107,195
 2026-08-05,SRPT,42.2,Underperform,129,195
 2026-08-07,SRPT,22.6,Avoid,183,195
 2026-08-10,SRPT,17.6,Avoid,192,195
@@ -7841,6 +7998,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,SRPT,19.7,Very Weak,176,195
 2026-10-06,SRPT,17,Very Weak,183,195
 2026-10-08,SRPT,29.4,Very Weak,157,195
+2026-10-09,SRPT,29.3,Very Weak,159,195
 2026-08-05,STRL,57.3,Hold,64,195
 2026-08-07,STRL,64.5,Hold,40,195
 2026-08-10,STRL,64.4,Hold,37,195
@@ -7880,6 +8038,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,STRL,47.2,Neutral,106,195
 2026-10-06,STRL,56.2,Neutral,73,195
 2026-10-08,STRL,44.8,Weak,109,195
+2026-10-09,STRL,44.5,Weak,110,195
 2026-08-05,SWKS,42.3,Underperform,128,195
 2026-08-07,SWKS,29.6,Avoid,168,195
 2026-08-10,SWKS,36,Underperform,149,195
@@ -7919,6 +8078,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,SWKS,67.6,Strong,41,195
 2026-10-06,SWKS,66.7,Strong,37,195
 2026-10-08,SWKS,63.9,Neutral,55,195
+2026-10-09,SWKS,64,Neutral,54,195
 2026-08-05,TDUP,42.2,Underperform,129,195
 2026-08-07,TDUP,36.7,Underperform,144,195
 2026-08-10,TDUP,38.3,Underperform,140,195
@@ -7958,6 +8118,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,TDUP,14.4,Very Weak,188,195
 2026-10-06,TDUP,14.6,Very Weak,185,195
 2026-10-08,TDUP,24.4,Very Weak,170,195
+2026-10-09,TDUP,24.3,Very Weak,170,195
 2026-08-05,TEAM,41.4,Underperform,132,195
 2026-08-07,TEAM,37.3,Underperform,141,195
 2026-08-10,TEAM,49,Hold,105,195
@@ -7997,6 +8158,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,TEAM,81.2,Very Strong,9,195
 2026-10-06,TEAM,78,Very Strong,18,195
 2026-10-08,TEAM,85,Very Strong,4,195
+2026-10-09,TEAM,84.9,Very Strong,5,195
 2026-08-05,TER,76.9,Buy,10,195
 2026-08-07,TER,69.9,Buy,24,195
 2026-08-10,TER,64.8,Hold,35,195
@@ -8036,6 +8198,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,TER,50.8,Neutral,93,195
 2026-10-06,TER,46.8,Neutral,107,195
 2026-10-08,TER,39,Weak,127,195
+2026-10-09,TER,39.1,Weak,126,195
 2026-05-05,TMO,37.8,Underperform,34,50
 2026-06-01,TMO,47.9,Hold,30,50
 2026-06-02,TMO,48.8,Hold,28,50
@@ -8115,6 +8278,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,TMO,79.9,Very Strong,13,195
 2026-10-06,TMO,72.2,Strong,30,195
 2026-10-08,TMO,70.1,Strong,39,195
+2026-10-09,TMO,70,Strong,39,195
 2026-08-05,TOST,47.5,Hold,111,195
 2026-08-07,TOST,64.3,Hold,42,195
 2026-08-10,TOST,61.3,Hold,49,195
@@ -8154,6 +8318,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,TOST,60,Neutral,60,195
 2026-10-06,TOST,63.4,Neutral,48,195
 2026-10-08,TOST,66.3,Strong,50,195
+2026-10-09,TOST,65.4,Strong,52,195
 2026-08-05,TROW,54.4,Hold,77,195
 2026-08-07,TROW,37.9,Underperform,138,195
 2026-08-10,TROW,36.2,Underperform,148,195
@@ -8193,6 +8358,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,TROW,50,Neutral,98,195
 2026-10-06,TROW,48.8,Neutral,101,195
 2026-10-08,TROW,56.6,Neutral,72,195
+2026-10-09,TROW,56.6,Neutral,73,195
 2026-05-05,TSLA,42.6,Hold,28,50
 2026-06-01,TSLA,49.4,Hold,26,50
 2026-06-02,TSLA,46,Hold,36,50
@@ -8272,6 +8438,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,TSLA,36.9,Weak,136,195
 2026-10-06,TSLA,32.3,Weak,151,195
 2026-10-08,TSLA,36.7,Weak,132,195
+2026-10-09,TSLA,36.5,Weak,132,195
 2026-08-05,TWLO,56,Hold,68,195
 2026-08-07,TWLO,65,Buy,37,195
 2026-08-10,TWLO,78.8,Strong Buy,8,195
@@ -8311,6 +8478,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,TWLO,85.5,Very Strong,5,195
 2026-10-06,TWLO,80.2,Very Strong,11,195
 2026-10-08,TWLO,81.8,Very Strong,9,195
+2026-10-09,TWLO,81.7,Very Strong,9,195
 2026-05-05,TXN,44.1,Hold,25,50
 2026-06-01,TXN,58.1,Hold,3,50
 2026-06-02,TXN,57.1,Hold,6,50
@@ -8390,6 +8558,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,TXN,62.6,Neutral,55,195
 2026-10-06,TXN,61.5,Neutral,56,195
 2026-10-08,TXN,60.5,Neutral,65,195
+2026-10-09,TXN,60.5,Neutral,65,195
 2026-08-05,TXRH,52.2,Hold,85,195
 2026-08-07,TXRH,65.9,Buy,34,195
 2026-08-10,TXRH,59.2,Hold,54,195
@@ -8429,6 +8598,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,TXRH,37.7,Weak,135,195
 2026-10-06,TXRH,45.1,Neutral,111,195
 2026-10-08,TXRH,40.2,Weak,123,195
+2026-10-09,TXRH,40.9,Weak,121,195
 2026-08-05,U,64.4,Hold,40,195
 2026-08-07,U,61.4,Hold,52,195
 2026-08-10,U,61.8,Hold,47,195
@@ -8468,6 +8638,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,U,77.1,Strong,18,195
 2026-10-06,U,72.3,Strong,29,195
 2026-10-08,U,79.3,Very Strong,19,195
+2026-10-09,U,79.4,Very Strong,19,195
 2026-05-05,UNH,36,Underperform,40,50
 2026-06-01,UNH,56,Hold,10,50
 2026-06-02,UNH,54.5,Hold,16,50
@@ -8547,6 +8718,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,UNH,65.1,Strong,48,195
 2026-10-06,UNH,56.8,Neutral,70,195
 2026-10-08,UNH,53.4,Neutral,83,195
+2026-10-09,UNH,53.3,Neutral,82,195
 2026-05-05,UPS,43.1,Hold,26,50
 2026-06-01,UPS,55,Hold,14,50
 2026-06-02,UPS,55.8,Hold,10,50
@@ -8626,6 +8798,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,UPS,32.3,Weak,149,195
 2026-10-06,UPS,30.2,Weak,158,195
 2026-10-08,UPS,33.5,Weak,142,195
+2026-10-09,UPS,33.4,Weak,142,195
 2026-08-05,UPST,28.4,Avoid,171,195
 2026-08-07,UPST,35.5,Underperform,149,195
 2026-08-10,UPST,38,Underperform,142,195
@@ -8665,6 +8838,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,UPST,16.5,Very Weak,184,195
 2026-10-06,UPST,12.9,Very Weak,189,195
 2026-10-08,UPST,18.6,Very Weak,182,195
+2026-10-09,UPST,18.5,Very Weak,182,195
 2026-08-05,UTZ,58.3,Hold,62,195
 2026-08-07,UTZ,57.2,Hold,62,195
 2026-08-10,UTZ,52.8,Hold,75,195
@@ -8704,6 +8878,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,UTZ,72.5,Strong,32,195
 2026-10-06,UTZ,72.8,Strong,27,195
 2026-10-08,UTZ,78.3,Very Strong,21,195
+2026-10-09,UTZ,78.5,Very Strong,20,195
 2026-05-05,V,35.6,Underperform,43,50
 2026-06-01,V,51.7,Hold,21,50
 2026-06-02,V,51.3,Hold,22,50
@@ -8783,6 +8958,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,V,72,Strong,33,195
 2026-10-06,V,74.4,Strong,26,195
 2026-10-08,V,76.2,Strong,26,195
+2026-10-09,V,76.2,Strong,26,195
 2026-08-05,VEEV,41.8,Underperform,131,195
 2026-08-07,VEEV,50,Hold,91,195
 2026-08-10,VEEV,52,Hold,82,195
@@ -8822,6 +8998,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,VEEV,82.3,Very Strong,8,195
 2026-10-06,VEEV,79.9,Very Strong,13,195
 2026-10-08,VEEV,81.9,Very Strong,8,195
+2026-10-09,VEEV,81.8,Very Strong,8,195
 2026-08-05,VERA,35.1,Underperform,152,195
 2026-08-07,VERA,40.8,Underperform,134,195
 2026-08-10,VERA,41.5,Underperform,129,195
@@ -8861,6 +9038,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,VERA,13.3,Very Weak,190,195
 2026-10-06,VERA,13.2,Very Weak,186,195
 2026-10-08,VERA,13.2,Very Weak,188,195
+2026-10-09,VERA,13.2,Very Weak,188,195
 2026-08-05,VERX,19.6,Avoid,191,195
 2026-08-07,VERX,25.4,Avoid,179,195
 2026-08-10,VERX,25.7,Avoid,178,195
@@ -8900,6 +9078,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,VERX,54.4,Neutral,83,195
 2026-10-06,VERX,59.1,Neutral,63,195
 2026-10-08,VERX,68.3,Strong,44,195
+2026-10-09,VERX,67.3,Strong,47,195
 2026-08-05,VITL,22.6,Avoid,182,195
 2026-08-07,VITL,49.9,Hold,92,195
 2026-08-10,VITL,45.3,Hold,114,195
@@ -8939,6 +9118,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,VITL,35,Weak,144,195
 2026-10-06,VITL,36.7,Weak,139,195
 2026-10-08,VITL,30.9,Weak,154,195
+2026-10-09,VITL,31,Weak,154,195
 2026-08-05,WAL,51.2,Hold,90,195
 2026-08-07,WAL,45.5,Hold,117,195
 2026-08-10,WAL,44.4,Underperform,120,195
@@ -8978,6 +9158,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,WAL,38.5,Weak,131,195
 2026-10-06,WAL,39.1,Weak,128,195
 2026-10-08,WAL,38.9,Weak,128,195
+2026-10-09,WAL,39,Weak,127,195
 2026-08-05,WBS,57,Hold,66,195
 2026-08-07,WBS,54.5,Hold,68,195
 2026-08-10,WBS,52.4,Hold,77,195
@@ -9017,6 +9198,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,WBS,53,Neutral,87,195
 2026-10-06,WBS,53,Neutral,85,195
 2026-10-08,WBS,53,Neutral,86,195
+2026-10-09,WBS,53,Neutral,85,195
 2026-08-05,WDAY,45.5,Hold,117,195
 2026-08-07,WDAY,36.1,Underperform,145,195
 2026-08-10,WDAY,39.6,Underperform,134,195
@@ -9056,6 +9238,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,WDAY,72.8,Strong,30,195
 2026-10-06,WDAY,66.1,Strong,40,195
 2026-10-08,WDAY,69.4,Strong,42,195
+2026-10-09,WDAY,69.2,Strong,42,195
 2026-08-05,WING,13.1,Avoid,195,195
 2026-08-07,WING,24.7,Avoid,180,195
 2026-08-10,WING,23.8,Avoid,180,195
@@ -9095,6 +9278,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,WING,18.6,Very Weak,178,195
 2026-10-06,WING,25.8,Very Weak,164,195
 2026-10-08,WING,32,Weak,151,195
+2026-10-09,WING,31.9,Weak,151,195
 2026-08-05,WLDN,37.9,Underperform,143,195
 2026-08-07,WLDN,46.5,Hold,109,195
 2026-08-10,WLDN,56.7,Hold,64,195
@@ -9134,6 +9318,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,WLDN,29.7,Very Weak,153,195
 2026-10-06,WLDN,29.8,Very Weak,159,195
 2026-10-08,WLDN,34.1,Weak,139,195
+2026-10-09,WLDN,34.9,Weak,139,195
 2026-05-05,WMT,51.3,Hold,15,50
 2026-06-01,WMT,41.7,Underperform,47,50
 2026-06-02,WMT,40.9,Underperform,49,50
@@ -9213,6 +9398,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,WMT,35.3,Weak,143,195
 2026-10-06,WMT,42.1,Weak,120,195
 2026-10-08,WMT,48.1,Neutral,99,195
+2026-10-09,WMT,48.6,Neutral,98,195
 2026-08-05,WTS,59.7,Hold,54,195
 2026-08-07,WTS,66,Buy,33,195
 2026-08-10,WTS,66.2,Buy,32,195
@@ -9252,6 +9438,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,WTS,62.5,Neutral,56,195
 2026-10-06,WTS,60.1,Neutral,60,195
 2026-10-08,WTS,53.4,Neutral,83,195
+2026-10-09,WTS,53.6,Neutral,81,195
 2026-08-05,XENE,61.5,Hold,50,195
 2026-08-07,XENE,61.9,Hold,49,195
 2026-08-10,XENE,51.9,Hold,84,195
@@ -9291,6 +9478,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,XENE,10.9,Very Weak,191,195
 2026-10-06,XENE,9.9,Very Weak,193,195
 2026-10-08,XENE,9.3,Very Weak,192,195
+2026-10-09,XENE,9.3,Very Weak,192,195
 2026-05-05,XOM,58.1,Buy,2,50
 2026-06-01,XOM,48.6,Hold,28,50
 2026-06-02,XOM,52.3,Hold,20,50
@@ -9370,6 +9558,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,XOM,75.8,Strong,23,195
 2026-10-06,XOM,77.7,Strong,19,195
 2026-10-08,XOM,77.2,Strong,23,195
+2026-10-09,XOM,77.3,Strong,23,195
 2026-08-05,YETI,63.6,Hold,44,195
 2026-08-07,YETI,50.3,Hold,90,195
 2026-08-10,YETI,51.8,Hold,86,195
@@ -9409,6 +9598,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,YETI,40.4,Weak,126,195
 2026-10-06,YETI,39.8,Weak,126,195
 2026-10-08,YETI,40.5,Weak,122,195
+2026-10-09,YETI,40.4,Weak,123,195
 2026-08-05,YEXT,40.3,Underperform,136,195
 2026-08-07,YEXT,35.5,Underperform,149,195
 2026-08-10,YEXT,36.9,Underperform,145,195
@@ -9448,6 +9638,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,YEXT,80.4,Very Strong,12,195
 2026-10-06,YEXT,78.2,Very Strong,17,195
 2026-10-08,YEXT,85,Very Strong,4,195
+2026-10-09,YEXT,85.1,Very Strong,4,195
 2026-08-05,ZION,58.5,Hold,60,195
 2026-08-07,ZION,57.3,Hold,61,195
 2026-08-10,ZION,55.1,Hold,69,195
@@ -9487,6 +9678,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,ZION,44.7,Weak,108,195
 2026-10-06,ZION,41.8,Weak,121,195
 2026-10-08,ZION,45.9,Neutral,107,195
+2026-10-09,ZION,45.8,Neutral,105,195
 2026-08-05,ZM,60.6,Hold,52,195
 2026-08-07,ZM,50.6,Hold,86,195
 2026-08-10,ZM,50,Hold,98,195
@@ -9526,6 +9718,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,ZM,59.3,Neutral,65,195
 2026-10-06,ZM,60.3,Neutral,59,195
 2026-10-08,ZM,64.2,Neutral,53,195
+2026-10-09,ZM,63.9,Neutral,55,195
 2026-08-05,ZNTL,74.4,Buy,16,195
 2026-08-07,ZNTL,49.8,Hold,93,195
 2026-08-10,ZNTL,29,Avoid,175,195
@@ -9565,6 +9758,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,ZNTL,42.3,Weak,123,195
 2026-10-06,ZNTL,34.4,Weak,145,195
 2026-10-08,ZNTL,14.7,Very Weak,187,195
+2026-10-09,ZNTL,14.7,Very Weak,187,195
 2026-08-05,ZS,36.5,Underperform,146,195
 2026-08-07,ZS,50.6,Hold,86,195
 2026-08-10,ZS,50.2,Hold,96,195
@@ -9604,3 +9798,4 @@ date,symbol,master_score,rating,rank,n_universe
 2026-10-05,ZS,76,Strong,22,195
 2026-10-06,ZS,80.2,Very Strong,11,195
 2026-10-08,ZS,83.3,Very Strong,7,195
+2026-10-09,ZS,83.3,Very Strong,7,195

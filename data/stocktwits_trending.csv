@@ -1,31 +1,31 @@
 symbol,title,watchlist_count,st_rank,trending_score,messages,bullish,bearish,sentiment_label,fetched_at
-ASTS,AST SpaceMobile Inc,71659,1,14.0664,6,2,0,Very Bullish,2026-10-09T01:29:00Z
-SPCX,SpaceX,107295,2,10.5362,6,1,0,Very Bullish,2026-10-09T01:29:00Z
-VZ,Verizon Communications Inc.,56399,3,8.2852,3,1,0,Very Bullish,2026-10-09T01:29:00Z
-T,AT&T Inc,110567,4,7.54143,0,0,0,Neutral,2026-10-09T01:29:00Z
-TMUS,T-Mobile US Inc,19454,5,7.37641,0,0,0,Neutral,2026-10-09T01:29:00Z
-DJT,Trump Media & Technology Group Corp.,115625,6,6.53942,2,0,1,Very Bearish,2026-10-09T01:29:00Z
-CMG,Chipotle Mexican Grill,62379,7,6.28698,1,0,0,Neutral,2026-10-09T01:29:00Z
-ALHC,Alignment Healthcare Inc,537,8,6.00634,1,1,0,Very Bullish,2026-10-09T01:29:00Z
-PLTR,Palantir Technologies Inc,325161,9,5.78751,2,1,0,Very Bullish,2026-10-09T01:29:00Z
-HUM,Humana Inc,7247,10,5.75446,0,0,0,Neutral,2026-10-09T01:29:00Z
-CRWV,CoreWeave Inc,49779,11,5.48426,0,0,0,Neutral,2026-10-09T01:29:00Z
-CHTR,Charter Communications Inc. - Ordinary Shares - Class A,4279,12,5.42646,0,0,0,Neutral,2026-10-09T01:29:00Z
-DUOT,Duos Technologies Group Inc,2021,13,5.40594,0,0,0,Neutral,2026-10-09T01:29:00Z
-CVS,CVS Health Corp,29815,14,5.18665,0,0,0,Neutral,2026-10-09T01:29:00Z
-F,Ford Motor Co,186258,15,4.83226,1,0,0,Neutral,2026-10-09T01:29:00Z
-OXY,Occidental Petroleum Corp.,43291,16,4.68307,0,0,0,Neutral,2026-10-09T01:29:00Z
-SBUX,Starbucks Corp,118470,17,4.66075,0,0,0,Neutral,2026-10-09T01:29:00Z
-LWLG,Lightwave Logic Inc,5840,18,4.60153,0,0,0,Neutral,2026-10-09T01:29:00Z
-QXO,QXO Inc.,5033,19,3.97294,1,1,0,Very Bullish,2026-10-09T01:29:00Z
-LOW,"Lowe's Companies, Inc.",19193,20,3.79188,0,0,0,Neutral,2026-10-09T01:29:00Z
-BRUN,Boost Run Inc.,2918,21,3.45988,0,0,0,Neutral,2026-10-09T01:29:00Z
-NBIS,Nebius Group N.V. ,53314,22,3.41595,0,0,0,Neutral,2026-10-09T01:29:00Z
-ACN,Accenture plc - Ordinary Shares - Class A,8912,23,3.2697600000000002,0,0,0,Neutral,2026-10-09T01:29:00Z
-RDDT,Reddit Inc,36840,24,3.26075,1,0,0,Neutral,2026-10-09T01:29:00Z
-HIMS,Hims & Hers Health Inc,57534,25,3.18457,0,0,0,Neutral,2026-10-09T01:29:00Z
-MU,Micron Technology Inc,219199,26,3.17826,5,2,1,Bullish,2026-10-09T01:29:00Z
-MPC,Marathon Petroleum Corp,8191,27,3.16498,0,0,0,Neutral,2026-10-09T01:29:00Z
-RVMD,Revolution Medicines Inc,3343,28,3.05268,0,0,0,Neutral,2026-10-09T01:29:00Z
-HUT,Hut 8 Corp,29817,29,3.01359,0,0,0,Neutral,2026-10-09T01:29:00Z
-XLF,Financial Select Sector SPDR Fund,18508,30,3.00302,0,0,0,Neutral,2026-10-09T01:29:00Z
+SNOW,Snowflake Inc,58763,1,6.97539,0,0,0,Neutral,2026-10-10T01:18:29Z
+NDAQ,Nasdaq Inc,6651,2,6.83118,0,0,0,Neutral,2026-10-10T01:18:29Z
+PLTR,Palantir Technologies Inc,325274,3,6.61797,3,2,0,Very Bullish,2026-10-10T01:18:29Z
+CURLF,Curaleaf Holdings Inc,9018,4,5.49327,0,0,0,Neutral,2026-10-10T01:18:29Z
+TMUS,T-Mobile US Inc,19755,5,4.76818,2,0,1,Very Bearish,2026-10-10T01:18:29Z
+AMRN,Amarin Corp - ADR,30389,6,4.27999,2,0,0,Neutral,2026-10-10T01:18:29Z
+ASTS,AST SpaceMobile Inc,71891,7,3.76189,2,0,0,Neutral,2026-10-10T01:18:29Z
+VLO,Valero Energy Corp.,9835,8,3.66382,0,0,0,Neutral,2026-10-10T01:18:29Z
+DAL,"Delta Air Lines, Inc.",83882,9,3.52002,0,0,0,Neutral,2026-10-10T01:18:29Z
+STRK.X,Starknet,1190,10,3.38424,0,0,0,Neutral,2026-10-10T01:18:29Z
+DJT,Trump Media & Technology Group Corp.,115614,11,3.28237,10,1,7,Very Bearish,2026-10-10T01:18:29Z
+AC.TSX,Air Canada Inc.,15386,12,3.27525,1,1,0,Very Bullish,2026-10-10T01:18:29Z
+INDEX.X,Index Cooperative,645,13,3.27127,0,0,0,Neutral,2026-10-10T01:18:29Z
+VZ,Verizon Communications Inc.,56616,14,3.14222,1,1,0,Very Bullish,2026-10-10T01:18:29Z
+QUBT,Quantum Computing Inc,33540,15,3.05608,1,0,0,Neutral,2026-10-10T01:18:29Z
+HUM,Humana Inc,7300,16,2.92252,0,0,0,Neutral,2026-10-10T01:18:29Z
+AEHR,Aehr Test Systems,15194,17,2.85508,0,0,0,Neutral,2026-10-10T01:18:29Z
+APP,Applovin Corp,25141,18,2.61612,1,0,0,Neutral,2026-10-10T01:18:29Z
+AVAV,AeroVironment Inc.,13964,19,2.53738,0,0,0,Neutral,2026-10-10T01:18:29Z
+BHVN,Biohaven Pharmaceutical Holding Company Ltd,3439,20,2.53738,0,0,0,Neutral,2026-10-10T01:18:29Z
+T,AT&T Inc,110770,21,2.50699,0,0,0,Neutral,2026-10-10T01:18:29Z
+MSTY,YieldMax MSTR Option Income Strategy ETF,9271,22,2.47901,0,0,0,Neutral,2026-10-10T01:18:29Z
+GLD,SPDR Gold Shares ETF,96694,23,2.46767,0,0,0,Neutral,2026-10-10T01:18:29Z
+GRRR,Gorilla Technology Group Inc,25578,24,2.39426,0,0,0,Neutral,2026-10-10T01:18:29Z
+USDE,StableCoinX Inc. - Ordinary Shares - Class A,721,25,2.15595,0,0,0,Neutral,2026-10-10T01:18:29Z
+ALAB,Astera Labs Inc,13315,26,2.14324,0,0,0,Neutral,2026-10-10T01:18:29Z
+CBRS,Cerebras Systems Inc,14257,27,2.13896,1,1,0,Very Bullish,2026-10-10T01:18:29Z
+MS,Morgan Stanley,15177,28,2.08851,0,0,0,Neutral,2026-10-10T01:18:29Z
+AXSM,Axsome Therapeutics Inc,11965,29,1.97913,0,0,0,Neutral,2026-10-10T01:18:29Z
+TMF,Direxion Daily 20+ Year Treasury Bull 3X Shares,5636,30,1.95331,0,0,0,Neutral,2026-10-10T01:18:29Z
