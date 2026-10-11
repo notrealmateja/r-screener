@@ -1,31 +1,31 @@
 symbol,title,watchlist_count,st_rank,trending_score,messages,bullish,bearish,sentiment_label,fetched_at
-SNOW,Snowflake Inc,58763,1,6.97539,0,0,0,Neutral,2026-10-10T01:18:29Z
-NDAQ,Nasdaq Inc,6651,2,6.83118,0,0,0,Neutral,2026-10-10T01:18:29Z
-PLTR,Palantir Technologies Inc,325274,3,6.61797,3,2,0,Very Bullish,2026-10-10T01:18:29Z
-CURLF,Curaleaf Holdings Inc,9018,4,5.49327,0,0,0,Neutral,2026-10-10T01:18:29Z
-TMUS,T-Mobile US Inc,19755,5,4.76818,2,0,1,Very Bearish,2026-10-10T01:18:29Z
-AMRN,Amarin Corp - ADR,30389,6,4.27999,2,0,0,Neutral,2026-10-10T01:18:29Z
-ASTS,AST SpaceMobile Inc,71891,7,3.76189,2,0,0,Neutral,2026-10-10T01:18:29Z
-VLO,Valero Energy Corp.,9835,8,3.66382,0,0,0,Neutral,2026-10-10T01:18:29Z
-DAL,"Delta Air Lines, Inc.",83882,9,3.52002,0,0,0,Neutral,2026-10-10T01:18:29Z
-STRK.X,Starknet,1190,10,3.38424,0,0,0,Neutral,2026-10-10T01:18:29Z
-DJT,Trump Media & Technology Group Corp.,115614,11,3.28237,10,1,7,Very Bearish,2026-10-10T01:18:29Z
-AC.TSX,Air Canada Inc.,15386,12,3.27525,1,1,0,Very Bullish,2026-10-10T01:18:29Z
-INDEX.X,Index Cooperative,645,13,3.27127,0,0,0,Neutral,2026-10-10T01:18:29Z
-VZ,Verizon Communications Inc.,56616,14,3.14222,1,1,0,Very Bullish,2026-10-10T01:18:29Z
-QUBT,Quantum Computing Inc,33540,15,3.05608,1,0,0,Neutral,2026-10-10T01:18:29Z
-HUM,Humana Inc,7300,16,2.92252,0,0,0,Neutral,2026-10-10T01:18:29Z
-AEHR,Aehr Test Systems,15194,17,2.85508,0,0,0,Neutral,2026-10-10T01:18:29Z
-APP,Applovin Corp,25141,18,2.61612,1,0,0,Neutral,2026-10-10T01:18:29Z
-AVAV,AeroVironment Inc.,13964,19,2.53738,0,0,0,Neutral,2026-10-10T01:18:29Z
-BHVN,Biohaven Pharmaceutical Holding Company Ltd,3439,20,2.53738,0,0,0,Neutral,2026-10-10T01:18:29Z
-T,AT&T Inc,110770,21,2.50699,0,0,0,Neutral,2026-10-10T01:18:29Z
-MSTY,YieldMax MSTR Option Income Strategy ETF,9271,22,2.47901,0,0,0,Neutral,2026-10-10T01:18:29Z
-GLD,SPDR Gold Shares ETF,96694,23,2.46767,0,0,0,Neutral,2026-10-10T01:18:29Z
-GRRR,Gorilla Technology Group Inc,25578,24,2.39426,0,0,0,Neutral,2026-10-10T01:18:29Z
-USDE,StableCoinX Inc. - Ordinary Shares - Class A,721,25,2.15595,0,0,0,Neutral,2026-10-10T01:18:29Z
-ALAB,Astera Labs Inc,13315,26,2.14324,0,0,0,Neutral,2026-10-10T01:18:29Z
-CBRS,Cerebras Systems Inc,14257,27,2.13896,1,1,0,Very Bullish,2026-10-10T01:18:29Z
-MS,Morgan Stanley,15177,28,2.08851,0,0,0,Neutral,2026-10-10T01:18:29Z
-AXSM,Axsome Therapeutics Inc,11965,29,1.97913,0,0,0,Neutral,2026-10-10T01:18:29Z
-TMF,Direxion Daily 20+ Year Treasury Bull 3X Shares,5636,30,1.95331,0,0,0,Neutral,2026-10-10T01:18:29Z
+AERO.X,Aerodrome Finance,4694,1,4.31317,1,1,0,Very Bullish,2026-10-11T00:28:58Z
+PLTR,Palantir Technologies Inc,325315,2,3.71626,8,0,0,Neutral,2026-10-11T00:28:58Z
+EXK,Endeavour Silver Corp.,5596,3,3.2307,0,0,0,Neutral,2026-10-11T00:28:58Z
+CVS,CVS Health Corp,29818,4,3.2307,0,0,0,Neutral,2026-10-11T00:28:58Z
+SRZN,Surrozen Inc,1197,5,3.2307,1,0,0,Neutral,2026-10-11T00:28:58Z
+NEAR.X,Near,5693,6,2.9098,1,0,0,Neutral,2026-10-11T00:28:58Z
+CLS,"Celestica, Inc.",7699,7,2.8204,1,0,0,Neutral,2026-10-11T00:28:58Z
+AMPX,Amprius Technologies Inc,9413,8,2.75332,0,0,0,Neutral,2026-10-11T00:28:58Z
+AG,First Majestic Silver Corporation,19903,9,2.53738,1,0,0,Neutral,2026-10-11T00:28:58Z
+VRT,Vertiv Holdings Co,20530,10,2.53738,1,0,0,Neutral,2026-10-11T00:28:58Z
+GRRR,Gorilla Technology Group Inc,25582,11,2.51903,1,0,1,Very Bearish,2026-10-11T00:28:58Z
+RDDT,Reddit Inc,36856,12,2.32736,1,0,1,Very Bearish,2026-10-11T00:28:58Z
+DAL,"Delta Air Lines, Inc.",83882,13,2.3249,0,0,0,Neutral,2026-10-11T00:28:58Z
+PCG,PG&E Corp.,18945,14,2.15595,1,0,0,Neutral,2026-10-11T00:28:58Z
+GLW,"Corning, Inc.",16237,15,2.08572,0,0,0,Neutral,2026-10-11T00:28:58Z
+B,Barrick Mining Corp,32237,16,2.01586,0,0,0,Neutral,2026-10-11T00:28:58Z
+UBER,Uber Technologies Inc,131868,17,1.95694,1,0,0,Neutral,2026-10-11T00:28:58Z
+DVN,Devon Energy Corp.,14449,18,1.88304,1,0,0,Neutral,2026-10-11T00:28:58Z
+XLF,Financial Select Sector SPDR Fund,18520,19,1.76758,2,1,0,Very Bullish,2026-10-11T00:28:58Z
+CRSP,CRISPR Therapeutics AG,41713,20,1.74679,0,0,0,Neutral,2026-10-11T00:28:58Z
+GS,"Goldman Sachs Group, Inc.",34439,21,1.7389,0,0,0,Neutral,2026-10-11T00:28:58Z
+RCAT,Red Cat Holdings Inc,28585,22,1.62467,1,0,1,Very Bearish,2026-10-11T00:28:58Z
+MELI,MercadoLibre Inc,22541,23,1.62439,0,0,0,Neutral,2026-10-11T00:28:58Z
+WLD.X,Worldcoin,3010,24,1.59412,0,0,0,Neutral,2026-10-11T00:28:58Z
+QUBT,Quantum Computing Inc,33544,25,1.35161,1,0,0,Neutral,2026-10-11T00:28:58Z
+CRO.X,Crypto.com Coin,37142,26,1.32934,0,0,0,Neutral,2026-10-11T00:28:58Z
+NVAX,Novavax Inc,108259,27,1.21662,1,1,0,Very Bullish,2026-10-11T00:28:58Z
+BAC,Bank of America Corp,147010,28,1.10761,0,0,0,Neutral,2026-10-11T00:28:58Z
+GLXY,Galaxy Digital Inc. - Ordinary Shares - Class A,18836,29,1.0824,1,0,0,Neutral,2026-10-11T00:28:58Z
+OMER,Omeros Corp,11781,30,1.07,0,0,0,Neutral,2026-10-11T00:28:58Z

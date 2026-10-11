@@ -909,11 +909,11 @@ FROG,8-K,2026-08-06,8-K,https://www.sec.gov/Archives/edgar/data/1800667/00011931
 FROG,8-K,2026-05-22,8-K,https://www.sec.gov/Archives/edgar/data/1800667/000119312526236917/frog-20260520.htm,21,FALSE,6
 FROG,10-Q,2026-05-08,10-Q,https://www.sec.gov/Archives/edgar/data/1800667/000119312526214647/frog-20260331.htm,21,FALSE,6
 FROG,8-K,2026-05-07,8-K,https://www.sec.gov/Archives/edgar/data/1800667/000119312526211940/frog-20260507.htm,21,FALSE,6
-NTRA,10-Q,2026-08-07,10-Q,https://www.sec.gov/Archives/edgar/data/1604821/000162828026054525/ntra-20260630.htm,30,FALSE,10
-NTRA,8-K,2026-08-06,8-K,https://www.sec.gov/Archives/edgar/data/1604821/000160482126000015/ntra-20260806.htm,30,FALSE,10
-NTRA,8-K,2026-07-06,8-K,https://www.sec.gov/Archives/edgar/data/1604821/000160482126000005/ntra-20260701.htm,30,FALSE,10
-NTRA,8-K,2026-06-16,8-K,https://www.sec.gov/Archives/edgar/data/1604821/000160482126000003/ntra-20260611.htm,30,FALSE,10
-NTRA,8-K,2026-06-05,8-K,https://www.sec.gov/Archives/edgar/data/1604821/000160482126000002/a20260605newdirectortomlyn.htm,30,FALSE,10
+NTRA,10-Q,2026-08-07,10-Q,https://www.sec.gov/Archives/edgar/data/1604821/000162828026054525/ntra-20260630.htm,31,FALSE,10
+NTRA,8-K,2026-08-06,8-K,https://www.sec.gov/Archives/edgar/data/1604821/000160482126000015/ntra-20260806.htm,31,FALSE,10
+NTRA,8-K,2026-07-06,8-K,https://www.sec.gov/Archives/edgar/data/1604821/000160482126000005/ntra-20260701.htm,31,FALSE,10
+NTRA,8-K,2026-06-16,8-K,https://www.sec.gov/Archives/edgar/data/1604821/000160482126000003/ntra-20260611.htm,31,FALSE,10
+NTRA,8-K,2026-06-05,8-K,https://www.sec.gov/Archives/edgar/data/1604821/000160482126000002/a20260605newdirectortomlyn.htm,31,FALSE,10
 TEAM,10-K,2026-08-14,10-K,https://www.sec.gov/Archives/edgar/data/1650372/000165037226000036/team-20260630.htm,8,FALSE,9
 TEAM,8-K,2026-08-06,8-K,https://www.sec.gov/Archives/edgar/data/1650372/000165037226000031/team-20260806.htm,8,FALSE,9
 TEAM,10-Q,2026-05-01,10-Q,https://www.sec.gov/Archives/edgar/data/1650372/000165037226000027/team-20260331.htm,8,FALSE,9
