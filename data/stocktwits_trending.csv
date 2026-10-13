@@ -1,31 +1,31 @@
 symbol,title,watchlist_count,st_rank,trending_score,messages,bullish,bearish,sentiment_label,fetched_at
-IREN,IREN Limited,51858,1,12.0542,8,5,0,Very Bullish,2026-10-12T00:50:45Z
-SLS,SELLAS Life Sciences Group Inc,62234,2,7.3929,1,1,0,Very Bullish,2026-10-12T00:50:45Z
-NEAR.X,Near,5732,3,6.77624,0,0,0,Neutral,2026-10-12T00:50:45Z
-STRK.X,Starknet,1464,4,6.69212,1,0,0,Neutral,2026-10-12T00:50:45Z
-ICP.X,Internet Computer,12256,5,6.66619,1,1,0,Very Bullish,2026-10-12T00:50:45Z
-TMUS,T-Mobile US Inc,19863,6,6.0352,2,1,0,Very Bullish,2026-10-12T00:50:45Z
-CIFR,Cipher Digital Inc.,23918,7,5.93462,1,0,0,Neutral,2026-10-12T00:50:45Z
-JNJ,Johnson & Johnson,49362,8,5.78176,1,0,0,Neutral,2026-10-12T00:50:45Z
-NBIS,Nebius Group N.V. ,53408,9,5.35971,1,0,1,Very Bearish,2026-10-12T00:50:45Z
-JOBY,Joby Aviation Inc,29327,10,5.25179,1,1,0,Very Bullish,2026-10-12T00:50:45Z
-GDX,VanEck Gold Miners ETF,30245,11,5.08472,0,0,0,Neutral,2026-10-12T00:50:45Z
-GME,GameStop Corp,308215,12,4.7031,4,2,0,Very Bullish,2026-10-12T00:50:45Z
-WFF,WF Holding Limited Ordinary Shares,1147,13,4.09764,2,0,0,Neutral,2026-10-12T00:50:45Z
-WYFI,"WhiteFiber, Inc.",7269,14,3.60092,0,0,0,Neutral,2026-10-12T00:50:45Z
-SLV,iShares Silver Trust,61814,15,3.59486,0,0,0,Neutral,2026-10-12T00:50:45Z
-ONDS,Ondas Inc,37209,16,3.43784,2,1,1,Neutral,2026-10-12T00:50:45Z
-TAO.X,Bittensor,3022,17,3.40329,0,0,0,Neutral,2026-10-12T00:50:45Z
-EBAY,eBay Inc,23839,18,3.34293,0,0,0,Neutral,2026-10-12T00:50:45Z
-DDOG,Datadog Inc,25889,19,3.2307,0,0,0,Neutral,2026-10-12T00:50:45Z
-OSCR,Oscar Health Inc - Ordinary Shares - Class A,16019,20,3.2307,0,0,0,Neutral,2026-10-12T00:50:45Z
-MSFT,Microsoft Corp,552523,21,3.10144,0,0,0,Neutral,2026-10-12T00:50:45Z
-ANET,Arista Networks Inc,21166,22,2.8204,0,0,0,Neutral,2026-10-12T00:50:45Z
-NAIL,Direxion Daily Homebuilders & Supplies Bull 3X Shares,5139,23,2.8204,0,0,0,Neutral,2026-10-12T00:50:45Z
-DOG.X,Dog (Bitcoin),2015,24,2.8204,0,0,0,Neutral,2026-10-12T00:50:45Z
-XAGUSD,Silver US Dollar,3651,25,2.8204,0,0,0,Neutral,2026-10-12T00:50:45Z
-PLTR,Palantir Technologies Inc,325337,26,2.62408,5,3,2,Bullish,2026-10-12T00:50:45Z
-LUMN,Lumen Technologies Inc,19018,27,2.53738,0,0,0,Neutral,2026-10-12T00:50:45Z
-HUT,Hut 8 Corp,29868,28,2.53738,0,0,0,Neutral,2026-10-12T00:50:45Z
-MPC,Marathon Petroleum Corp,8212,29,2.53738,0,0,0,Neutral,2026-10-12T00:50:45Z
-CRWV,CoreWeave Inc,49827,30,2.50846,0,0,0,Neutral,2026-10-12T00:50:45Z
+MU,Micron Technology Inc,219482,1,14.5792,4,2,0,Very Bullish,2026-10-13T02:51:12Z
+SNDK,Sandisk Corp,36482,2,13.4835,1,0,1,Very Bearish,2026-10-13T02:51:12Z
+QQQ,Invesco QQQ Trust Series 1,280795,3,12.8178,2,0,0,Neutral,2026-10-13T02:51:12Z
+SPY,SPDR S&P 500 ETF Trust,638552,4,11.2611,9,0,2,Very Bearish,2026-10-13T02:51:12Z
+ASTS,AST SpaceMobile Inc,72068,5,11.0644,3,0,3,Very Bearish,2026-10-13T02:51:12Z
+AAPL,Apple Inc,997101,6,9.83688,0,0,0,Neutral,2026-10-13T02:51:12Z
+SOXL,Direxion Daily Semiconductor Bull 3X Shares,40543,7,9.40268,3,0,0,Neutral,2026-10-13T02:51:12Z
+SOFI,SoFi Technologies Inc,156813,8,8.98856,0,0,0,Neutral,2026-10-13T02:51:12Z
+INTC,Intel Corp,209675,9,8.47079,1,1,0,Very Bullish,2026-10-13T02:51:12Z
+KORU,Direxion Daily South Korea Bull 3X Shares,3586,10,8.402,0,0,0,Neutral,2026-10-13T02:51:12Z
+NBIS,Nebius Group N.V. ,53490,11,7.5188,2,0,1,Very Bearish,2026-10-13T02:51:12Z
+SKHY,SK Hynix Inc - ADR,16420,12,7.48235,0,0,0,Neutral,2026-10-13T02:51:12Z
+APLD,Applied Digital Corporation,47795,13,7.45259,1,0,0,Neutral,2026-10-13T02:51:12Z
+CIFR,Cipher Digital Inc.,23948,14,7.12639,0,0,0,Neutral,2026-10-13T02:51:12Z
+CBRS,Cerebras Systems Inc,14635,15,6.81331,0,0,0,Neutral,2026-10-13T02:51:12Z
+AAOI,Applied Optoelectronics Inc,26489,16,6.48071,1,0,0,Neutral,2026-10-13T02:51:12Z
+DJT,Trump Media & Technology Group Corp.,115611,17,6.36793,1,0,0,Neutral,2026-10-13T02:51:12Z
+OKLO,Oklo Inc.,40325,18,6.33702,1,0,1,Very Bearish,2026-10-13T02:51:12Z
+AVGO,Broadcom Inc,75726,19,6.00108,0,0,0,Neutral,2026-10-13T02:51:12Z
+DRAM,Roundhill ETF Trust - Roundhill Memory ETF,14883,20,5.49815,0,0,0,Neutral,2026-10-13T02:51:12Z
+FUN,Six Flags Entertainment Corp,6938,21,5.33338,0,0,0,Neutral,2026-10-13T02:51:12Z
+RDW,Redwire Corp,24095,22,5.19181,0,0,0,Neutral,2026-10-13T02:51:12Z
+QUANT,Quant Traders and Investors,289,23,5.01326,0,0,0,Neutral,2026-10-13T02:51:12Z
+WMT,Walmart Inc,139126,24,4.93104,0,0,0,Neutral,2026-10-13T02:51:12Z
+STUDY,Stocktwits Education,5992,25,4.62261,0,0,0,Neutral,2026-10-13T02:51:12Z
+CHTR,Charter Communications Inc. - Ordinary Shares - Class A,4292,26,4.56775,0,0,0,Neutral,2026-10-13T02:51:12Z
+MRVL,Marvell Technology Inc,53642,27,4.45813,0,0,0,Neutral,2026-10-13T02:51:12Z
+KHC,Kraft Heinz Co,16218,28,4.16734,0,0,0,Neutral,2026-10-13T02:51:12Z
+USAR,USA Rare Earth Inc,20578,29,4.15942,0,0,0,Neutral,2026-10-13T02:51:12Z
+SOXX,iShares Semiconductor ETF,11113,30,4.10467,0,0,0,Neutral,2026-10-13T02:51:12Z

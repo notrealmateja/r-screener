@@ -179,7 +179,7 @@ KEYS,2026-11-17,Keysight Technologies Inc,,USD,amc,2026-08-18,91,43,SEC 8-K Item
 KEYS,2027-02-16,Keysight Technologies Inc,,USD,,2026-08-18,91,43,SEC 8-K Item 2.02,3.2249
 KO,2026-10-27,The Coca-Cola Company,,USD,bmo,2026-07-28,91,33,SEC 8-K Item 2.02,0.9049
 KO,2027-01-26,The Coca-Cola Company,,USD,,2026-07-28,91,33,SEC 8-K Item 2.02,NA
-KRYS,2026-11-17,Krystal Biotech Inc,,USD,,2026-08-03,106,31,SEC 8-K Item 2.02,NA
+KRYS,2026-11-17,Krystal Biotech Inc,,USD,bmo,2026-08-03,106,31,SEC 8-K Item 2.02,1.8927
 KRYS,2027-03-03,Krystal Biotech Inc,,USD,,2026-08-03,106,31,SEC 8-K Item 2.02,NA
 KYMR,2026-11-07,Kymera Therapeutics Inc,,USD,,2026-08-05,94,26,SEC 8-K Item 2.02,-1.2822
 KYMR,2027-02-09,Kymera Therapeutics Inc,,USD,,2026-08-05,94,26,SEC 8-K Item 2.02,NA
@@ -233,7 +233,7 @@ NFLX,2026-10-15,Netflix Inc,,USD,amc,2026-07-16,91,13,SEC 8-K Item 2.02,0.8385
 NFLX,2027-01-14,Netflix Inc,,USD,amc,2026-07-16,91,13,SEC 8-K Item 2.02,0.7459
 NPWR,2026-11-15,NET Power Inc.,,USD,,2026-08-13,94,13,SEC 8-K Item 2.02,-0.0525
 NPWR,2027-02-17,NET Power Inc.,,USD,,2026-08-13,94,13,SEC 8-K Item 2.02,NA
-NTRA,2026-10-25,Natera Inc,,USD,amc,2026-08-06,80.5,21,SEC 8-K Item 2.02,-0.2433
+NTRA,2026-10-25,Natera Inc,,USD,,2026-08-06,80.5,21,SEC 8-K Item 2.02,NA
 NTRA,2027-01-14,Natera Inc,,USD,,2026-08-06,80.5,21,SEC 8-K Item 2.02,NA
 NTRS,2026-10-22,Northern Trust Corporation,,USD,bmo,2026-07-22,92,26,SEC 8-K Item 2.02,2.8851
 NTRS,2027-01-22,Northern Trust Corporation,,USD,amc,2026-07-22,92,26,SEC 8-K Item 2.02,2.9685
@@ -267,7 +267,7 @@ PM,2026-10-21,Philip Morris International Inc,,USD,bmo,2026-07-22,91,35,SEC 8-K 
 PM,2027-01-20,Philip Morris International Inc,,USD,,2026-07-22,91,35,SEC 8-K Item 2.02,NA
 PRIM,2026-11-03,Primoris Services Corporation,,USD,amc,2026-08-04,91,56,SEC 8-K Item 2.02,0.7968
 PRIM,2027-02-02,Primoris Services Corporation,,USD,,2026-08-04,91,56,SEC 8-K Item 2.02,NA
-PRPL,2026-11-19,Purple Innovation Inc,,USD,,2026-08-10,101,35,SEC 8-K Item 2.02,NA
+PRPL,2026-11-19,Purple Innovation Inc,,USD,,2026-08-10,101,35,SEC 8-K Item 2.02,-1.5249
 PRPL,2027-02-28,Purple Innovation Inc,,USD,,2026-08-10,101,35,SEC 8-K Item 2.02,NA
 PTGX,2026-11-05,Protagonist Therapeutics Inc,,USD,amc,2026-08-05,92,40,SEC 8-K Item 2.02,2.4273
 PTGX,2027-02-05,Protagonist Therapeutics Inc,,USD,,2026-08-05,92,40,SEC 8-K Item 2.02,NA
@@ -295,12 +295,12 @@ RXRX,2026-11-05,Recursion Pharmaceuticals Inc,,USD,,2026-08-05,92,22,SEC 8-K Ite
 RXRX,2027-02-05,Recursion Pharmaceuticals Inc,,USD,,2026-08-05,92,22,SEC 8-K Item 2.02,NA
 SANA,2026-11-09,Sana Biotechnology Inc,,USD,amc,2026-08-10,91,22,SEC 8-K Item 2.02,-0.1512
 SANA,2027-02-08,Sana Biotechnology Inc,,USD,,2026-08-10,91,22,SEC 8-K Item 2.02,NA
-SENEA,2026-10-28,Seneca Foods Corp A,,USD,,2023-08-09,90.5,73,SEC 8-K Item 2.02,3.9346
+SENEA,2026-10-28,Seneca Foods Corp A,,USD,,2023-08-09,90.5,73,SEC 8-K Item 2.02,NA
 SENEA,2027-01-27,Seneca Foods Corp A,,USD,,2023-08-09,90.5,73,SEC 8-K Item 2.02,4.9749
 SG,2026-11-05,Sweetgreen Inc,,USD,,2026-08-06,91,19,SEC 8-K Item 2.02,-0.2653
 SG,2027-02-04,Sweetgreen Inc,,USD,,2026-08-06,91,19,SEC 8-K Item 2.02,NA
-SMPL,2026-10-12,Simply Good Foods Co,,USD,,2026-07-09,91,34,SEC 8-K Item 2.02,NA
-SMPL,2027-01-11,Simply Good Foods Co,,USD,,2026-07-09,91,34,SEC 8-K Item 2.02,0.4043
+SMPL,2026-10-13,Simply Good Foods Co,,USD,,2026-07-09,91,34,SEC 8-K Item 2.02,NA
+SMPL,2027-01-12,Simply Good Foods Co,,USD,,2026-07-09,91,34,SEC 8-K Item 2.02,0.4043
 SNAP,2026-11-02,Snap Inc,,USD,,2026-08-03,91,31,SEC 8-K Item 2.02,0.1645
 SNAP,2027-02-01,Snap Inc,,USD,amc,2026-08-03,91,31,SEC 8-K Item 2.02,0.2588
 SOFI,2026-10-28,SoFi Technologies Inc.,,USD,bmo,2026-07-29,91,21,SEC 8-K Item 2.02,0.1701
@@ -351,11 +351,11 @@ VEEV,2026-11-25,Veeva Systems Inc Class A,,USD,amc,2026-08-26,91,28,SEC 8-K Item
 VEEV,2027-02-24,Veeva Systems Inc Class A,,USD,amc,2026-08-26,91,28,SEC 8-K Item 2.02,2.3531
 VERA,2026-11-10,Vera Therapeutics Inc,,USD,,2026-08-10,92,23,SEC 8-K Item 2.02,-1.6422
 VERA,2027-02-10,Vera Therapeutics Inc,,USD,,2026-08-10,92,23,SEC 8-K Item 2.02,NA
-VERX,2026-10-31,Vertex,,USD,bmo,2026-08-03,89,25,SEC 8-K Item 2.02,0.2255
+VERX,2026-10-31,Vertex,,USD,,2026-08-03,89,25,SEC 8-K Item 2.02,NA
 VERX,2027-01-28,Vertex,,USD,,2026-08-03,89,25,SEC 8-K Item 2.02,NA
 VITL,2026-11-05,Vital Farms Inc,,USD,bmo,2026-08-06,91,24,SEC 8-K Item 2.02,-0.0975
 VITL,2027-02-04,Vital Farms Inc,,USD,,2026-08-06,91,24,SEC 8-K Item 2.02,NA
-WAL,2026-10-20,Western Alliance Bancorporation,,USD,,2026-07-21,91,34,SEC 8-K Item 2.02,2.4604
+WAL,2026-10-20,Western Alliance Bancorporation,,USD,amc,2026-07-21,91,34,SEC 8-K Item 2.02,2.4604
 WAL,2027-01-19,Western Alliance Bancorporation,,USD,amc,2026-07-21,91,34,SEC 8-K Item 2.02,2.6131
 WDAY,2026-12-29,Workday Inc,,USD,,2026-09-29,91,30,SEC 8-K Item 2.02,NA
 WDAY,2027-03-30,Workday Inc,,USD,,2026-09-29,91,30,SEC 8-K Item 2.02,NA
@@ -373,7 +373,7 @@ YETI,2026-11-12,YETI Holdings Inc,,USD,bmo,2026-08-13,91,32,SEC 8-K Item 2.02,0.
 YETI,2027-02-11,YETI Holdings Inc,,USD,amc,2026-08-13,91,32,SEC 8-K Item 2.02,1.246
 YEXT,2026-12-01,Yext Inc,,USD,,2026-09-01,91,33,SEC 8-K Item 2.02,0.1938
 YEXT,2027-03-02,Yext Inc,,USD,amc,2026-09-01,91,33,SEC 8-K Item 2.02,0.204
-ZION,2026-10-19,Zions Bancorporation,,USD,,2026-07-20,91,24,SEC 8-K Item 2.02,1.6989
+ZION,2026-10-19,Zions Bancorporation,,USD,amc,2026-07-20,91,24,SEC 8-K Item 2.02,1.6989
 ZION,2027-01-18,Zions Bancorporation,,USD,amc,2026-07-20,91,24,SEC 8-K Item 2.02,1.7338
 ZM,2026-11-26,Zoom Video Communications Inc,,USD,amc,2026-08-25,93,27,SEC 8-K Item 2.02,1.5308
 ZM,2027-02-27,Zoom Video Communications Inc,,USD,amc,2026-08-25,93,27,SEC 8-K Item 2.02,1.5963
