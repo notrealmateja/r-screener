@@ -1,31 +1,31 @@
 symbol,title,watchlist_count,st_rank,trending_score,messages,bullish,bearish,sentiment_label,fetched_at
-MU,Micron Technology Inc,219482,1,14.5792,4,2,0,Very Bullish,2026-10-13T02:51:12Z
-SNDK,Sandisk Corp,36482,2,13.4835,1,0,1,Very Bearish,2026-10-13T02:51:12Z
-QQQ,Invesco QQQ Trust Series 1,280795,3,12.8178,2,0,0,Neutral,2026-10-13T02:51:12Z
-SPY,SPDR S&P 500 ETF Trust,638552,4,11.2611,9,0,2,Very Bearish,2026-10-13T02:51:12Z
-ASTS,AST SpaceMobile Inc,72068,5,11.0644,3,0,3,Very Bearish,2026-10-13T02:51:12Z
-AAPL,Apple Inc,997101,6,9.83688,0,0,0,Neutral,2026-10-13T02:51:12Z
-SOXL,Direxion Daily Semiconductor Bull 3X Shares,40543,7,9.40268,3,0,0,Neutral,2026-10-13T02:51:12Z
-SOFI,SoFi Technologies Inc,156813,8,8.98856,0,0,0,Neutral,2026-10-13T02:51:12Z
-INTC,Intel Corp,209675,9,8.47079,1,1,0,Very Bullish,2026-10-13T02:51:12Z
-KORU,Direxion Daily South Korea Bull 3X Shares,3586,10,8.402,0,0,0,Neutral,2026-10-13T02:51:12Z
-NBIS,Nebius Group N.V. ,53490,11,7.5188,2,0,1,Very Bearish,2026-10-13T02:51:12Z
-SKHY,SK Hynix Inc - ADR,16420,12,7.48235,0,0,0,Neutral,2026-10-13T02:51:12Z
-APLD,Applied Digital Corporation,47795,13,7.45259,1,0,0,Neutral,2026-10-13T02:51:12Z
-CIFR,Cipher Digital Inc.,23948,14,7.12639,0,0,0,Neutral,2026-10-13T02:51:12Z
-CBRS,Cerebras Systems Inc,14635,15,6.81331,0,0,0,Neutral,2026-10-13T02:51:12Z
-AAOI,Applied Optoelectronics Inc,26489,16,6.48071,1,0,0,Neutral,2026-10-13T02:51:12Z
-DJT,Trump Media & Technology Group Corp.,115611,17,6.36793,1,0,0,Neutral,2026-10-13T02:51:12Z
-OKLO,Oklo Inc.,40325,18,6.33702,1,0,1,Very Bearish,2026-10-13T02:51:12Z
-AVGO,Broadcom Inc,75726,19,6.00108,0,0,0,Neutral,2026-10-13T02:51:12Z
-DRAM,Roundhill ETF Trust - Roundhill Memory ETF,14883,20,5.49815,0,0,0,Neutral,2026-10-13T02:51:12Z
-FUN,Six Flags Entertainment Corp,6938,21,5.33338,0,0,0,Neutral,2026-10-13T02:51:12Z
-RDW,Redwire Corp,24095,22,5.19181,0,0,0,Neutral,2026-10-13T02:51:12Z
-QUANT,Quant Traders and Investors,289,23,5.01326,0,0,0,Neutral,2026-10-13T02:51:12Z
-WMT,Walmart Inc,139126,24,4.93104,0,0,0,Neutral,2026-10-13T02:51:12Z
-STUDY,Stocktwits Education,5992,25,4.62261,0,0,0,Neutral,2026-10-13T02:51:12Z
-CHTR,Charter Communications Inc. - Ordinary Shares - Class A,4292,26,4.56775,0,0,0,Neutral,2026-10-13T02:51:12Z
-MRVL,Marvell Technology Inc,53642,27,4.45813,0,0,0,Neutral,2026-10-13T02:51:12Z
-KHC,Kraft Heinz Co,16218,28,4.16734,0,0,0,Neutral,2026-10-13T02:51:12Z
-USAR,USA Rare Earth Inc,20578,29,4.15942,0,0,0,Neutral,2026-10-13T02:51:12Z
-SOXX,iShares Semiconductor ETF,11113,30,4.10467,0,0,0,Neutral,2026-10-13T02:51:12Z
+MSFT,Microsoft Corp,552736,1,9.64593,5,1,0,Very Bullish,2026-10-14T00:37:26Z
+LQDA,Liquidia Corp,5030,2,8.50075,6,1,0,Very Bullish,2026-10-14T00:37:26Z
+GME,GameStop Corp,308275,3,7.28236,6,2,0,Very Bullish,2026-10-14T00:37:26Z
+BAC,Bank of America Corp,147098,4,7.14435,0,0,0,Neutral,2026-10-14T00:37:26Z
+SKHY,SK Hynix Inc - ADR,16542,5,6.46283,0,0,0,Neutral,2026-10-14T00:37:26Z
+DOGE.X,Dogecoin,352233,6,6.2694,0,0,0,Neutral,2026-10-14T00:37:26Z
+CRWV,CoreWeave Inc,49857,7,5.99867,0,0,0,Neutral,2026-10-14T00:37:26Z
+CIFR,Cipher Digital Inc.,24173,8,5.93467,3,1,0,Very Bullish,2026-10-14T00:37:26Z
+ASML,ASML Holding NV,32373,9,5.87791,0,0,0,Neutral,2026-10-14T00:37:26Z
+XCN.X,Onyxcoin,8316,10,5.69415,0,0,0,Neutral,2026-10-14T00:37:26Z
+AMAT,Applied Materials Inc.,35840,11,5.56392,0,0,0,Neutral,2026-10-14T00:37:26Z
+JNJ,Johnson & Johnson,49521,12,5.3657,0,0,0,Neutral,2026-10-14T00:37:26Z
+ASTS,AST SpaceMobile Inc,72138,13,5.06544,1,0,0,Neutral,2026-10-14T00:37:26Z
+GOOG,Alphabet Inc - Ordinary Shares - Class C,312388,14,4.86489,0,0,0,Neutral,2026-10-14T00:37:26Z
+USDCAD,US Dollar / Canadian Dollar,11163,15,4.83237,0,0,0,Neutral,2026-10-14T00:37:26Z
+AAPL,Apple Inc,997212,16,4.80815,0,0,0,Neutral,2026-10-14T00:37:26Z
+UNG,"United States Natural Gas Fund, LP",17699,17,4.73036,0,0,0,Neutral,2026-10-14T00:37:26Z
+KTOS,Kratos Defense & Security Solutions Inc,21949,18,4.68482,0,0,0,Neutral,2026-10-14T00:37:26Z
+AXON,Axon Enterprise Inc,15432,19,4.61964,0,0,0,Neutral,2026-10-14T00:37:26Z
+KORU,Direxion Daily South Korea Bull 3X Shares,3627,20,4.58877,0,0,0,Neutral,2026-10-14T00:37:26Z
+FSLR,First Solar Inc,35697,21,4.55868,0,0,0,Neutral,2026-10-14T00:37:26Z
+SKYD,Skydance Corp. - Ordinary Shares - Class B,26993,22,4.54357,3,0,0,Neutral,2026-10-14T00:37:26Z
+SNDK,Sandisk Corp,36588,23,4.37437,2,1,0,Very Bullish,2026-10-14T00:37:26Z
+ANTHZZX.P,Anthropic,2273,24,4.36649,0,0,0,Neutral,2026-10-14T00:37:26Z
+GRRR,Gorilla Technology Group Inc,25595,25,4.30954,1,1,0,Very Bullish,2026-10-14T00:37:26Z
+USAR,USA Rare Earth Inc,20602,26,4.27904,0,0,0,Neutral,2026-10-14T00:37:26Z
+KOLD,ProShares UltraShort Bloomberg Natural Gas,10349,27,4.13921,0,0,0,Neutral,2026-10-14T00:37:26Z
+WMT,Walmart Inc,139130,28,4.10699,0,0,0,Neutral,2026-10-14T00:37:26Z
+LKNCY,Luckin Coffee Inc - ADR,40111,29,3.70706,0,0,0,Neutral,2026-10-14T00:37:26Z
+INTU,Intuit Inc,12835,30,3.69551,0,0,0,Neutral,2026-10-14T00:37:26Z
