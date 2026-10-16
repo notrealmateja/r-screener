@@ -510,8 +510,8 @@
       }
     },
     "curl": {
-      "Source": "CRAN",
-      "Repository": "https://cran.rstudio.com",
+      "Source": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
       "description": {
         "Package": "curl",
         "Type": "Package",
@@ -533,9 +533,9 @@
         "Packaged": "2026-10-14 10:10:35 UTC; jeroen",
         "Author": "Jeroen Ooms [aut, cre] (ORCID: <https://orcid.org/0000-0002-4035-0289>),\n  Hadley Wickham [ctb],\n  Posit Software, PBC [cph]",
         "Maintainer": "Jeroen Ooms <jeroenooms@gmail.com>",
-        "Repository": "CRAN",
+        "Repository": "RSPM",
         "Date/Publication": "2026-10-14 12:12:13 UTC",
-        "Built": "R 4.4.0; x86_64-pc-linux-gnu; 2026-10-15 00:01:28 UTC; unix"
+        "Built": "R 4.4.0; x86_64-pc-linux-gnu; 2026-10-15 03:47:54 UTC; unix"
       }
     },
     "data.table": {
@@ -2547,10 +2547,10 @@
       "checksum": "cf84fad924b573381cb47bf1093687b6"
     },
     "backtest_equity_stats.csv": {
-      "checksum": "b14b7d6b5ad7877ec1b0b1c0ce3e425d"
+      "checksum": "fdfd7384d73d87e544dacc4d3bd39db4"
     },
     "backtest_equity.csv": {
-      "checksum": "4e183bbdf15264e5e3f48d91b9bcbddb"
+      "checksum": "1e71b045ce6c9d0a84281c51b6e703c6"
     },
     "backtest_headline.csv": {
       "checksum": "68ac44953d0be2fa18f0cc358d64ca86"
@@ -2559,7 +2559,7 @@
       "checksum": "2745cf10f45f73352e64eb908752fe08"
     },
     "backtest_phase_sweep.csv": {
-      "checksum": "09bafd3ff09f51f389bd5dd77d2b165e"
+      "checksum": "76fb0bdfe1549e28df38865e24d2404f"
     },
     "backtest_summary.csv": {
       "checksum": "817614a199ea21cce507c886a3c8f068"
@@ -2568,61 +2568,61 @@
       "checksum": "6f1dddc156f656f2d4c4d382e7b64017"
     },
     "data/meta.rds": {
-      "checksum": "4adb6d0a04032260968411c5f30e4f21"
+      "checksum": "48581adb08c1ebe18d6cc3b7f2a9d239"
     },
     "data/price_series_cache.rds": {
       "checksum": "266a1b7cfa8bbf9180380a4969dbc886"
     },
     "earnings_calendar.csv": {
-      "checksum": "c402992daa0ae2d14ab5fee7c7ba7939"
+      "checksum": "d4305bf75b2b3afcb8c8f6363822c9c1"
     },
     "global.R": {
       "checksum": "55b7ee2946ae08b4d664acaf2d8f7b1d"
     },
     "macro_data.csv": {
-      "checksum": "954eea902e3f069e77412a2b9f2e39a8"
+      "checksum": "beaf891e327820be926a2646a1938b8f"
     },
     "market_news.csv": {
       "checksum": "40b59b1ef18dd32c084b345c018d8bfb"
     },
     "master_scored.csv": {
-      "checksum": "2a918611932d91db8432c82d23448d83"
+      "checksum": "28e010b43cb3c281d45ec438f20285e9"
     },
     "meta.rds": {
-      "checksum": "4adb6d0a04032260968411c5f30e4f21"
+      "checksum": "48581adb08c1ebe18d6cc3b7f2a9d239"
     },
     "price_history.csv": {
-      "checksum": "cfda169f94e771a4d9a94f46439905fc"
+      "checksum": "340b2b11f03fdce8ea026f6ebec87ea9"
     },
     "reversal_results.csv": {
       "checksum": "c676317a3b59c4a44e785026464994b8"
     },
     "score_history.csv": {
-      "checksum": "f91b8d73256820706ddc80726178dfbe"
+      "checksum": "51a237a854e6661a19b408fbd5510f10"
     },
     "sec_filings.csv": {
-      "checksum": "60340b56b93cc66e34677bc9541476e3"
+      "checksum": "37f4b1f65982c31b06d4c650de056b1d"
     },
     "sector_performance.csv": {
-      "checksum": "476e93815717a072add0a609ca871ede"
+      "checksum": "a5b2c7ec25c25b6b9011af436faef393"
     },
     "stock_news.csv": {
-      "checksum": "1ba530a5673d33c5535c50e6d725223d"
+      "checksum": "7fd621ae789cac1f40597bda98c71819"
     },
     "stocktwits_trending.csv": {
-      "checksum": "c94edf6bd55e9f268256881cdb94fde7"
+      "checksum": "2dfc7f0225fa1610990fa4f6eec87c50"
     },
     "top15_sweetspot.csv": {
-      "checksum": "a8b8d1039c7d13fa79bb1d8f1cd11b41"
+      "checksum": "b2cfebfa058dfd4f2deb88d0cef20687"
     },
     "top15_unicorns.csv": {
-      "checksum": "7660cd22cfac038b5270fa0fbb2807da"
+      "checksum": "58db769d09295de7dcf42392381062d0"
     },
     "tv_channels.csv": {
-      "checksum": "ac07ba18a329a6b521737e606799ffdb"
+      "checksum": "0f9822fcde21fb42200e222790ff20b3"
     },
     "wsb_trending.csv": {
-      "checksum": "66e3f5ec05266e2df8eda4d8a2c96641"
+      "checksum": "f42335371ba51f54ef94d03132c7091d"
     }
   },
   "users": null
