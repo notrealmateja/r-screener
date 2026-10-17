@@ -2371,31 +2371,31 @@
       }
     },
     "xfun": {
-      "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Source": "CRAN",
+      "Repository": "https://cran.rstudio.com",
       "description": {
         "Package": "xfun",
         "Type": "Package",
         "Title": "Supporting Functions for Packages Maintained by 'Yihui Xie'",
-        "Version": "0.61",
+        "Version": "0.62",
         "Authors@R": "c(\n  person(\"Yihui\", \"Xie\", role = c(\"aut\", \"cre\", \"cph\"), email = \"xie@yihui.name\", comment = c(ORCID = \"0000-0003-0645-5666\", URL = \"https://yihui.org\")),\n  person(\"Wush\", \"Wu\", role = \"ctb\"),\n  person(\"Daijiang\", \"Li\", role = \"ctb\"),\n  person(\"Xianying\", \"Tan\", role = \"ctb\"),\n  person(\"Salim\", \"Brüggemann\", role = \"ctb\", email = \"salim-b@pm.me\", comment = c(ORCID = \"0000-0002-5329-5987\")),\n  person(\"Christophe\", \"Dervieux\", role = \"ctb\"),\n  person()\n  )",
         "Description": "Miscellaneous functions commonly used in other packages maintained by 'Yihui Xie'.",
         "Depends": "R (>= 3.2.0)",
         "Imports": "grDevices, stats, tools",
-        "Suggests": "testit, parallel, codetools, methods, rstudioapi, tinytex (>=\n0.30), mime, litedown (>= 0.6), commonmark, knitr (>= 1.50),\nremotes, pak, curl, xml2, jsonlite, magick, yaml, data.table,\nqs2",
+        "Suggests": "testit, parallel, codetools, methods, rstudioapi, tinytex (>=\n0.30), mime, litedown (>= 0.6), knitr (>= 1.50), remotes, pak,\ncurl, xml2, jsonlite, magick, yaml, data.table, qs2",
         "License": "MIT + file LICENSE",
         "URL": "https://github.com/yihui/xfun",
         "BugReports": "https://github.com/yihui/xfun/issues",
         "Encoding": "UTF-8",
         "VignetteBuilder": "litedown",
-        "Config/roxygen2/version": "8.1.0",
+        "Config/roxygen2/version": "8.1.1",
         "NeedsCompilation": "yes",
-        "Packaged": "2026-09-16 17:36:20 UTC; yihui",
+        "Packaged": "2026-10-16 01:24:19 UTC; yihui",
         "Author": "Yihui Xie [aut, cre, cph] (ORCID:\n    <https://orcid.org/0000-0003-0645-5666>, URL: https://yihui.org),\n  Wush Wu [ctb],\n  Daijiang Li [ctb],\n  Xianying Tan [ctb],\n  Salim Brüggemann [ctb] (ORCID: <https://orcid.org/0000-0002-5329-5987>),\n  Christophe Dervieux [ctb]",
         "Maintainer": "Yihui Xie <xie@yihui.name>",
-        "Repository": "RSPM",
-        "Date/Publication": "2026-09-16 18:30:02 UTC",
-        "Built": "R 4.4.0; x86_64-pc-linux-gnu; 2026-09-17 03:48:49 UTC; unix"
+        "Repository": "CRAN",
+        "Date/Publication": "2026-10-16 03:30:02 UTC",
+        "Built": "R 4.4.0; x86_64-pc-linux-gnu; 2026-10-16 23:47:43 UTC; unix"
       }
     },
     "xml2": {
@@ -2544,85 +2544,85 @@
       "checksum": "6fa866fb9e9ce4bdd05e93de8bce4e5b"
     },
     "backtest_components.csv": {
-      "checksum": "cf84fad924b573381cb47bf1093687b6"
+      "checksum": "1e04e535906606a6cb273ed96200a661"
     },
     "backtest_equity_stats.csv": {
-      "checksum": "fdfd7384d73d87e544dacc4d3bd39db4"
+      "checksum": "93de450f961c64a058c1490b03b24d68"
     },
     "backtest_equity.csv": {
-      "checksum": "1e71b045ce6c9d0a84281c51b6e703c6"
+      "checksum": "60fa0fe2e19c19ca2f00d5cf5b917277"
     },
     "backtest_headline.csv": {
-      "checksum": "68ac44953d0be2fa18f0cc358d64ca86"
+      "checksum": "baca1c15f56a174570f3818416d9e4af"
     },
     "backtest_ic.csv": {
-      "checksum": "2745cf10f45f73352e64eb908752fe08"
+      "checksum": "70b86b5869c7096e31a825b85c2af123"
     },
     "backtest_phase_sweep.csv": {
-      "checksum": "76fb0bdfe1549e28df38865e24d2404f"
+      "checksum": "89dbd4052b175d83b1db1c6a16f70ddb"
     },
     "backtest_summary.csv": {
-      "checksum": "817614a199ea21cce507c886a3c8f068"
+      "checksum": "9d15adeb1094bab80ce5b8cc1e3b49ce"
     },
     "data/batch_tracker.rds": {
       "checksum": "6f1dddc156f656f2d4c4d382e7b64017"
     },
     "data/meta.rds": {
-      "checksum": "48581adb08c1ebe18d6cc3b7f2a9d239"
+      "checksum": "127a362e1e6dea37b7e06314049343b3"
     },
     "data/price_series_cache.rds": {
       "checksum": "266a1b7cfa8bbf9180380a4969dbc886"
     },
     "earnings_calendar.csv": {
-      "checksum": "d4305bf75b2b3afcb8c8f6363822c9c1"
+      "checksum": "3db5a07b0b706d83db5a4d380205b4b3"
     },
     "global.R": {
       "checksum": "55b7ee2946ae08b4d664acaf2d8f7b1d"
     },
     "macro_data.csv": {
-      "checksum": "beaf891e327820be926a2646a1938b8f"
+      "checksum": "0e9be99dce421979c2afffe86601cdbc"
     },
     "market_news.csv": {
       "checksum": "40b59b1ef18dd32c084b345c018d8bfb"
     },
     "master_scored.csv": {
-      "checksum": "28e010b43cb3c281d45ec438f20285e9"
+      "checksum": "5386f33f516269cdac57965b1ade7654"
     },
     "meta.rds": {
-      "checksum": "48581adb08c1ebe18d6cc3b7f2a9d239"
+      "checksum": "127a362e1e6dea37b7e06314049343b3"
     },
     "price_history.csv": {
-      "checksum": "340b2b11f03fdce8ea026f6ebec87ea9"
+      "checksum": "cd1a98a06d3c2f2521699ee820807464"
     },
     "reversal_results.csv": {
-      "checksum": "c676317a3b59c4a44e785026464994b8"
+      "checksum": "92daf25521ec896e7a006f742361f40c"
     },
     "score_history.csv": {
-      "checksum": "51a237a854e6661a19b408fbd5510f10"
+      "checksum": "7a9adde51a7febae84893f056bb02d0f"
     },
     "sec_filings.csv": {
-      "checksum": "37f4b1f65982c31b06d4c650de056b1d"
+      "checksum": "c0938d37f87d00daca3bb68e73ad4edc"
     },
     "sector_performance.csv": {
-      "checksum": "a5b2c7ec25c25b6b9011af436faef393"
+      "checksum": "8906a4b334abb850f5a7f971a97a22d4"
     },
     "stock_news.csv": {
-      "checksum": "7fd621ae789cac1f40597bda98c71819"
+      "checksum": "d5facc06575e8a4ae0353a4e0d124a07"
     },
     "stocktwits_trending.csv": {
-      "checksum": "2dfc7f0225fa1610990fa4f6eec87c50"
+      "checksum": "833a6ee7cdb678f48104ad2311cff68c"
     },
     "top15_sweetspot.csv": {
-      "checksum": "b2cfebfa058dfd4f2deb88d0cef20687"
+      "checksum": "d3db2df836ff38e915116eff08579e75"
     },
     "top15_unicorns.csv": {
-      "checksum": "58db769d09295de7dcf42392381062d0"
+      "checksum": "7744b0094f8551c393b216f9b7ca165b"
     },
     "tv_channels.csv": {
-      "checksum": "0f9822fcde21fb42200e222790ff20b3"
+      "checksum": "172506728e8e900e253efb00d3ced22c"
     },
     "wsb_trending.csv": {
-      "checksum": "f42335371ba51f54ef94d03132c7091d"
+      "checksum": "1671f5f0e2d694cdf2e71733c42a8c34"
     }
   },
   "users": null

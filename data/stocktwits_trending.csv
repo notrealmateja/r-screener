@@ -1,31 +1,31 @@
 symbol,title,watchlist_count,st_rank,trending_score,messages,bullish,bearish,sentiment_label,fetched_at
-DJT,Trump Media & Technology Group Corp.,115633,1,9.57253,2,0,0,Neutral,2026-10-15T23:55:03Z
-TSLA,Tesla Inc,1069119,2,9.00741,3,1,0,Very Bullish,2026-10-15T23:55:03Z
-DELL,Dell Technologies Inc,31598,3,7.67477,1,0,0,Neutral,2026-10-15T23:55:03Z
-NOW,ServiceNow Inc,44446,4,7.25716,0,0,0,Neutral,2026-10-15T23:55:03Z
-SHOP,Shopify Inc,139203,5,6.90139,1,0,0,Neutral,2026-10-15T23:55:03Z
-TEAM,Atlassian Corporation Plc,15003,6,5.97125,0,0,0,Neutral,2026-10-15T23:55:03Z
-KO,Coca-Cola Co,53638,7,5.82512,0,0,0,Neutral,2026-10-15T23:55:03Z
-BCRX,Biocryst Pharmaceuticals Inc.,36969,8,5.42792,0,0,0,Neutral,2026-10-15T23:55:03Z
-NOK,Nokia Corp,114875,9,5.38483,0,0,0,Neutral,2026-10-15T23:55:03Z
-IEF,iShares 7-10 Year Treasury Bond ETF,1492,10,5.21346,0,0,0,Neutral,2026-10-15T23:55:03Z
-GFS,GlobalFoundries Inc,5501,11,4.77822,1,0,0,Neutral,2026-10-15T23:55:03Z
-XAGUSD,Silver US Dollar,3653,12,4.72307,0,0,0,Neutral,2026-10-15T23:55:03Z
-UNH,Unitedhealth Group Inc,55891,13,4.61239,1,0,0,Neutral,2026-10-15T23:55:03Z
-QQQ,Invesco QQQ Trust Series 1,281034,14,4.57329,3,0,0,Neutral,2026-10-15T23:55:03Z
-AMGN,AMGEN Inc.,15013,15,4.38721,0,0,0,Neutral,2026-10-15T23:55:03Z
-GEV,GE Vernova Inc.,10861,16,4.26434,1,0,0,Neutral,2026-10-15T23:55:03Z
-PFE,Pfizer Inc,106452,17,4.11561,0,0,0,Neutral,2026-10-15T23:55:03Z
-WULF,TeraWulf Inc,32253,18,4.04382,1,1,0,Very Bullish,2026-10-15T23:55:03Z
-CRWV,CoreWeave Inc,50890,19,3.77279,3,1,0,Very Bullish,2026-10-15T23:55:03Z
-COIN,Coinbase Global Inc,138743,20,3.48909,0,0,0,Neutral,2026-10-15T23:55:03Z
-TLT,iShares 20+ Year Treasury Bond ETF,31672,21,3.42025,0,0,0,Neutral,2026-10-15T23:55:03Z
-CRMD,CorMedix Inc,23537,22,3.35547,0,0,0,Neutral,2026-10-15T23:55:03Z
-RGTI,Rigetti Computing Inc,52511,23,3.35145,0,0,0,Neutral,2026-10-15T23:55:03Z
-BKNG,Booking Holdings Inc,18395,24,3.24402,0,0,0,Neutral,2026-10-15T23:55:03Z
-KLAC,KLA Corp.,6425,25,3.2307,0,0,0,Neutral,2026-10-15T23:55:03Z
-PZZA,"Papa John`s International, Inc.",5306,26,3.2307,0,0,0,Neutral,2026-10-15T23:55:03Z
-SRZN,Surrozen Inc,1193,27,3.2307,0,0,0,Neutral,2026-10-15T23:55:03Z
-CRCL,Circle,23294,28,3.16974,0,0,0,Neutral,2026-10-15T23:55:03Z
-SOXL,Direxion Daily Semiconductor Bull 3X Shares,40819,29,3.1161,1,0,0,Neutral,2026-10-15T23:55:03Z
-ALOY,REalloys Inc.,14290,30,3.02077,0,0,0,Neutral,2026-10-15T23:55:03Z
+TSLA,Tesla Inc,1069519,1,13.785,1,0,1,Very Bearish,2026-10-16T23:57:12Z
+WDC,Western Digital Corp.,22213,2,8.49964,0,0,0,Neutral,2026-10-16T23:57:12Z
+SMCI,Super Micro Computer Inc,93288,3,8.30006,1,0,0,Neutral,2026-10-16T23:57:12Z
+AVGO,Broadcom Inc,75927,4,7.63317,2,0,0,Neutral,2026-10-16T23:57:12Z
+UVXY,ProShares Ultra VIX Short-Term Futures ETF,85131,5,7.01778,1,0,0,Neutral,2026-10-16T23:57:12Z
+LABD,Direxion Daily S&P Biotech Bear 3X Shares,13888,6,6.49863,0,0,0,Neutral,2026-10-16T23:57:12Z
+LABU,Direxion Daily S&P Biotech Bull 3X Shares,23213,7,6.18643,0,0,0,Neutral,2026-10-16T23:57:12Z
+CHPY,YieldMax Semiconductor Portfolio Option Income ETF,1666,8,5.43922,1,0,0,Neutral,2026-10-16T23:57:12Z
+SLS,SELLAS Life Sciences Group Inc,62395,9,5.31459,5,3,0,Very Bullish,2026-10-16T23:57:12Z
+NOC,Northrop Grumman Corp.,11566,10,5.31179,0,0,0,Neutral,2026-10-16T23:57:12Z
+QQQ,Invesco QQQ Trust Series 1,281156,11,5.04542,4,0,1,Very Bearish,2026-10-16T23:57:12Z
+MRVL,Marvell Technology Inc,53715,12,4.45429,0,0,0,Neutral,2026-10-16T23:57:12Z
+CURLF,Curaleaf Holdings Inc,9023,13,4.43606,0,0,0,Neutral,2026-10-16T23:57:12Z
+AMZN,Amazon.com Inc,707100,14,4.14518,1,0,0,Neutral,2026-10-16T23:57:12Z
+TRLV,Trulieve Cannabis Corp ,7811,15,4.11472,0,0,0,Neutral,2026-10-16T23:57:12Z
+USDE.X,Ethena USDe,87,16,3.86337,0,0,0,Neutral,2026-10-16T23:57:12Z
+STX,Seagate Technology Holdings Plc,14650,17,3.8131,0,0,0,Neutral,2026-10-16T23:57:12Z
+TQQQ,ProShares UltraPro QQQ,44525,18,3.53068,0,0,0,Neutral,2026-10-16T23:57:12Z
+CBRS,Cerebras Systems Inc,14849,19,3.28512,2,1,0,Very Bullish,2026-10-16T23:57:12Z
+NBIS,Nebius Group N.V. ,54208,20,3.25087,3,0,1,Very Bearish,2026-10-16T23:57:12Z
+MLTX,MoonLake Immunotherapeutics,6553,21,3.05493,0,0,0,Neutral,2026-10-16T23:57:12Z
+ARKK,ARK Innovation ETF,49679,22,3.02641,0,0,0,Neutral,2026-10-16T23:57:12Z
+CRWV,CoreWeave Inc,51306,23,2.95507,3,3,0,Very Bullish,2026-10-16T23:57:12Z
+LITE,Lumentum Holdings Inc,16087,24,2.93023,0,0,0,Neutral,2026-10-16T23:57:12Z
+SIMO,Silicon Motion Technology Corp.,3333,25,2.9237,0,0,0,Neutral,2026-10-16T23:57:12Z
+BE,Bloom Energy Corp - Ordinary Shares - Class A,37259,26,2.86286,0,0,0,Neutral,2026-10-16T23:57:12Z
+GOOGL,Alphabet Inc Class A,233962,27,2.84817,0,0,0,Neutral,2026-10-16T23:57:12Z
+CLDX,Celldex Therapeutics Inc.,9766,28,2.8204,0,0,0,Neutral,2026-10-16T23:57:12Z
+COHR,Coherent Corp,11252,29,2.79963,0,0,0,Neutral,2026-10-16T23:57:12Z
+NVAX,Novavax Inc,108272,30,2.75146,0,0,0,Neutral,2026-10-16T23:57:12Z
