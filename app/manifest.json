@@ -2371,8 +2371,8 @@
       }
     },
     "xfun": {
-      "Source": "CRAN",
-      "Repository": "https://cran.rstudio.com",
+      "Source": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
       "description": {
         "Package": "xfun",
         "Type": "Package",
@@ -2393,9 +2393,9 @@
         "Packaged": "2026-10-16 01:24:19 UTC; yihui",
         "Author": "Yihui Xie [aut, cre, cph] (ORCID:\n    <https://orcid.org/0000-0003-0645-5666>, URL: https://yihui.org),\n  Wush Wu [ctb],\n  Daijiang Li [ctb],\n  Xianying Tan [ctb],\n  Salim Brüggemann [ctb] (ORCID: <https://orcid.org/0000-0002-5329-5987>),\n  Christophe Dervieux [ctb]",
         "Maintainer": "Yihui Xie <xie@yihui.name>",
-        "Repository": "CRAN",
+        "Repository": "RSPM",
         "Date/Publication": "2026-10-16 03:30:02 UTC",
-        "Built": "R 4.4.0; x86_64-pc-linux-gnu; 2026-10-16 23:47:43 UTC; unix"
+        "Built": "R 4.4.0; x86_64-pc-linux-gnu; 2026-10-17 03:52:05 UTC; unix"
       }
     },
     "xml2": {
@@ -2544,85 +2544,85 @@
       "checksum": "6fa866fb9e9ce4bdd05e93de8bce4e5b"
     },
     "backtest_components.csv": {
-      "checksum": "1e04e535906606a6cb273ed96200a661"
+      "checksum": "7a30672b240f42f1e2bbeabd538666c1"
     },
     "backtest_equity_stats.csv": {
-      "checksum": "93de450f961c64a058c1490b03b24d68"
+      "checksum": "521d482e54b13fa7b3e28fb626dda3e0"
     },
     "backtest_equity.csv": {
-      "checksum": "60fa0fe2e19c19ca2f00d5cf5b917277"
+      "checksum": "40b92a1e6aa8bf3a3b2cba8b883d6780"
     },
     "backtest_headline.csv": {
-      "checksum": "baca1c15f56a174570f3818416d9e4af"
+      "checksum": "59b3d07d948d71060609b1a3713e937b"
     },
     "backtest_ic.csv": {
-      "checksum": "70b86b5869c7096e31a825b85c2af123"
+      "checksum": "62b2f11bf03771ec681261975c34d0db"
     },
     "backtest_phase_sweep.csv": {
-      "checksum": "89dbd4052b175d83b1db1c6a16f70ddb"
+      "checksum": "156206395426511ee663705fa69f57a6"
     },
     "backtest_summary.csv": {
-      "checksum": "9d15adeb1094bab80ce5b8cc1e3b49ce"
+      "checksum": "9689999a3766c67ab7afea71ecc17519"
     },
     "data/batch_tracker.rds": {
       "checksum": "6f1dddc156f656f2d4c4d382e7b64017"
     },
     "data/meta.rds": {
-      "checksum": "127a362e1e6dea37b7e06314049343b3"
+      "checksum": "8327eb400f1908be3f59d74a311fc8e3"
     },
     "data/price_series_cache.rds": {
       "checksum": "266a1b7cfa8bbf9180380a4969dbc886"
     },
     "earnings_calendar.csv": {
-      "checksum": "3db5a07b0b706d83db5a4d380205b4b3"
+      "checksum": "acd5c099b8b5ae716eb9b8aad81fe350"
     },
     "global.R": {
       "checksum": "55b7ee2946ae08b4d664acaf2d8f7b1d"
     },
     "macro_data.csv": {
-      "checksum": "0e9be99dce421979c2afffe86601cdbc"
+      "checksum": "bb3642472cc7b9b4dd2a0bfea1381f74"
     },
     "market_news.csv": {
       "checksum": "40b59b1ef18dd32c084b345c018d8bfb"
     },
     "master_scored.csv": {
-      "checksum": "5386f33f516269cdac57965b1ade7654"
+      "checksum": "4473563c0717abab475c872ee82d8ed6"
     },
     "meta.rds": {
-      "checksum": "127a362e1e6dea37b7e06314049343b3"
+      "checksum": "8327eb400f1908be3f59d74a311fc8e3"
     },
     "price_history.csv": {
-      "checksum": "cd1a98a06d3c2f2521699ee820807464"
+      "checksum": "ccd38cfe1041b6f20fc78de5fe07dcf9"
     },
     "reversal_results.csv": {
-      "checksum": "92daf25521ec896e7a006f742361f40c"
+      "checksum": "55d4782d53b4c52ed2cb8fb1885c3140"
     },
     "score_history.csv": {
-      "checksum": "7a9adde51a7febae84893f056bb02d0f"
+      "checksum": "f3da33774a7d490eda526fa4c8a02383"
     },
     "sec_filings.csv": {
-      "checksum": "c0938d37f87d00daca3bb68e73ad4edc"
+      "checksum": "a5980771d0c52648725d18ad88c95228"
     },
     "sector_performance.csv": {
-      "checksum": "8906a4b334abb850f5a7f971a97a22d4"
+      "checksum": "398b4e1df1b9c996cdaa463e7c2ecf87"
     },
     "stock_news.csv": {
-      "checksum": "d5facc06575e8a4ae0353a4e0d124a07"
+      "checksum": "1d0b77eea3301644ebebf7b731f1a1b8"
     },
     "stocktwits_trending.csv": {
-      "checksum": "833a6ee7cdb678f48104ad2311cff68c"
+      "checksum": "0677e3a3c6d13fd60d4591942f7b5cec"
     },
     "top15_sweetspot.csv": {
-      "checksum": "d3db2df836ff38e915116eff08579e75"
+      "checksum": "f14edc984ce3a63987e6c1b26f1c1226"
     },
     "top15_unicorns.csv": {
-      "checksum": "7744b0094f8551c393b216f9b7ca165b"
+      "checksum": "403a40090952ce98588e58b460a894ae"
     },
     "tv_channels.csv": {
-      "checksum": "172506728e8e900e253efb00d3ced22c"
+      "checksum": "222e4d83967db41fc2cfdd44a2851367"
     },
     "wsb_trending.csv": {
-      "checksum": "1671f5f0e2d694cdf2e71733c42a8c34"
+      "checksum": "f93bb612d6f5274a97ffc8474d93d315"
     }
   },
   "users": null

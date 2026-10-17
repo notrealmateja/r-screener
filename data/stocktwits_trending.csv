@@ -1,31 +1,31 @@
 symbol,title,watchlist_count,st_rank,trending_score,messages,bullish,bearish,sentiment_label,fetched_at
-TSLA,Tesla Inc,1069519,1,13.785,1,0,1,Very Bearish,2026-10-16T23:57:12Z
-WDC,Western Digital Corp.,22213,2,8.49964,0,0,0,Neutral,2026-10-16T23:57:12Z
-SMCI,Super Micro Computer Inc,93288,3,8.30006,1,0,0,Neutral,2026-10-16T23:57:12Z
-AVGO,Broadcom Inc,75927,4,7.63317,2,0,0,Neutral,2026-10-16T23:57:12Z
-UVXY,ProShares Ultra VIX Short-Term Futures ETF,85131,5,7.01778,1,0,0,Neutral,2026-10-16T23:57:12Z
-LABD,Direxion Daily S&P Biotech Bear 3X Shares,13888,6,6.49863,0,0,0,Neutral,2026-10-16T23:57:12Z
-LABU,Direxion Daily S&P Biotech Bull 3X Shares,23213,7,6.18643,0,0,0,Neutral,2026-10-16T23:57:12Z
-CHPY,YieldMax Semiconductor Portfolio Option Income ETF,1666,8,5.43922,1,0,0,Neutral,2026-10-16T23:57:12Z
-SLS,SELLAS Life Sciences Group Inc,62395,9,5.31459,5,3,0,Very Bullish,2026-10-16T23:57:12Z
-NOC,Northrop Grumman Corp.,11566,10,5.31179,0,0,0,Neutral,2026-10-16T23:57:12Z
-QQQ,Invesco QQQ Trust Series 1,281156,11,5.04542,4,0,1,Very Bearish,2026-10-16T23:57:12Z
-MRVL,Marvell Technology Inc,53715,12,4.45429,0,0,0,Neutral,2026-10-16T23:57:12Z
-CURLF,Curaleaf Holdings Inc,9023,13,4.43606,0,0,0,Neutral,2026-10-16T23:57:12Z
-AMZN,Amazon.com Inc,707100,14,4.14518,1,0,0,Neutral,2026-10-16T23:57:12Z
-TRLV,Trulieve Cannabis Corp ,7811,15,4.11472,0,0,0,Neutral,2026-10-16T23:57:12Z
-USDE.X,Ethena USDe,87,16,3.86337,0,0,0,Neutral,2026-10-16T23:57:12Z
-STX,Seagate Technology Holdings Plc,14650,17,3.8131,0,0,0,Neutral,2026-10-16T23:57:12Z
-TQQQ,ProShares UltraPro QQQ,44525,18,3.53068,0,0,0,Neutral,2026-10-16T23:57:12Z
-CBRS,Cerebras Systems Inc,14849,19,3.28512,2,1,0,Very Bullish,2026-10-16T23:57:12Z
-NBIS,Nebius Group N.V. ,54208,20,3.25087,3,0,1,Very Bearish,2026-10-16T23:57:12Z
-MLTX,MoonLake Immunotherapeutics,6553,21,3.05493,0,0,0,Neutral,2026-10-16T23:57:12Z
-ARKK,ARK Innovation ETF,49679,22,3.02641,0,0,0,Neutral,2026-10-16T23:57:12Z
-CRWV,CoreWeave Inc,51306,23,2.95507,3,3,0,Very Bullish,2026-10-16T23:57:12Z
-LITE,Lumentum Holdings Inc,16087,24,2.93023,0,0,0,Neutral,2026-10-16T23:57:12Z
-SIMO,Silicon Motion Technology Corp.,3333,25,2.9237,0,0,0,Neutral,2026-10-16T23:57:12Z
-BE,Bloom Energy Corp - Ordinary Shares - Class A,37259,26,2.86286,0,0,0,Neutral,2026-10-16T23:57:12Z
-GOOGL,Alphabet Inc Class A,233962,27,2.84817,0,0,0,Neutral,2026-10-16T23:57:12Z
-CLDX,Celldex Therapeutics Inc.,9766,28,2.8204,0,0,0,Neutral,2026-10-16T23:57:12Z
-COHR,Coherent Corp,11252,29,2.79963,0,0,0,Neutral,2026-10-16T23:57:12Z
-NVAX,Novavax Inc,108272,30,2.75146,0,0,0,Neutral,2026-10-16T23:57:12Z
+NASA,Tema Space Innovators ETF,5411,1,6.01613,1,0,0,Neutral,2026-10-17T23:27:20Z
+INDEX.X,Index Cooperative,649,2,5.23844,2,2,0,Very Bullish,2026-10-17T23:27:20Z
+BNKR.X,BankrCoin,884,3,3.40641,1,1,0,Very Bullish,2026-10-17T23:27:20Z
+GE,GE Aerospace,154934,4,3.28528,1,0,0,Neutral,2026-10-17T23:27:20Z
+V,Visa Inc,96789,5,3.2307,0,0,0,Neutral,2026-10-17T23:27:20Z
+XAGUSD,Silver US Dollar,3656,6,2.96889,0,0,0,Neutral,2026-10-17T23:27:20Z
+IMMX,Immix Biopharma Inc,4711,7,2.8204,0,0,0,Neutral,2026-10-17T23:27:20Z
+AEHR,Aehr Test Systems,15212,8,2.53738,0,0,0,Neutral,2026-10-17T23:27:20Z
+BNB.X,Binance,24191,9,2.3249,0,0,0,Neutral,2026-10-17T23:27:20Z
+RYCEY,Rolls-Royce Holdings Plc - ADR,23222,10,2.3249,0,0,0,Neutral,2026-10-17T23:27:20Z
+DJIA,Global X Dow 30 Covered Call ETF,84327,11,2.15595,1,0,0,Neutral,2026-10-17T23:27:20Z
+MRK,Merck & Co Inc,26561,12,2.01586,0,0,0,Neutral,2026-10-17T23:27:20Z
+LINK.X,ChainLink,38586,13,1.88292,1,1,0,Very Bullish,2026-10-17T23:27:20Z
+RTX,Raytheon Technologies Corporation,24467,14,1.79045,1,0,0,Neutral,2026-10-17T23:27:20Z
+CSIQ,Canadian Solar Inc,14830,15,1.42362,1,1,0,Very Bullish,2026-10-17T23:27:20Z
+XPEV,XPeng Inc - ADR,57072,16,1.4174,0,0,0,Neutral,2026-10-17T23:27:20Z
+KYTX,Kyverna Therapeutics Inc.,1564,17,1.29893,0,0,0,Neutral,2026-10-17T23:27:20Z
+NIGHT.X,Midnight,696,18,1.29893,0,0,0,Neutral,2026-10-17T23:27:20Z
+PURR,Hyperliquid Strategies Inc.,26467,19,1.29033,0,0,0,Neutral,2026-10-17T23:27:20Z
+FUN,Six Flags Entertainment Corp,7061,20,1.11239,0,0,0,Neutral,2026-10-17T23:27:20Z
+RKT,Rocket Companies Inc,58249,21,1.05871,1,0,0,Neutral,2026-10-17T23:27:20Z
+CBRS,Cerebras Systems Inc,14873,22,1.04698,3,0,0,Neutral,2026-10-17T23:27:20Z
+CELH,Celsius Holdings Inc,30947,23,0.977541,0,0,0,Neutral,2026-10-17T23:27:20Z
+B,Barrick Mining Corp,32249,24,0.977517,0,0,0,Neutral,2026-10-17T23:27:20Z
+TSLA,Tesla Inc,1069637,25,0.935648,7,3,0,Very Bullish,2026-10-17T23:27:20Z
+NN,NextNav Inc,1212,26,0.93081,0,0,0,Neutral,2026-10-17T23:27:20Z
+GOOG,Alphabet Inc - Ordinary Shares - Class C,312424,27,0.835496,1,0,0,Neutral,2026-10-17T23:27:20Z
+SKHY,SK Hynix Inc - ADR,16896,28,0.834709,2,0,0,Neutral,2026-10-17T23:27:20Z
+BE,Bloom Energy Corp - Ordinary Shares - Class A,37290,29,0.722018,1,0,0,Neutral,2026-10-17T23:27:20Z
+STRK.X,Starknet,1496,30,0.715085,0,0,0,Neutral,2026-10-17T23:27:20Z
