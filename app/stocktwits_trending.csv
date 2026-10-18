@@ -1,31 +1,31 @@
 symbol,title,watchlist_count,st_rank,trending_score,messages,bullish,bearish,sentiment_label,fetched_at
-NASA,Tema Space Innovators ETF,5411,1,6.01613,1,0,0,Neutral,2026-10-17T23:27:20Z
-INDEX.X,Index Cooperative,649,2,5.23844,2,2,0,Very Bullish,2026-10-17T23:27:20Z
-BNKR.X,BankrCoin,884,3,3.40641,1,1,0,Very Bullish,2026-10-17T23:27:20Z
-GE,GE Aerospace,154934,4,3.28528,1,0,0,Neutral,2026-10-17T23:27:20Z
-V,Visa Inc,96789,5,3.2307,0,0,0,Neutral,2026-10-17T23:27:20Z
-XAGUSD,Silver US Dollar,3656,6,2.96889,0,0,0,Neutral,2026-10-17T23:27:20Z
-IMMX,Immix Biopharma Inc,4711,7,2.8204,0,0,0,Neutral,2026-10-17T23:27:20Z
-AEHR,Aehr Test Systems,15212,8,2.53738,0,0,0,Neutral,2026-10-17T23:27:20Z
-BNB.X,Binance,24191,9,2.3249,0,0,0,Neutral,2026-10-17T23:27:20Z
-RYCEY,Rolls-Royce Holdings Plc - ADR,23222,10,2.3249,0,0,0,Neutral,2026-10-17T23:27:20Z
-DJIA,Global X Dow 30 Covered Call ETF,84327,11,2.15595,1,0,0,Neutral,2026-10-17T23:27:20Z
-MRK,Merck & Co Inc,26561,12,2.01586,0,0,0,Neutral,2026-10-17T23:27:20Z
-LINK.X,ChainLink,38586,13,1.88292,1,1,0,Very Bullish,2026-10-17T23:27:20Z
-RTX,Raytheon Technologies Corporation,24467,14,1.79045,1,0,0,Neutral,2026-10-17T23:27:20Z
-CSIQ,Canadian Solar Inc,14830,15,1.42362,1,1,0,Very Bullish,2026-10-17T23:27:20Z
-XPEV,XPeng Inc - ADR,57072,16,1.4174,0,0,0,Neutral,2026-10-17T23:27:20Z
-KYTX,Kyverna Therapeutics Inc.,1564,17,1.29893,0,0,0,Neutral,2026-10-17T23:27:20Z
-NIGHT.X,Midnight,696,18,1.29893,0,0,0,Neutral,2026-10-17T23:27:20Z
-PURR,Hyperliquid Strategies Inc.,26467,19,1.29033,0,0,0,Neutral,2026-10-17T23:27:20Z
-FUN,Six Flags Entertainment Corp,7061,20,1.11239,0,0,0,Neutral,2026-10-17T23:27:20Z
-RKT,Rocket Companies Inc,58249,21,1.05871,1,0,0,Neutral,2026-10-17T23:27:20Z
-CBRS,Cerebras Systems Inc,14873,22,1.04698,3,0,0,Neutral,2026-10-17T23:27:20Z
-CELH,Celsius Holdings Inc,30947,23,0.977541,0,0,0,Neutral,2026-10-17T23:27:20Z
-B,Barrick Mining Corp,32249,24,0.977517,0,0,0,Neutral,2026-10-17T23:27:20Z
-TSLA,Tesla Inc,1069637,25,0.935648,7,3,0,Very Bullish,2026-10-17T23:27:20Z
-NN,NextNav Inc,1212,26,0.93081,0,0,0,Neutral,2026-10-17T23:27:20Z
-GOOG,Alphabet Inc - Ordinary Shares - Class C,312424,27,0.835496,1,0,0,Neutral,2026-10-17T23:27:20Z
-SKHY,SK Hynix Inc - ADR,16896,28,0.834709,2,0,0,Neutral,2026-10-17T23:27:20Z
-BE,Bloom Energy Corp - Ordinary Shares - Class A,37290,29,0.722018,1,0,0,Neutral,2026-10-17T23:27:20Z
-STRK.X,Starknet,1496,30,0.715085,0,0,0,Neutral,2026-10-17T23:27:20Z
+SPY,SPDR S&P 500 ETF Trust,638815,1,13.5385,12,3,1,Very Bullish,2026-10-18T23:37:56Z
+SLS,SELLAS Life Sciences Group Inc,62434,2,12.5128,1,0,0,Neutral,2026-10-18T23:37:56Z
+TSLA,Tesla Inc,1069709,3,7.74467,2,1,0,Very Bullish,2026-10-18T23:37:56Z
+QQQ,Invesco QQQ Trust Series 1,281204,4,7.51662,2,1,0,Very Bullish,2026-10-18T23:37:56Z
+IOVA,Iovance Biotherapeutics Inc,21034,5,7.10711,0,0,0,Neutral,2026-10-18T23:37:56Z
+IBIT,iShares Bitcoin Trust ETF,20557,6,4.90913,0,0,0,Neutral,2026-10-18T23:37:56Z
+BTC.X,Bitcoin,684243,7,4.07912,5,2,0,Very Bullish,2026-10-18T23:37:56Z
+CVX,Chevron Corp.,37191,8,4.03552,0,0,0,Neutral,2026-10-18T23:37:56Z
+KTOS,Kratos Defense & Security Solutions Inc,21977,9,3.60092,0,0,0,Neutral,2026-10-18T23:37:56Z
+NVAX,Novavax Inc,108273,10,3.4671,0,0,0,Neutral,2026-10-18T23:37:56Z
+USO,United States Oil Fund,75549,11,3.3834,0,0,0,Neutral,2026-10-18T23:37:56Z
+RIVN,Rivian Automotive Inc,88352,12,3.3609,0,0,0,Neutral,2026-10-18T23:37:56Z
+RSP,Invesco S&P 500 Equal Weight ETF,2486,13,3.23504,0,0,0,Neutral,2026-10-18T23:37:56Z
+WYNN,Wynn Resorts Ltd.,25833,14,3.2307,0,0,0,Neutral,2026-10-18T23:37:56Z
+JKS,JinkoSolar Holding Co LTD,10771,15,3.2307,0,0,0,Neutral,2026-10-18T23:37:56Z
+EROC,ERock Inc. - Ordinary Shares - Class A,962,16,3.14794,0,0,0,Neutral,2026-10-18T23:37:56Z
+MSTR,Strategy,83482,17,2.83885,0,0,0,Neutral,2026-10-18T23:37:56Z
+INTC,Intel Corp,209838,18,2.73038,4,1,0,Very Bullish,2026-10-18T23:37:56Z
+MSFT,Microsoft Corp,553206,19,2.54714,1,1,0,Very Bullish,2026-10-18T23:37:56Z
+RCL,Royal Caribbean Group,30000,20,2.53738,0,0,0,Neutral,2026-10-18T23:37:56Z
+GENI,Genius Sports Limited,7019,21,2.53738,0,0,0,Neutral,2026-10-18T23:37:56Z
+B,Barrick Mining Corp,32248,22,2.52097,0,0,0,Neutral,2026-10-18T23:37:56Z
+ANTHZZX.P,Anthropic,2314,23,2.45102,0,0,0,Neutral,2026-10-18T23:37:56Z
+FUN,Six Flags Entertainment Corp,7063,24,2.4087,0,0,0,Neutral,2026-10-18T23:37:56Z
+UMAC,Unusual Machines Inc,12587,25,2.15595,0,0,0,Neutral,2026-10-18T23:37:56Z
+TRUMP.X,Trump For President,12730,26,2.11098,0,0,0,Neutral,2026-10-18T23:37:56Z
+SRPT,Sarepta Therapeutics Inc,26688,27,2.08572,0,0,0,Neutral,2026-10-18T23:37:56Z
+PYTH.X,Pyth Network,2446,28,1.95331,0,0,0,Neutral,2026-10-18T23:37:56Z
+AVAV,AeroVironment Inc.,13990,29,1.89588,0,0,0,Neutral,2026-10-18T23:37:56Z
+GDX,VanEck Gold Miners ETF,30257,30,1.89588,0,0,0,Neutral,2026-10-18T23:37:56Z

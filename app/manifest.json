@@ -2547,10 +2547,10 @@
       "checksum": "7a30672b240f42f1e2bbeabd538666c1"
     },
     "backtest_equity_stats.csv": {
-      "checksum": "521d482e54b13fa7b3e28fb626dda3e0"
+      "checksum": "39ff1de254a2e44d16b4de9ff6021d66"
     },
     "backtest_equity.csv": {
-      "checksum": "40b92a1e6aa8bf3a3b2cba8b883d6780"
+      "checksum": "3252ad7054b5a3e7107a126f9ee50899"
     },
     "backtest_headline.csv": {
       "checksum": "59b3d07d948d71060609b1a3713e937b"
@@ -2559,7 +2559,7 @@
       "checksum": "62b2f11bf03771ec681261975c34d0db"
     },
     "backtest_phase_sweep.csv": {
-      "checksum": "156206395426511ee663705fa69f57a6"
+      "checksum": "34fbd47a6df83c0d002e73d3e90f1f53"
     },
     "backtest_summary.csv": {
       "checksum": "9689999a3766c67ab7afea71ecc17519"
@@ -2568,61 +2568,61 @@
       "checksum": "6f1dddc156f656f2d4c4d382e7b64017"
     },
     "data/meta.rds": {
-      "checksum": "8327eb400f1908be3f59d74a311fc8e3"
+      "checksum": "d49e072ce43ff8c378f655ff439c5808"
     },
     "data/price_series_cache.rds": {
       "checksum": "266a1b7cfa8bbf9180380a4969dbc886"
     },
     "earnings_calendar.csv": {
-      "checksum": "acd5c099b8b5ae716eb9b8aad81fe350"
+      "checksum": "f5e6b2f9325784ebf76c7b53d3a2fc31"
     },
     "global.R": {
       "checksum": "55b7ee2946ae08b4d664acaf2d8f7b1d"
     },
     "macro_data.csv": {
-      "checksum": "bb3642472cc7b9b4dd2a0bfea1381f74"
+      "checksum": "0af4fb5e3ed06f3fe1ae2cf866d726aa"
     },
     "market_news.csv": {
       "checksum": "40b59b1ef18dd32c084b345c018d8bfb"
     },
     "master_scored.csv": {
-      "checksum": "4473563c0717abab475c872ee82d8ed6"
+      "checksum": "1433b7a6bc1ec3847db3f8fc64ee9075"
     },
     "meta.rds": {
-      "checksum": "8327eb400f1908be3f59d74a311fc8e3"
+      "checksum": "d49e072ce43ff8c378f655ff439c5808"
     },
     "price_history.csv": {
-      "checksum": "ccd38cfe1041b6f20fc78de5fe07dcf9"
+      "checksum": "0e2f5d8049f3ffefc8d3410e21801da2"
     },
     "reversal_results.csv": {
       "checksum": "55d4782d53b4c52ed2cb8fb1885c3140"
     },
     "score_history.csv": {
-      "checksum": "f3da33774a7d490eda526fa4c8a02383"
+      "checksum": "2eb4d4037b08584d3c969e2cdb47dfcf"
     },
     "sec_filings.csv": {
-      "checksum": "a5980771d0c52648725d18ad88c95228"
+      "checksum": "5ed4304b2000ad7efcb26c7e76accacb"
     },
     "sector_performance.csv": {
       "checksum": "398b4e1df1b9c996cdaa463e7c2ecf87"
     },
     "stock_news.csv": {
-      "checksum": "1d0b77eea3301644ebebf7b731f1a1b8"
+      "checksum": "4f2c00f9d3e4a59ca702ffb427d66da8"
     },
     "stocktwits_trending.csv": {
-      "checksum": "0677e3a3c6d13fd60d4591942f7b5cec"
+      "checksum": "8ee42f80b8bd60d76603ceb5eac6fe9b"
     },
     "top15_sweetspot.csv": {
-      "checksum": "f14edc984ce3a63987e6c1b26f1c1226"
+      "checksum": "a90db87f9f8cadaddcb34d6c7a5da506"
     },
     "top15_unicorns.csv": {
       "checksum": "403a40090952ce98588e58b460a894ae"
     },
     "tv_channels.csv": {
-      "checksum": "222e4d83967db41fc2cfdd44a2851367"
+      "checksum": "c79b00d39fb7f0b0afa8ecfe1c87728c"
     },
     "wsb_trending.csv": {
-      "checksum": "f93bb612d6f5274a97ffc8474d93d315"
+      "checksum": "776175e78cfcf5bcc3b7ac25ca1ea6a5"
     }
   },
   "users": null
