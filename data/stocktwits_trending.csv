@@ -1,31 +1,31 @@
 symbol,title,watchlist_count,st_rank,trending_score,messages,bullish,bearish,sentiment_label,fetched_at
-SPY,SPDR S&P 500 ETF Trust,638815,1,13.5385,12,3,1,Very Bullish,2026-10-18T23:37:56Z
-SLS,SELLAS Life Sciences Group Inc,62434,2,12.5128,1,0,0,Neutral,2026-10-18T23:37:56Z
-TSLA,Tesla Inc,1069709,3,7.74467,2,1,0,Very Bullish,2026-10-18T23:37:56Z
-QQQ,Invesco QQQ Trust Series 1,281204,4,7.51662,2,1,0,Very Bullish,2026-10-18T23:37:56Z
-IOVA,Iovance Biotherapeutics Inc,21034,5,7.10711,0,0,0,Neutral,2026-10-18T23:37:56Z
-IBIT,iShares Bitcoin Trust ETF,20557,6,4.90913,0,0,0,Neutral,2026-10-18T23:37:56Z
-BTC.X,Bitcoin,684243,7,4.07912,5,2,0,Very Bullish,2026-10-18T23:37:56Z
-CVX,Chevron Corp.,37191,8,4.03552,0,0,0,Neutral,2026-10-18T23:37:56Z
-KTOS,Kratos Defense & Security Solutions Inc,21977,9,3.60092,0,0,0,Neutral,2026-10-18T23:37:56Z
-NVAX,Novavax Inc,108273,10,3.4671,0,0,0,Neutral,2026-10-18T23:37:56Z
-USO,United States Oil Fund,75549,11,3.3834,0,0,0,Neutral,2026-10-18T23:37:56Z
-RIVN,Rivian Automotive Inc,88352,12,3.3609,0,0,0,Neutral,2026-10-18T23:37:56Z
-RSP,Invesco S&P 500 Equal Weight ETF,2486,13,3.23504,0,0,0,Neutral,2026-10-18T23:37:56Z
-WYNN,Wynn Resorts Ltd.,25833,14,3.2307,0,0,0,Neutral,2026-10-18T23:37:56Z
-JKS,JinkoSolar Holding Co LTD,10771,15,3.2307,0,0,0,Neutral,2026-10-18T23:37:56Z
-EROC,ERock Inc. - Ordinary Shares - Class A,962,16,3.14794,0,0,0,Neutral,2026-10-18T23:37:56Z
-MSTR,Strategy,83482,17,2.83885,0,0,0,Neutral,2026-10-18T23:37:56Z
-INTC,Intel Corp,209838,18,2.73038,4,1,0,Very Bullish,2026-10-18T23:37:56Z
-MSFT,Microsoft Corp,553206,19,2.54714,1,1,0,Very Bullish,2026-10-18T23:37:56Z
-RCL,Royal Caribbean Group,30000,20,2.53738,0,0,0,Neutral,2026-10-18T23:37:56Z
-GENI,Genius Sports Limited,7019,21,2.53738,0,0,0,Neutral,2026-10-18T23:37:56Z
-B,Barrick Mining Corp,32248,22,2.52097,0,0,0,Neutral,2026-10-18T23:37:56Z
-ANTHZZX.P,Anthropic,2314,23,2.45102,0,0,0,Neutral,2026-10-18T23:37:56Z
-FUN,Six Flags Entertainment Corp,7063,24,2.4087,0,0,0,Neutral,2026-10-18T23:37:56Z
-UMAC,Unusual Machines Inc,12587,25,2.15595,0,0,0,Neutral,2026-10-18T23:37:56Z
-TRUMP.X,Trump For President,12730,26,2.11098,0,0,0,Neutral,2026-10-18T23:37:56Z
-SRPT,Sarepta Therapeutics Inc,26688,27,2.08572,0,0,0,Neutral,2026-10-18T23:37:56Z
-PYTH.X,Pyth Network,2446,28,1.95331,0,0,0,Neutral,2026-10-18T23:37:56Z
-AVAV,AeroVironment Inc.,13990,29,1.89588,0,0,0,Neutral,2026-10-18T23:37:56Z
-GDX,VanEck Gold Miners ETF,30257,30,1.89588,0,0,0,Neutral,2026-10-18T23:37:56Z
+DJT,Trump Media & Technology Group Corp.,115699,1,12.5932,4,0,0,Neutral,2026-10-20T00:39:49Z
+AMZN,Amazon.com Inc,707427,2,9.7377300000000009,0,0,0,Neutral,2026-10-20T00:39:49Z
+IBRX,ImmunityBio Inc,31427,3,8.21115,2,0,0,Neutral,2026-10-20T00:39:49Z
+CLF,Cleveland-Cliffs Inc,32958,4,7.62943,0,0,0,Neutral,2026-10-20T00:39:49Z
+CBRS,Cerebras Systems Inc,15021,5,7.29888,1,0,0,Neutral,2026-10-20T00:39:49Z
+SLS,SELLAS Life Sciences Group Inc,62521,6,7.08347,3,3,0,Very Bullish,2026-10-20T00:39:49Z
+AVGO,Broadcom Inc,76035,7,6.36206,2,0,0,Neutral,2026-10-20T00:39:49Z
+LRCX,Lam Research Corp.,22185,8,5.99758,0,0,0,Neutral,2026-10-20T00:39:49Z
+LUNR,Intuitive Machines Inc,39064,9,5.79619,0,0,0,Neutral,2026-10-20T00:39:49Z
+UAL,United Airlines Holdings Inc,39894,10,5.63559,0,0,0,Neutral,2026-10-20T00:39:49Z
+AGNC,AGNC Investment Corp,13097,11,5.42985,0,0,0,Neutral,2026-10-20T00:39:49Z
+RUN,Sunrun Inc,22970,12,5.39249,0,0,0,Neutral,2026-10-20T00:39:49Z
+GME,GameStop Corp,308313,13,5.12345,1,0,0,Neutral,2026-10-20T00:39:49Z
+KENDU.X,Kendu,5560,14,5.11423,0,0,0,Neutral,2026-10-20T00:39:49Z
+BTDR,Bitdeer Technologies Holding Co,4183,15,5.00353,0,0,0,Neutral,2026-10-20T00:39:49Z
+XLE,Energy Select Sector SPDR Fund,24771,16,4.98678,0,0,0,Neutral,2026-10-20T00:39:49Z
+ARM,Arm Holdings Plc.,33976,17,4.82926,0,0,0,Neutral,2026-10-20T00:39:49Z
+UPS,"United Parcel Service, Inc.",29547,18,4.58857,0,0,0,Neutral,2026-10-20T00:39:49Z
+SCHD,Schwab US Dividend Equity ETF,24221,19,4.58857,0,0,0,Neutral,2026-10-20T00:39:49Z
+AAL,American Airlines Group Inc,109767,20,4.33564,0,0,0,Neutral,2026-10-20T00:39:49Z
+UBER,Uber Technologies Inc,131930,21,4.24789,0,0,0,Neutral,2026-10-20T00:39:49Z
+NOK,Nokia Corp,114873,22,4.1485,1,0,0,Neutral,2026-10-20T00:39:49Z
+CRWV,CoreWeave Inc,51988,23,4.04622,2,0,2,Very Bearish,2026-10-20T00:39:49Z
+BROS,Dutch Bros Inc,12352,24,4.01138,0,0,0,Neutral,2026-10-20T00:39:49Z
+MSTR,Strategy,83490,25,3.62713,5,2,2,Neutral,2026-10-20T00:39:49Z
+SPY,SPDR S&P 500 ETF Trust,638875,26,3.4655,6,1,0,Very Bullish,2026-10-20T00:39:49Z
+AMKR,AMKOR Technology Inc.,6422,27,3.46549,0,0,0,Neutral,2026-10-20T00:39:49Z
+CHPY,YieldMax Semiconductor Portfolio Option Income ETF,1683,28,3.37144,0,0,0,Neutral,2026-10-20T00:39:49Z
+GM,General Motors Company,50574,29,3.33083,0,0,0,Neutral,2026-10-20T00:39:49Z
+IPO,Renaissance Capital Greenwich Funds - Renaissance IPO ETF,1815,30,3.32568,0,0,0,Neutral,2026-10-20T00:39:49Z
