@@ -1,31 +1,31 @@
 symbol,title,watchlist_count,st_rank,trending_score,messages,bullish,bearish,sentiment_label,fetched_at
-DJT,Trump Media & Technology Group Corp.,115699,1,12.5932,4,0,0,Neutral,2026-10-20T00:39:49Z
-AMZN,Amazon.com Inc,707427,2,9.7377300000000009,0,0,0,Neutral,2026-10-20T00:39:49Z
-IBRX,ImmunityBio Inc,31427,3,8.21115,2,0,0,Neutral,2026-10-20T00:39:49Z
-CLF,Cleveland-Cliffs Inc,32958,4,7.62943,0,0,0,Neutral,2026-10-20T00:39:49Z
-CBRS,Cerebras Systems Inc,15021,5,7.29888,1,0,0,Neutral,2026-10-20T00:39:49Z
-SLS,SELLAS Life Sciences Group Inc,62521,6,7.08347,3,3,0,Very Bullish,2026-10-20T00:39:49Z
-AVGO,Broadcom Inc,76035,7,6.36206,2,0,0,Neutral,2026-10-20T00:39:49Z
-LRCX,Lam Research Corp.,22185,8,5.99758,0,0,0,Neutral,2026-10-20T00:39:49Z
-LUNR,Intuitive Machines Inc,39064,9,5.79619,0,0,0,Neutral,2026-10-20T00:39:49Z
-UAL,United Airlines Holdings Inc,39894,10,5.63559,0,0,0,Neutral,2026-10-20T00:39:49Z
-AGNC,AGNC Investment Corp,13097,11,5.42985,0,0,0,Neutral,2026-10-20T00:39:49Z
-RUN,Sunrun Inc,22970,12,5.39249,0,0,0,Neutral,2026-10-20T00:39:49Z
-GME,GameStop Corp,308313,13,5.12345,1,0,0,Neutral,2026-10-20T00:39:49Z
-KENDU.X,Kendu,5560,14,5.11423,0,0,0,Neutral,2026-10-20T00:39:49Z
-BTDR,Bitdeer Technologies Holding Co,4183,15,5.00353,0,0,0,Neutral,2026-10-20T00:39:49Z
-XLE,Energy Select Sector SPDR Fund,24771,16,4.98678,0,0,0,Neutral,2026-10-20T00:39:49Z
-ARM,Arm Holdings Plc.,33976,17,4.82926,0,0,0,Neutral,2026-10-20T00:39:49Z
-UPS,"United Parcel Service, Inc.",29547,18,4.58857,0,0,0,Neutral,2026-10-20T00:39:49Z
-SCHD,Schwab US Dividend Equity ETF,24221,19,4.58857,0,0,0,Neutral,2026-10-20T00:39:49Z
-AAL,American Airlines Group Inc,109767,20,4.33564,0,0,0,Neutral,2026-10-20T00:39:49Z
-UBER,Uber Technologies Inc,131930,21,4.24789,0,0,0,Neutral,2026-10-20T00:39:49Z
-NOK,Nokia Corp,114873,22,4.1485,1,0,0,Neutral,2026-10-20T00:39:49Z
-CRWV,CoreWeave Inc,51988,23,4.04622,2,0,2,Very Bearish,2026-10-20T00:39:49Z
-BROS,Dutch Bros Inc,12352,24,4.01138,0,0,0,Neutral,2026-10-20T00:39:49Z
-MSTR,Strategy,83490,25,3.62713,5,2,2,Neutral,2026-10-20T00:39:49Z
-SPY,SPDR S&P 500 ETF Trust,638875,26,3.4655,6,1,0,Very Bullish,2026-10-20T00:39:49Z
-AMKR,AMKOR Technology Inc.,6422,27,3.46549,0,0,0,Neutral,2026-10-20T00:39:49Z
-CHPY,YieldMax Semiconductor Portfolio Option Income ETF,1683,28,3.37144,0,0,0,Neutral,2026-10-20T00:39:49Z
-GM,General Motors Company,50574,29,3.33083,0,0,0,Neutral,2026-10-20T00:39:49Z
-IPO,Renaissance Capital Greenwich Funds - Renaissance IPO ETF,1815,30,3.32568,0,0,0,Neutral,2026-10-20T00:39:49Z
+SPCX,SpaceX,109412,1,20.1408,9,5,0,Very Bullish,2026-10-21T00:09:57Z
+SMCI,Super Micro Computer Inc,93440,2,17.2973,3,2,0,Very Bullish,2026-10-21T00:09:57Z
+NFLX,Netflix Inc,522899,3,15.2425,1,1,0,Very Bullish,2026-10-21T00:09:57Z
+TSLA,Tesla Inc,1070054,4,8.59101,4,3,0,Very Bullish,2026-10-21T00:09:57Z
+AAPL,Apple Inc,997990,5,7.51695,0,0,0,Neutral,2026-10-21T00:09:57Z
+MYGN,"Myriad Genetics, Inc.",2274,6,6.857,0,0,0,Neutral,2026-10-21T00:09:57Z
+NVDA,NVIDIA Corp,672407,7,6.25216,0,0,0,Neutral,2026-10-21T00:09:57Z
+RAPP,Rapport Therapeutics Inc,474,8,5.83701,0,0,0,Neutral,2026-10-21T00:09:57Z
+BRZE,Braze Inc,1397,9,5.76875,0,0,0,Neutral,2026-10-21T00:09:57Z
+NBIS,Nebius Group N.V. ,54670,10,5.75687,2,1,1,Neutral,2026-10-21T00:09:57Z
+AUDUSD,Australian Dollar / US Dollar,8106,11,5.25583,0,0,0,Neutral,2026-10-21T00:09:57Z
+SNAP,Snap Inc,234418,12,5.0472,0,0,0,Neutral,2026-10-21T00:09:57Z
+CRMD,CorMedix Inc,23560,13,4.96561,1,0,0,Neutral,2026-10-21T00:09:57Z
+SE,Sea Ltd - ADR,28411,14,4.78787,0,0,0,Neutral,2026-10-21T00:09:57Z
+BE,Bloom Energy Corp - Ordinary Shares - Class A,37401,15,4.70027,2,1,0,Very Bullish,2026-10-21T00:09:57Z
+BB,BlackBerry Ltd,151512,16,4.62853,0,0,0,Neutral,2026-10-21T00:09:57Z
+SKHY,SK Hynix Inc - ADR,17035,17,4.6257,2,1,0,Very Bullish,2026-10-21T00:09:57Z
+DX,"Dynex Capital, Inc.",2436,18,4.39494,0,0,0,Neutral,2026-10-21T00:09:57Z
+IWM,iShares Russell 2000 ETF,50093,19,4.19748,0,0,0,Neutral,2026-10-21T00:09:57Z
+GM,General Motors Company,50666,20,4.0036,1,0,0,Neutral,2026-10-21T00:09:57Z
+ET,Energy Transfer LP Unit,23074,21,3.90695,0,0,0,Neutral,2026-10-21T00:09:57Z
+PYTH.X,Pyth Network,2484,22,3.88498,0,0,0,Neutral,2026-10-21T00:09:57Z
+SLS,SELLAS Life Sciences Group Inc,62599,23,3.76675,3,3,0,Very Bullish,2026-10-21T00:09:57Z
+LKNCY,Luckin Coffee Inc - ADR,40102,24,3.57174,0,0,0,Neutral,2026-10-21T00:09:57Z
+FIGR,Figure Technology Solutions Inc,2637,25,3.5458,0,0,0,Neutral,2026-10-21T00:09:57Z
+BRK.B,Berkshire Hathaway Inc. - Ordinary Shares - Class B,47723,26,3.47195,1,0,0,Neutral,2026-10-21T00:09:57Z
+ALM,Almonty Industries Inc,1302,27,3.34168,0,0,0,Neutral,2026-10-21T00:09:57Z
+IONQ,IonQ Inc,61404,28,3.32992,0,0,0,Neutral,2026-10-21T00:09:57Z
+IEP,"Icahn Enterprises, L.P.",6640,29,3.29818,0,0,0,Neutral,2026-10-21T00:09:57Z
+KORU,Direxion Daily South Korea Bull 3X Shares,3745,30,3.27973,0,0,0,Neutral,2026-10-21T00:09:57Z
