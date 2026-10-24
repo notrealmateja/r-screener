@@ -137,11 +137,26 @@ if (have_pkgs("dplyr", "tibble", "readr")) {
     expect_true(all(c("date","symbol","master_score","rank","n_universe") %in% names(d)))
     skip_if(nrow(d) == 0, "empty history")
     expect_equal(anyDuplicated(d[c("symbol","date")]), 0)
-    # Within a day, rank 1 is the best score and ranks run 1..n
+    # Within a day, rank 1 is the best score and no rank exceeds the field.
+    #
+    # NOT `max(rank) == nrow`. Ranks come from ties.method = "min", and
+    # master_score is rounded to one decimal across 195 names, so ties are
+    # routine — 19 tied pairs on 2026-10-22. Each tie makes the ranking skip a
+    # value, so the maximum equals the row count only when the LAST position
+    # happens not to be tied. That assertion passed for months by luck and
+    # failed the day OLMA and SOUN both scored 7.8.
     last <- d %>% filter(date == max(as.Date(date)))
     expect_equal(min(last$rank), 1)
-    expect_equal(max(last$rank), nrow(last))
+    expect_lte(max(last$rank), nrow(last))
     expect_equal(last$symbol[which.min(last$rank)],
                  last$symbol[which.max(last$master_score)])
+    # What the gaps must never do: a rank may repeat or skip, but ordering by
+    # rank must still order by score.
+    ord <- last %>% arrange(rank)
+    expect_false(is.unsorted(rev(ord$master_score)))
+    # Every tied rank must be a genuine score tie, not an indexing slip.
+    dup <- ord %>% group_by(rank) %>% filter(dplyr::n() > 1) %>%
+      summarize(n_scores = dplyr::n_distinct(master_score), .groups = "drop")
+    if (nrow(dup)) expect_true(all(dup$n_scores == 1))
   })
 }
