@@ -107,11 +107,41 @@ test_that("disclaimer gate is present and blocks the page on load", {
   # Covers the page rather than sitting in a footer
   expect_match(src, "#disclaimer-gate \\{[^}]*position:fixed")
   expect_match(src, "#disclaimer-gate \\{[^}]*z-index:100000")
-  # States the null result rather than only generic boilerplate. Matches the
-  # metric name rather than a full sentence so rewording the gate does not
-  # break the test, but removing the disclosure entirely still does.
+  # States the null result rather than only generic boilerplate. Matches short
+  # phrases rather than whole sentences so rewording the gate does not break
+  # the test, but removing the disclosure entirely still does.
   expect_match(src, "information coefficient")
-  expect_match(src, "no statistically significant relationship to forward returns")
+  expect_match(src, "no demonstrated predictive power")
+  expect_match(src, "not a basis for any investment decision")
+  # The claim must be stated unconditionally, never derived from the current
+  # t-statistic. A disclaimer that softens itself the first night a number
+  # wanders past 2 is worse than a stale one, so nothing here may sit behind
+  # an if() testing significance.
+  gate <- sub('.*id="disclaimer-gate"', "", src)
+  gate <- substr(gate, 1, 4000)
+  expect_no_match(gate, "if *\\([^)]*ic_t_stat")
+  expect_no_match(gate, "if *\\([^)]*significan")
+})
+
+# The gate used to hardcode "32 rebalances ... coefficient +0.003, t = 0.09"
+# while the pipeline reported 28, +0.053 and 1.99 — and the Methodology tab
+# rendered the count dynamically, so the app stated two different numbers four
+# screens apart. Measured values in the gate must come from the data.
+test_that("the disclaimer gate reads its numbers from the backtest, not the source", {
+  lines <- readLines("../../app/app.R")
+  from  <- grep('id="disclaimer-gate"', lines, fixed = TRUE)[1]
+  skip_if(is.na(from), "disclaimer gate not found")
+  gate_lines <- lines[from:min(length(lines), from + 70)]
+  expect_match(paste(gate_lines, collapse = "\n"), "bt_headline")
+  expect_match(paste(gate_lines, collapse = "\n"), "mean_rank_ic")
+  # Comments are stripped first: the block documents the old hardcoded values
+  # on purpose, and a test that cannot tell a comment from rendered copy would
+  # forbid explaining the bug it exists to prevent.
+  code <- sub("(^|\\s)#.*$", "", gate_lines)
+  code <- paste(code, collapse = "\n")
+  expect_no_match(code, "across [0-9]+ rebalances")
+  expect_no_match(code, "coefficient \\+?[0-9]")
+  expect_no_match(code, "t = [0-9]")
 })
 
 test_that("UI does not claim predictive power the validation disproves", {

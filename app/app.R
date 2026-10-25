@@ -908,14 +908,36 @@ ui <- fluidPage(
              "here is a recommendation, solicitation or offer to buy or sell any security, ",
              "and no advisory relationship is created by using this site."),
       div(class="dg-flag",
-        tags$p(tags$strong("Rankings carry no demonstrated predictive power. "),
-               "In out-of-sample testing across 32 rebalances, this model's rankings showed ",
-               "no statistically significant relationship to forward returns (information ",
-               "coefficient +0.003, t = 0.09). Stocks are labelled by score band — Very ",
-               "Strong through Very Weak — describing where they sit in the model's own ",
-               "distribution. They are not forecasts, not endorsements, and not a ",
-               "basis for any investment decision. The Methodology tab shows the full ",
-               "evidence.")),
+        # Rendered from backtest_headline.csv, not typed in.
+        #
+        # This paragraph used to hardcode "32 rebalances ... coefficient +0.003,
+        # t = 0.09". The pipeline had long since moved on: 28 rebalances, IC
+        # +0.053, t = 1.99. Every number in the sentence was wrong, and the
+        # Methodology tab renders the same count dynamically, so the app showed
+        # 32 here and 28 four screens later. Being stale in the conservative
+        # direction is still being stale, and this is the one paragraph on the
+        # site written to be legally careful.
+        #
+        # The CLAIM is deliberately not derived. "No demonstrated predictive
+        # power" is the conservative reading of a small sample, and it must not
+        # start asserting the opposite the first night a t-statistic wanders
+        # past 2 — a disclaimer that talks itself up is worse than a stale one.
+        # So the numbers move and the caution does not.
+        local({
+          h <- if (!is.null(bt_headline) && nrow(bt_headline) > 0) bt_headline[1, ] else NULL
+          measured <- if (is.null(h)) "" else sprintf(
+            "In out-of-sample testing across %s rebalances, the rank information coefficient was %+.3f (t = %.2f) — measured over %s trading days of history on a universe chosen after the fact. ",
+            h$rebalances, h$mean_rank_ic, h$ic_t_stat,
+            h$formation_days + h$hold_days)
+          tags$p(tags$strong("Rankings carry no demonstrated predictive power. "),
+                 measured,
+                 "That is far too small a sample, over far too short a period, to establish ",
+                 "a reliable relationship to forward returns. Stocks are labelled by score ",
+                 "band — Very Strong through Very Weak — describing where they sit in the ",
+                 "model's own distribution. They are not forecasts, not endorsements, and ",
+                 "not a basis for any investment decision. The Methodology tab shows the ",
+                 "full evidence.")
+        })),
       tags$p(tags$strong("Backtested results are hypothetical. "),
              "They do not represent actual trading, were produced with the benefit of ",
              "hindsight, and exclude trading costs, slippage and the effect of companies ",
@@ -2998,8 +3020,10 @@ server <- function(input, output, session) {
     validation <- if (is.null(bt_headline) || nrow(bt_headline) == 0) {
       div(class="callout",
         div(class="ct","Validation pending"),
+        # 126 + 63 + 1, the guard in R/05_backtest.R. It said 85, which was
+        # never the requirement for the windows this test actually uses.
         tags$p("The walk-forward backtest has not produced results yet. It needs at least ",
-               "85 trading days of alpha history."))
+               "190 trading days of alpha history."))
     } else {
       h <- bt_headline[1, ]
       stats <- div(class="statrow",
@@ -3128,10 +3152,22 @@ server <- function(input, output, session) {
              "is judged on the same evidence as one tracked since day one."),
 
       tags$h2("Does it actually work?"),
-      tags$p("Walk-forward test, out-of-sample by construction: at each rebalance the score ",
-             "is computed from a 63-day formation window, stocks are sorted into quintiles, ",
-             "and realised alpha is measured over the following 21 days — data the score ",
-             "could not have seen. The weights are the live model's, not fitted here."),
+      # Windows read from the backtest's own output rather than typed. This
+      # paragraph said "a 63-day formation window ... the following 21 days";
+      # the test actually uses 126 and 63, and 21 is the rebalance INTERVAL,
+      # not the measurement horizon. The Validation tab described the same
+      # backtest correctly 900 lines further down, so the file disagreed with
+      # itself about what it had run.
+      local({
+        h  <- if (!is.null(bt_headline) && nrow(bt_headline) > 0) bt_headline[1, ] else NULL
+        fw <- if (is.null(h)) 126 else h$formation_days
+        hw <- if (is.null(h)) 63  else h$hold_days
+        tags$p("Walk-forward test, out-of-sample by construction: at each rebalance the score ",
+               sprintf("is computed from a %s-day formation window, stocks are sorted into ", fw),
+               sprintf("quintiles, and realised alpha is measured over the following %s days ", hw),
+               "— data the score could not have seen. The weights are the live model's, not ",
+               "fitted here.")
+      }),
       validation,
 
       # ── Per-component diagnostic ────────────────────────────────────────
@@ -4165,9 +4201,15 @@ server <- function(input, output, session) {
       else if (ex2 >= ed_u) "It is not resting on the two moonshots."
       else "Part of it is the two moonshots.",
       "</b> This candidate list was not assembled ",
-      "neutrally: 68 of the 195 names sit in a block whose own comment says they exist to make ",
-      "the small-cap screen meaningful, picked in August 2026 with full hindsight, and the two ",
-      "largest total returns in the whole file are among them. Because the figure above is the ",
+      # Was "the two largest total returns in the whole file are among them",
+      # which overstated it: QBTS is in that 68-name small-cap block, but HOOD
+      # is in the 77-name mid-cap one. The hindsight point stands for the whole
+      # list — every tier was picked in August 2026 — so it is made about the
+      # list rather than about one block it does not fit.
+      "neutrally: every name in it was chosen in August 2026, with full hindsight, and 68 of ",
+      "the 195 sit in a block whose own comment says they exist to make the small-cap screen ",
+      "meaningful. The largest total return in the whole file is in that block; the second ",
+      "largest is in the mid-cap tier beside it. Because the figure above is the ",
       "model minus its own universe, those names sit on both sides of the subtraction, so which ",
       "side they move more has to be measured rather than argued. Deleting ",
       if (is.na(ex2_nm)) "the two biggest winners" else ex2_nm,
