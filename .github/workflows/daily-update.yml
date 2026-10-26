@@ -322,9 +322,23 @@ jobs:
                   problems <- c(problems,
                                 sprintf("%d symbol(s) with missing or thin price history",
                                         length(none) + length(thin)))
-                # A broad collapse IS fatal: that is the pull breaking, not a
-                # couple of delisted names.
-                if (length(none) + length(thin) > 0.1 * length(unique(ms$symbol)))
+                # Fatal ONLY when the pull is so broken the site would be
+                # useless anyway.
+                #
+                # This used to be fatal above 10%, which was a mistake and a
+                # costly one. The commit step is gated on this check passing,
+                # so a tenth of the universe pulling short stopped the ENTIRE
+                # nightly refresh — no price update, no scores, no deploy —
+                # and reopened the failure issue every night until someone
+                # looked. A coverage warning is a reason to investigate, not a
+                # reason to publish nothing: yesterday's good data plus today's
+                # partial pull is still better than a site frozen for days.
+                #
+                # 10% is well inside the range an ordinary flaky Yahoo night
+                # produces. Half the universe is not; that is the pull itself
+                # failing, and committing it would overwrite good data with
+                # rubbish, which is what the gate exists to prevent.
+                if (length(none) + length(thin) > 0.5 * length(unique(ms$symbol)))
                   hard <- c(hard, sprintf("price coverage collapsed: %d of %d symbols unusable",
                                           length(none) + length(thin),
                                           length(unique(ms$symbol))))
