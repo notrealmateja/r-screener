@@ -86,3 +86,51 @@ test_that("an unterminated block is named rather than mis-sliced", {
   expect_equal(r$status, 1L, info = r$text)
   expect_true(grepl("unterminated", r$text, fixed = TRUE))
 })
+
+# The R in this workflow is embedded in the shell as Rscript -e '...', so the
+# file has to be valid SHELL before any of it is valid R. Parsing the YAML, as
+# the linter did, cannot see that distinction: the R is fine, bash is what
+# objects.
+#
+# The word "day's" in a comment closed that quote and took the nightly down,
+# with an error naming a line that was perfectly correct:
+#     line 86: syntax error near unexpected token `"data/price_history.csv"'
+# Three nights failed before anyone read the log. `bash -n` reproduces it in
+# milliseconds, so it runs here.
+test_that("every run: block in the workflow is valid shell", {
+  wf <- repo_path(".github", "workflows")
+  skip_if_not(dir.exists(wf), "no workflows directory")
+  skip_if(Sys.which("bash") == "", "bash unavailable")
+
+  for (f in list.files(wf, pattern = "\\.ya?ml$", full.names = TRUE)) {
+    lines <- readLines(f, warn = FALSE)
+    cur <- NULL; indent <- NA_integer_; blocks <- list(); starts <- integer(0)
+    for (i in seq_along(lines)) {
+      l <- lines[i]
+      if (grepl("^\\s*run: \\|\\s*$", l)) {
+        if (!is.null(cur)) { blocks[[length(blocks) + 1]] <- cur }
+        cur <- character(0); indent <- NA_integer_
+        starts <- c(starts, i); next
+      }
+      if (is.null(cur)) next
+      if (!nzchar(trimws(l))) { cur <- c(cur, ""); next }
+      ind <- nchar(sub("[^ ].*$", "", l))
+      if (is.na(indent)) indent <- ind
+      if (ind < indent) { blocks[[length(blocks) + 1]] <- cur; cur <- NULL; next }
+      cur <- c(cur, substring(l, indent + 1))
+    }
+    if (!is.null(cur)) blocks[[length(blocks) + 1]] <- cur
+
+    for (k in seq_along(blocks)) {
+      tmp <- tempfile(fileext = ".sh")
+      writeLines(blocks[[k]], tmp)
+      out <- suppressWarnings(system2("bash", c("-n", shQuote(tmp)),
+                                      stdout = TRUE, stderr = TRUE))
+      st <- attr(out, "status")
+      unlink(tmp)
+      expect_true(is.null(st) || st == 0L,
+                  info = sprintf("%s run: block starting line %d is not valid shell:\n%s",
+                                 basename(f), starts[k], paste(out, collapse = "\n")))
+    }
+  }
+})

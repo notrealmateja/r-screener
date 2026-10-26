@@ -290,7 +290,12 @@ jobs:
             # WBS has had ZERO price rows and CRNX eight for over a week, and
             # every check passed every night. Both were still scored, ranked
             # and displayed, and a 17-observation CRNX was being announced in
-            # the run log as the day's best alpha.
+            # the run log as the best alpha of the day.
+            # No apostrophes anywhere in this block: it is embedded in the
+            # shell inside a single-quoted Rscript argument, so one apostrophe
+            # closes that quote and bash tries to parse the rest as shell.
+            # That took the nightly down for a day. tools/lint_workflow_r.R
+            # now refuses the whole file if one reappears.
             if (file.exists("data/price_history.csv") &&
                 file.exists("data/master_scored.csv")) {
               ph <- tryCatch(read_csv("data/price_history.csv",
@@ -331,8 +336,8 @@ jobs:
                 # nightly refresh — no price update, no scores, no deploy —
                 # and reopened the failure issue every night until someone
                 # looked. A coverage warning is a reason to investigate, not a
-                # reason to publish nothing: yesterday's good data plus today's
-                # partial pull is still better than a site frozen for days.
+                # reason to publish nothing: the good data already on disk plus
+                # a partial pull beats a site frozen for days.
                 #
                 # 10% is well inside the range an ordinary flaky Yahoo night
                 # produces. Half the universe is not; that is the pull itself

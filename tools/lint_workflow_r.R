@@ -63,6 +63,29 @@ if (!length(files)) { cat("No workflow files found in", wf_dir, "\n"); quit(stat
 for (f in files) {
   for (b in extract_blocks(f)) {
     label <- sprintf("%s:%d", f, b$line)
+
+    # A lone apostrophe ends the block, because the R is embedded in the shell
+    # as Rscript -e '...'. bash closes the quote at the first ' it meets and
+    # then tries to parse the rest of the R as shell, which fails somewhere
+    # further on with a message that names an innocent line.
+    #
+    # This is not hypothetical. The word "day's" in a COMMENT took the nightly
+    # down, and the failure read:
+    #     syntax error near unexpected token `"data/price_history.csv"'
+    # which points at code that is perfectly fine. Parsing the YAML, as this
+    # linter did, never sees it: the R is valid R. Only the shell objects.
+    if (!isTRUE(b$unterminated) && length(b$code)) {
+      q <- grep("'", b$code, fixed = TRUE)
+      if (length(q)) {
+        cat(sprintf("FAIL %s\n  apostrophe inside Rscript -e '...' closes the shell quote:\n", label))
+        for (i in utils::head(q, 5))
+          cat(sprintf("    line %d: %s\n", b$line + i, trimws(b$code[i])))
+        cat("  Reword rather than escape \u2014 an escaped quote survives review badly.\n")
+        problems <- problems + 1L
+        next
+      }
+    }
+
     if (isTRUE(b$unterminated)) {
       cat(sprintf("FAIL %s\n  unterminated Rscript -e block (no closing quote)\n", label))
       problems <- problems + 1L
