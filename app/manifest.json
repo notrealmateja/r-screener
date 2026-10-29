@@ -12,7 +12,7 @@
   "packages": {
     "DT": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Type": "Package",
         "Package": "DT",
@@ -39,7 +39,7 @@
     },
     "R6": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "R6",
         "Title": "Encapsulated Classes with Reference Semantics",
@@ -66,7 +66,7 @@
     },
     "RColorBrewer": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "RColorBrewer",
         "Version": "1.1-3",
@@ -88,7 +88,7 @@
     },
     "Rcpp": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "Rcpp",
         "Title": "Seamless R and C++ Integration",
@@ -116,7 +116,7 @@
     },
     "S7": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "S7",
         "Title": "An Object Oriented System Meant to Become a Successor to S3 and\nS4",
@@ -148,7 +148,7 @@
     },
     "TTR": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "TTR",
         "Type": "Package",
@@ -175,7 +175,7 @@
     },
     "askpass": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "askpass",
         "Type": "Package",
@@ -202,7 +202,7 @@
     },
     "base64enc": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "base64enc",
         "Version": "0.1-6",
@@ -226,7 +226,7 @@
     },
     "bit": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "bit",
         "Title": "Classes and Methods for Fast Memory-Efficient Boolean Selections",
@@ -254,7 +254,7 @@
     },
     "bit64": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "bit64",
         "Title": "A S3 Class for Vectors of 64bit Integers",
@@ -284,7 +284,7 @@
     },
     "bslib": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "bslib",
         "Title": "Custom 'Bootstrap' 'Sass' Themes for 'shiny' and 'rmarkdown'",
@@ -317,7 +317,7 @@
     },
     "cachem": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "cachem",
         "Version": "1.1.0",
@@ -344,7 +344,7 @@
     },
     "cli": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "cli",
         "Title": "Helpers for Developing Command Line Interfaces",
@@ -373,7 +373,7 @@
     },
     "clipr": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Type": "Package",
         "Package": "clipr",
@@ -402,7 +402,7 @@
     },
     "commonmark": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "commonmark",
         "Type": "Package",
@@ -428,7 +428,7 @@
     },
     "cpp11": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "cpp11",
         "Title": "A C++11 Interface for R's C Interface",
@@ -457,7 +457,7 @@
     },
     "crayon": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "crayon",
         "Title": "Colored Terminal Output",
@@ -484,7 +484,7 @@
     },
     "crosstalk": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Type": "Package",
         "Package": "crosstalk",
@@ -511,7 +511,7 @@
     },
     "curl": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "curl",
         "Type": "Package",
@@ -540,7 +540,7 @@
     },
     "data.table": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "data.table",
         "Version": "1.18.6.1",
@@ -567,7 +567,7 @@
     },
     "digest": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "digest",
         "Authors@R": "c(person(\"Dirk\", \"Eddelbuettel\", role = c(\"aut\", \"cre\"), email = \"edd@debian.org\",\n                    comment = c(ORCID = \"0000-0001-6419-907X\")),\n             person(\"Antoine\", \"Lucas\", role=\"ctb\", comment = c(ORCID = \"0000-0002-8059-9767\")),\n             person(\"Jarek\", \"Tuszynski\", role=\"ctb\"),\n             person(\"Henrik\", \"Bengtsson\", role=\"ctb\", comment = c(ORCID = \"0000-0002-7579-5165\")),\n             person(\"Simon\", \"Urbanek\", role=\"ctb\", comment = c(ORCID = \"0000-0003-2297-1732\")),\n             person(\"Mario\", \"Frasca\", role=\"ctb\"),\n             person(\"Bryan\", \"Lewis\", role=\"ctb\"),\n             person(\"Murray\", \"Stokely\", role=\"ctb\"),\n             person(\"Hannes\", \"Muehleisen\", role=\"ctb\", comment = c(ORCID = \"0000-0001-8552-0029\")),\n             person(\"Duncan\", \"Murdoch\", role=\"ctb\"),\n             person(\"Jim\", \"Hester\", role=\"ctb\", comment = c(ORCID = \"0000-0002-2739-7082\")),\n             person(\"Wush\", \"Wu\", role=\"ctb\", comment = c(ORCID = \"0000-0001-5180-0567\")),\n             person(\"Qiang\", \"Kou\", role=\"ctb\", comment = c(ORCID = \"0000-0001-6786-5453\")),\n             person(\"Thierry\", \"Onkelinx\", role=\"ctb\", comment = c(ORCID = \"0000-0001-8804-4216\")),\n             person(\"Michel\", \"Lang\", role=\"ctb\", comment = c(ORCID = \"0000-0001-9754-0393\")),\n             person(\"Viliam\", \"Simko\", role=\"ctb\"),\n             person(\"Kurt\", \"Hornik\", role=\"ctb\", comment = c(ORCID = \"0000-0003-4198-9911\")),\n             person(\"Radford\", \"Neal\", role=\"ctb\", comment = c(ORCID = \"0000-0002-2473-3407\")),\n             person(\"Kendon\", \"Bell\", role=\"ctb\", comment = c(ORCID = \"0000-0002-9093-8312\")),\n             person(\"Matthew\", \"de Queljoe\", role=\"ctb\"),\n             person(\"Dmitry\", \"Selivanov\", role=\"ctb\", comment = c(ORCID = \"0000-0003-0492-6647\")),\n             person(\"Ion\", \"Suruceanu\", role=\"ctb\", comment = c(ORCID = \"0009-0005-6446-4909\")),\n             person(\"Bill\", \"Denney\", role=\"ctb\", comment = c(ORCID = \"0000-0002-5759-428X\")),\n             person(\"Dirk\", \"Schumacher\", role=\"ctb\"),\n             person(\"András\", \"Svraka\", role=\"ctb\", comment = c(ORCID = \"0009-0008-8480-1329\")),\n             person(\"Sergey\", \"Fedorov\", role=\"ctb\", comment = c(ORCID = \"0000-0002-5970-7233\")),\n             person(\"Will\", \"Landau\", role=\"ctb\", comment = c(ORCID = \"0000-0003-1878-3253\")),\n             person(\"Floris\", \"Vanderhaeghe\", role=\"ctb\", comment = c(ORCID = \"0000-0002-6378-6229\")),\n             person(\"Kevin\", \"Tappe\", role=\"ctb\"),\n             person(\"Harris\", \"McGehee\", role=\"ctb\"),\n             person(\"Tim\", \"Mastny\", role=\"ctb\"),\n             person(\"Aaron\", \"Peikert\", role=\"ctb\", comment = c(ORCID = \"0000-0001-7813-818X\")),\n             person(\"Mark\", \"van der Loo\", role=\"ctb\", comment = c(ORCID = \"0000-0002-9807-4686\")),\n             person(\"Chris\", \"Muir\", role=\"ctb\", comment = c(ORCID = \"0000-0003-2555-3878\")),\n             person(\"Moritz\", \"Beller\", role=\"ctb\", comment = c(ORCID = \"0000-0003-4852-0526\")),\n             person(\"Sebastian\", \"Campbell\", role=\"ctb\", comment = c(ORCID = \"0009-0000-5948-4503\")),\n             person(\"Winston\", \"Chang\", role=\"ctb\", comment = c(ORCID = \"0000-0002-1576-2126\")),\n             person(\"Dean\", \"Attali\", role=\"ctb\", comment = c(ORCID = \"0000-0002-5645-3493\")),\n             person(\"Michael\", \"Chirico\", role=\"ctb\", comment = c(ORCID = \"0000-0003-0787-087X\")),\n             person(\"Kevin\", \"Ushey\", role=\"ctb\", comment = c(ORCID = \"0000-0003-2880-7407\")),\n             person(\"Carl\", \"Pearson\", role=\"ctb\", comment = c(ORCID = \"0000-0003-0701-7860\")))",
@@ -594,7 +594,7 @@
     },
     "dplyr": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Type": "Package",
         "Package": "dplyr",
@@ -626,7 +626,7 @@
     },
     "evaluate": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Type": "Package",
         "Package": "evaluate",
@@ -654,7 +654,7 @@
     },
     "farver": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Type": "Package",
         "Package": "farver",
@@ -680,7 +680,7 @@
     },
     "fastmap": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "fastmap",
         "Title": "Fast Data Structures",
@@ -704,7 +704,7 @@
     },
     "fontawesome": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Type": "Package",
         "Package": "fontawesome",
@@ -733,7 +733,7 @@
     },
     "fs": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "fs",
         "Title": "Cross-Platform File System Operations Based on 'libuv'",
@@ -766,7 +766,7 @@
     },
     "generics": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "generics",
         "Title": "Common S3 Generics not Provided by Base R Methods Related to\nModel Fitting",
@@ -794,7 +794,7 @@
     },
     "ggplot2": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "ggplot2",
         "Title": "Create Elegant Data Visualisations Using the Grammar of Graphics",
@@ -827,7 +827,7 @@
     },
     "glue": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "glue",
         "Title": "Interpreted String Literals",
@@ -858,7 +858,7 @@
     },
     "gtable": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "gtable",
         "Title": "Arrange 'Grobs' in Tables",
@@ -888,7 +888,7 @@
     },
     "highr": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "highr",
         "Type": "Package",
@@ -916,7 +916,7 @@
     },
     "hms": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "hms",
         "Title": "Pretty Time of Day",
@@ -944,7 +944,7 @@
     },
     "htmltools": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Type": "Package",
         "Package": "htmltools",
@@ -975,7 +975,7 @@
     },
     "htmlwidgets": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Type": "Package",
         "Package": "htmlwidgets",
@@ -1003,7 +1003,7 @@
     },
     "httpuv": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Type": "Package",
         "Package": "httpuv",
@@ -1036,7 +1036,7 @@
     },
     "httr": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "httr",
         "Title": "Tools for Working with URLs and HTTP",
@@ -1064,7 +1064,7 @@
     },
     "isoband": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "isoband",
         "Title": "Generate Isolines and Isobands from Regularly Spaced Elevation\nGrids",
@@ -1095,7 +1095,7 @@
     },
     "jquerylib": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "jquerylib",
         "Title": "Obtain 'jQuery' as an HTML Dependency Object",
@@ -1119,7 +1119,7 @@
     },
     "jsonlite": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "jsonlite",
         "Version": "2.0.0",
@@ -1145,7 +1145,7 @@
     },
     "knitr": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "knitr",
         "Type": "Package",
@@ -1175,7 +1175,7 @@
     },
     "labeling": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "labeling",
         "Type": "Package",
@@ -1198,7 +1198,7 @@
     },
     "later": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Type": "Package",
         "Package": "later",
@@ -1231,7 +1231,7 @@
     },
     "lattice": {
       "Source": "CRAN",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "lattice",
         "Version": "0.22-6",
@@ -1255,12 +1255,12 @@
         "Maintainer": "Deepayan Sarkar <deepayan.sarkar@r-project.org>",
         "Repository": "CRAN",
         "Date/Publication": "2024-03-20 06:10:02 UTC",
-        "Built": "R 4.4.0; x86_64-pc-linux-gnu; 2025-04-29 05:30:24 UTC; unix"
+        "Built": "R 4.4.0; x86_64-pc-linux-gnu; 2026-04-21 20:42:32 UTC; unix"
       }
     },
     "lazyeval": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "lazyeval",
         "Version": "0.2.3",
@@ -1286,7 +1286,7 @@
     },
     "lifecycle": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "lifecycle",
         "Title": "Manage the Life Cycle of your Package Functions",
@@ -1315,7 +1315,7 @@
     },
     "lubridate": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Type": "Package",
         "Package": "lubridate",
@@ -1349,7 +1349,7 @@
     },
     "magrittr": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Type": "Package",
         "Package": "magrittr",
@@ -1378,7 +1378,7 @@
     },
     "memoise": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "memoise",
         "Title": "'Memoisation' of Functions",
@@ -1403,7 +1403,7 @@
     },
     "mime": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "mime",
         "Type": "Package",
@@ -1428,7 +1428,7 @@
     },
     "openssl": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "openssl",
         "Type": "Package",
@@ -1456,7 +1456,7 @@
     },
     "otel": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "otel",
         "Title": "OpenTelemetry R API",
@@ -1484,7 +1484,7 @@
     },
     "pillar": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "pillar",
         "Title": "Coloured Formatting for Columns",
@@ -1517,7 +1517,7 @@
     },
     "pkgconfig": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "pkgconfig",
         "Title": "Private Configuration for 'R' Packages",
@@ -1541,7 +1541,7 @@
     },
     "plotly": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "plotly",
         "Title": "Create Interactive Web Graphics via 'plotly.js'",
@@ -1569,7 +1569,7 @@
     },
     "prettyunits": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "prettyunits",
         "Title": "Pretty, Human Readable Formatting of Quantities",
@@ -1594,7 +1594,7 @@
     },
     "progress": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "progress",
         "Title": "Terminal Progress Bars",
@@ -1622,7 +1622,7 @@
     },
     "promises": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Type": "Package",
         "Package": "promises",
@@ -1654,7 +1654,7 @@
     },
     "purrr": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "purrr",
         "Title": "Functional Programming Tools",
@@ -1687,7 +1687,7 @@
     },
     "quantmod": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "quantmod",
         "Type": "Package",
@@ -1714,7 +1714,7 @@
     },
     "rappdirs": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Type": "Package",
         "Package": "rappdirs",
@@ -1744,7 +1744,7 @@
     },
     "readr": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "readr",
         "Title": "Read Rectangular Text Data",
@@ -1777,7 +1777,7 @@
     },
     "rlang": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "rlang",
         "Version": "1.3.0",
@@ -1810,7 +1810,7 @@
     },
     "rmarkdown": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Type": "Package",
         "Package": "rmarkdown",
@@ -1840,7 +1840,7 @@
     },
     "sass": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Type": "Package",
         "Package": "sass",
@@ -1869,7 +1869,7 @@
     },
     "scales": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "scales",
         "Title": "Scale Functions for Visualization",
@@ -1899,7 +1899,7 @@
     },
     "shiny": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Type": "Package",
         "Package": "shiny",
@@ -1929,7 +1929,7 @@
     },
     "sourcetools": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "sourcetools",
         "Type": "Package",
@@ -1954,7 +1954,7 @@
     },
     "stringi": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "stringi",
         "Version": "1.8.9",
@@ -1984,7 +1984,7 @@
     },
     "stringr": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "stringr",
         "Title": "Simple, Consistent Wrappers for Common String Operations",
@@ -2015,7 +2015,7 @@
     },
     "sys": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "sys",
         "Type": "Package",
@@ -2041,7 +2041,7 @@
     },
     "tibble": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "tibble",
         "Title": "Simple Data Frames",
@@ -2076,7 +2076,7 @@
     },
     "tidyr": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "tidyr",
         "Title": "Tidy Messy Data",
@@ -2108,7 +2108,7 @@
     },
     "tidyselect": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "tidyselect",
         "Title": "Select from a Set of Strings",
@@ -2138,7 +2138,7 @@
     },
     "timechange": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "timechange",
         "Title": "Efficient Manipulation of Date-Times",
@@ -2165,7 +2165,7 @@
     },
     "tinytex": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "tinytex",
         "Type": "Package",
@@ -2191,7 +2191,7 @@
     },
     "tzdb": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "tzdb",
         "Title": "Time Zone Database Information",
@@ -2220,7 +2220,7 @@
     },
     "utf8": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "utf8",
         "Title": "Unicode Text Processing",
@@ -2247,7 +2247,7 @@
     },
     "vctrs": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "vctrs",
         "Title": "Vector Helpers",
@@ -2280,7 +2280,7 @@
     },
     "viridisLite": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "viridisLite",
         "Type": "Package",
@@ -2307,7 +2307,7 @@
     },
     "vroom": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "vroom",
         "Title": "Read and Write Rectangular Text Data Quickly",
@@ -2342,7 +2342,7 @@
     },
     "withr": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "withr",
         "Title": "Run Code 'With' Temporarily Modified Global State",
@@ -2372,7 +2372,7 @@
     },
     "xfun": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "xfun",
         "Type": "Package",
@@ -2400,7 +2400,7 @@
     },
     "xml2": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "xml2",
         "Title": "Parse XML",
@@ -2431,7 +2431,7 @@
     },
     "xtable": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "xtable",
         "Version": "1.8-8",
@@ -2457,7 +2457,7 @@
     },
     "xts": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "xts",
         "Type": "Package",
@@ -2485,7 +2485,7 @@
     },
     "yaml": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Type": "Package",
         "Package": "yaml",
@@ -2513,7 +2513,7 @@
     },
     "zoo": {
       "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/resolute/latest",
       "description": {
         "Package": "zoo",
         "Version": "1.9-1",
