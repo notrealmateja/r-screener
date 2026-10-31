@@ -1,31 +1,31 @@
 symbol,title,watchlist_count,st_rank,trending_score,messages,bullish,bearish,sentiment_label,fetched_at
-SKHY,SK Hynix Inc - ADR,17521,1,17.3306,2,2,0,Very Bullish,2026-10-28T00:48:33Z
-HOOD,Robinhood Markets Inc,101809,2,14.3181,8,2,2,Neutral,2026-10-28T00:48:33Z
-GOOGL,Alphabet Inc Class A,235268,3,11.3529,2,0,0,Neutral,2026-10-28T00:48:33Z
-ENPH,Enphase Energy Inc,49553,4,9.90829,0,0,0,Neutral,2026-10-28T00:48:33Z
-GOOG,Alphabet Inc - Ordinary Shares - Class C,312780,5,9.0372,0,0,0,Neutral,2026-10-28T00:48:33Z
-STX,Seagate Technology Holdings Plc,14958,6,8.70012,0,0,0,Neutral,2026-10-28T00:48:33Z
-SOFI,SoFi Technologies Inc,157435,7,8.69822,0,0,0,Neutral,2026-10-28T00:48:33Z
-BA,Boeing Co,198122,8,8.4087,3,0,0,Neutral,2026-10-28T00:48:33Z
-XRP.X,Ripple,240788,9,8.16468,0,0,0,Neutral,2026-10-28T00:48:33Z
-MU,Micron Technology Inc,220653,10,7.78518,6,2,0,Very Bullish,2026-10-28T00:48:33Z
-DJT,Trump Media & Technology Group Corp.,115746,11,7.53107,2,0,1,Very Bearish,2026-10-28T00:48:33Z
-GLW,"Corning, Inc.",16420,12,5.87964,0,0,0,Neutral,2026-10-28T00:48:33Z
-V,Visa Inc,96931,13,5.65115,0,0,0,Neutral,2026-10-28T00:48:33Z
-IEP,"Icahn Enterprises, L.P.",6685,14,5.59479,0,0,0,Neutral,2026-10-28T00:48:33Z
-LU,Lufax Holding Ltd - ADR,1501,15,5.48128,0,0,0,Neutral,2026-10-28T00:48:33Z
-IBIT,iShares Bitcoin Trust ETF,20546,16,5.33904,0,0,0,Neutral,2026-10-28T00:48:33Z
-AVGO,Broadcom Inc,76425,17,5.31214,0,0,0,Neutral,2026-10-28T00:48:33Z
-RAPP,Rapport Therapeutics Inc,499,18,5.04467,0,0,0,Neutral,2026-10-28T00:48:33Z
-RCL,Royal Caribbean Group,30028,19,5.0211,0,0,0,Neutral,2026-10-28T00:48:33Z
-AMZN,Amazon.com Inc,708393,20,4.75194,1,0,0,Neutral,2026-10-28T00:48:33Z
-NLST,Netlist Inc,28157,21,4.6727,1,1,0,Very Bullish,2026-10-28T00:48:33Z
-WEN,Wendy's Co,15988,22,4.62861,0,0,0,Neutral,2026-10-28T00:48:33Z
-INOD,Innodata Inc,11789,23,4.29519,0,0,0,Neutral,2026-10-28T00:48:33Z
-ZBCN.X,Zebec Network,5884,24,4.23186,0,0,0,Neutral,2026-10-28T00:48:33Z
-AMPX,Amprius Technologies Inc,9464,25,4.05998,0,0,0,Neutral,2026-10-28T00:48:33Z
-JNUG,Direxion Shares ETF Trust - Direxion Daily Junior Gold Miners Index Bull 2X ETF,78741,26,3.91976,0,0,0,Neutral,2026-10-28T00:48:33Z
-MSFT,Microsoft Corp,554148,27,3.88823,2,0,0,Neutral,2026-10-28T00:48:33Z
-AUPH,Aurinia Pharmaceuticals Inc,46390,28,3.87092,0,0,0,Neutral,2026-10-28T00:48:33Z
-XOM,Exxon Mobil Corp,99771,29,3.84256,0,0,0,Neutral,2026-10-28T00:48:33Z
-IWM,iShares Russell 2000 ETF,50133,30,3.78948,0,0,0,Neutral,2026-10-28T00:48:33Z
+QBTS,D-Wave Quantum Inc,55882,1,6.28603,4,1,3,Very Bearish,2026-10-31T23:38:59Z
+TGTX,TG Therapeutics Inc,21850,2,5.69031,4,1,0,Very Bullish,2026-10-31T23:38:59Z
+NU,Nu Holdings Ltd,17287,3,5.6511,1,0,0,Neutral,2026-10-31T23:38:59Z
+MLYS,Mineralys Therapeutics Inc,763,4,5.24521,0,0,0,Neutral,2026-10-31T23:38:59Z
+QCOM,"Qualcomm, Inc.",78064,5,4.88721,4,0,0,Neutral,2026-10-31T23:38:59Z
+DAL,"Delta Air Lines, Inc.",83883,6,4.24036,1,0,0,Neutral,2026-10-31T23:38:59Z
+ADUR,Aduro Clean Technologies Inc,5023,7,4.24036,2,0,0,Neutral,2026-10-31T23:38:59Z
+CHTR,Charter Communications Inc. - Ordinary Shares - Class A,4312,8,4.11472,1,0,0,Neutral,2026-10-31T23:38:59Z
+ON,ON Semiconductor Corp.,13352,9,4.02936,1,0,0,Neutral,2026-10-31T23:38:59Z
+XOM,Exxon Mobil Corp,99829,10,3.85493,0,0,0,Neutral,2026-10-31T23:38:59Z
+AUDUSD,Australian Dollar / US Dollar,8110,11,0.107901,0,0,0,Neutral,2026-10-31T23:38:59Z
+NZDUSD,New Zealand Dollar / US Dollar,4099,12,0.0799498,0,0,0,Neutral,2026-10-31T23:38:59Z
+GBPUSD,British Pound / US Dollar,14638,13,0.0515369,0,0,0,Neutral,2026-10-31T23:38:59Z
+UNG,"United States Natural Gas Fund, LP",17718,14,3.2307,0,0,0,Neutral,2026-10-31T23:38:59Z
+AI,C3.ai Inc,49669,15,3.2307,1,0,0,Neutral,2026-10-31T23:38:59Z
+ALOY,REalloys Inc.,15321,16,3.0178,2,2,0,Very Bullish,2026-10-31T23:38:59Z
+USDCAD,US Dollar / Canadian Dollar,11168,17,0.0334391,0,0,0,Neutral,2026-10-31T23:38:59Z
+SCHW,Charles Schwab Corp.,11792,18,2.60262,0,0,0,Neutral,2026-10-31T23:38:59Z
+XAGUSD,Silver US Dollar,3667,19,2.81696,0,0,0,Neutral,2026-10-31T23:38:59Z
+TRUMP.X,Trump For President,12754,20,2.55531,1,1,0,Very Bullish,2026-10-31T23:38:59Z
+INOD,Innodata Inc,11835,21,2.2341,2,1,0,Very Bullish,2026-10-31T23:38:59Z
+MA,Mastercard Inc,32244,22,2.15595,0,0,0,Neutral,2026-10-31T23:38:59Z
+TRLV,Trulieve Cannabis Corp ,7802,23,2.01586,0,0,0,Neutral,2026-10-31T23:38:59Z
+BAT.X,Basic Attention Token,10345,24,1.90366,0,0,0,Neutral,2026-10-31T23:38:59Z
+CCJ,Cameco Corp.,17610,25,1.79045,0,0,0,Neutral,2026-10-31T23:38:59Z
+CMPS,COMPASS Pathways,10027,26,1.65174,0,0,0,Neutral,2026-10-31T23:38:59Z
+BROS,Dutch Bros Inc,12348,27,1.65174,0,0,0,Neutral,2026-10-31T23:38:59Z
+CCL,Carnival Corp,89452,28,1.35161,1,0,0,Neutral,2026-10-31T23:38:59Z
+POET,POET Technologies Inc,29637,29,1.29092,1,0,0,Neutral,2026-10-31T23:38:59Z
+KYTX,Kyverna Therapeutics Inc.,1589,30,1.29033,1,0,0,Neutral,2026-10-31T23:38:59Z
