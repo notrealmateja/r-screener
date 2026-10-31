@@ -25,3 +25,7 @@ Thumbs.db
 /files.zip
 /{R,data,output,app}/
 /output/
+
+# Written by the nightly run, never committed. Proves the pipeline executed in
+# the current job; the verify step fails the run when it is absent or stale.
+data/.run_stamp

@@ -15,7 +15,15 @@ permissions:
 
 jobs:
   update-and-deploy:
-    runs-on: ubuntu-latest
+    # PINNED deliberately. GitHub rolled ubuntu-latest from 24.04 to 26.04
+    # between the 2026-10-28 and 2026-10-29 runs and the nightly died for three
+    # nights. The binary package repo below is keyed to a distro codename, so a
+    # silent image bump hands you packages built against the wrong system
+    # libraries: xml2 installed, reported DONE, and then would not load, because
+    # 26.04 ships libxml2 2.15 and the jammy binary wanted the old soname.
+    # Bump this on purpose, together with the codename below, and watch one run
+    # before trusting it.
+    runs-on: ubuntu-24.04
 
     steps:
       - name: Checkout code
@@ -36,8 +44,15 @@ jobs:
       # Runs before anything expensive. The inline R in this file is otherwise
       # only executed in production, so a dangling reference is discovered by a
       # failed nightly rather than by CI — which is how `csv_files` got through.
-      - name: Lint workflow R blocks
-        run: Rscript tools/lint_workflow_r.R
+      - name: Lint embedded code in workflows
+        run: |
+          Rscript tools/lint_workflow_r.R
+          # The failure reporters are Python heredocs. They only execute when a
+          # run has already failed, so a syntax error in them would surface at
+          # the precise moment the pipeline needed to raise an alarm — and the
+          # step swallows its own errors by design, so the alarm would simply
+          # never arrive.
+          python3 tools/lint_workflow_py.py
 
       - name: Install system dependencies
         run: |
@@ -48,7 +63,10 @@ jobs:
         run: |
           Rscript -e '
             options(repos = c(
-              RSPM = "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
+              # This codename MUST match runs-on above. It said jammy (22.04)
+              # while the runner was noble (24.04) and then resolute (26.04).
+              # The mismatch is what took the nightly down.
+              RSPM = "https://packagemanager.posit.co/cran/__linux__/noble/latest",
               CRAN = "https://cloud.r-project.org"
             ))
             install.packages(c("httr","jsonlite","readr","dplyr","tidyr","glue","lubridate","scales"))
@@ -69,8 +87,24 @@ jobs:
                           "scales","xts","zoo","TTR","quantmod","xml2",
                           "shiny","shinydashboard","DT","plotly","ggplot2","rsconnect",
                           "testthat")
-            missing <- required[!sapply(required, requireNamespace, quietly=TRUE)]
-            if (length(missing) > 0) stop("MISSING: ", paste(missing, collapse=", "))
+            # requireNamespace(quietly=TRUE) returns FALSE for a package that
+            # is INSTALLED but cannot be loaded, and throws the reason away.
+            # That is exactly how xml2 presented: the install said DONE, this
+            # guard said only "MISSING: xml2", and the actual cause (a binary
+            # linked against another libxml2) was nowhere in the log. Load each
+            # one and keep the condition message.
+            why <- character(0)
+            for (p in required) {
+              err <- tryCatch({ loadNamespace(p); NULL },
+                              error = function(e) conditionMessage(e))
+              if (!is.null(err)) {
+                state <- if (nzchar(system.file(package = p)))
+                           "installed but will not load" else "not installed"
+                why <- c(why, sprintf("%s [%s]: %s", p, state, err))
+              }
+            }
+            if (length(why) > 0)
+              stop("PACKAGE LOAD FAILURES:\n", paste(why, collapse = "\n"))
             message("ALL PACKAGES OK")
           '
 
@@ -85,6 +119,7 @@ jobs:
           '
 
       - name: Run data pipeline
+        id: pipeline
         env:
           AV_KEY: ${{ secrets.AV_KEY }}
           POLY_KEY: ${{ secrets.POLY_KEY }}
@@ -96,6 +131,14 @@ jobs:
           # dates but publishes no estimate; without this the column is blank.
           FINNHUB_KEY: ${{ secrets.FINNHUB_KEY }}
         run: |
+          # Written BEFORE the pipeline, not after. A run that starts and then
+          # fails part way still counts as having run, so the commit step below
+          # keeps its intended behaviour of publishing whatever good data it
+          # managed to write. The stamp exists only to separate that case from a
+          # pipeline that never executed at all, which is what happens whenever
+          # an earlier step fails and this one is skipped.
+          echo "$GITHUB_RUN_ID" > data/.run_stamp
+
           Rscript -e '
             # Prevent modules from auto-running on source()
             SOURCED_BY_MASTER <- TRUE
@@ -362,6 +405,48 @@ jobs:
               }
             }
 
+            # PROVENANCE. Every check above inspects files sitting in the
+            # working tree, which a fresh checkout supplies whether or not this
+            # run produced them. So all of it passes when the pipeline was
+            # skipped. On 2026-10-29 it did exactly that: the install step
+            # failed, the pipeline never ran, every check here went green
+            # against data committed two nights earlier, and the commit step
+            # published "Auto-update: Daily alpha refresh 2026-10-29" whose
+            # entire content was a reshuffled manifest. Tie the verdict to the
+            # run that is executing.
+            stamp <- "data/.run_stamp"
+            run_id <- Sys.getenv("GITHUB_RUN_ID")
+            if (!file.exists(stamp)) {
+              hard <- c(hard, "pipeline never ran (no run stamp)")
+            } else {
+              stamped <- trimws(readLines(stamp, warn = FALSE)[1])
+              if (nzchar(run_id) && !identical(stamped, run_id)) {
+                hard <- c(hard, sprintf("run stamp is from run %s, not %s",
+                                        stamped, run_id))
+              } else {
+                # The stamp proves the pipeline STARTED. Whether it achieved
+                # anything is a separate question, so count the core files it
+                # actually rewrote. Partial credit is deliberate here: one
+                # rewritten core file is enough to publish, zero is not.
+                ref <- file.info(stamp)$mtime
+                cand <- Sys.glob("data/*.csv")
+                mt <- file.info(cand)$mtime
+                rewrote <- cand[!is.na(mt) & mt >= ref]
+                core_fresh <- intersect(CORE, rewrote)
+                out <- c(out, "",
+                         sprintf("**Provenance:** %d/%d core files rewritten by this run.",
+                                 length(core_fresh), length(CORE)))
+                if (length(core_fresh) == 0) {
+                  hard <- c(hard, "pipeline ran but rewrote no core data file")
+                } else {
+                  cold <- setdiff(CORE, rewrote)
+                  if (length(cold) > 0)
+                    problems <- c(problems, paste("not rewritten this run:",
+                                   paste(basename(cold), collapse = ", ")))
+                }
+              }
+            }
+
             out <- c(out, "")
             if (length(problems) > 0) {
               out <- c(out, sprintf("**%d issue(s):** %s", length(problems),
@@ -385,7 +470,11 @@ jobs:
       # a manifest committed once would be stale by the next run and the
       # deployed app would not match what the manifest claims.
       - name: Refresh Connect Cloud manifest
-        if: always()
+        # Not a bare always(): when the pipeline was skipped there is no new
+        # data to checksum, and refreshing regardless rewrites manifest.json
+        # with reshuffled keys. That lone cosmetic diff was the entire content
+        # of the fake 2026-10-29 "alpha refresh" commit.
+        if: always() && steps.pipeline.outcome != 'skipped'
         continue-on-error: true
         run: |
           Rscript -e '
@@ -413,7 +502,12 @@ jobs:
       # working data with an empty file and take the live site down, while the
       # red run only tells you afterwards.
       - name: Clean stale files and commit updated data
-        if: always() && steps.verify.outcome != 'failure'
+        # always() preserves the intent described above: a pipeline that ran and
+        # partly failed still publishes its good data. But a pipeline that never
+        # ran has no good data to publish, and committing then stamps a stale
+        # snapshot with today's date. outcome is "skipped" in precisely that
+        # case and in no other.
+        if: always() && steps.pipeline.outcome != 'skipped' && steps.verify.outcome != 'failure'
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
@@ -438,9 +532,20 @@ jobs:
           # -u touches only already-tracked paths, so no build junk sneaks in.
           git add -u -- data app || true
 
+          # Date the commit from the DATA, not the clock. The subject line is
+          # the only record most people ever read, and $(date) alone let a run
+          # that regenerated nothing still announce a refresh for today.
+          DD=$(python3 -c 'import csv;rows=list(csv.DictReader(open("data/price_history.csv")));print(max(r["date"] for r in rows))' 2>/dev/null || echo "")
+          if [ -n "$DD" ]; then SUBJ="Auto-update: Daily alpha refresh $(date +'%Y-%m-%d') (data through $DD)"
+          else SUBJ="Auto-update: Daily alpha refresh $(date +'%Y-%m-%d') (data date unknown)"; fi
+
           git diff --quiet && git diff --staged --quiet || \
-            git commit -m "Auto-update: Daily alpha refresh $(date +'%Y-%m-%d')"
-          git push || true
+            git commit -m "$SUBJ"
+
+          # Not "|| true". A push that fails leaves the run green while main
+          # never receives the data, so the live site goes on serving yesterday
+          # and nothing anywhere says so.
+          git push
 
       - name: Strip Bioconductor packages before deploy
         run: |
@@ -534,6 +639,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPO: ${{ github.repository }}
+          RUN_ID: ${{ github.run_id }}
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
           cat > /tmp/report_failure.py <<'PYSCRIPT'
@@ -542,7 +648,7 @@ jobs:
           token = os.environ["GH_TOKEN"]
           repo  = os.environ["REPO"]
           run   = os.environ["RUN_URL"]
-          today = datetime.datetime.utcnow().strftime("%Y-%m-%d")
+          today = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d")
           api   = "https://api.github.com/repos/" + repo
 
           def call(url, payload=None):
@@ -553,6 +659,35 @@ jobs:
               with urllib.request.urlopen(req, timeout=30) as r:
                   body = r.read().decode()
               return json.loads(body) if body.strip() else None
+
+          # WHICH step failed, and HOW STALE the data now is. Without these the
+          # notification is just "Failed again on <date>", which is why four
+          # consecutive failures from three unrelated causes (a rank-tie test,
+          # a bash quoting bug, and an Ubuntu image roll) were indistinguishable
+          # from one unfixed problem.
+          step = "unknown step"
+          try:
+              jobs = call(api + "/actions/runs/" + os.environ["RUN_ID"] + "/jobs")
+              for j in (jobs or {}).get("jobs", []):
+                  bad = [t for t in j.get("steps", []) if t.get("conclusion") == "failure"]
+                  if bad:
+                      step = bad[0]["name"]
+                      break
+          except Exception as e:
+              print("step lookup failed:", e)
+
+          stale = ""
+          try:
+              import csv
+              with open("data/price_history.csv") as fh:
+                  last = max(r["date"] for r in csv.DictReader(fh))
+              age = (datetime.datetime.strptime(today, "%Y-%m-%d")
+                     - datetime.datetime.strptime(last, "%Y-%m-%d")).days
+              stale = "Committed data still ends %s (%d day(s) behind).\n\n" % (last, age)
+          except Exception as e:
+              print("staleness lookup failed:", e)
+
+          title = "Daily pipeline failed (%s) - %s" % (today, step)
 
           existing = None
           try:
@@ -565,21 +700,73 @@ jobs:
           try:
               if existing:
                   call(api + "/issues/%d/comments" % existing,
-                       {"body": "Failed again on %s.\n\nRun: %s" % (today, run)})
+                       {"body": "Failed again on %s at **%s**.\n\n%sRun: %s"
+                                % (today, step, stale, run)})
+                  # Retitle, so the notification subject names the CURRENT cause
+                  # rather than the date the first failure happened.
+                  call(api + "/issues/%d" % existing, {"title": title})
                   print("commented on issue #%d" % existing)
               else:
                   call(api + "/issues", {
-                      "title": "Daily pipeline failed (%s)" % today,
+                      "title": title,
                       "labels": ["pipeline-failure"],
-                      "body": ("The scheduled run failed.\n\n"
+                      "body": ("The scheduled run failed at **%s**.\n\n"
+                               "%s"
                                "Run: %s\n\n"
-                               "The site is not down. Data files are preserved when a fetch "
+                               "The site is not down: data files are preserved when a fetch "
                                "returns empty and the deploy is skipped, so it keeps serving "
-                               "the last good data. This tracks the refresh being stalled.\n\n"
-                               "Close once a run goes green." % run)})
+                               "the last good data. What is stalled is the refresh.\n\n"
+                               "This issue closes itself on the next green run."
+                               % (step, stale, run))})
                   print("opened a pipeline-failure issue")
           except Exception as e:
               print("report failed:", e)
           PYSCRIPT
           python3 /tmp/report_failure.py || true
+          exit 0
+
+      # The old issue said "Close once a run goes green" and nobody ever did, so
+      # a stale open issue sat there through green nights and the next failure
+      # merely added a comment to it. An alert that is never retracted stops
+      # being an alert: by the fourth comment it reads as one unfixed problem
+      # rather than three unrelated ones. Retract it automatically.
+      - name: Resolve failure issue
+        if: success()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          cat > /tmp/resolve_failure.py <<'PYSCRIPT'
+          import json, os, urllib.request, datetime
+
+          token = os.environ["GH_TOKEN"]
+          repo  = os.environ["REPO"]
+          run   = os.environ["RUN_URL"]
+          today = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d")
+          api   = "https://api.github.com/repos/" + repo
+
+          def call(url, payload=None, method=None):
+              data = json.dumps(payload).encode() if payload else None
+              req = urllib.request.Request(url, data=data, method=method)
+              req.add_header("Authorization", "Bearer " + token)
+              req.add_header("Accept", "application/vnd.github+json")
+              with urllib.request.urlopen(req, timeout=30) as r:
+                  body = r.read().decode()
+              return json.loads(body) if body.strip() else None
+
+          try:
+              found = call(api + "/issues?state=open&labels=pipeline-failure&per_page=10") or []
+              for issue in found:
+                  n = issue["number"]
+                  call(api + "/issues/%d/comments" % n,
+                       {"body": "Green run on %s. Closing.\n\nRun: %s" % (today, run)})
+                  call(api + "/issues/%d" % n, {"state": "closed"}, method="PATCH")
+                  print("closed issue #%d" % n)
+              if not found:
+                  print("no open pipeline-failure issue")
+          except Exception as e:
+              print("resolve failed:", e)
+          PYSCRIPT
+          python3 /tmp/resolve_failure.py || true
           exit 0

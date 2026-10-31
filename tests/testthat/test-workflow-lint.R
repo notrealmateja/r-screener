@@ -134,3 +134,56 @@ test_that("every run: block in the workflow is valid shell", {
     }
   }
 })
+
+# The Python linter is a separate tool because the embedded Python lives in shell
+# heredocs rather than `Rscript -e` blocks. Same reasoning as above: those blocks
+# run only when a nightly has ALREADY failed, and the step that runs them ends in
+# `|| true; exit 0` so that reporting a failure can never fail the job. A syntax
+# error there is therefore invisible — the alert just never arrives.
+
+py_lint <- repo_path("tools", "lint_workflow_py.py")
+
+run_py_lint <- function(dir) {
+  out <- suppressWarnings(system2("python3", c("-I", shQuote(py_lint), shQuote(dir)),
+                                  stdout = TRUE, stderr = TRUE))
+  list(status = attr(out, "status") %||% 0L, text = paste(out, collapse = "\n"))
+}
+
+test_that("every embedded Python heredoc in the workflows compiles", {
+  skip_if_not(file.exists(py_lint), "python linter not present")
+  skip_if_not(dir.exists(wf), "no workflows directory")
+  r <- run_py_lint(wf)
+  expect_equal(r$status, 0L, info = r$text)
+})
+
+test_that("the Python linter finds the blocks rather than reporting a vacuous pass", {
+  skip_if_not(file.exists(py_lint), "python linter not present")
+  skip_if_not(dir.exists(wf), "no workflows directory")
+  r <- run_py_lint(wf)
+  # A linter that matches nothing exits 0 too. Insist it actually saw the
+  # reporters, so the guard cannot quietly become a no-op if the heredoc style
+  # changes.
+  expect_match(r$text, "report_failure\\.py")
+  expect_match(r$text, "resolve_failure\\.py")
+})
+
+test_that("the Python linter still catches a syntax error", {
+  skip_if_not(file.exists(py_lint), "python linter not present")
+  src <- list.files(wf, pattern = "\\.ya?ml$", full.names = TRUE)[1]
+  skip_if(is.na(src), "no workflow file")
+  tmp <- file.path(tempdir(), "pylint-check")
+  dir.create(tmp, showWarnings = FALSE)
+  on.exit(unlink(tmp, recursive = TRUE), add = TRUE)
+
+  lines <- readLines(src, warn = FALSE)
+  # Break the first reporter the way a careless edit would: an unclosed paren.
+  at <- grep("^\\s*token = os\\.environ\\[\"GH_TOKEN\"\\]\\s*$", lines)
+  skip_if(length(at) == 0L, "reporter body not found")
+  lines[at[1]] <- sub("os\\.environ\\[\"GH_TOKEN\"\\]",
+                      "os.environ[\"GH_TOKEN\"", lines[at[1]])
+  writeLines(lines, file.path(tmp, "broken.yml"))
+
+  r <- run_py_lint(tmp)
+  expect_equal(r$status, 1L, info = r$text)
+  expect_match(r$text, "FAIL")
+})
