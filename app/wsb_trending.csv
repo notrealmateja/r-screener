@@ -1,51 +1,51 @@
 rank,ticker,name,mentions,upvotes,rank_24h_ago,mentions_24h_ago,mentions_chg,rank_chg,momentum
-1,RDDT,Reddit,95,449,1,298,-203,0,Steady
-2,NVDA,NVIDIA,70,19461,10,87,-17,8,Surging
-3,GOOG,Alphabet (Google),56,250,5,91,-35,2,Rising
-4,QQQ,Invesco QQQ ETF,50,267,4,152,-102,0,Steady
-5,SPY,SPDR S&amp;P 500 ETF Trust,48,101,3,152,-104,-2,Fading
-6,INTC,Intel,40,1682,2,196,-156,-4,Fading
-7,AMD,AMD,32,62,7,112,-80,0,Steady
-8,AGI,Alamos Gold,25,82,388,2,23,380,Surging
-9,MSFT,Microsoft,24,173,16,21,3,7,Surging
-10,AAPL,Apple,23,79,12,62,-39,2,Rising
-11,DTE,DTE Energy,22,85,14,44,-22,3,Rising
-12,GOOGL,Alphabet (Google),22,129,9,71,-49,-3,Fading
-13,MU,Micron Technology,20,81,11,65,-45,-2,Fading
-14,SPCX,SpaceX,16,46,27,22,-6,13,Surging
-15,SNDK,Sandisk,16,718,8,63,-47,-7,Falling
-16,TSLA,Tesla,15,19,13,50,-35,-3,Fading
-17,IT,Gartner,14,105,20,20,-6,3,Rising
-18,VOO,Vanguard S&amp;P 500 ETF,14,33,21,23,-9,3,Rising
-19,TTWO,Take 2 Interactive,13,303,209,1,12,190,Surging
-20,META,Meta Platforms (Facebook),12,193,19,17,-5,-1,Steady
-21,AMZN,Amazon,11,99,6,51,-40,-15,Falling
-22,AM,Antero Midstream,10,14,31,14,-4,9,Surging
-23,MSOS,Advisorshares Trust - AdvisorShares Pure US Cannabis ETF,10,868,427,1,9,404,Surging
-24,PLTR,Palantir,9,17,22,24,-15,-2,Fading
-25,LINK,Interlink Electronics,9,17,81,6,3,56,Surging
-26,FCF,First Commonwealth Financial Corp,8,174,23,20,-12,-3,Fading
-27,NOW,ServiceNow,7,52,18,28,-21,-9,Falling
-28,NBIS,Nebius Group,7,111,28,17,-10,0,Steady
-29,JD,Jingdong Mall,6,33,45,8,-2,16,Surging
-30,SOXL,Direxion Shares ETF Trust - Direxion Daily Semiconductor Bull 3X Share,6,13,15,35,-29,-15,Falling
-31,YOU,CLEAR Secure,6,13,24,18,-12,-7,Falling
-32,API,Agora.io,6,132,96,4,2,64,Surging
-33,TE,T1 Energy,6,31,624,1,5,591,Surging
-34,MA,Mastercard,5,6,143,1,4,109,Surging
-35,ORCL,Oracle,5,10,36,7,-2,1,Steady
-36,GL,Globe Life,5,0,186,1,4,150,Surging
-37,IP,International Paper,5,32,44,3,2,7,Surging
-38,ET,Energy Transfer Partners,5,9,35,11,-6,-3,Fading
-39,VT,"Vanguard Group, Inc. - Vanguard Total World Stock ETF",5,12,73,4,1,34,Surging
-40,CRWV,CoreWeave,5,11,32,10,-5,-8,Falling
-41,ALL,Allstate,4,41,43,8,-4,2,Rising
-42,PSA,Public Storage,4,11,202,1,3,160,Surging
-43,JPM,JPMorgan Chase,4,310,216,1,3,173,Surging
-44,PEG,PSEG,4,14,234,1,3,190,Surging
-45,PS,Pluralsight,4,-13,69,2,2,24,Surging
-46,BE,Bloom Energy,4,11,70,6,-2,24,Surging
-47,HOOD,Robinhood,4,21,49,7,-3,2,Rising
-48,IREN,Iris Energy,4,10,78,7,-3,30,Surging
-49,CD,Chindata,4,7,109,2,2,60,Surging
-50,LOT,Lotus Technology,4,6,82,4,0,32,Surging
+1,RDDT,Reddit,92,465,1,295,-203,0,Steady
+2,NVDA,NVIDIA,68,19461,7,84,-16,5,Surging
+3,GOOG,Alphabet (Google),55,236,6,89,-34,3,Rising
+4,QQQ,Invesco QQQ ETF,45,243,4,148,-103,0,Steady
+5,SPY,SPDR S&amp;P 500 ETF Trust,42,95,3,153,-111,-2,Fading
+6,INTC,Intel,38,1398,2,183,-145,-4,Fading
+7,AMD,AMD,30,60,5,115,-85,-2,Fading
+8,AGI,Alamos Gold,25,85,126,2,23,118,Surging
+9,MSFT,Microsoft,23,114,17,22,1,8,Surging
+10,DTE,DTE Energy,23,88,14,44,-21,4,Rising
+11,GOOGL,Alphabet (Google),21,129,8,69,-48,-3,Fading
+12,AAPL,Apple,20,74,12,60,-40,0,Steady
+13,MU,Micron Technology,20,83,10,66,-46,-3,Fading
+14,TSLA,Tesla,15,19,13,51,-36,-1,Steady
+15,IT,Gartner,15,106,19,20,-5,4,Rising
+16,SPCX,SpaceX,14,44,24,22,-8,8,Surging
+17,VOO,Vanguard S&amp;P 500 ETF,14,34,20,20,-6,3,Rising
+18,TTWO,Take 2 Interactive,13,324,204,1,12,186,Surging
+19,SNDK,Sandisk,13,722,11,62,-49,-8,Falling
+20,META,Meta Platforms (Facebook),12,201,22,15,-3,2,Rising
+21,AMZN,Amazon,11,102,9,50,-39,-12,Falling
+22,AM,Antero Midstream,10,14,29,13,-3,7,Surging
+23,MSOS,Advisorshares Trust - AdvisorShares Pure US Cannabis ETF,10,897,426,1,9,403,Surging
+24,PLTR,Palantir,8,16,21,24,-16,-3,Fading
+25,FCF,First Commonwealth Financial Corp,8,174,23,18,-10,-2,Fading
+26,LINK,Interlink Electronics,8,14,96,6,2,70,Surging
+27,NOW,ServiceNow,7,48,18,28,-21,-9,Falling
+28,NBIS,Nebius Group,7,133,27,20,-13,-1,Steady
+29,JD,Jingdong Mall,6,33,49,7,-1,20,Surging
+30,YOU,CLEAR Secure,6,21,26,18,-12,-4,Fading
+31,API,Agora.io,6,141,75,4,2,44,Surging
+32,TE,T1 Energy,6,36,630,1,5,598,Surging
+33,MA,Mastercard,5,6,137,1,4,104,Surging
+34,GL,Globe Life,5,0,181,1,4,147,Surging
+35,IP,International Paper,5,34,56,1,4,21,Surging
+36,ET,Energy Transfer Partners,5,9,36,10,-5,0,Steady
+37,CRWV,CoreWeave,5,11,35,10,-5,-2,Fading
+38,ALL,Allstate,4,41,41,9,-5,3,Rising
+39,PSA,Public Storage,4,11,197,1,3,158,Surging
+40,JPM,JPMorgan Chase,4,312,211,1,3,171,Surging
+41,PEG,PSEG,4,14,230,1,3,189,Surging
+42,PS,Pluralsight,4,-12,70,2,2,28,Surging
+43,BE,Bloom Energy,4,9,64,6,-2,21,Surging
+44,VT,"Vanguard Group, Inc. - Vanguard Total World Stock ETF",4,12,73,5,-1,29,Surging
+45,IREN,Iris Energy,4,10,61,8,-4,16,Surging
+46,CD,Chindata,4,7,92,2,2,46,Surging
+47,LOT,Lotus Technology,4,6,76,4,0,29,Surging
+48,ORCL,Oracle,3,7,46,6,-3,-2,Fading
+49,AVGO,Broadcom,3,19,54,7,-4,5,Surging
+50,MS,Morgan Stanley,3,19,118,1,2,68,Surging
