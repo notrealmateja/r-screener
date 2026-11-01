@@ -33,9 +33,34 @@ fetch_av_overview <- function(sym) {
       symbol     = sym,
       apikey     = AV_KEY
     ))
-    if (status_code(resp) != 200) return(NULL)
+    if (status_code(resp) != 200) {
+      message("  AV HTTP ", status_code(resp), " for ", sym)
+      return(NULL)
+    }
     raw <- fromJSON(content(resp, as = "text", encoding = "UTF-8"))
-    if (length(raw) == 0 || is.null(raw$Symbol)) return(NULL)
+
+    # Alpha Vantage answers a REFUSAL with HTTP 200 and a short JSON notice --
+    # throttled, daily cap reached, key revoked, or an endpoint that has moved
+    # to a paid tier -- under one of several keys depending on tier and
+    # endpoint. None of those payloads carries $Symbol, so testing only for
+    # $Symbol made a refused request look exactly like a delisted ticker, and
+    # logged neither. The key stopped answering on 2026-10-06 and nothing said
+    # so for 26 days, while the log went on reporting 194/195 full fundamentals
+    # from a frozen cache. get_market_news() in R/03_data.R already checks
+    # these three keys; this is the same check, and they must not drift apart.
+    for (k in c("Note", "Information", "Error Message")) {
+      if (!is.null(raw[[k]])) {
+        message("  AV ", k, " for ", sym, ": ",
+                substr(as.character(raw[[k]]), 1, 200))
+        return(NULL)
+      }
+    }
+
+    if (length(raw) == 0 || is.null(raw$Symbol)) {
+      message("  AV returned no OVERVIEW body for ", sym,
+              " (unknown or delisted ticker)")
+      return(NULL)
+    }
 
     safe_num <- function(x) suppressWarnings(as.numeric(x))
 
@@ -214,7 +239,7 @@ run_module1 <- function(tickers = NULL) {
 
   if (length(to_fetch) > 0) {
     message(glue::glue("Fetching Alpha Vantage OVERVIEW for {length(to_fetch)} tickers ",
-                       "(up to {AV_MAX_PER_RUN}/run, 7-day cache)..."))
+                       "(up to {AV_MAX_PER_RUN}/run, {AV_TTL_DAYS}-day cache)..."))
     fresh <- list()
     for (i in seq_along(to_fetch)) {
       sym <- to_fetch[i]
@@ -223,6 +248,14 @@ run_module1 <- function(tickers = NULL) {
       if (!is.null(result)) fresh[[sym]] <- result
       if (i < length(to_fetch)) Sys.sleep(AV_SLEEP_SEC)
     }
+
+    # Report the count unconditionally. There was no else branch below, so a
+    # run in which every fetch failed printed its attempts and then said
+    # nothing whatsoever -- a total blackout and a quiet success were the same
+    # log. Everything downstream still succeeds either way, because it reads
+    # the cache rather than the fetch, so this line is the only place the
+    # difference is visible.
+    message(glue::glue("AV fetch: {length(fresh)}/{length(to_fetch)} succeeded."))
 
     if (length(fresh) > 0) {
       fresh_df <- bind_rows(fresh)
@@ -233,6 +266,20 @@ run_module1 <- function(tickers = NULL) {
         arrange(symbol)
       write_csv(av_cache, AV_CACHE)
       message(glue::glue("AV cache updated: {nrow(av_cache)} tickers cached."))
+    } else {
+      # warning(), not message(): warnings are collected and echoed at the end
+      # of the step, so this survives in a log that is thousands of lines long.
+      # The nightly does not set options(warn = 2), so it cannot halt the run --
+      # which is correct here. Fundamentals going stale must not stop the price
+      # and momentum refresh; it must just stop being invisible.
+      last_ok <- suppressWarnings(max(av_cache$last_fetched, na.rm = TRUE))
+      warning(glue::glue(
+        "Alpha Vantage returned nothing for all {length(to_fetch)} tickers. ",
+        "The cache is unchanged, so market cap, P/E, P/B, ROE, analyst targets ",
+        "and the Unicorn screen will be republished from data last refreshed ",
+        "{ifelse(is.finite(last_ok), format(last_ok), \"never\")}. ",
+        "Check AV_KEY: expired, revoked, or over its daily cap."),
+        call. = FALSE)
     }
   } else {
     message("All tickers fresh in AV cache — no fetches needed.")

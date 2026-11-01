@@ -278,3 +278,130 @@ test_that("a partially failed pipeline still publishes, with a soft warning", {
   expect_match(r$problems, "price_history\\.csv")
   expect_match(r$problems, "macro_data\\.csv")
 })
+
+# ── Upstream feed health ─────────────────────────────────────────────────────
+#
+# The checks above prove the pipeline RAN. These prove its INPUTS are still
+# answering, which is a different failure and was invisible for 26 days: the
+# Alpha Vantage key stopped working on 2026-10-06, every output stayed present
+# and healthy because they are rebuilt nightly from the cache, and the run log
+# went on reporting "194/195 stocks have full fundamentals" off frozen data.
+#
+# As with provenance, the false-positive case matters as much as the true one:
+# this check makes the run go red, so a threshold that trips on a normal
+# weekend would hand you a nightly alert that means nothing.
+
+feed_src <- local({
+  if (is.null(wf)) return(NULL)
+  a <- grep("UPSTREAM FEED HEALTH", wf, fixed = TRUE)
+  if (!length(a)) return(NULL)
+  b <- grep("PROVENANCE. Every check above", wf, fixed = TRUE)
+  if (!length(b) || b[1] <= a[1]) return(NULL)
+  sub("^ {12}", "", wf[a[1]:(b[1] - 1L)])
+})
+
+# Run the extracted fragment over a scratch tree holding the two cache files,
+# and return its table rows, soft problems, and whatever it declared dark.
+feed_run <- function(av_date, news_date) {
+  d <- file.path(tempdir(), paste0("feed-", basename(tempfile(""))))
+  dir.create(file.path(d, "data"), recursive = TRUE, showWarnings = FALSE)
+  old <- setwd(d)
+  on.exit({ setwd(old); unlink(d, recursive = TRUE) }, add = TRUE)
+
+  if (!is.na(av_date))
+    writeLines(c("symbol,last_fetched", paste0("AAPL,", av_date)),
+               "data/av_cache.csv")
+  if (!is.na(news_date))
+    writeLines(c("title,publishedDate", paste0("x,", news_date, "T01:02:03")),
+               "data/market_news.csv")
+
+  go <- file.path(d, "ghout.txt")
+  file.create(go)
+  prev <- Sys.getenv("GITHUB_OUTPUT", unset = NA)
+  Sys.setenv(GITHUB_OUTPUT = go)
+  on.exit(if (is.na(prev)) Sys.unsetenv("GITHUB_OUTPUT")
+          else Sys.setenv(GITHUB_OUTPUT = prev), add = TRUE)
+
+  e <- new.env()
+  assign("out", character(0), e)
+  assign("problems", character(0), e)
+  assign("read_csv", readr::read_csv, e)
+  eval(parse(text = paste(feed_src, collapse = "\n")), envir = e)
+  list(out = get("out", e), problems = get("problems", e),
+       dark = if (file.exists(go)) readLines(go, warn = FALSE) else character(0))
+}
+
+ago <- function(n) format(Sys.Date() - n)
+
+test_that("the feed fragment could be extracted", {
+  skip_if(is.null(wf), "workflow file not present")
+  expect_false(is.null(feed_src))
+  expect_gt(length(feed_src), 20L)
+})
+
+test_that("feeds answering today are not flagged", {
+  skip_if(is.null(feed_src), "feed fragment not found")
+  # The false-positive guard. If this fails, every night goes red for nothing.
+  r <- feed_run(ago(0), ago(0))
+  expect_length(r$problems, 0L)
+  expect_length(r$dark, 0L)
+  expect_true(any(grepl("| ok |", r$out, fixed = TRUE)))
+})
+
+test_that("a feed quiet for a few days is soft, not fatal", {
+  skip_if(is.null(feed_src), "feed fragment not found")
+  # Fundamentals rotate on a 10-day TTL, so 15 days is stale but not yet proof
+  # of a dead credential. It belongs in the summary, not in a red run.
+  r <- feed_run(ago(15), ago(0))
+  expect_length(r$dark, 0L)
+  expect_length(r$problems, 1L)
+  expect_match(r$problems, "fundamentals last answered 15 days ago")
+})
+
+test_that("a feed silent past its threshold goes dark and reaches the step output", {
+  skip_if(is.null(feed_src), "feed fragment not found")
+  r <- feed_run(ago(26), ago(26))
+  expect_length(r$dark, 1L)
+  expect_match(r$dark, "^dark_feeds=")
+  expect_match(r$dark, "Alpha Vantage fundamentals silent 26 days")
+  expect_match(r$dark, "Alpha Vantage news silent 26 days")
+  # Dark must not ALSO be reported as a soft problem; it has its own channel.
+  expect_length(r$problems, 0L)
+})
+
+test_that("the two feeds carry independent thresholds", {
+  skip_if(is.null(feed_src), "feed fragment not found")
+  # News is refetched nightly, so 16 days dark; fundamentals rotate slowly and
+  # get 21. A single shared threshold would either miss a dead news feed for
+  # three weeks or cry wolf about healthy fundamentals.
+  r <- feed_run(ago(16), ago(16))
+  expect_length(r$dark, 1L)
+  expect_match(r$dark, "news silent 16 days")
+  expect_false(grepl("fundamentals silent", r$dark))
+  expect_match(paste(r$problems, collapse = "|"), "fundamentals last answered 16")
+})
+
+test_that("a missing or unreadable cache is reported rather than skipped", {
+  skip_if(is.null(feed_src), "feed fragment not found")
+  r <- feed_run(NA, ago(0))
+  expect_true(any(grepl("MISSING", r$out, fixed = TRUE)))
+  # Absent is not the same as dark: there is nothing to date, so it cannot be
+  # given an age, and silently dropping the row would hide it entirely.
+  expect_length(r$dark, 0L)
+})
+
+test_that("the dark-feed step fails the run and names the remedy", {
+  skip_if(is.null(wf), "workflow file not present")
+  cond <- step_if(wf, "Fail on a dark upstream feed")
+  expect_false(is.na(cond))
+  expect_match(cond, "steps\\.verify\\.outputs\\.dark_feeds")
+  body <- paste(step_body(wf, "Fail on a dark upstream feed"), collapse = "\n")
+  expect_match(body, "exit 1")
+  expect_match(body, "AV_KEY")
+  # It has to sit AFTER the commit, or a dead third-party key would block
+  # publication of the data every working source did refresh.
+  at_commit <- grep("^\\s*- name:\\s*Clean stale files and commit updated data",
+                    wf)
+  at_dark <- grep("^\\s*- name:\\s*Fail on a dark upstream feed", wf)
+  expect_true(at_dark[1] > at_commit[1])
+})

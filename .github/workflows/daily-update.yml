@@ -405,6 +405,67 @@ jobs:
               }
             }
 
+            # UPSTREAM FEED HEALTH. Everything above inspects pipeline OUTPUTS.
+            # Those get rewritten every night from whatever the caches hold, so
+            # a dead upstream credential leaves every output present, every row
+            # count healthy, every age fresh -- and the numbers quietly frozen.
+            # The Alpha Vantage key stopped answering on 2026-10-06 and the run
+            # log went on reporting 194/195 full fundamentals for 26 days.
+            #
+            # Age comes from the file CONTENT, never from git. A cache that has
+            # stopped updating is never committed, so its commit age is the age
+            # of the last SUCCESS and says nothing about today.
+            feeds <- list(
+              list(file = "data/av_cache.csv", col = "last_fetched",
+                   label = "Alpha Vantage fundamentals", warn = 14, dark = 21),
+              list(file = "data/market_news.csv", col = "publishedDate",
+                   label = "Alpha Vantage news", warn = 7, dark = 14)
+            )
+            dark <- character(0)
+            out <- c(out, "", "### Upstream feeds", "",
+                     "| Source | Last answered | Age (d) | Status |",
+                     "|---|---|---:|---|")
+            for (fd in feeds) {
+              if (!file.exists(fd$file)) {
+                out <- c(out, sprintf("| %s | - | - | MISSING |", fd$label))
+                next
+              }
+              dd <- tryCatch(suppressWarnings(
+                       read_csv(fd$file, show_col_types = FALSE)),
+                     error = function(e) NULL)
+              if (is.null(dd) || !(fd$col %in% names(dd)) || nrow(dd) == 0) {
+                out <- c(out, sprintf("| %s | - | - | UNREADABLE |", fd$label))
+                next
+              }
+              # Timestamps appear as both dates and ISO datetimes, so take the
+              # leading 10 characters rather than guessing a format.
+              seen <- suppressWarnings(max(as.Date(
+                        substr(as.character(dd[[fd$col]]), 1, 10)), na.rm = TRUE))
+              if (!is.finite(as.numeric(seen))) {
+                out <- c(out, sprintf("| %s | - | - | NO DATES |", fd$label))
+                next
+              }
+              age <- as.numeric(Sys.Date() - seen)
+              st <- if (age >= fd$dark) "DARK"
+                    else if (age >= fd$warn) "STALE" else "ok"
+              out <- c(out, sprintf("| %s | %s | %d | %s |",
+                                    fd$label, format(seen), age, st))
+              if (identical(st, "DARK")) {
+                dark <- c(dark, sprintf("%s silent %d days", fd$label, age))
+              } else if (identical(st, "STALE")) {
+                problems <- c(problems,
+                              sprintf("%s last answered %d days ago", fd$label, age))
+              }
+            }
+            # Handed to a later step rather than stopped on here. A dead
+            # third-party credential must not block publication: the pipeline
+            # still regenerated everything it could, and withholding all of it
+            # would take the whole site down over one panel.
+            gh_out <- Sys.getenv("GITHUB_OUTPUT")
+            if (nzchar(gh_out) && length(dark) > 0)
+              cat(sprintf("dark_feeds=%s\n", paste(dark, collapse = "; ")),
+                  file = gh_out, append = TRUE)
+
             # PROVENANCE. Every check above inspects files sitting in the
             # working tree, which a fresh checkout supplies whether or not this
             # run produced them. So all of it passes when the pipeline was
@@ -627,6 +688,29 @@ jobs:
 
       # The failure mode that actually cost time here was silence: the pipeline
       # broke and nothing said so, so it stayed broken for days. A failed run
+      # Deliberately last, and deliberately after the commit and the deploy.
+      # A dark upstream feed must not block publication -- the pipeline still
+      # refreshed every source that IS answering, and withholding that to
+      # protest a third-party credential would take the site down over one
+      # panel. But it must not pass silently either, which is exactly what
+      # happened for 26 days: the data was stale, the run was green, and the
+      # only trace was a row in a step summary nobody opens. So the data ships,
+      # and THEN the run goes red, because red is what reaches a human.
+      - name: Fail on a dark upstream feed
+        if: always() && steps.verify.outputs.dark_feeds != ''
+        run: |
+          echo "An upstream data source has stopped answering:"
+          echo "  ${{ steps.verify.outputs.dark_feeds }}"
+          echo ""
+          echo "Everything else published normally and the site is current for"
+          echo "every source that is still answering. This run is red so that"
+          echo "the stall is visible, not because the pipeline is broken."
+          echo ""
+          echo "For Alpha Vantage: the key is expired, revoked, or over its"
+          echo "daily cap. Replace the AV_KEY repository secret. The next green"
+          echo "run closes the tracking issue by itself."
+          exit 1
+
       # now opens a tracking issue, which emails the repo owner. Repeat failures
       # comment on the existing issue rather than opening one a night.
       #
