@@ -104,6 +104,24 @@ if (have_pkgs("dplyr", "readr", "tibble")) {
   })
 }
 
+# The block above sources R/05_backtest.R inside try(silent = TRUE), and the
+# blocks below used to gate their whole contents on exists(). That combination
+# is how a module that fails to load deletes its own tests: an unregistered
+# test_that is not reported as a skip, it is simply ABSENT, so the suite goes
+# green having run none of them. The guards now sit inside each test, where a
+# missing symbol shows up as a skip you can count -- and this converts the one
+# case that should never happen, the module failing to load where its
+# dependencies are all installed, into a single visible failure.
+test_that("R/05_backtest.R sourced, so the tests below are not silently absent", {
+  skip_if_not(have_pkgs("dplyr", "readr", "tibble", "tidyr", "glue"),
+              "backtest dependencies absent on this machine")
+  for (sym in c("equity_stats", "corporate_action", "tranche_returns",
+                "run_equity_curve"))
+    expect_true(exists(sym),
+                info = paste(sym, "missing: R/05_backtest.R did not source"))
+})
+
+
 # ── corporate-action detection ──────────────────────────────────────────────
 # An earlier version used a plain |return| >= 50% threshold. It deleted 13 bars
 # inside the curve window, none of which was a corporate action — they were
@@ -111,90 +129,95 @@ if (have_pkgs("dplyr", "readr", "tibble")) {
 # written for (PRPL, BRCC) sat outside the window entirely. The signature test
 # replaced it: a k:1 reverse split multiplies price by k and divides share
 # volume by k, so the two move in OPPOSITE directions. No news event does that.
-if (exists("corporate_action")) {
-  test_that("real reverse splits are detected by price up on collapsing volume", {
-    # PRPL 2026-07-20 and BRCC 2026-08-25, the two actual artifacts
-    expect_true(corporate_action(20.103, 0.099))
-    expect_true(corporate_action(8.716,  0.509))
-  })
+test_that("real reverse splits are detected by price up on collapsing volume", {
+  skip_if_not(exists("corporate_action"), "R/05_backtest.R not sourced")
+  # PRPL 2026-07-20 and BRCC 2026-08-25, the two actual artifacts
+  expect_true(corporate_action(20.103, 0.099))
+  expect_true(corporate_action(8.716,  0.509))
+})
 
-  test_that("genuine catalysts are left alone", {
-    # every real mover in the dataset came with volume UP several fold
-    expect_false(corporate_action(1.606,  5.635))   # SANA, clinical data
-    expect_false(corporate_action(1.364,  139.39))  # OLMA
-    expect_false(corporate_action(0.723,  6.897))   # FSLY
-    expect_false(corporate_action(0.580,  2.836))   # RGTI
-    expect_false(corporate_action(-0.627, 11.126))  # TDUP
-  })
+test_that("genuine catalysts are left alone", {
+  skip_if_not(exists("corporate_action"), "R/05_backtest.R not sourced")
+  # every real mover in the dataset came with volume UP several fold
+  expect_false(corporate_action(1.606,  5.635))   # SANA, clinical data
+  expect_false(corporate_action(1.364,  139.39))  # OLMA
+  expect_false(corporate_action(0.723,  6.897))   # FSLY
+  expect_false(corporate_action(0.580,  2.836))   # RGTI
+  expect_false(corporate_action(-0.627, 11.126))  # TDUP
+})
 
-  test_that("a forward split is caught by its mirror signature", {
-    # price halves, volume doubles: the logs cancel
-    expect_true(corporate_action(-0.543, 2.351))    # IESC
-    expect_true(corporate_action(-0.5,   2.0))      # exact 2:1
-  })
+test_that("a forward split is caught by its mirror signature", {
+  skip_if_not(exists("corporate_action"), "R/05_backtest.R not sourced")
+  # price halves, volume doubles: the logs cancel
+  expect_true(corporate_action(-0.543, 2.351))    # IESC
+  expect_true(corporate_action(-0.5,   2.0))      # exact 2:1
+})
 
-  test_that("ordinary days and missing volume never trip the detector", {
-    expect_false(corporate_action(0.02, 1.1))
-    expect_false(corporate_action(0.4,  0.5))       # below the move floor
-    expect_false(corporate_action(0.8,  NA_real_))
-    expect_false(corporate_action(NA_real_, 0.1))
-    expect_false(corporate_action(0.8,  0))         # zero prior volume
-  })
-}
+test_that("ordinary days and missing volume never trip the detector", {
+  skip_if_not(exists("corporate_action"), "R/05_backtest.R not sourced")
+  expect_false(corporate_action(0.02, 1.1))
+  expect_false(corporate_action(0.4,  0.5))       # below the move floor
+  expect_false(corporate_action(0.8,  NA_real_))
+  expect_false(corporate_action(NA_real_, 0.1))
+  expect_false(corporate_action(0.8,  0))         # zero prior volume
+})
 
 # ── buy and hold, not silent daily rebalancing ──────────────────────────────
-if (exists("tranche_returns") && have_pkgs("tidyr")) {
-  test_that("a tranche holds its basket rather than rebalancing every day", {
-    # One name compounds up, the other down. Buy-and-hold lets the winner grow
-    # into a larger share of the book; averaging daily returns instead would
-    # silently sell the winner and buy the loser every single day.
-    d <- as.Date("2024-01-01") + 0:9
-    fw <- tibble::tibble(
-      date      = rep(d, 2),
-      symbol    = rep(c("UP", "DN"), each = 10),
-      daily_ret = c(rep(0.05, 10), rep(-0.05, 10))
-    )
-    got <- tranche_returns(fw, c("UP", "DN"))
-    expect_equal(nrow(got), 10)
-    expect_equal(got$n[1], 2)
+test_that("a tranche holds its basket rather than rebalancing every day", {
+  skip_if_not(exists("tranche_returns"), "R/05_backtest.R not sourced")
+  skip_if_not(have_pkgs("tidyr"), "tidyr not installed")
+  # One name compounds up, the other down. Buy-and-hold lets the winner grow
+  # into a larger share of the book; averaging daily returns instead would
+  # silently sell the winner and buy the loser every single day.
+  d <- as.Date("2024-01-01") + 0:9
+  fw <- tibble::tibble(
+    date      = rep(d, 2),
+    symbol    = rep(c("UP", "DN"), each = 10),
+    daily_ret = c(rep(0.05, 10), rep(-0.05, 10))
+  )
+  got <- tranche_returns(fw, c("UP", "DN"))
+  expect_equal(nrow(got), 10)
+  expect_equal(got$n[1], 2)
 
-    # Buy-and-hold terminal value of an equal-weighted pair
-    expect_equal(prod(1 + got$ret),
-                 (1.05^10 + 0.95^10) / 2, tolerance = 1e-10)
-    # Daily rebalancing would give exactly (1 + mean(0.05, -0.05))^10 = 1.
-    expect_true(abs(prod(1 + got$ret) - 1) > 0.01)
-  })
+  # Buy-and-hold terminal value of an equal-weighted pair
+  expect_equal(prod(1 + got$ret),
+               (1.05^10 + 0.95^10) / 2, tolerance = 1e-10)
+  # Daily rebalancing would give exactly (1 + mean(0.05, -0.05))^10 = 1.
+  expect_true(abs(prod(1 + got$ret) - 1) > 0.01)
+})
 
-  test_that("a day a held name is missing does not silently drop the day", {
-    d <- as.Date("2024-01-01") + 0:4
-    fw <- tibble::tibble(
-      date      = c(d, d[-3]),
-      symbol    = c(rep("A", 5), rep("B", 4)),
-      daily_ret = c(rep(0.01, 5), rep(0.02, 4))
-    )
-    got <- tranche_returns(fw, c("A", "B"))
-    expect_equal(nrow(got), 5)          # all five dates survive
-    expect_false(any(is.na(got$ret)))
-  })
+test_that("a day a held name is missing does not silently drop the day", {
+  skip_if_not(exists("tranche_returns"), "R/05_backtest.R not sourced")
+  skip_if_not(have_pkgs("tidyr"), "tidyr not installed")
+  d <- as.Date("2024-01-01") + 0:4
+  fw <- tibble::tibble(
+    date      = c(d, d[-3]),
+    symbol    = c(rep("A", 5), rep("B", 4)),
+    daily_ret = c(rep(0.01, 5), rep(0.02, 4))
+  )
+  got <- tranche_returns(fw, c("A", "B"))
+  expect_equal(nrow(got), 5)          # all five dates survive
+  expect_false(any(is.na(got$ret)))
+})
 
-  # ...but surviving is not the same as being right. The 0-fill is a HOLD, not
-  # an exclusion: a missing cell freezes that position at its last value, so a
-  # day where most of the book has no price reads as flat rather than as
-  # unknown. That is why run_equity_curve trims thin trailing days before they
-  # ever reach this function.
-  test_that("a missing cell freezes the position rather than excluding it", {
-    skip_if_not(exists("tranche_returns"), "05_backtest.R not sourced")
-    d <- as.Date("2024-01-01") + 0:1
-    fw <- tibble::tibble(
-      date      = c(d, d[1]),           # B has no row on day 2
-      symbol    = c("A", "A", "B"),
-      daily_ret = c(0.00, 0.10, 0.00)
-    )
-    got <- tranche_returns(fw, c("A", "B"))
-    # A gained 10% and B was frozen, so the book reads +5% — diluted, not +10%.
-    expect_equal(got$ret[2], 0.05, tolerance = 1e-12)
-  })
-}
+# ...but surviving is not the same as being right. The 0-fill is a HOLD, not
+# an exclusion: a missing cell freezes that position at its last value, so a
+# day where most of the book has no price reads as flat rather than as
+# unknown. That is why run_equity_curve trims thin trailing days before they
+# ever reach this function.
+test_that("a missing cell freezes the position rather than excluding it", {
+  skip_if_not(have_pkgs("tidyr"), "tidyr not installed")
+  skip_if_not(exists("tranche_returns"), "05_backtest.R not sourced")
+  d <- as.Date("2024-01-01") + 0:1
+  fw <- tibble::tibble(
+    date      = c(d, d[1]),           # B has no row on day 2
+    symbol    = c("A", "A", "B"),
+    daily_ret = c(0.00, 0.10, 0.00)
+  )
+  got <- tranche_returns(fw, c("A", "B"))
+  # A gained 10% and B was frozen, so the book reads +5% — diluted, not +10%.
+  expect_equal(got$ret[2], 0.05, tolerance = 1e-12)
+})
 
 # ── the honesty controls ────────────────────────────────────────────────────
 # These exist because an adversarial review found the tab was crediting the

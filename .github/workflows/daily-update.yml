@@ -554,26 +554,37 @@ jobs:
         #
         # An allowlist, not `!= 'skipped'`: a cancelled run also satisfies
         # `!= 'skipped'`. See the commit step below for why that matters.
+        id: manifest
         if: always() && (steps.pipeline.outcome == 'success' || steps.pipeline.outcome == 'failure')
-        continue-on-error: true
         run: |
           Rscript -e '
-            if (!requireNamespace("rsconnect", quietly = TRUE)) {
-              message("rsconnect unavailable — leaving manifest untouched.")
-            } else if (!file.exists("app/app.R")) {
-              message("app/app.R missing — leaving manifest untouched.")
-            } else {
-              ok <- tryCatch({
-                rsconnect::writeManifest(appDir = "app", appPrimaryDoc = "app.R")
-                TRUE
-              }, error = function(e) { message("Manifest refresh failed: ",
-                                               conditionMessage(e)); FALSE })
-              if (ok) {
-                m <- jsonlite::fromJSON("app/manifest.json")
-                message(sprintf("Manifest refreshed: %d files, %d packages.",
-                                length(m$files), length(m$packages)))
-              }
-            }
+            # Every path out of here used to be non-fatal: the failure was
+            # swallowed by tryCatch into a message and a FALSE that nothing
+            # read, and then swallowed again by continue-on-error. So a failed
+            # refresh left the step green, and the commit step went on to
+            # publish freshly rewritten CSVs alongside the PREVIOUS manifest.
+            # Connect Cloud validates every file against a checksum in that
+            # manifest, so the published bundle then describes data it does not
+            # contain -- and nothing anywhere said so.
+            #
+            # stop() on each path instead. Keeping yesterday CSVs beside
+            # yesterday manifest is a consistent bundle and the site goes on
+            # serving it; publishing a mismatched pair is what breaks the
+            # deploy. The commit step gates on this step outcome.
+            if (!requireNamespace("rsconnect", quietly = TRUE))
+              stop("rsconnect unavailable: cannot refresh the manifest, so new data must not be published against the old one.")
+            if (!file.exists("app/app.R"))
+              stop("app/app.R missing: cannot refresh the manifest.")
+
+            tryCatch(
+              rsconnect::writeManifest(appDir = "app", appPrimaryDoc = "app.R"),
+              error = function(e)
+                stop("Manifest refresh failed: ", conditionMessage(e),
+                     ". Refusing to let the commit publish new data against a stale manifest."))
+
+            m <- jsonlite::fromJSON("app/manifest.json")
+            message(sprintf("Manifest refreshed: %d files, %d packages.",
+                            length(m$files), length(m$packages)))
           '
 
       # always(), so a failure in the pipeline step still publishes whatever good
@@ -599,7 +610,13 @@ jobs:
         # today prices beside yesterday scores, under a subject line claiming
         # data through today. A six-hour hang lands mid-pipeline more often
         # than not, so the window is wide rather than a corner case.
-        if: always() && (steps.pipeline.outcome == 'success' || steps.pipeline.outcome == 'failure') && steps.verify.outcome != 'failure'
+        # The manifest condition is not optional. Connect Cloud validates each
+        # deployed file against a checksum in app/manifest.json, so committing
+        # CSVs the manifest does not describe publishes a bundle that
+        # contradicts itself. If the refresh failed, yesterday CSVs and
+        # yesterday manifest are still a matching pair and the site keeps
+        # serving them -- one day stale beats one day broken.
+        if: always() && (steps.pipeline.outcome == 'success' || steps.pipeline.outcome == 'failure') && steps.verify.outcome != 'failure' && steps.manifest.outcome == 'success'
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"

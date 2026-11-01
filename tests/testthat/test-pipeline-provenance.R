@@ -473,3 +473,90 @@ test_that("price history is tracked as a feed so a refused write surfaces", {
   r <- feed_run(ago(0), ago(0))
   expect_length(r$dark, 0L)
 })
+
+# ── The manifest must match the data it ships with ───────────────────────────
+#
+# Connect Cloud validates every deployed file against a checksum in
+# app/manifest.json. The refresh step swallowed its failure twice over -- a
+# tryCatch that turned the error into a message and a FALSE nothing read, then
+# continue-on-error on top -- so a failed refresh left the step green and the
+# commit published freshly rewritten CSVs against the PREVIOUS manifest. The
+# bundle then described data it did not contain.
+
+test_that("the manifest step can be gated on, and does not swallow its failure", {
+  skip_if(is.null(wf), "workflow file not present")
+  nm <- "Refresh Connect Cloud manifest"
+  at <- grep(sprintf("^\\s*- name:\\s*\\Q%s\\E\\s*$", nm), wf, perl = TRUE)
+  expect_length(at, 1L)
+  body <- step_body(wf, nm)
+
+  # Without an id, steps.manifest.outcome is the empty string and the gate
+  # below silently compares against nothing.
+  expect_true(any(grepl("^\\s*id:\\s*manifest\\s*$", body)),
+              info = "the manifest step needs `id: manifest`")
+  # continue-on-error was the outer of the two swallows.
+  expect_false(any(grepl("^\\s*continue-on-error:\\s*true\\s*$", body)),
+               info = "continue-on-error hides the failure from the gate")
+
+  code <- decomment(body)
+  txt <- paste(code, collapse = "\n")
+  expect_false(grepl("leaving manifest untouched", txt, fixed = TRUE),
+               info = "a path that leaves the manifest stale must be fatal, not a message")
+
+  # And the inner swallow. Asserting only that the body contains stop() is too
+  # weak: mutation testing turned the writeManifest handler back into a
+  # message() and this test still passed, because the two guard clauses above
+  # it have stop() calls of their own. So require EVERY error handler in the
+  # step to terminate.
+  eh <- grep("error\\s*=\\s*function", code)
+  expect_gt(length(eh), 0L)
+  for (i in eh) {
+    near <- paste(code[i:min(length(code), i + 3L)], collapse = " ")
+    expect_match(near, "stop\\(",
+                 info = paste("an error handler that does not stop() is a swallow:",
+                              trimws(code[i])))
+  }
+})
+
+test_that("nothing is committed against a stale manifest", {
+  skip_if(is.null(wf), "workflow file not present")
+  cond <- step_if(wf, "Clean stale files and commit updated data")
+  expect_false(is.na(cond))
+  # One day stale beats one day broken: yesterday's CSVs and yesterday's
+  # manifest are at least a matching pair.
+  expect_match(cond, "steps\\.manifest\\.outcome\\s*==\\s*'success'",
+               info = paste("commit must require a refreshed manifest; if:", cond))
+})
+
+# ── Tests must fail, not vanish ──────────────────────────────────────────────
+#
+# A test_that registered inside `if (exists(...))` at file scope is not skipped
+# when the condition is false -- it is ABSENT. testthat reports no skip and no
+# failure, just a smaller suite, so a module that fails to load deletes its own
+# tests and the run goes green. Measured on test-equity-curve.R: with
+# R/05_backtest.R made to error, the old file dropped from 22 blocks to 15 and
+# still reported zero failures.
+#
+# The guard belongs with the pipeline-trust tests because that is the same
+# failure shape as the rest of this file: a check that cannot fail.
+
+test_that("no test file gates whole blocks behind a bare exists() wrapper", {
+  files <- list.files(repo_path("tests", "testthat"), pattern = "^test-.*\\.R$",
+                      full.names = TRUE)
+  expect_gt(length(files), 0L)
+  offenders <- character(0)
+  for (f in files) {
+    src <- readLines(f, warn = FALSE)
+    # Column 0 only: an `if (exists(...))` nested inside a test_that body is
+    # ordinary control flow, not a registration gate.
+    hit <- grep("^if\\s*\\(\\s*(!\\s*)?exists\\(", src)
+    if (length(hit))
+      offenders <- c(offenders, sprintf("%s:%s", basename(f),
+                                        paste(hit, collapse = ",")))
+  }
+  expect_length(offenders, 0L)
+  if (length(offenders))
+    cat("Put the guard inside each test_that as skip_if_not(exists(...), ...)",
+        "so an absent symbol is a countable skip:",
+        paste(offenders, collapse = "; "), "\n")
+})
