@@ -25,6 +25,13 @@ jobs:
     # before trusting it.
     runs-on: ubuntu-24.04
 
+    # Successful runs take about 25 minutes. Without this the job inherits
+    # GitHub default of 360, so a single hung HTTP call -- four APIs, 195
+    # tickers, none of the fetches carrying a timeout of its own -- holds the
+    # runner for six hours and then ends in CANCELLATION rather than failure.
+    # That distinction mattered: see the Report failure condition below.
+    timeout-minutes: 60
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -419,7 +426,16 @@ jobs:
               list(file = "data/av_cache.csv", col = "last_fetched",
                    label = "Alpha Vantage fundamentals", warn = 14, dark = 21),
               list(file = "data/market_news.csv", col = "publishedDate",
-                   label = "Alpha Vantage news", warn = 7, dark = 14)
+                   label = "Alpha Vantage news", warn = 7, dark = 14),
+              # write_history_or_keep in R/00_utils.R now refuses to replace
+              # this file with a short or truncated pull, which protects the
+              # history but leaves the prices frozen until the upstream
+              # recovers. Keeping the good data is the right call; letting it
+              # go unreported was how Alpha Vantage stayed dark for 26 days.
+              # Thresholds are in calendar days and sized for the longest
+              # legitimate market closure, so a holiday weekend cannot trip it.
+              list(file = "data/price_history.csv", col = "date",
+                   label = "Price history", warn = 7, dark = 12)
             )
             dark <- character(0)
             out <- c(out, "", "### Upstream feeds", "",
@@ -535,7 +551,10 @@ jobs:
         # data to checksum, and refreshing regardless rewrites manifest.json
         # with reshuffled keys. That lone cosmetic diff was the entire content
         # of the fake 2026-10-29 "alpha refresh" commit.
-        if: always() && steps.pipeline.outcome != 'skipped'
+        #
+        # An allowlist, not `!= 'skipped'`: a cancelled run also satisfies
+        # `!= 'skipped'`. See the commit step below for why that matters.
+        if: always() && (steps.pipeline.outcome == 'success' || steps.pipeline.outcome == 'failure')
         continue-on-error: true
         run: |
           Rscript -e '
@@ -564,11 +583,23 @@ jobs:
       # red run only tells you afterwards.
       - name: Clean stale files and commit updated data
         # always() preserves the intent described above: a pipeline that ran and
-        # partly failed still publishes its good data. But a pipeline that never
-        # ran has no good data to publish, and committing then stamps a stale
-        # snapshot with today's date. outcome is "skipped" in precisely that
-        # case and in no other.
-        if: always() && steps.pipeline.outcome != 'skipped' && steps.verify.outcome != 'failure'
+        # partly failed still publishes its good data. A pipeline that never ran
+        # has none to publish, and committing then stamps a stale snapshot with
+        # today date.
+        #
+        # Success or failure, and nothing else. `!= 'skipped'` was not enough,
+        # because a CANCELLED run satisfies it too, and cancellation is the
+        # likeliest way this job dies -- a hung fetch against one of four APIs.
+        # The damage is not a half-written file; it is MIXED VINTAGE. The core
+        # outputs are written at different points in the sequence: macro_data
+        # in module 3, master_scored and the top-15 lists in module 4. A
+        # cancellation between them leaves at least one core file rewritten, so
+        # the provenance check above is satisfied, and the rest are recorded
+        # only as a soft problem. Verify goes green and this step publishes
+        # today prices beside yesterday scores, under a subject line claiming
+        # data through today. A six-hour hang lands mid-pipeline more often
+        # than not, so the window is wide rather than a corner case.
+        if: always() && (steps.pipeline.outcome == 'success' || steps.pipeline.outcome == 'failure') && steps.verify.outcome != 'failure'
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
@@ -719,7 +750,13 @@ jobs:
       # which is invalid JSON. Every failure path is swallowed so that reporting
       # a failure can never itself fail the job.
       - name: Report failure
-        if: failure()
+        # failure() alone is FALSE for a cancelled run, and a job killed by the
+        # timeout above -- or by someone pressing cancel -- is cancelled, not
+        # failed. So the single most likely way for this pipeline to die, a
+        # hung fetch, was also the one way it reported nothing at all: no
+        # issue, no comment, and the Resolve step below gated on success() so
+        # it did not close anything either. Silence in both directions.
+        if: failure() || cancelled()
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPO: ${{ github.repository }}
@@ -753,7 +790,8 @@ jobs:
           try:
               jobs = call(api + "/actions/runs/" + os.environ["RUN_ID"] + "/jobs")
               for j in (jobs or {}).get("jobs", []):
-                  bad = [t for t in j.get("steps", []) if t.get("conclusion") == "failure"]
+                  bad = [t for t in j.get("steps", [])
+                         if t.get("conclusion") in ("failure", "cancelled")]
                   if bad:
                       step = bad[0]["name"]
                       break

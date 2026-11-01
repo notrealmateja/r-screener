@@ -26,11 +26,14 @@ library(tidyquant); library(dplyr); library(tidyr)
 library(TTR); library(readr); library(glue); library(lubridate)
 
 # How far back to pull prices.  This sets how much alpha history exists, which
-# in turn sets how many independent rebalances the backtest gets: at a 63-day
-# formation window and 21-day holding period, one year yields ~8 rebalances and
-# three years yields ~32.  Statistical power scales with the square root of
-# that count, so the longer window roughly doubles the t-statistic available to
-# the validation in R/05_backtest.R.
+# in turn sets how many independent rebalances the backtest gets.  At the
+# windows R/05_backtest.R actually uses — FORMATION_DAYS 126, HOLD_DAYS 63,
+# rebalancing every REBAL_DAYS 21 — three years of history yields ~28
+# rebalances in the IC test and 8 non-overlapping holding periods in the equity
+# curve.  (This comment described a 63-day formation and a 21-day hold, which
+# is the retired configuration; 21 is the rebalance cadence, not the horizon.)
+# Statistical power scales with the square root of that count, so the longer
+# window is what makes the validation worth running at all.
 if (!exists("corporate_action")) {
   # Modules run from the repo root in production but from tests/testthat under
   # testthat, so resolve rather than assuming the working directory.
@@ -402,16 +405,25 @@ run_module2 <- function(tickers = NULL) {
 
   write_csv(summary_out, "data/momentum_scored.csv")
 
-  # Full price + indicator history for charting
-  write_csv(
-    tech %>% select(symbol, date, open, high, low, close, volume,
-                    ma20, ma50, ma200, rsi14, macd_line, macd_signal,
-                    macd_hist, bb_upper, bb_lower, bb_mid,
-                    daily_ret, spy_ret, daily_alpha),
-    "data/price_history.csv"
-  )
+  # Full price + indicator history for charting.
+  #
+  # Guarded, not a bare write_csv. tq_get above is unchecked: when Yahoo
+  # throttles it returns a few recent sessions for every symbol instead of
+  # three years, and that frame is non-empty, so nothing here used to stop it
+  # replacing the file. safe_calc() turns the long indicators into NA at that
+  # length, and the next run pulls the same short window and writes it again,
+  # so the history is unrecoverable. See write_history_or_keep in R/00_utils.R.
+  hist_out <- tech %>%
+    select(symbol, date, open, high, low, close, volume,
+           ma20, ma50, ma200, rsi14, macd_line, macd_signal,
+           macd_hist, bb_upper, bb_lower, bb_mid,
+           daily_ret, spy_ret, daily_alpha)
+  wrote_hist <- write_history_or_keep(hist_out, "data/price_history.csv")
 
-  message("Saved: data/momentum_scored.csv + data/price_history.csv")
+  message(if (isTRUE(wrote_hist))
+            "Saved: data/momentum_scored.csv + data/price_history.csv"
+          else
+            "Saved: data/momentum_scored.csv. KEPT the existing data/price_history.csv — see the warning above.")
   # Only names with a full window. Annualising a mean over 17 observations
   # gave CRNX 1179%/yr and this line reported it as the day's top alpha.
   top_alpha <- summary_out %>%

@@ -151,8 +151,17 @@ test_that("nothing is committed when the pipeline never ran", {
     # `always()` on its own is what published the fake refresh. The pipeline
     # outcome is the only thing that separates "ran and partly failed" — which
     # SHOULD still publish — from "never started", which must not.
-    expect_true(grepl("steps\\.pipeline\\.outcome\\s*!=\\s*'skipped'", cond, perl = TRUE),
-                info = paste0(nm, ": if: ", cond))
+    #
+    # An allowlist is required, not `!= 'skipped'`. A CANCELLED run satisfies
+    # `!= 'skipped'`, and cancellation publishes mixed vintage: core files are
+    # written at different stages, so one of them is fresh, provenance passes,
+    # and today's prices ship beside yesterday's scores.
+    expect_match(cond, "steps\\.pipeline\\.outcome\\s*==\\s*'success'",
+                 info = paste0(nm, ": if: ", cond))
+    expect_match(cond, "steps\\.pipeline\\.outcome\\s*==\\s*'failure'",
+                 info = paste0(nm, ": if: ", cond))
+    expect_false(grepl("!=\\s*'skipped'", cond, perl = TRUE),
+                 info = paste0(nm, ": a bare != 'skipped' lets a cancelled run commit: ", cond))
   }
 })
 
@@ -404,4 +413,63 @@ test_that("the dark-feed step fails the run and names the remedy", {
                     wf)
   at_dark <- grep("^\\s*- name:\\s*Fail on a dark upstream feed", wf)
   expect_true(at_dark[1] > at_commit[1])
+})
+
+# ── Cancellation ─────────────────────────────────────────────────────────────
+#
+# Cancellation is the likeliest way this job dies: four APIs, 195 tickers, and
+# no timeout on any individual fetch. It was also the one outcome that reported
+# nothing at all — failure() is FALSE for a cancelled run, so no issue was
+# opened or commented, while Resolve was gated on success() so nothing was
+# closed either. Silence in both directions, for the most probable failure.
+
+test_that("the job is time-bounded well inside GitHub's default", {
+  skip_if(is.null(wf), "workflow file not present")
+  tm <- grep("^\\s*timeout-minutes:", wf, value = TRUE)
+  expect_length(tm, 1L)
+  mins <- as.integer(trimws(sub("^\\s*timeout-minutes:\\s*", "", tm)))
+  expect_true(!is.na(mins))
+  # Successful runs take ~25 minutes. The point is to fail fast rather than
+  # hold a runner for GitHub's 360-minute default, so anything near that
+  # defeats the purpose.
+  expect_lt(mins, 180L)
+  expect_gt(mins, 30L)
+})
+
+test_that("a cancelled run still reports", {
+  skip_if(is.null(wf), "workflow file not present")
+  cond <- step_if(wf, "Report failure")
+  expect_false(is.na(cond))
+  expect_match(cond, "cancelled\\(\\)",
+               info = paste("Report failure must fire on cancellation; if:", cond))
+})
+
+test_that("the failure report can name a cancelled step", {
+  skip_if(is.null(wf), "workflow file not present")
+  code <- decomment(step_body(wf, "Report failure"))
+  # Firing the step is not enough. The lookup matched only conclusion ==
+  # "failure"; on a cancelled run no step has that, so the issue title said
+  # "unknown step" — the same indistinguishable alert the reporter exists to
+  # prevent.
+  #
+  # Assert against the LOOKUP, not the step body: a bare search for
+  # "cancelled" is satisfied by the `if:` condition one line above and so
+  # passes even with the lookup left failure-only. Mutation testing caught
+  # exactly that.
+  concl <- grep("conclusion", code, value = TRUE)
+  expect_gt(length(concl), 0L)
+  expect_true(any(grepl("cancelled", concl, fixed = TRUE)),
+              info = paste("lookup must accept a cancelled conclusion:",
+                           paste(concl, collapse = " | ")))
+})
+
+test_that("price history is tracked as a feed so a refused write surfaces", {
+  skip_if(is.null(feed_src), "feed fragment not found")
+  src <- paste(feed_src, collapse = "\n")
+  expect_match(src, "data/price_history\\.csv")
+  # write_history_or_keep protects the history by declining the write, which
+  # leaves prices frozen until upstream recovers. Correct, but it must not go
+  # unreported — that is precisely how Alpha Vantage stayed dark for 26 days.
+  r <- feed_run(ago(0), ago(0))
+  expect_length(r$dark, 0L)
 })

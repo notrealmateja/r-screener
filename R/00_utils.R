@@ -93,3 +93,74 @@ merge_history <- function(existing, fresh, keep_days = NULL, today = Sys.Date())
   if (!is.null(keep_days)) out <- out[which(out$date >= today - keep_days), , drop = FALSE]
   dplyr::arrange(out, symbol, date)
 }
+
+# Replace a long history file only if the incoming pull plausibly IS one.
+#
+# write_or_keep() in R/03_data.R guards the soft feeds against an EMPTY fetch.
+# That is the wrong shape of guard for price history, whose dangerous failure
+# is a SHORT fetch. When Yahoo throttles, tq_get returns a handful of recent
+# sessions for every symbol rather than nothing — so the result is non-empty,
+# every emptiness check waves it through, and the write lands. safe_calc() then
+# turns ma200, rsi14, macd and the Bollinger bands into NA because TTR has too
+# few periods, and three calendar years of history is gone in one write_csv.
+#
+# Nothing downstream can recover it. The next run pulls the same short window
+# and writes it again, so the only place the loss can be prevented is here,
+# against what is already on disk, before the write.
+#
+# Three ways the incoming frame can fail to be a history:
+#   - far fewer rows than the file it would replace
+#   - a median bar count per symbol that has collapsed (catches a truncation
+#     that hits every symbol equally, which a row total can mask if the
+#     universe grew at the same time)
+#   - a newest date that moves BACKWARDS, which no healthy pull ever does
+#
+# Returns TRUE if it wrote, FALSE if it kept what was there.
+write_history_or_keep <- function(df, path, min_frac = 0.80,
+                                  label = basename(path)) {
+  prev <- if (file.exists(path))
+    tryCatch(readr::read_csv(path, show_col_types = FALSE,
+                             progress = FALSE),
+             error = function(e) NULL) else NULL
+
+  # Nothing to protect: first run, or an unreadable file that is no loss.
+  if (is.null(prev) || nrow(prev) == 0) {
+    readr::write_csv(df, path)
+    return(invisible(TRUE))
+  }
+
+  bars <- function(d) {
+    if (!"symbol" %in% names(d) || nrow(d) == 0) return(0)
+    stats::median(as.numeric(table(d$symbol)))
+  }
+  newest <- function(d) {
+    if (!"date" %in% names(d) || nrow(d) == 0) return(NA)
+    suppressWarnings(max(as.Date(substr(as.character(d$date), 1, 10)),
+                         na.rm = TRUE))
+  }
+
+  why <- character(0)
+  if (nrow(df) < min_frac * nrow(prev))
+    why <- c(why, sprintf("%d rows replacing %d", nrow(df), nrow(prev)))
+  if (bars(df) < min_frac * bars(prev))
+    why <- c(why, sprintf("median %.0f bars/symbol replacing %.0f",
+                          bars(df), bars(prev)))
+  nd <- newest(df); pd <- newest(prev)
+  if (!is.na(nd) && !is.na(pd) && nd < pd)
+    why <- c(why, sprintf("newest date %s is older than %s on disk",
+                          format(nd), format(pd)))
+
+  if (length(why) > 0) {
+    # warning(), so it is echoed at the end of a step whose log runs to
+    # thousands of lines. Keeping the good file is the safe outcome, so this
+    # must not halt the run — the rest of the pipeline reads the kept file and
+    # produces correct output from it. It must simply stop being invisible.
+    warning(sprintf(
+      "%s: refusing to overwrite — %s. Keeping the %d rows already on disk. This is a short or truncated upstream pull, not a shrinking universe.",
+      label, paste(why, collapse = "; "), nrow(prev)), call. = FALSE)
+    return(invisible(FALSE))
+  }
+
+  readr::write_csv(df, path)
+  invisible(TRUE)
+}
