@@ -3144,7 +3144,7 @@ server <- function(input, output, session) {
       tags$h2("Confidence weighting"),
       tags$p("A short return series gives a noisy alpha estimate, so the raw score is ",
              "shrunk toward a neutral 50 in proportion to how much history supports it:"),
-      tags$pre("alpha_score = alpha_raw x w + 50 x (1 - w),   w = min(days_tracked / 63, 1)"),
+      tags$pre("alpha_score = alpha_raw x w + 50 x (1 - w),   w = min(days_scored / 63, 1)"),
       tags$p("63 trading days is one quarter — the point at which an information ratio ",
              "becomes statistically meaningful. Below that the model deliberately refuses ",
              "to express conviction. Alpha history is rebuilt from the full one-year price ",

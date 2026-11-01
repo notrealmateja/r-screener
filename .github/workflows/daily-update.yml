@@ -369,10 +369,14 @@ jobs:
                 if (length(thin))
                   out <- c(out, sprintf("Under half the median: %s.",
                                         paste(sort(thin), collapse = ", ")))
-                # Warn, do not fail: these names are scored with a confidence
-                # weight that shrinks them toward neutral, so they degrade the
-                # output rather than breaking it. Failing the run would stop a
-                # healthy nightly over two stale tickers.
+                # Warn, do not fail: a thin feed now costs the symbol its
+                # alpha score rather than mis-scoring it. Under 20 paired
+                # observations compute_beta returns NA, the residual is left
+                # NA, and pct_scale places the symbol at neutral 50 with a
+                # confidence weight near zero, so these names drop out of the
+                # ranking instead of entering it on raw excess vs SPY.
+                # Failing the run would stop a healthy nightly over two
+                # stale tickers.
                 if (length(none) + length(thin) > 0)
                   problems <- c(problems,
                                 sprintf("%d symbol(s) with missing or thin price history",

@@ -906,15 +906,38 @@ get_sec_filings <- function(tickers) {
 # ── Squeeze Scoring ─────────────────────────────────────────────────────────
 build_squeeze_score <- function(short_data, fund_data) {
   message("Building squeeze scores...")
+  # These three flags were stubbed to FALSE, which pinned fi_score at 0. Since
+  # fi_score carries the largest weight of the four terms (0.40), the composite
+  # could not exceed 0.25*100 + 0.20*100 + 0.15*80 = 57, so every threshold
+  # that reads it was unreachable: the 60 and 80 tier cuts here, the
+  # squeeze_candidate gate at R/04_master_score.R, the High-Conviction panel
+  # and KPI tile in the app. Measured on the live universe the maximum was
+  # 53.4 and all 195 names sat in No Signal or Low Signal.
+  need <- c("revenue_growth", "earningsGrowth", "profit_margin")
+  absent <- setdiff(need, names(fund_data))
+  if (length(absent) > 0)
+    stop("build_squeeze_score cannot judge whether fundamentals are improving ",
+         "without ", paste(absent, collapse = ", "),
+         " from fundamentals_scored.csv. Scoring every symbol 0 on that term ",
+         "caps the composite below every tier threshold, which is how this ",
+         "shipped before: silently, with no tier above Low Signal ever set.")
   improving <- fund_data %>%
     mutate(
-      rev_up    = FALSE,
-      earn_up   = FALSE,
-      margin_ok = FALSE,
+      # A squeeze needs the shorts to be wrong, so the test is that the
+      # business is not deteriorating: top line growing, earnings growing,
+      # and actually profitable.
+      rev_up    = !is.na(revenue_growth) & revenue_growth > 0,
+      earn_up   = !is.na(earningsGrowth) & earningsGrowth > 0,
+      margin_ok = !is.na(profit_margin)  & profit_margin  > 0,
       improvement_count = as.integer(rev_up)+as.integer(earn_up)+as.integer(margin_ok),
       fundamentals_improving = improvement_count >= 2
     ) %>%
     select(symbol, improvement_count, fundamentals_improving)
+  if (nrow(improving) > 0 && all(improving$improvement_count == 0))
+    warning("Every symbol scored 0 of 3 fundamental improvement flags, which ",
+            "caps squeeze_score at 57 and makes every tier above Low Signal ",
+            "unreachable. Check that fundamentals_scored.csv carries live ",
+            "revenue_growth / earningsGrowth / profit_margin.", call. = FALSE)
   short_data %>%
     left_join(improving, by="symbol") %>%
     mutate(

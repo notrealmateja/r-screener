@@ -3,7 +3,7 @@
 #
 # Primary rank: alpha_score (excess return vs SPY, compounded daily)
 # Supporting:   quality_gate (fundamentals), tech_filter (trend/momentum)
-# Confidence:   confidence_weight ramps 0→1 as days_tracked → 63
+# Confidence:   confidence_weight ramps 0→1 as days_scored → 63
 #
 # All column names match what app/app.R and app/global.R expect:
 #   master_score, rating, golden_cross_flag, regime,
@@ -228,6 +228,7 @@ run_module4 <- function(fund_data = NULL) {
     alpha_streak      = ifelse(is.finite(alpha_streak),      alpha_streak,      NA_real_),
     confidence_weight = ifelse(is.finite(confidence_weight), confidence_weight, 0),
     days_tracked      = ifelse(is.finite(days_tracked),      as.integer(days_tracked), 0L),
+    days_scored       = ifelse(is.finite(days_scored),       as.integer(days_scored),  0L),
 
     p_ann_alpha  = pct_scale(hist_alpha_ann,  TRUE),
     p_ir         = pct_scale(hist_ir,         TRUE),
@@ -338,11 +339,14 @@ run_module4 <- function(fund_data = NULL) {
     regime = regime,                                       # app reads regime
 
     # Confidence metadata
+    # Banded on days_scored, not days_tracked: a symbol whose prices stopped
+    # arriving weeks ago keeps its stored rows, so days_tracked kept calling it
+    # Proven while its score rested on 5 fresh bars.
     confidence_band = dplyr::case_when(
-      days_tracked >= 126 ~ "Proven",
-      days_tracked >=  63 ~ "Established",
-      days_tracked >=  20 ~ "Developing",
-      TRUE                ~ "Emerging"
+      days_scored >= 126 ~ "Proven",
+      days_scored >=  63 ~ "Established",
+      days_scored >=  20 ~ "Developing",
+      TRUE               ~ "Emerging"
     ),
 
     # Enriched columns for tables
@@ -355,8 +359,8 @@ run_module4 <- function(fund_data = NULL) {
     revenue_growth     = dplyr::coalesce(rev_cagr, earningsGrowth),
 
     primary_driver = dplyr::case_when(
-      p_ann_alpha >= 70 & days_tracked >= 20          ~ "Alpha Leader",
-      p_ir        >= 70 & days_tracked >= 20          ~ "High IR",
+      p_ann_alpha >= 70 & days_scored >= 20           ~ "Alpha Leader",
+      p_ir        >= 70 & days_scored >= 20           ~ "High IR",
       !is.na(put_call_ratio) & put_call_ratio < 0.6   ~ "Smart $ Bullish",
       p_hit_rate  >= 70                               ~ "Consistent Beat",
       tech_filter >= 70                               ~ "Strong Trend",
@@ -517,6 +521,7 @@ run_module4 <- function(fund_data = NULL) {
       sweet_spot_confidence = round(confidence_weight * 100, 1),
       confidence_band,
       days_tracked,
+      days_scored,
       # return expectation
       expected_return_1d,
       # alpha metrics
@@ -593,6 +598,7 @@ run_module4 <- function(fund_data = NULL) {
       confidence_5d         = round(confidence_weight * 100, 1),
       confidence_band,
       days_tracked,
+      days_scored,
       hist_ir               = ifelse(is.na(hist_ir), 0, hist_ir),
       hist_alpha_ann        = ifelse(is.na(hist_alpha_ann), 0, hist_alpha_ann),
       alpha_hit_rate,
@@ -635,7 +641,7 @@ run_module4 <- function(fund_data = NULL) {
     # (CRNX lands 85th of 195, rated Neutral); this field was not, so the run
     # log has been announcing a 17-day artifact as the day's best alpha.
     top_alpha_stock  = local({
-      ok <- which(df$days_tracked >= 63 & is.finite(df$hist_alpha_ann))
+      ok <- which(df$days_scored >= 63 & is.finite(df$hist_alpha_ann))
       if (!length(ok)) NA_character_
       else df$symbol[ok[which.max(df$hist_alpha_ann[ok])]]
     }),

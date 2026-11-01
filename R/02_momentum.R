@@ -20,7 +20,7 @@
 #   info_ratio        — annualised alpha / tracking-error (consistency)
 #   alpha_hit_rate    — % of days stock beat SPY (over available history)
 #   alpha_30d / 63d   — cumulative alpha over recent windows
-#   confidence_weight — scales 0→1 as days_tracked grows to 63
+#   confidence_weight — scales 0→1 as days_scored grows to 63
 # =============================================================================
 library(tidyquant); library(dplyr); library(tidyr)
 library(TTR); library(readr); library(glue); library(lubridate)
@@ -332,15 +332,40 @@ run_module2 <- function(tickers = NULL) {
     mutate(
       beta_window = compute_beta(utils::tail(daily_ret, ALPHA_WINDOW),
                                  utils::tail(spy_ret,  ALPHA_WINDOW)),
-      # Fall back to raw excess where a return is missing (alpha_history keeps
-      # a few dates that predate the current price pull) or beta is unusable.
+      # A single date the current pull did not supply falls back to raw
+      # excess: alpha_history deliberately keeps a few dates that predate the
+      # pull, and a handful among hundreds does not move the ranking.
+      #
+      # A symbol with no usable beta is different in kind. compute_beta needs
+      # 20 paired observations, so once the price feed goes thin EVERY date
+      # falls through and the whole scoring window silently becomes raw excess
+      # vs SPY - the measure this project abandoned on 2026-09-23 because it
+      # ranks market exposure as skill. QRVO shipped exactly that way: 5 fresh
+      # bars behind 711 stored rows, alpha_score 67.7, 70th percentile, badged
+      # Proven and Alpha Leader. Leave the residual NA instead and let
+      # pct_scale place the symbol at neutral rather than rank it on the wrong
+      # metric.
       daily_resid = ifelse(
-        is.na(daily_ret) | is.na(spy_ret) | is.na(beta_window),
-        daily_alpha,
-        daily_ret - beta_window * spy_ret)
+        is.na(beta_window),
+        NA_real_,
+        ifelse(is.na(daily_ret) | is.na(spy_ret),
+               daily_alpha,
+               daily_ret - beta_window * spy_ret)),
+      # Fresh evidence only: a date whose residual came from the stored
+      # raw-excess fallback still feeds the alpha metrics, but it is not new
+      # information and must not buy confidence. Measured on the live book
+      # this separates cleanly - 192 of 194 symbols have 750 scored days and
+      # keep full weight, while CRNX (0) and QRVO (5) lose it.
+      resid_scored = !is.na(beta_window) & !is.na(daily_ret) & !is.na(spy_ret)
     ) %>%
     summarize(
       days_tracked      = n(),
+
+      # Dates with live evidence behind them. days_tracked counts stored rows,
+      # and merge_history preserves rows for symbols the pull never reached
+      # (R/00_utils.R), so it measures how long a symbol has been on the books
+      # rather than how much of its score rests on fresh data.
+      days_scored       = sum(resid_scored),
 
       # Cumulative alpha over all available history (compounded)
       cum_alpha_all     = prod(1 + replace_na(daily_alpha, 0)) - 1,
@@ -378,9 +403,13 @@ run_module2 <- function(tickers = NULL) {
                                  (hist_mean_alpha / hist_sd_alpha) * sqrt(252),
                                  NA_real_),
 
-      # Confidence weight: ramps 0 → 1 as days_tracked grows to 63 (one quarter)
-      # After 63 days the signal is considered fully weighted
-      confidence_weight = pmin(days_tracked / 63, 1.0),
+      # Confidence weight: ramps 0 → 1 as days_scored grows to 63 (one quarter)
+      # After 63 scored days the signal is considered fully weighted.
+      #
+      # Keyed to days_scored, not days_tracked. Weighting on stored rows gave
+      # QRVO a weight of 1.0 off 5 fresh bars because 711 old rows sat behind
+      # them, which is the exact opposite of what this term exists to do.
+      confidence_weight = pmin(days_scored / 63, 1.0),
 
       # Alpha streak: consecutive days with positive alpha (most recent)
       alpha_streak      = {
@@ -427,14 +456,14 @@ run_module2 <- function(tickers = NULL) {
   # Only names with a full window. Annualising a mean over 17 observations
   # gave CRNX 1179%/yr and this line reported it as the day's top alpha.
   top_alpha <- summary_out %>%
-    filter(days_tracked >= 63, is.finite(hist_alpha_ann)) %>%
+    filter(days_scored >= 63, is.finite(hist_alpha_ann)) %>%
     arrange(desc(hist_alpha_ann)) %>% slice(1)
   if (nrow(top_alpha) == 0)
     top_alpha <- summary_out %>% arrange(desc(hist_alpha_ann)) %>% slice(1)
   message(glue("Top alpha stock today: {top_alpha$symbol} ",
                "(ann. alpha {round(top_alpha$hist_alpha_ann*100,1)}%, ",
                "IR {round(top_alpha$hist_ir,2)}, ",
-               "{top_alpha$days_tracked} days tracked)"))
+               "{top_alpha$days_scored} days scored)"))
 
   # Pass merged result upstream
   fund_data <- tryCatch(
