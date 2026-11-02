@@ -1,31 +1,31 @@
 symbol,title,watchlist_count,st_rank,trending_score,messages,bullish,bearish,sentiment_label,fetched_at
-TGTX,TG Therapeutics Inc,21854,1,6.66501,4,1,0,Very Bullish,2026-11-01T00:28:32Z
-LEN,Lennar Corp.,7511,2,5.88821,1,0,0,Neutral,2026-11-01T00:28:32Z
-REGN,"Regeneron Pharmaceuticals, Inc.",17613,3,5.64443,0,0,0,Neutral,2026-11-01T00:28:32Z
-AI,C3.ai Inc,49671,4,4.58857,1,0,0,Neutral,2026-11-01T00:28:32Z
-ALOY,REalloys Inc.,15322,5,3.24732,0,0,0,Neutral,2026-11-01T00:28:32Z
-BTGO,BitGo Holdings Inc. - Ordinary Shares - Class A,850,6,2.8204,1,0,0,Neutral,2026-11-01T00:28:32Z
-MDB,MongoDB Inc,21904,7,2.8204,1,0,0,Neutral,2026-11-01T00:28:32Z
-ALNY,Alnylam Pharmaceuticals Inc,4636,8,2.64319,1,0,0,Neutral,2026-11-01T00:28:32Z
-MAGS,Roundhill Magnificent Seven ETF,3851,9,2.47638,0,0,0,Neutral,2026-11-01T00:28:32Z
-PZZA,"Papa John`s International, Inc.",5349,10,2.3249,0,0,0,Neutral,2026-11-01T00:28:32Z
-LLY,Lilly(Eli) & Co,35351,11,2.25516,2,1,0,Very Bullish,2026-11-01T00:28:32Z
-AAL,American Airlines Group Inc,109808,12,2.24598,0,0,0,Neutral,2026-11-01T00:28:32Z
-AMGN,AMGEN Inc.,15078,13,2.24598,0,0,0,Neutral,2026-11-01T00:28:32Z
-QBTS,D-Wave Quantum Inc,55886,14,2.2341,0,0,0,Neutral,2026-11-01T00:28:32Z
-HIMS,Hims & Hers Health Inc,57610,15,2.18422,1,0,0,Neutral,2026-11-01T00:28:32Z
-POET,POET Technologies Inc,29637,16,2.10024,2,2,0,Very Bullish,2026-11-01T00:28:32Z
-KYTX,Kyverna Therapeutics Inc.,1589,17,2.08572,0,0,0,Neutral,2026-11-01T00:28:32Z
-GNRC,Generac Holdings Inc,6336,18,1.95331,1,1,0,Very Bullish,2026-11-01T00:28:32Z
-SLS,SELLAS Life Sciences Group Inc,62954,19,1.94811,6,2,1,Bullish,2026-11-01T00:28:32Z
-QCOM,"Qualcomm, Inc.",78065,20,1.89313,0,0,0,Neutral,2026-11-01T00:28:32Z
-MA,Mastercard Inc,32244,21,1.84016,0,0,0,Neutral,2026-11-01T00:28:32Z
-KLAR,Klarna Group plc,7905,22,1.84016,1,0,0,Neutral,2026-11-01T00:28:32Z
-PANW,Palo Alto Networks Inc,40204,23,1.41547,0,0,0,Neutral,2026-11-01T00:28:32Z
-ETH.X,Ethereum,340575,24,1.37377,0,0,0,Neutral,2026-11-01T00:28:32Z
-HYPE.X,Hype,4011,25,1.35684,0,0,0,Neutral,2026-11-01T00:28:32Z
-SMMT,Summit Therapeutics Inc,10637,26,1.23098,0,0,0,Neutral,2026-11-01T00:28:32Z
-INOD,Innodata Inc,11835,27,1.02776,1,0,0,Neutral,2026-11-01T00:28:32Z
-TTWO,"Take-Two Interactive Software, Inc.",24709,28,1.0029,0,0,0,Neutral,2026-11-01T00:28:32Z
-AVAX.X,Avalanche,18422,29,0.763507,1,0,0,Neutral,2026-11-01T00:28:32Z
-BTC,Grayscale Bitcoin Mini Trust ETF,4815,30,0.731486,0,0,0,Neutral,2026-11-01T00:28:32Z
+TRUMP.X,Trump For President,12796,1,7.57552,0,0,0,Neutral,2026-11-02T01:07:24Z
+LOW,"Lowe's Companies, Inc.",19210,2,5.16941,0,0,0,Neutral,2026-11-02T01:07:24Z
+POET,POET Technologies Inc,29653,3,5.1622,3,1,0,Very Bullish,2026-11-02T01:07:24Z
+GM,General Motors Company,50669,4,4.82848,0,0,0,Neutral,2026-11-02T01:07:24Z
+MXL,MaxLinear Inc,3834,5,4.58857,0,0,0,Neutral,2026-11-02T01:07:24Z
+QCOM,"Qualcomm, Inc.",78069,6,4.52314,0,0,0,Neutral,2026-11-02T01:07:24Z
+AXSM,Axsome Therapeutics Inc,12007,7,4.2715,0,0,0,Neutral,2026-11-02T01:07:24Z
+HD,"Home Depot, Inc.",46246,8,3.29519,0,0,0,Neutral,2026-11-02T01:07:24Z
+KLAC,KLA Corp.,6544,9,3.2307,0,0,0,Neutral,2026-11-02T01:07:24Z
+PLTR,Palantir Technologies Inc,325488,10,3.19903,0,0,0,Neutral,2026-11-02T01:07:24Z
+ADBE,Adobe Inc,50935,11,3.13837,0,0,0,Neutral,2026-11-02T01:07:24Z
+RIOT,Riot Platforms Inc,129876,12,2.95364,1,0,0,Neutral,2026-11-02T01:07:24Z
+CROX,Crocs Inc,9536,13,2.82992,0,0,0,Neutral,2026-11-02T01:07:24Z
+VTI,Vanguard Total Stock Market ETF,29236,14,2.8204,0,0,0,Neutral,2026-11-02T01:07:24Z
+OUST,Ouster Inc - Ordinary Shares - Class A,17708,15,2.8204,0,0,0,Neutral,2026-11-02T01:07:24Z
+UPS,"United Parcel Service, Inc.",29607,16,2.8204,0,0,0,Neutral,2026-11-02T01:07:24Z
+DJT,Trump Media & Technology Group Corp.,115751,17,2.75017,4,0,4,Very Bearish,2026-11-02T01:07:24Z
+AMD,Advanced Micro Devices Inc,566326,18,2.66839,0,0,0,Neutral,2026-11-02T01:07:24Z
+ACN,Accenture plc - Ordinary Shares - Class A,8909,19,2.53738,0,0,0,Neutral,2026-11-02T01:07:24Z
+CDE,Coeur Mining Inc,6915,20,2.53738,1,1,0,Very Bullish,2026-11-02T01:07:24Z
+SMMT,Summit Therapeutics Inc,10645,21,2.46475,0,0,0,Neutral,2026-11-02T01:07:24Z
+TXN,Texas Instruments Inc.,13292,22,2.44867,0,0,0,Neutral,2026-11-02T01:07:24Z
+SPY,SPDR S&P 500 ETF Trust,639390,23,2.41772,15,0,3,Very Bearish,2026-11-02T01:07:24Z
+U,Unity Software Inc,37175,24,2.39075,0,0,0,Neutral,2026-11-02T01:07:24Z
+JNUG,Direxion Shares ETF Trust - Direxion Daily Junior Gold Miners Index Bull 2X ETF,78739,25,2.3249,0,0,0,Neutral,2026-11-02T01:07:24Z
+TTWO,"Take-Two Interactive Software, Inc.",24714,26,2.18422,0,0,0,Neutral,2026-11-02T01:07:24Z
+INTU,Intuit Inc,12848,27,2.15595,0,0,0,Neutral,2026-11-02T01:07:24Z
+XCN.X,Onyxcoin,8338,28,2.09359,0,0,0,Neutral,2026-11-02T01:07:24Z
+TGTX,TG Therapeutics Inc,21874,29,2.02275,0,0,0,Neutral,2026-11-02T01:07:24Z
+SHIB.X,Shiba Inu,190575,30,1.86078,0,0,0,Neutral,2026-11-02T01:07:24Z
