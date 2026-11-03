@@ -15,6 +15,13 @@ wf_dir <- if (length(args)) args[1] else ".github/workflows"
 ALLOW <- c("T", "F", "args", ".Machine", "pi", "LETTERS", "letters",
            "month.abb", "month.name")
 
+# R's hard -e limit, the size this linter refuses, and the size it warns at.
+# The gap is deliberate headroom: a block that is already at 9500 bytes will be
+# pushed over by the next small edit, and the failure is silent.
+E_LIMIT_HARD <- 10000L
+E_LIMIT_FAIL <-  8000L
+E_LIMIT_WARN <-  6000L
+
 extract_blocks <- function(path) {
   lines <- readLines(path, warn = FALSE)
   blocks <- list(); i <- 1
@@ -91,6 +98,36 @@ for (f in files) {
       problems <- problems + 1L
       next
     }
+
+    # R caps a -e expression at 10000 bytes. Past that it prints
+    #     WARNING: '-e <mangled expression>'
+    # throws the expression away, and EXITS 0. The step runs nothing and goes
+    # green. Parsing cannot see this, because the R is perfectly valid R - only
+    # R's own argument handling refuses it, and only at invocation time.
+    #
+    # This is not hypothetical. The nightly's "Verify pipeline output" step
+    # crossed the limit at commit 856380c on 2026-10-31 and silently did
+    # nothing for three nights: no provenance check, no feed-health check, no
+    # dark_feeds output, so the dark-feed gate was always skipped. The step
+    # reported success every time.
+    #
+    # A block this long belongs in a file called as Rscript path/to/it.R, which
+    # has no limit, fails loudly on a syntax error, and can be unit tested.
+    if (!isTRUE(b$unterminated) && length(b$code)) {
+      nbytes <- sum(nchar(b$code, type = "bytes")) + max(0L, length(b$code) - 1L)
+      if (nbytes > E_LIMIT_FAIL) {
+        cat(sprintf("FAIL %s\n  Rscript -e block is %d bytes, over R's %d-byte -e limit.\n",
+                    label, nbytes, E_LIMIT_HARD))
+        cat("  R would discard this expression, print a WARNING, and exit 0,\n")
+        cat("  so the step would run nothing and still report success.\n")
+        cat("  Move it to a script file and call Rscript <file>.\n")
+        problems <- problems + 1L
+        next
+      }
+      if (nbytes > E_LIMIT_WARN)
+        cat(sprintf("warn %s (%d bytes, within %d of R's %d-byte -e limit)\n",
+                    label, nbytes, E_LIMIT_HARD - nbytes, E_LIMIT_HARD))
+    }
     exprs <- tryCatch(parse(text = b$code), error = function(e) e)
     if (inherits(exprs, "error")) {
       cat(sprintf("FAIL %s\n  syntax: %s\n", label, conditionMessage(exprs)))
@@ -118,6 +155,38 @@ for (f in files) {
       problems <- problems + 1L
     } else {
       cat(sprintf("ok   %s (%d lines)\n", label, length(b$code)))
+    }
+  }
+}
+
+# Script files the workflow calls directly. Inlining was the only option this
+# linter originally had to check, so moving a program into a file would have
+# quietly removed it from scope - the opposite of the intent.
+for (f in files) {
+  lines <- readLines(f, warn = FALSE)
+  hits <- regmatches(lines, regexpr("Rscript +[^ '\"]+\\.R\\b", lines))
+  # The path in the workflow is repo-relative, because that is the working
+  # directory the runner uses. This linter is run from elsewhere too - the test
+  # suite calls it with an absolute workflows directory from tests/testthat -
+  # so resolve against the repo root implied by the workflow file itself rather
+  # than against getwd(), which reported every script as missing.
+  root <- dirname(dirname(dirname(f)))
+  for (h in unique(unlist(hits))) {
+    target <- sub("^Rscript +", "", h)
+    label <- sprintf("%s -> %s", f, target)
+    resolved <- if (file.exists(target)) target else file.path(root, target)
+    if (!file.exists(resolved)) {
+      cat(sprintf("FAIL %s\n  workflow calls a script that does not exist\n", label))
+      problems <- problems + 1L
+      next
+    }
+    err <- tryCatch({ parse(resolved); NULL }, error = function(e) conditionMessage(e))
+    if (!is.null(err)) {
+      cat(sprintf("FAIL %s\n  syntax: %s\n", label, err))
+      problems <- problems + 1L
+    } else {
+      cat(sprintf("ok   %s (%d lines, script file)\n",
+                  label, length(readLines(resolved, warn = FALSE))))
     }
   }
 }

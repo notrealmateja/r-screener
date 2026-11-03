@@ -26,6 +26,41 @@ AV_TTL_DAYS    <- 10
 AV_SLEEP_SEC   <- 13          # 13 s = ~4.6 calls/min (under 5/min limit)
 
 # ── Alpha Vantage OVERVIEW fetcher ───────────────────────────────────────────
+# Why Alpha Vantage last refused, by kind.
+#
+# fetch_av_overview signals failure by returning NULL and the caller only
+# counts NULLs, so the reason has to be recorded somewhere it can be read back.
+# The distinction matters: on 2026-10-06 Alpha Vantage moved OVERVIEW and
+# NEWS_SENTIMENT behind a paid plan, and every request since has come back with
+# a premium-endpoint notice. The key is valid. For 28 days this code told the
+# reader to replace AV_KEY, which could not have helped.
+AV_REFUSALS <- new.env(parent = emptyenv())
+
+av_classify <- function(key, text) {
+  txt <- tolower(paste(as.character(text), collapse = " "))
+  if (grepl("premium endpoint", txt, fixed = TRUE)) return("premium")
+  if (identical(key, "Note") ||
+      grepl("call frequency|rate limit|requests per", txt)) return("quota")
+  "other"
+}
+
+# What to actually do about it, named after the refusal we saw.
+av_remedy <- function() {
+  kinds <- ls(AV_REFUSALS)
+  if ("premium" %in% kinds)
+    paste("Alpha Vantage now bills this endpoint as premium and refuses every",
+          "request with a premium-endpoint notice. The key is NOT the problem",
+          "and replacing AV_KEY will not fix it: either subscribe to a paid",
+          "plan, or source these fields from the free SEC XBRL feed this",
+          "pipeline already pulls into data/sec_financials.csv.")
+  else if ("quota" %in% kinds)
+    paste("Alpha Vantage is rate limiting: the free tier allows 25 calls a day",
+          "across the whole pipeline. Wait for the cap to reset, or reduce",
+          "AV_MAX_PER_RUN.")
+  else
+    "Check AV_KEY: expired, revoked, or malformed."
+}
+
 fetch_av_overview <- function(sym) {
   tryCatch({
     resp <- GET(AV_BASE, query = list(
@@ -50,6 +85,9 @@ fetch_av_overview <- function(sym) {
     # these three keys; this is the same check, and they must not drift apart.
     for (k in c("Note", "Information", "Error Message")) {
       if (!is.null(raw[[k]])) {
+        why <- av_classify(k, raw[[k]])
+        assign(why, c(get0(why, AV_REFUSALS, ifnotfound = character(0)), sym),
+               envir = AV_REFUSALS)
         message("  AV ", k, " for ", sym, ": ",
                 substr(as.character(raw[[k]]), 1, 200))
         return(NULL)
@@ -278,7 +316,7 @@ run_module1 <- function(tickers = NULL) {
         "The cache is unchanged, so market cap, P/E, P/B, ROE, analyst targets ",
         "and the Unicorn screen will be republished from data last refreshed ",
         "{ifelse(is.finite(last_ok), format(last_ok), \"never\")}. ",
-        "Check AV_KEY: expired, revoked, or over its daily cap."),
+        "{av_remedy()}"),
         call. = FALSE)
     }
   } else {

@@ -156,7 +156,10 @@ test_that("cache age never depends on file mtime", {
   # made the health table's STALE check unreachable. Age must come from data
   # inside the file, or from git history.
   r_src  <- paste(readLines("../../R/03_data.R"), collapse = "\n")
-  yml    <- paste(readLines("../../.github/workflows/daily-update.yml"), collapse = "\n")
+  # The health table moved from the workflow into tools/verify_pipeline.R on
+  # 2026-11-03, so read both: the rule has to hold wherever the code lives.
+  yml    <- paste(c(readLines("../../.github/workflows/daily-update.yml"),
+                    readLines("../../tools/verify_pipeline.R")), collapse = "\n")
   expect_no_match(r_src, "file\\.mtime")
   expect_no_match(yml,   "file\\.mtime")
   # The earnings cache stamps itself and reads that stamp back

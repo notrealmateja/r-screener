@@ -24,6 +24,18 @@ wf <- local({
   if (!file.exists(wf_file)) NULL else readLines(wf_file, warn = FALSE)
 })
 
+# The verify program lives in a script file, not inlined in the workflow.
+#
+# It was inlined as Rscript -e until 2026-11-03. R caps a -e expression at
+# 10000 bytes; past that it prints a WARNING, discards the expression and exits
+# 0. This program crossed the limit at 856380c and for three nights the step
+# ran nothing at all while reporting success - no provenance check, no feed
+# health, no dark_feeds output. Tests that read it must read it where it is.
+vp_file <- repo_path("tools", "verify_pipeline.R")
+vp <- local({
+  if (!file.exists(vp_file)) NULL else readLines(vp_file, warn = FALSE)
+})
+
 # The `if:` expression attached to a named step, or NA when it carries none.
 step_if <- function(lines, step_name) {
   at <- grep(sprintf("^\\s*- name:\\s*\\Q%s\\E\\s*$", step_name), lines, perl = TRUE)
@@ -129,7 +141,15 @@ test_that("the pipeline step is identifiable and stamps the run before running",
 
 test_that("verify ties its verdict to the run that is executing", {
   skip_if(is.null(wf), "workflow file not present")
-  body <- paste(step_body(wf, "Verify pipeline output"), collapse = "\n")
+  skip_if(is.null(vp), "tools/verify_pipeline.R not present")
+  # The step must delegate to the script file rather than inline the program,
+  # which is what put it over R's -e limit and silenced it.
+  # Decommented: the step carries a comment explaining the -e limit, and that
+  # prose names the very construct the next line forbids.
+  step <- paste(decomment(step_body(wf, "Verify pipeline output")), collapse = " ")
+  expect_match(step, "Rscript +tools/verify_pipeline\\.R")
+  expect_false(grepl("Rscript -e", step, fixed = TRUE))
+  body <- paste(vp, collapse = "\n")
   expect_true(nzchar(body))
   # Without this, every assertion in the step is satisfied by whatever the
   # checkout put on disk, so a skipped pipeline verifies clean.
@@ -195,13 +215,13 @@ test_that("the commit subject records the data date, not just the clock", {
 # still publish what it wrote.
 
 prov_src <- local({
-  if (is.null(wf)) return(NULL)
-  start <- grep("PROVENANCE. Every check above", wf, fixed = TRUE)
+  if (is.null(vp)) return(NULL)
+  start <- grep("PROVENANCE. Every check above", vp, fixed = TRUE)
   if (!length(start)) return(NULL)
-  rest <- wf[(start[1] + 1L):length(wf)]
+  rest <- vp[(start[1] + 1L):length(vp)]
   stop_at <- grep('^\\s*out <- c\\(out, ""\\)\\s*$', rest)
   if (!length(stop_at)) return(NULL)
-  body <- wf[start[1]:(start[1] + stop_at[1] - 1L)]
+  body <- vp[start[1]:(start[1] + stop_at[1] - 1L)]
   # Undo the YAML block-scalar indent so the fragment parses on its own.
   sub("^ {12}", "", body)
 })
@@ -301,12 +321,12 @@ test_that("a partially failed pipeline still publishes, with a soft warning", {
 # weekend would hand you a nightly alert that means nothing.
 
 feed_src <- local({
-  if (is.null(wf)) return(NULL)
-  a <- grep("UPSTREAM FEED HEALTH", wf, fixed = TRUE)
+  if (is.null(vp)) return(NULL)
+  a <- grep("UPSTREAM FEED HEALTH", vp, fixed = TRUE)
   if (!length(a)) return(NULL)
-  b <- grep("PROVENANCE. Every check above", wf, fixed = TRUE)
+  b <- grep("PROVENANCE. Every check above", vp, fixed = TRUE)
   if (!length(b) || b[1] <= a[1]) return(NULL)
-  sub("^ {12}", "", wf[a[1]:(b[1] - 1L)])
+  sub("^ {12}", "", vp[a[1]:(b[1] - 1L)])
 })
 
 # Run the extracted fragment over a scratch tree holding the two cache files,

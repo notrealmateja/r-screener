@@ -242,8 +242,12 @@ if (have_pkgs("dplyr", "tibble", "readr", "glue")) {
   })
 
   test_that("the nightly no longer claims thin names are shrunk to neutral", {
-    wf <- readLines(repo_path(".github", "workflows", "daily-update.yml"),
-                    warn = FALSE)
+    # This prose moved into tools/verify_pipeline.R on 2026-11-03 when the
+    # verify program came out of Rscript -e; read both so the assertion holds
+    # wherever it lives.
+    wf <- c(readLines(repo_path(".github", "workflows", "daily-update.yml"),
+                      warn = FALSE),
+            readLines(repo_path("tools", "verify_pipeline.R"), warn = FALSE))
     # The old rationale was false for exactly the symbol class it described: a
     # thin feed left days_tracked high, so the weight did not shrink at all.
     expect_false(any(grepl("weight that shrinks them toward neutral", wf,
