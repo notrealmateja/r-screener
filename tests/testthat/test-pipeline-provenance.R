@@ -26,11 +26,13 @@ wf <- local({
 
 # The verify program lives in a script file, not inlined in the workflow.
 #
-# It was inlined as Rscript -e until 2026-11-03. R caps a -e expression at
-# 10000 bytes; past that it prints a WARNING, discards the expression and exits
-# 0. This program crossed the limit at 856380c and for three nights the step
-# ran nothing at all while reporting success - no provenance check, no feed
-# health, no dark_feeds output. Tests that read it must read it where it is.
+# It was inlined as Rscript -e until 2026-11-03. bin/R encodes every space and
+# newline as three bytes before R's length check, so the block went over while
+# its raw size still looked safe; R then discards the expression, prints a
+# WARNING to stdout and exits 0. It crossed at 6e17f66 and ran nothing at all
+# for seven published nights from 2026-10-27 while reporting success - no
+# provenance check, no feed health, no dark_feeds output, and no Data health
+# table. Tests that read the program must read it where it now lives.
 vp_file <- repo_path("tools", "verify_pipeline.R")
 vp <- local({
   if (!file.exists(vp_file)) NULL else readLines(vp_file, warn = FALSE)

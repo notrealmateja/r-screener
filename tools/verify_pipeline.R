@@ -2,20 +2,43 @@
 #
 # This is a FILE, not an Rscript -e argument, and that is the whole point.
 #
-# It used to be inlined as Rscript -e in .github/workflows/daily-update.yml.
-# R caps a -e expression at 10000 bytes; past that it prints
-#     WARNING: '-e <mangled expression>'
-# discards the expression, and EXITS 0. Nothing runs and the step goes green.
+# R caps an `Rscript -e` expression, but NOT at a count of the bytes you wrote.
+# `$R_HOME/bin/R` is a shell script, and before R sees the argument it rewrites
+# every space as `~+~`, every newline as `~n~` and every tab as `~t~` (lines
+# 196-197). Each of those costs THREE bytes against the limit, so indented
+# multi-line R measures about 1.5x its own size. Over the limit R prints
+#     WARNING: '-e <encoded expression>'
+# to STDOUT (not stderr), discards the expression, and falls through to reading
+# a program from stdin. On a runner stdin is /dev/null, so it reads EOF, finds
+# nothing to do, and EXITS 0. The step runs nothing and reports success.
 #
-# This program crossed that limit at commit 856380c on 2026-10-31 - the commit
-# whose stated purpose was to stop the nightly blessing data it never
-# generated. From then until 2026-11-03 every check below silently did nothing
-# while the step reported success: the provenance check, the upstream feed
-# health check, the core-file checks, and the dark_feeds output that the
-# "Fail on a dark upstream feed" step reads (so that step was always skipped).
+# This program was inlined that way. It went silent at commit 6e17f66 on
+# 2026-10-26 -- 9109 raw bytes, which any raw-byte threshold would have passed,
+# but 13871 encoded. The first affected nightly is run #246 on 2026-10-27,
+# whose verify step emitted the WARNING and nothing else; run #245 the night
+# before had failed loudly with a bash syntax error. 6e17f66 is titled "An
+# apostrophe in a comment was taking the nightly down": fixing the apostrophe
+# converted a loud failure into a silent one, and nobody looked again.
+#
+# Seven nightly commits published with no verification at all: 10-27, 10-28,
+# 10-29, 10-31, 11-01, 11-02 and 11-03. Not just the dark-feed gate -- the
+# core-file checks, the run-stamp provenance check that 856380c was written to
+# add, and the step-summary table all live here, so the Data health table was
+# missing from every one of those runs. `steps.verify.outcome != 'failure'` on
+# the commit gate was vacuous: a step that runs nothing cannot fail.
+#
+# Measured on R 4.5.2 by bisection: an argument of 9997 encoded bytes runs and
+# 9998 is refused, and an all-space payload reaches that same ceiling at
+# exactly one third of the raw bytes a whitespace-free one does -- which is how
+# the encoding was confirmed rather than inferred. The limit is cumulative
+# across all -e arguments in one invocation, not per argument. In this workflow
+# the largest block known to have run is 8043 encoded (the verify step at
+# 9d9bc94); the one R threw away was 13871. The ceiling belongs to the R build,
+# so tools/lint_workflow_r.R refuses anything over 8000 rather than sitting
+# near it.
 #
 # As a script file the same mistake is impossible. There is no length limit, a
-# syntax error exits non-zero and names a line, and apostrophes are allowed -
+# syntax error exits non-zero and names a line, and apostrophes are allowed --
 # the no-apostrophe rule in tools/lint_workflow_r.R exists only because bash
 # closes a single-quoted -e argument at the first apostrophe.
 #
@@ -307,7 +330,7 @@ if (nzchar(sf)) writeLines(out, sf)
 #
 # Without this the pipeline cannot tell "checked, all clean" from "never
 # checked": both leave dark_feeds unset, so the dark-feed gate is skipped
-# either way. That is exactly how the oversized -e block hid for three nights.
+# either way. That is exactly how the oversized -e block hid for seven nights.
 # A later step requires this to be 1, so an absent verdict fails the run
 # instead of passing silently.
 gh_out <- Sys.getenv("GITHUB_OUTPUT")

@@ -15,12 +15,62 @@ wf_dir <- if (length(args)) args[1] else ".github/workflows"
 ALLOW <- c("T", "F", "args", ".Machine", "pi", "LETTERS", "letters",
            "month.abb", "month.name")
 
-# R's hard -e limit, the size this linter refuses, and the size it warns at.
-# The gap is deliberate headroom: a block that is already at 9500 bytes will be
-# pushed over by the next small edit, and the failure is silent.
-E_LIMIT_HARD <- 10000L
-E_LIMIT_FAIL <-  8000L
-E_LIMIT_WARN <-  6000L
+# The -e length limit does NOT apply to the bytes you wrote.
+#
+# $R_HOME/bin/R is a shell script, and before R sees the argument it rewrites
+# every space as ~+~, every newline as ~n~ and every tab as ~t~ (lines 196-197
+# of that script). Each of those characters therefore costs THREE bytes against
+# the limit, and indented multi-line R runs about 1.5x its own size once
+# encoded: the verify block was 14616 raw bytes but 22246 encoded.
+#
+# Measured on R 4.5.2: an argument of 9997 encoded bytes runs and 9998 is
+# refused. A pad of pure spaces reaches that ceiling at 3328 raw bytes and a
+# pad containing no whitespace at 9984 -- exactly 3x apart, which is how the
+# encoding was confirmed rather than assumed.
+#
+# That distinction is the whole bug. At 6e17f66 (2026-10-27) the verify block
+# was 9109 raw bytes -- under any 10000-byte RAW threshold, so a raw check
+# passes it -- and 13871 encoded, so R threw it away. The nightly then ran
+# nothing for seven published nights while reporting success every time.
+#
+# E_LIMIT_HARD is the ceiling measured here, not a promise about the runner's
+# own R build, so E_LIMIT_FAIL keeps real headroom: a block sitting at 9500 is
+# pushed over by the next small edit, and the failure is silent. The remedy is
+# cheap -- move the program into a file.
+#
+# The limit is cumulative across all -e arguments in one invocation, not per
+# argument, so a step passing two of them must fit both in the same budget.
+E_LIMIT_HARD <- 9997L
+E_LIMIT_FAIL <- 8000L
+E_LIMIT_WARN <- 7000L
+
+indent_of <- function(s) nchar(sub("[^ ].*$", "", s))
+
+# YAML strips a block scalar by the indentation of its FIRST non-empty line.
+# That is the only indentation bash never sees; whatever the R code carries on
+# top of it is part of the argument and costs 3 bytes per space. Measuring a
+# de-indented copy of the body therefore understates every block.
+yaml_block_indent <- function(lines, start) {
+  i <- start
+  while (i > 1L &&
+         !grepl("^[[:space:]]*run:[[:space:]]*[|>][+-]?[[:space:]]*$", lines[i])) {
+    if (grepl("^[[:space:]]*-[[:space:]]+name:", lines[i]))
+      return(indent_of(lines[start]))
+    i <- i - 1L
+  }
+  if (i <= 1L) return(indent_of(lines[start]))
+  k <- i + 1L
+  while (k <= length(lines) && !nzchar(trimws(lines[k]))) k <- k + 1L
+  if (k > length(lines)) indent_of(lines[start]) else indent_of(lines[k])
+}
+
+# What bin/R hands the length check.
+e_encoded_len <- function(code) {
+  joined <- paste(code, collapse = "\n")
+  n <- nchar(joined, type = "bytes")
+  fat <- lengths(regmatches(joined, gregexpr("[ \t\n]", joined)))
+  n + 2L * fat
+}
 
 extract_blocks <- function(path) {
   lines <- readLines(path, warn = FALSE)
@@ -34,7 +84,8 @@ extract_blocks <- function(path) {
       # dangling reference sitting in it went unreported.
       after <- sub("^.*Rscript -e '", "", lines[i])
       if (grepl("'", after, fixed = TRUE)) {
-        blocks[[length(blocks) + 1]] <- list(line = i, code = sub("'.*$", "", after))
+        one <- sub("'.*$", "", after)
+        blocks[[length(blocks) + 1]] <- list(line = i, code = one, arg = one)
         i <- i + 1
         next
       }
@@ -51,12 +102,18 @@ extract_blocks <- function(path) {
         break
       }
       body <- if (j > start + 1) lines[(start + 1):(j - 1)] else character(0)
+      # Two copies, deliberately: the de-indented one to parse, and the one
+      # bash really passes to measure. The opening quote is followed by a
+      # newline and the closing quote preceded by one, and both are inside the
+      # argument, so they count too.
+      blk <- yaml_block_indent(lines, start)
+      arg <- paste0("\n", paste(substring(body, blk + 1L), collapse = "\n"), "\n")
       keep <- nzchar(trimws(body))
       if (any(keep)) {
         indent <- min(nchar(sub("[^ ].*$", "", body[keep])))
         body <- substring(body, indent + 1)
       }
-      blocks[[length(blocks) + 1]] <- list(line = start, code = body)
+      blocks[[length(blocks) + 1]] <- list(line = start, code = body, arg = arg)
       i <- j + 1
     } else i <- i + 1
   }
@@ -99,34 +156,41 @@ for (f in files) {
       next
     }
 
-    # R caps a -e expression at 10000 bytes. Past that it prints
+    # Past the encoded limit above, R prints
     #     WARNING: '-e <mangled expression>'
-    # throws the expression away, and EXITS 0. The step runs nothing and goes
-    # green. Parsing cannot see this, because the R is perfectly valid R - only
-    # R's own argument handling refuses it, and only at invocation time.
+    # to STDOUT, throws the expression away, and EXITS 0. On a runner stdin is
+    # /dev/null, so R reads EOF, finds nothing to do, and the step goes green
+    # having run none of it. Parsing cannot see this, because the R is perfectly
+    # valid R - only R's own argument handling refuses it, at invocation time.
     #
     # This is not hypothetical. The nightly's "Verify pipeline output" step
-    # crossed the limit at commit 856380c on 2026-10-31 and silently did
-    # nothing for three nights: no provenance check, no feed-health check, no
-    # dark_feeds output, so the dark-feed gate was always skipped. The step
-    # reported success every time.
+    # crossed the limit at commit 6e17f66 on 2026-10-27 and did nothing for
+    # seven published nights: no provenance check, no feed-health check, no
+    # dark_feeds output, so the dark-feed gate was skipped every night. The
+    # step reported success every time. 6e17f66's own stated purpose was to
+    # fix an apostrophe that had been failing this step LOUDLY in bash, so
+    # removing it turned a visible failure into a silent one.
     #
     # A block this long belongs in a file called as Rscript path/to/it.R, which
     # has no limit, fails loudly on a syntax error, and can be unit tested.
     if (!isTRUE(b$unterminated) && length(b$code)) {
-      nbytes <- sum(nchar(b$code, type = "bytes")) + max(0L, length(b$code) - 1L)
-      if (nbytes > E_LIMIT_FAIL) {
-        cat(sprintf("FAIL %s\n  Rscript -e block is %d bytes, over R's %d-byte -e limit.\n",
-                    label, nbytes, E_LIMIT_HARD))
-        cat("  R would discard this expression, print a WARNING, and exit 0,\n")
-        cat("  so the step would run nothing and still report success.\n")
+      arg <- if (!is.null(b$arg)) b$arg else paste(b$code, collapse = "\n")
+      raw <- sum(nchar(arg, type = "bytes"))
+      enc <- e_encoded_len(arg)
+      if (enc > E_LIMIT_FAIL) {
+        cat(sprintf("FAIL %s\n  Rscript -e block is %d bytes, %d once bin/R encodes it.\n",
+                    label, raw, enc))
+        cat(sprintf("  The limit applies to the encoded size and is about %d here.\n",
+                    E_LIMIT_HARD))
+        cat("  R would discard this expression, print a WARNING to STDOUT, and\n")
+        cat("  exit 0, so the step would run nothing and still report success.\n")
         cat("  Move it to a script file and call Rscript <file>.\n")
         problems <- problems + 1L
         next
       }
-      if (nbytes > E_LIMIT_WARN)
-        cat(sprintf("warn %s (%d bytes, within %d of R's %d-byte -e limit)\n",
-                    label, nbytes, E_LIMIT_HARD - nbytes, E_LIMIT_HARD))
+      if (enc > E_LIMIT_WARN)
+        cat(sprintf("warn %s (%d bytes, %d encoded, within %d of the limit)\n",
+                    label, raw, enc, E_LIMIT_HARD - enc))
     }
     exprs <- tryCatch(parse(text = b$code), error = function(e) e)
     if (inherits(exprs, "error")) {

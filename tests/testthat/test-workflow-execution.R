@@ -1,25 +1,33 @@
 # Does the workflow's embedded R actually RUN?
 #
 # Every other test in this suite asks what the nightly's inline R *says*. None
-# asked whether R would agree to execute it, and that gap cost three nights.
+# asked whether R would agree to execute it, and that gap cost seven nights.
 #
-# R caps an -e expression at 10000 bytes. Past the limit it prints
-#     WARNING: '-e <mangled expression>'
-# discards the expression, and EXITS 0. Nothing runs and the step reports
-# success. Parsing cannot see this: the R is valid R, and only R's own argument
-# handling refuses it, at invocation time.
+# R caps an `Rscript -e` expression, but NOT at a count of the bytes you wrote.
+# `$R_HOME/bin/R` is a shell script, and before R sees the argument it rewrites
+# every space as `~+~`, every newline as `~n~` and every tab as `~t~` (lines
+# 196-197), so each of those costs THREE bytes against the limit. Over it, R
+# prints `WARNING: '-e <encoded expression>'` to STDOUT (not stderr), discards
+# the expression, and falls through to reading a program from stdin -- which on
+# a runner is /dev/null, so it reads EOF and EXITS 0, having run nothing.
 #
-# The "Verify pipeline output" step crossed the limit at commit 856380c on
-# 2026-10-31 - the commit whose stated purpose was to stop the nightly blessing
-# data it never generated. For three nights the step silently ran nothing while
-# reporting success: no core-file checks, no provenance check, no upstream feed
-# health check, and no dark_feeds output, so "Fail on a dark upstream feed" was
-# skipped every night while both Alpha Vantage feeds sat 28 days dark. The data
-# was real, but nothing had checked it.
+# The "Verify pipeline output" step went silent at commit 6e17f66 on
+# 2026-10-26: 9109 raw bytes, which any raw-byte threshold would have passed,
+# but 13871 encoded. First affected nightly is run #246 on 2026-10-27, whose
+# verify step emitted the WARNING and nothing else; run #245 the night before
+# had failed loudly with a bash syntax error. 6e17f66 is titled "An apostrophe
+# in a comment was taking the nightly down" -- fixing the apostrophe converted
+# a loud failure into a silent one.
 #
-# test-pipeline-provenance.R and test-workflow-lint.R both passed throughout.
-# They asserted the text was present and executed extracted fragments in
-# isolation, which works regardless of whether the whole block ever runs.
+# Seven nightly commits then published with nothing verified: the core-file
+# checks, the run-stamp provenance check, the feed health check, the dark_feeds
+# output and the step-summary table all lived in that block.
+#
+# Why the existing tests passed throughout: test-pipeline-provenance.R asserts
+# the text is PRESENT and executes extracted FRAGMENTS in-process, and
+# test-workflow-lint.R only parsed the block. Neither form proves R accepts the
+# assembled expression, and `parse()` never will -- the R is valid R, and only
+# R's own argument handling refuses it, at invocation time.
 
 lint <- repo_path("tools", "lint_workflow_r.R")
 wf_dir <- repo_path(".github", "workflows")
@@ -35,34 +43,77 @@ run_lint <- function(dir) {
   list(status = attr(out, "status") %||% 0L, text = paste(out, collapse = "\n"))
 }
 
-# R's documented -e ceiling. The linter refuses well below it; see E_LIMIT_FAIL.
-E_LIMIT <- 10000L
+# The ceiling applies to the ENCODED size. Measured on R 4.5.2 by bisection:
+# 9997 encoded bytes run, 9998 is refused, and an all-space pad hits the same
+# ceiling at exactly one third of the raw bytes a whitespace-free pad does.
+# It is a property of the R build, so the linter's own fail threshold sits well
+# below this; here we only assert nothing is near the measured cliff.
+E_LIMIT_ENCODED <- 9997L
 
-# Every Rscript -e block in a workflow, sized as bash receives it. Deliberately
-# a second implementation, independent of the linter's: the one thing that has
-# already slipped through is exactly the thing a shared helper would hide.
+# What bin/R hands the length check: space, newline and tab cost 3 bytes each.
+e_encoded_len <- function(code) {
+  joined <- paste(code, collapse = "\n")
+  nchar(joined, type = "bytes") +
+    2L * lengths(regmatches(joined, gregexpr("[ \t\n]", joined)))
+}
+
+# Every Rscript -e block in a workflow, sized as bash receives it.
+#
+# Deliberately a second implementation, independent of the linter's: the one
+# thing that has already slipped through is exactly what a shared helper would
+# hide. It also takes the opposite route on purpose -- de-indent the whole
+# `run:` block the way YAML does, THEN pull the quoted argument out of the
+# resulting shell script, where the linter finds the argument first and
+# de-indents that. Same specification, different order, so a mistake in either
+# shows up as disagreement.
+#
+# The indentation detail is the one that matters: YAML strips a block scalar by
+# the indent of its first non-empty line and no more, so whatever indentation
+# the R carries ON TOP of that is part of the argument and costs 3 bytes per
+# space. De-indenting the R body before measuring understates every block.
+indent_of <- function(s) nchar(sub("[^ ].*$", "", s))
+
 e_blocks <- function(lines) {
   out <- list()
   i <- 1L
   while (i <= length(lines)) {
-    if (grepl("Rscript -e '", lines[i], fixed = TRUE)) {
-      after <- sub("^.*Rscript -e '", "", lines[i])
+    if (!grepl("^[[:space:]]*run:[[:space:]]*[|>][+-]?[[:space:]]*$", lines[i])) {
+      i <- i + 1L
+      next
+    }
+    k <- i + 1L
+    while (k <= length(lines) && !nzchar(trimws(lines[k]))) k <- k + 1L
+    if (k > length(lines)) break
+    base <- indent_of(lines[k])
+    j <- k
+    while (j <= length(lines) &&
+           (!nzchar(trimws(lines[j])) || indent_of(lines[j]) >= base)) j <- j + 1L
+    script <- substring(lines[(i + 1L):(j - 1L)], base + 1L)
+
+    m <- 1L
+    while (m <= length(script)) {
+      if (!grepl("Rscript -e '", script[m], fixed = TRUE)) {
+        m <- m + 1L
+        next
+      }
+      after <- sub("^.*Rscript -e '", "", script[m])
       if (grepl("'", after, fixed = TRUE)) {
-        i <- i + 1L
+        m <- m + 1L
         next                                    # one-liner, closes itself
       }
-      j <- i + 1L
-      while (j <= length(lines) && !grepl("^\\s*'\\s*$", lines[j])) j <- j + 1L
-      body <- if (j > i + 1L) lines[(i + 1L):(j - 1L)] else character(0)
-      keep <- nzchar(trimws(body))
-      if (any(keep)) {
-        indent <- min(nchar(sub("[^ ].*$", "", body[keep])))
-        body <- substring(body, indent + 1L)
-      }
-      nbytes <- sum(nchar(body, type = "bytes")) + max(0L, length(body) - 1L)
-      out[[length(out) + 1L]] <- list(line = i, bytes = nbytes, n = length(body))
-      i <- j + 1L
-    } else i <- i + 1L
+      e <- m + 1L
+      while (e <= length(script) && !grepl("^'[[:space:]]*$", script[e])) e <- e + 1L
+      body <- if (e > m + 1L) script[(m + 1L):(e - 1L)] else character(0)
+      # The newline after the opening quote and the one before the closing
+      # quote are both inside the argument.
+      arg <- paste0("\n", paste(body, collapse = "\n"), "\n")
+      out[[length(out) + 1L]] <- list(
+        line = i + m, n = length(body),
+        bytes = nchar(arg, type = "bytes"),
+        encoded = e_encoded_len(arg))
+      m <- e + 1L
+    }
+    i <- j
   }
   out
 }
@@ -102,15 +153,56 @@ test_that("R silently discards an oversized -e expression", {
                info = "R now fails loudly on an oversized -e; the guards can be relaxed")
 })
 
+test_that("the limit counts encoded bytes, not the bytes you wrote", {
+  # Two payloads of near-identical raw size. One is all x, the other all
+  # spaces. If the limit were a raw byte count both would behave the same;
+  # because bin/R triples whitespace, only the spaces overflow. This is the
+  # detail that put the real start of the outage four nights earlier than a
+  # raw-byte reading suggests, and it is why the linter encodes before it
+  # measures.
+  run_e <- function(e)
+    suppressWarnings(system2("Rscript", c("-e", shQuote(e)),
+                             stdout = TRUE, stderr = TRUE, stdin = "/dev/null"))
+  dense  <- paste0("# ", strrep("x", 6000), "\ncat(\"DENSE\\n\")")
+  spacey <- paste0("# ", strrep(" ", 6000), "\ncat(\"LOOSE\\n\")")
+  expect_equal(nchar(dense, type = "bytes"), nchar(spacey, type = "bytes"))
+
+  expect_true(any(grepl("DENSE", run_e(dense), fixed = TRUE)),
+              info = "a dense 6KB expression should run")
+  out <- run_e(spacey)
+  expect_false(any(grepl("LOOSE", out, fixed = TRUE)),
+               info = "6000 spaces encode to ~18KB and must be discarded")
+  expect_true(any(grepl("WARNING", out, fixed = TRUE)))
+})
+
+test_that("the -e budget is shared across arguments, not per argument", {
+  # A step passing two -e arguments must fit both in one budget. Nothing in
+  # the workflow does today, and this records why it must not start.
+  run2 <- function(n) {
+    pad <- function(tag) paste0("# ", strrep("x", n), "\ncat(\"", tag, "\\n\")")
+    suppressWarnings(system2("Rscript",
+      c("-e", shQuote(pad("A")), "-e", shQuote(pad("B"))),
+      stdout = TRUE, stderr = TRUE, stdin = "/dev/null"))
+  }
+  both <- run2(4000)
+  expect_true(any(grepl("^A$", both)))
+  expect_true(any(grepl("^B$", both)))
+
+  split <- run2(5100)
+  expect_true(any(grepl("^A$", split)), info = "the first argument should still run")
+  expect_false(any(grepl("^B$", split)),
+               info = "two 5.1KB arguments exceed one shared budget")
+})
+
 test_that("no workflow hands R an expression it will discard", {
   skip_if_not(dir.exists(wf_dir), "no workflows directory")
   files <- list.files(wf_dir, pattern = "\\.ya?ml$", full.names = TRUE)
   expect_gt(length(files), 0)
   for (f in files) {
     for (b in e_blocks(readLines(f, warn = FALSE))) {
-      expect_lt(b$bytes, E_LIMIT,
-                label = sprintf("%s:%d (%d lines) is %d bytes; R discards it and exits 0",
-                                basename(f), b$line, b$n, b$bytes))
+      expect_lt(b$encoded, E_LIMIT_ENCODED,
+                label = sprintf("%s:%d (%d lines) is %d bytes, %d encoded; R discards it and exits 0",
+                                basename(f), b$line, b$n, b$bytes, b$encoded))
     }
   }
 })
@@ -205,6 +297,72 @@ test_that("the linter refuses an -e block R would discard", {
   r <- run_lint(d)
   expect_equal(r$status, 1L, info = r$text)
   expect_match(r$text, "limit", info = r$text)
+})
+
+test_that("the linter counts the indentation YAML leaves behind", {
+  skip_if_not(file.exists(lint), "linter not present")
+  # The second regression in the same check, and subtler than the first: the
+  # linter de-indented the R body before measuring it, by the body's own
+  # minimum indent. YAML does not do that. A block scalar is stripped by the
+  # indent of its FIRST non-empty line -- here the `Rscript -e '` line at 10 --
+  # and every space the R carries on top of that is in the argument, costing 3
+  # bytes once bin/R encodes it.
+  #
+  # The figures below are hand-computed rather than taken from the linter, so
+  # this fails if the linter measures anything other than what bash passes:
+  #   500 body lines of `  cat("x")`, 10 bytes each after the 10-space strip
+  #   argument = "\n" + 500 lines joined by "\n" + "\n" = 11*500 + 1 = 5501
+  #   whitespace = 1000 spaces + 501 newlines = 1501, at +2 bytes each
+  #   encoded = 5501 + 3002 = 8503
+  # Raw 5501 is comfortably under the 8000 threshold; encoded 8503 is over it.
+  # De-indenting first would leave 8 bytes a line, 4499 raw and 5497 encoded,
+  # and the block would be reported "ok" -- which is what this test exists to
+  # stop. The arithmetic is spelled out because getting it wrong once already
+  # produced a check that measured the wrong thing while looking right.
+  n <- 500L
+  d <- file.path(tempdir(), paste0("lintind-", basename(tempfile(""))))
+  dir.create(d, recursive = TRUE, showWarnings = FALSE)
+  writeLines(c("name: t", "jobs:", "  j:", "    steps:",
+               "      - name: Indented",
+               "        run: |",
+               "          Rscript -e '",
+               rep('            cat("x")', n),
+               "          '"),
+             file.path(d, "indent.yml"))
+
+  arg <- paste0("\n", paste(rep('  cat("x")', n), collapse = "\n"), "\n")
+  expect_equal(nchar(arg, type = "bytes"), 5501L)
+  expect_equal(e_encoded_len(arg), 8503L)
+  expect_lt(nchar(arg, type = "bytes"), 8000L)   # a raw check lets it through
+
+  r <- run_lint(d)
+  expect_equal(r$status, 1L, info = r$text)
+  expect_match(r$text, "5501 bytes, 8503 once", fixed = TRUE, info = r$text)
+})
+
+test_that("the linter refuses a block that only overflows once encoded", {
+  skip_if_not(file.exists(lint), "linter not present")
+  # The regression this guards: the first version of the size check measured
+  # RAW bytes against 8000. Deeply indented R is roughly 1.5x its raw size
+  # once encoded, so a block well under the raw threshold could still be
+  # discarded by R -- which is exactly how 6e17f66 slipped through at 9109 raw
+  # bytes. The fixture below is ~4.9KB raw and ~11.6KB encoded, and the
+  # raw-only check passed it.
+  d <- file.path(tempdir(), paste0("lintenc-", basename(tempfile(""))))
+  dir.create(d, recursive = TRUE, showWarnings = FALSE)
+  deep <- paste0("            ", strrep(" ", 40), "# ", strrep("z", 18))
+  writeLines(c("name: t", "jobs:", "  j:", "    steps:",
+               "      - name: Deep", "        run: |", "          Rscript -e '",
+               rep(deep, 80), '            cat("hi")', "            '"),
+             file.path(d, "deep.yml"))
+
+  body <- c(rep(substring(deep, 13), 80), 'cat("hi")')
+  expect_lt(sum(nchar(body, type = "bytes")) + length(body) - 1L, 8000L)
+  expect_gt(e_encoded_len(body), 8000L)
+
+  r <- run_lint(d)
+  expect_equal(r$status, 1L, info = r$text)
+  expect_match(r$text, "encode", info = r$text)
 })
 
 test_that("the linter checks the script files the workflow calls", {

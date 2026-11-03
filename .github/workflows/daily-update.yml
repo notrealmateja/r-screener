@@ -259,9 +259,14 @@ jobs:
 
       # A verdict must exist. Without this the pipeline cannot tell
       # "checked, all clean" from "never checked" - both leave every output
-      # unset. The verify program used to be an Rscript -e argument; when it
-      # grew past R's 10000-byte -e limit R discarded the expression and exited
-      # 0, so the step went green having run nothing, for three nights.
+      # unset, so the dark-feed gate below is skipped either way.
+      #
+      # The verify program used to be an Rscript -e argument. bin/R encodes
+      # each space and newline as three bytes before the length check, so the
+      # block was over the limit while its raw size still looked safe: R
+      # discarded it, printed a WARNING to stdout and exited 0, and the step
+      # went green having run nothing for seven published nights from
+      # 2026-10-27 (commit 6e17f66, run #246). See tools/verify_pipeline.R.
       - name: Confirm the verifier reached a verdict
         id: verdict
         if: always() && (steps.pipeline.outcome == 'success' || steps.pipeline.outcome == 'failure')
