@@ -1,31 +1,31 @@
 symbol,title,watchlist_count,st_rank,trending_score,messages,bullish,bearish,sentiment_label,fetched_at
-TRUMP.X,Trump For President,12796,1,7.57552,0,0,0,Neutral,2026-11-02T01:07:24Z
-LOW,"Lowe's Companies, Inc.",19210,2,5.16941,0,0,0,Neutral,2026-11-02T01:07:24Z
-POET,POET Technologies Inc,29653,3,5.1622,3,1,0,Very Bullish,2026-11-02T01:07:24Z
-GM,General Motors Company,50669,4,4.82848,0,0,0,Neutral,2026-11-02T01:07:24Z
-MXL,MaxLinear Inc,3834,5,4.58857,0,0,0,Neutral,2026-11-02T01:07:24Z
-QCOM,"Qualcomm, Inc.",78069,6,4.52314,0,0,0,Neutral,2026-11-02T01:07:24Z
-AXSM,Axsome Therapeutics Inc,12007,7,4.2715,0,0,0,Neutral,2026-11-02T01:07:24Z
-HD,"Home Depot, Inc.",46246,8,3.29519,0,0,0,Neutral,2026-11-02T01:07:24Z
-KLAC,KLA Corp.,6544,9,3.2307,0,0,0,Neutral,2026-11-02T01:07:24Z
-PLTR,Palantir Technologies Inc,325488,10,3.19903,0,0,0,Neutral,2026-11-02T01:07:24Z
-ADBE,Adobe Inc,50935,11,3.13837,0,0,0,Neutral,2026-11-02T01:07:24Z
-RIOT,Riot Platforms Inc,129876,12,2.95364,1,0,0,Neutral,2026-11-02T01:07:24Z
-CROX,Crocs Inc,9536,13,2.82992,0,0,0,Neutral,2026-11-02T01:07:24Z
-VTI,Vanguard Total Stock Market ETF,29236,14,2.8204,0,0,0,Neutral,2026-11-02T01:07:24Z
-OUST,Ouster Inc - Ordinary Shares - Class A,17708,15,2.8204,0,0,0,Neutral,2026-11-02T01:07:24Z
-UPS,"United Parcel Service, Inc.",29607,16,2.8204,0,0,0,Neutral,2026-11-02T01:07:24Z
-DJT,Trump Media & Technology Group Corp.,115751,17,2.75017,4,0,4,Very Bearish,2026-11-02T01:07:24Z
-AMD,Advanced Micro Devices Inc,566326,18,2.66839,0,0,0,Neutral,2026-11-02T01:07:24Z
-ACN,Accenture plc - Ordinary Shares - Class A,8909,19,2.53738,0,0,0,Neutral,2026-11-02T01:07:24Z
-CDE,Coeur Mining Inc,6915,20,2.53738,1,1,0,Very Bullish,2026-11-02T01:07:24Z
-SMMT,Summit Therapeutics Inc,10645,21,2.46475,0,0,0,Neutral,2026-11-02T01:07:24Z
-TXN,Texas Instruments Inc.,13292,22,2.44867,0,0,0,Neutral,2026-11-02T01:07:24Z
-SPY,SPDR S&P 500 ETF Trust,639390,23,2.41772,15,0,3,Very Bearish,2026-11-02T01:07:24Z
-U,Unity Software Inc,37175,24,2.39075,0,0,0,Neutral,2026-11-02T01:07:24Z
-JNUG,Direxion Shares ETF Trust - Direxion Daily Junior Gold Miners Index Bull 2X ETF,78739,25,2.3249,0,0,0,Neutral,2026-11-02T01:07:24Z
-TTWO,"Take-Two Interactive Software, Inc.",24714,26,2.18422,0,0,0,Neutral,2026-11-02T01:07:24Z
-INTU,Intuit Inc,12848,27,2.15595,0,0,0,Neutral,2026-11-02T01:07:24Z
-XCN.X,Onyxcoin,8338,28,2.09359,0,0,0,Neutral,2026-11-02T01:07:24Z
-TGTX,TG Therapeutics Inc,21874,29,2.02275,0,0,0,Neutral,2026-11-02T01:07:24Z
-SHIB.X,Shiba Inu,190575,30,1.86078,0,0,0,Neutral,2026-11-02T01:07:24Z
+PLTR,Palantir Technologies Inc,325810,1,14.0253,3,2,1,Bullish,2026-11-03T03:09:14Z
+AAPL,Apple Inc,999929,2,10.8693,1,0,1,Very Bearish,2026-11-03T03:09:14Z
+MRVL,Marvell Technology Inc,54560,3,8.3596,1,0,0,Neutral,2026-11-03T03:09:14Z
+AMD,Advanced Micro Devices Inc,566476,4,7.30711,1,0,0,Neutral,2026-11-03T03:09:14Z
+BLZE,Backblaze Inc - Ordinary Shares - Class A,2540,5,6.8756,0,0,0,Neutral,2026-11-03T03:09:14Z
+CVNA,Carvana Co.,41405,6,6.66986,2,0,0,Neutral,2026-11-03T03:09:14Z
+UPST,Upstart Holdings Inc,47533,7,6.23625,0,0,0,Neutral,2026-11-03T03:09:14Z
+AEHR,Aehr Test Systems,15327,8,6.19388,1,0,0,Neutral,2026-11-03T03:09:14Z
+DJT,Trump Media & Technology Group Corp.,115747,9,6.18683,9,2,2,Neutral,2026-11-03T03:09:14Z
+SOXX,iShares Semiconductor ETF,11585,10,5.53687,0,0,0,Neutral,2026-11-03T03:09:14Z
+MOD,Modine Manufacturing Co.,2963,11,5.51642,1,0,0,Neutral,2026-11-03T03:09:14Z
+CMPS,COMPASS Pathways,10098,12,5.51076,0,0,0,Neutral,2026-11-03T03:09:14Z
+ON,ON Semiconductor Corp.,13386,13,5.47066,0,0,0,Neutral,2026-11-03T03:09:14Z
+SHOP,Shopify Inc,139206,14,5.10346,1,1,0,Very Bullish,2026-11-03T03:09:14Z
+PURR,Hyperliquid Strategies Inc.,26634,15,5.00326,0,0,0,Neutral,2026-11-03T03:09:14Z
+TRLV,Trulieve Cannabis Corp ,7804,16,4.90674,0,0,0,Neutral,2026-11-03T03:09:14Z
+ZVRA,Zevra Therapeutics Inc,24203,17,4.89738,0,0,0,Neutral,2026-11-03T03:09:14Z
+RIG,Transocean Ltd,25141,18,4.88349,0,0,0,Neutral,2026-11-03T03:09:14Z
+BCRX,Biocryst Pharmaceuticals Inc.,37003,19,4.33923,1,0,0,Neutral,2026-11-03T03:09:14Z
+ORCL,Oracle Corp.,73009,20,4.19103,1,0,0,Neutral,2026-11-03T03:09:14Z
+SOXL,Direxion Daily Semiconductor Bull 3X Shares,41889,21,4.04631,2,1,0,Very Bullish,2026-11-03T03:09:14Z
+TQQQ,ProShares UltraPro QQQ,44704,22,3.88886,0,0,0,Neutral,2026-11-03T03:09:14Z
+PGEN,Precigen Inc,9419,23,3.76533,0,0,0,Neutral,2026-11-03T03:09:14Z
+BWXT,BWX Technologies Inc,4586,24,3.7336,0,0,0,Neutral,2026-11-03T03:09:14Z
+FLY,Firefly Aerospace Inc.,9491,25,3.61641,0,0,0,Neutral,2026-11-03T03:09:14Z
+LITE,Lumentum Holdings Inc,16847,26,3.59757,1,0,0,Neutral,2026-11-03T03:09:14Z
+TEM,Tempus AI Inc,22064,27,3.51295,0,0,0,Neutral,2026-11-03T03:09:14Z
+USAR,USA Rare Earth Inc,20824,28,3.51125,0,0,0,Neutral,2026-11-03T03:09:14Z
+SOXS,Direxion Daily Semiconductor Bear 3X ETF,19116,29,3.4775,1,0,0,Neutral,2026-11-03T03:09:14Z
+ANT.X,Aragon,506,30,3.44375,0,0,0,Neutral,2026-11-03T03:09:14Z

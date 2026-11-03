@@ -1427,13 +1427,13 @@
       }
     },
     "openssl": {
-      "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Source": "CRAN",
+      "Repository": "https://cran.rstudio.com",
       "description": {
         "Package": "openssl",
         "Type": "Package",
         "Title": "Toolkit for Encryption, Signatures and Certificates Based on\nOpenSSL",
-        "Version": "2.4.2",
+        "Version": "2.5.0",
         "Authors@R": "c(person(\"Jeroen\", \"Ooms\", role = c(\"aut\", \"cre\"), email = \"jeroenooms@gmail.com\",\n    comment = c(ORCID = \"0000-0002-4035-0289\")),\n    person(\"Oliver\", \"Keyes\", role = \"ctb\"))",
         "Description": "Bindings to OpenSSL libssl and libcrypto, plus custom SSH key parsers.\n    Supports RSA, DSA and EC curves P-256, P-384, P-521, and curve25519. Cryptographic\n    signatures can either be created and verified manually or via x509 certificates. \n    AES can be used in cbc, ctr or gcm mode for symmetric encryption; RSA for asymmetric\n    (public key) encryption or EC for Diffie Hellman. High-level envelope functions \n    combine RSA and AES for encrypting arbitrary sized data. Other utilities include key\n    generators, hash functions (md5, sha1, sha256, etc), base64 encoder, a secure random\n    number generator, and 'bignum' math methods for manually performing crypto \n    calculations on large multibyte integers.",
         "License": "MIT + file LICENSE",
@@ -1446,12 +1446,12 @@
         "Encoding": "UTF-8",
         "Config/roxygen2/version": "8.0.0",
         "NeedsCompilation": "yes",
-        "Packaged": "2026-06-09 10:51:42 UTC; jeroen",
+        "Packaged": "2026-11-01 10:34:10 UTC; jeroen",
         "Author": "Jeroen Ooms [aut, cre] (ORCID: <https://orcid.org/0000-0002-4035-0289>),\n  Oliver Keyes [ctb]",
         "Maintainer": "Jeroen Ooms <jeroenooms@gmail.com>",
-        "Repository": "RSPM",
-        "Date/Publication": "2026-06-09 13:30:02 UTC",
-        "Built": "R 4.4.0; x86_64-pc-linux-gnu; 2026-08-12 19:08:41 UTC; unix"
+        "Repository": "CRAN",
+        "Date/Publication": "2026-11-02 17:20:02 UTC",
+        "Built": "R 4.4.0; x86_64-pc-linux-gnu; 2026-11-03 03:00:22 UTC; unix"
       }
     },
     "otel": {
@@ -2544,85 +2544,85 @@
       "checksum": "5e692bae5263dfa20386d91073134349"
     },
     "backtest_components.csv": {
-      "checksum": "53da1228c084cddf2b51e95daae01cbe"
+      "checksum": "97cd02b3a09ba5352e3dbbf9b1da15fe"
     },
     "backtest_equity_stats.csv": {
-      "checksum": "4c92b3cd8e5dcaf585f4545094004a89"
+      "checksum": "603300f9600968bfafed432381b17156"
     },
     "backtest_equity.csv": {
-      "checksum": "5d5d89d7dd7dca48e5fbe3da8dcc3da2"
+      "checksum": "277f5a29ca20f9eef5f32c13c286ea51"
     },
     "backtest_headline.csv": {
-      "checksum": "a6344e799cf385e3569b8c6f414512b4"
+      "checksum": "aa3c43bf82efb1d53060c7c86c65ae11"
     },
     "backtest_ic.csv": {
-      "checksum": "e25877206b7b1592985f9f0e3ee546ca"
+      "checksum": "a02f55d0474da6248c5eb39cfc0a5e03"
     },
     "backtest_phase_sweep.csv": {
-      "checksum": "2affde75e1587462b31242b07fcea4bf"
+      "checksum": "bcd2424627bdc12d329ed21989533198"
     },
     "backtest_summary.csv": {
-      "checksum": "fa1156aa308453e4894697a18e14ec0e"
+      "checksum": "57bdedec80e8eb1a69748d261e49efd3"
     },
     "data/batch_tracker.rds": {
       "checksum": "6f1dddc156f656f2d4c4d382e7b64017"
     },
     "data/meta.rds": {
-      "checksum": "fd09597c6d91c1f9beaeb847c678529a"
+      "checksum": "a14d9c5a4aba5300e83fb36be6357c2c"
     },
     "data/price_series_cache.rds": {
       "checksum": "266a1b7cfa8bbf9180380a4969dbc886"
     },
     "earnings_calendar.csv": {
-      "checksum": "cb57265a2380725f1614fd6598635ddc"
+      "checksum": "296a2738100724a8ef1d06d6a8adcbcb"
     },
     "global.R": {
       "checksum": "55b7ee2946ae08b4d664acaf2d8f7b1d"
     },
     "macro_data.csv": {
-      "checksum": "0c8519c7e73f1a2afdf6541f25c89bfc"
+      "checksum": "f4b8794fc807cc2f65041ffb465b62ff"
     },
     "market_news.csv": {
       "checksum": "40b59b1ef18dd32c084b345c018d8bfb"
     },
     "master_scored.csv": {
-      "checksum": "f521304333a695c52ebaba947bf8d716"
+      "checksum": "1a5e4761e5685861a2ee8bbb69b6e690"
     },
     "meta.rds": {
-      "checksum": "fd09597c6d91c1f9beaeb847c678529a"
+      "checksum": "a14d9c5a4aba5300e83fb36be6357c2c"
     },
     "price_history.csv": {
-      "checksum": "c96118af20cc36e910384fe20a3fedfa"
+      "checksum": "e7020e2e16615a6f1f626807ce9be9e4"
     },
     "reversal_results.csv": {
-      "checksum": "8de79988f8dc5a24e5e3ada71688fabd"
+      "checksum": "d8aa017e9abc4dce846269dd2f782b4c"
     },
     "score_history.csv": {
-      "checksum": "6a63aa798ce2f5431d4ae758ce62c3e1"
+      "checksum": "d0b6a5d3176413225ab825fd9e9765c1"
     },
     "sec_filings.csv": {
-      "checksum": "2fd24bd0b3cee8330ef4337d3f42313f"
+      "checksum": "8647283aa80e06e793f25eb490fe7c3d"
     },
     "sector_performance.csv": {
-      "checksum": "4ca48483dab61f9768674b5ddea117d1"
+      "checksum": "df70044d6d4d2bb69f8e06769952131d"
     },
     "stock_news.csv": {
-      "checksum": "690ae32ce7cdef2be34d47da18cf5531"
+      "checksum": "d7f1d3edb33f03c49ee23ccde0512ee7"
     },
     "stocktwits_trending.csv": {
-      "checksum": "f697d1cd7932ebbf10c40e9a56cfcc63"
+      "checksum": "7331e38302013a9e1a84789aaf850f00"
     },
     "top15_sweetspot.csv": {
-      "checksum": "f4bed177e80b17dd2fe87d866fa2c19d"
+      "checksum": "55b4cb194f7e7f7817db7ec600dce8dc"
     },
     "top15_unicorns.csv": {
-      "checksum": "d669e5de22ccfed62829eda6decb7ea6"
+      "checksum": "43a87c6aed396f5bf9ce6a0df592df3f"
     },
     "tv_channels.csv": {
-      "checksum": "9042f0334a057b21bce5675fa441bacc"
+      "checksum": "a02f69d39cf8031e73f56d901b56999a"
     },
     "wsb_trending.csv": {
-      "checksum": "2feb7772aef7de40c6b959cd82546f0c"
+      "checksum": "7dba662540e23f5b4f210c88c1e05b9d"
     }
   },
   "users": null
