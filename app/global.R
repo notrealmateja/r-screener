@@ -51,6 +51,65 @@ tv_channels    <- load_csv("tv_channels.csv")
 meta <- tryCatch(readRDS(file.path(APP_DATA_DIR, "meta.rds")),
                  error=function(e) list(last_updated="Not yet run", n_stocks=0))
 
+# What share of a series' win over the index is explained by carrying more
+# market than the index does, rather than by skill. Excess over the index
+# decomposes as alpha + (beta - 1) * market return, so above a beta of one a
+# rising market hands the series a head start.
+#
+# A top-level function rather than an expression inside renderUI, so a test can
+# run it: the page once denied that the control's win was market exposure while
+# this quantity stood at 78%, and a text assertion cannot tell a live branch
+# from one someone guarded with FALSE.
+bt_leverage_share <- function(beta, mkt_cagr, excess) {
+  if (length(beta) != 1 || length(mkt_cagr) != 1 || length(excess) != 1) return(NA_real_)
+  if (is.na(beta) || is.na(mkt_cagr) || is.na(excess) || excess <= 0.005) return(NA_real_)
+  (beta - 1) * mkt_cagr / excess
+}
+
+# When the backtest that produced a frame actually ran, as MM/DD/YYYY.
+#
+# Deliberately NOT derived from the file's mtime or from Sys.Date(). Connect
+# Cloud deploys from a git checkout, so every data file's mtime is the deploy
+# time -- a stamp built from it would advance every night whether or not the
+# backtest ran, which is precisely the failure it exists to expose. Absence
+# reads as unknown, never as fresh.
+bt_stamp_time <- function(df) {
+  if (is.null(df) || !nrow(df) || !"generated_at" %in% names(df))
+    return(as.POSIXct(NA))
+  raw <- as.character(df$generated_at[1])
+  if (length(raw) != 1 || is.na(raw) || !nzchar(trimws(raw))) return(as.POSIXct(NA))
+  t <- tryCatch(suppressWarnings(as.POSIXct(raw, tz = "UTC")),
+                error = function(e) as.POSIXct(NA))
+  if (length(t) != 1) as.POSIXct(NA) else t
+}
+
+bt_stamp <- function(df) {
+  if (is.null(df) || !nrow(df) || !"generated_at" %in% names(df)) return(NA_character_)
+  t <- bt_stamp_time(df)
+  if (is.na(t)) return(NA_character_)
+  format(t, "%m/%d/%Y")
+}
+
+# How many days ago that was, so a stamp that has stopped moving can say so
+# rather than relying on the reader to notice a date.
+bt_stamp_age <- function(df) {
+  if (is.null(df) || !nrow(df) || !"generated_at" %in% names(df)) return(NA_real_)
+  t <- bt_stamp_time(df)
+  if (is.na(t)) return(NA_real_)
+  as.numeric(difftime(Sys.time(), t, units = "days"))
+}
+
+# The phrase both the gate and the validation panel print. One definition, so
+# the two cannot disagree about when the same backtest ran.
+bt_stamp_label <- function(df) {
+  d <- bt_stamp(df)
+  if (is.na(d)) return("last updated \u2014 unknown, this backtest has not run since the stamp was added")
+  age <- bt_stamp_age(df)
+  if (!is.na(age) && age > 7)
+    sprintf("last updated %s \u2014 %.0f days ago, so the backtest has not rerun", d, age)
+  else sprintf("last updated %s", d)
+}
+
 all_sectors <- c("All", if (!is.null(master_data)) sort(unique(na.omit(master_data$sector))) else character(0))
 all_ratings <- c("All","Very Strong","Strong","Neutral","Weak","Very Weak")
 

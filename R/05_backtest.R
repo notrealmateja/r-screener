@@ -226,7 +226,13 @@ run_backtest <- function(history_path = "data/alpha_history.csv") {
     spread_ann     = spread,
     mean_rank_ic   = mean_ic,
     ic_t_stat      = ic_t,
-    monotonic      = all(diff(summary_tbl$ann_alpha) <= 0)
+    monotonic      = all(diff(summary_tbl$ann_alpha) <= 0),
+    # Stamped by the run that produced these numbers, so the page can say when
+    # they were measured. Every backtest call in the nightly is wrapped in a
+    # tryCatch that only message()s, and the copy step ships whatever is in
+    # data/ regardless -- so a failed backtest silently republishes yesterday's
+    # figures. Nothing else in the pipeline records that this ran.
+    generated_at   = backtest_stamp()
   )
 
   if (!dir.exists("data")) dir.create("data", recursive = TRUE)
@@ -563,6 +569,10 @@ if (!exists("corporate_action")) {
   if (length(.utils)) source(.utils[1]) else
     stop("00_utils.R not found from ", getwd())
 }
+
+# One clock for every file this module writes, so two outputs from the same run
+# carry the same stamp and the app can tell them apart when they do not.
+backtest_stamp <- function() format(Sys.time(), "%Y-%m-%d %H:%M:%S", tz = "UTC")
 
 equity_stats <- function(r, bench, dates = NULL, periods_per_year = 252) {
   ok <- !is.na(r) & !is.na(bench)
@@ -1133,6 +1143,7 @@ run_equity_curve <- function(price_path = "data/price_history.csv",
   stats$edge_vs_univ_ex_top2       <- ex_top2
   stats$edge_vs_univ_ex_top2_win   <- ex_top2_win
   stats$edge_vs_univ_ex_top2_names <- ex_top2_names
+  stats$generated_at               <- backtest_stamp()
 
   if (write) {
     write_csv(curve %>% select(date, block, n_books, model_ret, q5_ret, spy_ret,
