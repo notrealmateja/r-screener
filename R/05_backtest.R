@@ -1021,6 +1021,13 @@ run_equity_curve <- function(price_path = "data/price_history.csv",
   m$edge_vs_univ_t_align_min <- if (!length(at_u))   NA_real_ else min(at_u)
   m$edge_vs_univ_t_align_max <- if (!length(at_u))   NA_real_ else max(at_u)
 
+  # The universe leg gets its own regression intercept, because the page
+  # compares the two. It used to divide a shortcut (u_cagr - u_beta*b_cagr)
+  # by the model's regression intercept and print the ratio — two different
+  # estimators over one division, which moved the printed share by five points.
+  fit_u_spy <- stats::lm(I(curve$univ_ret - curve$spy_ret) ~ curve$spy_ret)
+  u_alpha_vs_spy <- unname(stats::coef(fit_u_spy)[1]) * 252
+
   for (s in c("q5", "b", "u")) {
     o <- get(s)
     for (f in c("n_tested_days", "excess_cagr_tested", "edge_vs_univ_cagr_tested",
@@ -1036,6 +1043,7 @@ run_equity_curve <- function(price_path = "data/price_history.csv",
       o[[f]] <- NA_real_
     assign(s, o)
   }
+  u$alpha_vs_spy <- u_alpha_vs_spy   # after the blanking loop, not before
 
   # The per-calendar diagnostic. This is the spread the old single-phase number
   # was silently drawing one sample from, so it belongs on the page.
@@ -1093,16 +1101,16 @@ run_equity_curve <- function(price_path = "data/price_history.csv",
   # This is the check that matters most, because the candidate list was not
   # assembled neutrally. 68 of the 195 names sit in a block whose own comment
   # says they exist to "make the Unicorn screen meaningful", chosen in August
-  # 2026 — with hindsight — and the two largest total returns in the whole file
-  # (QBTS +1589%, RGTI +1120%) are among them. Both sit on BOTH sides of
-  # model-minus-universe, so which side they move more is an empirical
-  # question, not something to reason about.
+  # 2026 — with hindsight. The largest total return in the file is in that
+  # block. Whichever two names currently top the list, they sit on BOTH sides
+  # of model-minus-universe, so which side they move more is an empirical
+  # question rather than something to reason about.
   #
-  # Measured: removing them RAISES the edge, from +13.6pp to +15.1pp, and takes
-  # the share of calendars where the top quintile beats the bottom from 87% to
-  # 100%. They inflate the no-signal control more than they flatter the model,
-  # so the headline is carrying a headwind rather than resting on two names.
-  # Re-run nightly rather than asserted once, because the answer can change.
+  # Deliberately NOT summarised here. This comment used to record that removal
+  # raised the edge, naming QBTS and RGTI — four days later the pair was QBTS
+  # and HOOD and removal lowered it instead, and the page carried the stale
+  # conclusion for nineteen days. The whole point of re-running it nightly is
+  # that the answer moves, so the answer lives in the output, not in prose.
   ex_top2 <- NA_real_; ex_top2_names <- NA_character_; ex_top2_win <- NA_real_
   if (robustness && !length(exclude)) {
     growth <- px %>% filter(!is.na(daily_ret)) %>% group_by(symbol) %>%

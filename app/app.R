@@ -1042,7 +1042,13 @@ ui <- fluidPage(
           div(class="panel",
             div(class="panel-head",
               div(class="panel-head-regime",
-                div(class="panel-head-title","TOP 20 — SWEET SPOT"),
+                # Titled from the data. The file is written with head(15) and
+                # the table renders every row with no slice, so a panel headed
+                # "TOP 20" listed 15 names a reader could count — while the
+                # sibling panel is honestly titled "TOP 15 UNICORNS".
+                div(class="panel-head-title",
+                    paste0("TOP ", if (is.null(top15_data)) 15 else nrow(top15_data),
+                           " \u2014 SWEET SPOT")),
                 uiOutput("regime_badge_ui")
               ),
               # Previously claimed predicted returns and backtested confidence,
@@ -1304,7 +1310,11 @@ ui <- fluidPage(
           div(class="panel",
             div(class="panel-head",
               div(class="panel-head-title","EARNINGS CALENDAR"),
-              div(class="panel-head-meta","NEXT 60 DAYS")),
+              # Derived from the list actually rendered. It said "NEXT 60
+              # DAYS" while the feed is cut by head(40) with no horizon bound
+              # at all — today those 40 events span a week, and the file
+              # reaches six months out.
+              div(class="panel-head-meta", uiOutput("earnings_horizon", inline = TRUE))),
             div(class="panel-body", style="max-height:420px;overflow-y:auto;",
               uiOutput("earnings_feed"))
           ),
@@ -1387,7 +1397,20 @@ ui <- fluidPage(
         div(class="panel-head",
           div(class="panel-head-title","EVERY REBALANCE CALENDAR"),
           div(class="panel-head-meta",
-              paste0("63 views of the same 2.5 years, sharing nearly all the same returns ",
+              # Built in the UI, where eq_stat is not in scope, so the span is
+              # read from the stats frame directly. It said "2.5 years" about a
+              # window that is 2.2 and grows nightly — while val_curve_meta
+              # printed the real start and end dates on the same screen.
+              paste0(local({
+                       y <- tryCatch({
+                         r <- bt_eq_stats[bt_eq_stats$series == "model", ]
+                         as.numeric(as.Date(r$end_date[1]) -
+                                    as.Date(r$start_date[1])) / 365.25
+                       }, error = function(e) NA_real_)
+                       if (length(y) != 1 || is.na(y)) "63 views of the same window"
+                       else sprintf("63 views of the same %.1f years", y)
+                     }),
+                     ", sharing nearly all the same returns ",
                      "· a range, not a confidence interval"))),
         div(class="panel-body", plotlyOutput("val_phases", height="320px"))
       ),
@@ -1737,7 +1760,7 @@ server <- function(input, output, session) {
   output$top15_table <- renderDT({
     if (is.null(top15_data) || nrow(top15_data) == 0)
       return(datatable(data.frame(
-        Message="Run 01_fundamentals.R then 04_master_score.R to generate Top 20")))
+        Message="Run 01_fundamentals.R then 04_master_score.R to generate the sweet-spot table")))
 
     d <- top15_data
 
@@ -2855,15 +2878,31 @@ server <- function(input, output, session) {
     div(do.call(tagList, items))
   })
 
+  # One source for the feed and its header, so the label cannot describe a
+  # horizon the list does not have.
+  EARNINGS_SHOWN <- 40L
+  earnings_upcoming <- reactive({
+    if (is.null(earnings_data) || nrow(earnings_data) == 0) return(NULL)
+    earnings_data %>%
+      filter(!is.na(date), date >= Sys.Date()) %>%
+      arrange(date) %>% head(EARNINGS_SHOWN)
+  })
+
+  output$earnings_horizon <- renderUI({
+    u <- earnings_upcoming()
+    if (is.null(u) || nrow(u) == 0) return(HTML("NO UPCOMING EVENTS"))
+    HTML(sprintf("NEXT %d EVENTS &nbsp;\u00b7&nbsp; THROUGH %s",
+                 nrow(u), toupper(format(max(u$date), "%b %d"))))
+  })
+
   output$earnings_feed <- renderUI({
     if (is.null(earnings_data) || nrow(earnings_data)==0)
       return(div("No earnings data. Run pipeline.",
                  style="color:#666;padding:20px;font-family:IBM Plex Mono;font-size:11px;"))
-    upcoming <- earnings_data %>%
-      filter(!is.na(date), date >= Sys.Date()) %>%
-      arrange(date) %>% head(40)
-    if (nrow(upcoming)==0) return(div("No upcoming earnings in next 60 days.",
-                                      style="color:#666;padding:20px;font-family:IBM Plex Mono;"))
+    upcoming <- earnings_upcoming()
+    if (is.null(upcoming) || nrow(upcoming)==0)
+      return(div("No upcoming earnings scheduled.",
+                 style="color:#666;padding:20px;font-family:IBM Plex Mono;"))
     # Flag stocks in our universe
     our_syms <- if (!is.null(master_data)) master_data$symbol else character(0)
     items <- lapply(1:nrow(upcoming), function(i) {
@@ -3134,11 +3173,19 @@ server <- function(input, output, session) {
              "for carrying market risk while the market rose. The walk-forward curve showed ",
              "the cost: the ranking had inverted, and the bottom quintile was beating the ",
              "top by 8.7 points a year. Re-running the same backtest on the residual turned ",
+             # Pre-change figures are frozen history and cannot be recomputed;
+             # the post-change ones drifted (beta 1.33, drawdown -29.5%, spread
+             # +23pp today, more than double the +10.1 printed). Marking the
+             # whole comparison as a dated measurement is honest and stops it
+             # reading as current.
              "that spread from -8.7 to +10.1 points, lowered the book's beta from 1.42 to ",
-             "1.32 and its worst drawdown from -33.8% to -30.6%. The change was made because ",
+             "1.32 and its worst drawdown from -33.8% to -30.6% — all measured on the day ",
+             "of the change, not since. The change was made because ",
              "the reasoning holds on its own, not because it backtested better — the excess ",
              "return still is not statistically significant, and this is one more ",
-             "configuration tried on the same 2.5 years. Note also that the description ",
+             sprintf("configuration tried on the same %s. Note also that the description ",
+                     local({ y <- bt_window_years()
+                             if (is.na(y)) "window" else sprintf("%.1f years", y) })),
              "above said CAPM-adjusted before the code did."),
 
       tags$h2("Confidence weighting"),
@@ -3147,7 +3194,7 @@ server <- function(input, output, session) {
       tags$pre("alpha_score = alpha_raw x w + 50 x (1 - w),   w = min(days_scored / 63, 1)"),
       tags$p("63 trading days is one quarter — the point at which an information ratio ",
              "becomes statistically meaningful. Below that the model deliberately refuses ",
-             "to express conviction. Alpha history is rebuilt from the full one-year price ",
+             "to express conviction. Alpha history is rebuilt from the full three-year price ",
              "window on every run, so a missed run backfills itself and a newly added ticker ",
              "is judged on the same evidence as one tracked since day one."),
 
@@ -3204,7 +3251,11 @@ server <- function(input, output, session) {
               tags$p(tags$strong("No component carries signal either. "),
                 "Every measure sits within noise of zero, so the flat composite is not ",
                 "a weighting problem — trailing daily alpha simply does not predict ",
-                "forward excess return for this universe at a one-month horizon."),
+                # One month is REBAL_DAYS, the rebalance cadence. Forward alpha
+                # is measured over HOLD_DAYS, one quarter.
+                sprintf("forward excess return for this universe at a %d-day horizon.",
+                        if (!is.null(bt_headline) && nrow(bt_headline) > 0)
+                          bt_headline$hold_days[1] else 63L)),
               tags$p("That is a real finding rather than a bug, and it is the honest ",
                      "conclusion of the validation: a screener built on momentum in ",
                      "risk-adjusted excess return does not, on this evidence, identify ",
@@ -3230,12 +3281,39 @@ server <- function(input, output, session) {
         any_sig <- any(bt_reversal$significant, na.rm = TRUE)
         tagList(
           tags$h2("Testing the opposite hypothesis"),
-          tags$p("The component diagnostic produced a result the model did not ",
-                 "predict: of the six measures, the positive-alpha streak had the ",
-                 "largest magnitude, it was ", tags$strong("negative"),
-                 ", and it points against the momentum premise the score is built on. ",
-                 "Short-term reversal is a documented effect, so the honest step is to ",
-                 "test it rather than ignore a result that disagrees with the design."),
+          # Derived from bt_components, not asserted.
+          #
+          # This paragraph said "of the six measures, the positive-alpha streak
+          # had the largest magnitude, it was negative". All six mean_ic values
+          # are positive today and streak is fourth by magnitude, so three
+          # claims were false at once — directly above the table that lists
+          # them. It was written as the motivation for the whole section when
+          # the strongest component happened to be negative, and never guarded.
+          local({
+            cmp <- bt_components[order(-abs(bt_components$mean_ic)), ]
+            top <- cmp[1, ]
+            neg <- isTRUE(top$mean_ic < 0)
+            tags$p(
+              # Punctuation kept inside the sprintf: tagList joins its
+              # arguments with a space, so a bare ", which" rendered as
+              # "+0.0552 , which".
+              if (neg)
+                tagList("The component diagnostic produced a result the model did not ",
+                        "predict: the strongest of the six measures is ",
+                        tags$strong(top$label),
+                        sprintf(" at %+.4f, and its sign points ", top$mean_ic),
+                        tags$strong("against"),
+                        " the momentum premise the score is built on. ")
+              else
+                tagList("Whichever way the components come out, the opposite hypothesis is ",
+                        "worth testing rather than assumed away. The strongest of the six ",
+                        "measures is currently ", tags$strong(top$label),
+                        sprintf(" at %+.4f, which carries the sign the design expects ", top$mean_ic),
+                        "\u2014 but a weak positive is not evidence against reversal, only ",
+                        "an absence of evidence for momentum. "),
+              "Short-term reversal is a documented effect, so the honest step is to ",
+              "test it directly rather than infer it from the sign of a noisy average.")
+          }),
           tags$p("Same walk-forward harness, but correlating trailing alpha with forward ",
                  "alpha directly. The sign is the whole answer: ",
                  tags$strong("negative means losers outperform"), " (reversal), positive ",
@@ -3250,10 +3328,20 @@ server <- function(input, output, session) {
             if (any_sig)
               tags$p("A window clears the adjusted significance bar — worth pursuing.")
             else tagList(
-              tags$p(tags$strong("No window clears significance either. "),
-                "Testing four formation windows means four chances at a false positive, ",
-                "so the bar here is |t| > 2.5 rather than the usual 2.0. Nothing comes ",
-                "close; the strongest is the 10-day window at t = -1.53."),
+              # The extreme window is read from the table above, not typed.
+              # This said "the strongest is the 10-day window at t = -1.53";
+              # every ic_t in the file is positive, the largest magnitude is
+              # the 5-day, and no value anywhere is -1.53. It was a reading of
+              # a different column of an older run, printed under the table
+              # that contradicts it.
+              local({
+                ex <- bt_reversal[which.max(abs(bt_reversal$ic_t)), ]
+                tags$p(tags$strong("No window clears significance either. "),
+                  "Testing four formation windows means four chances at a false positive, ",
+                  "so the bar here is |t| > 2.5 rather than the usual 2.0. Nothing comes ",
+                  sprintf("close; the strongest is the %d-day window at t = %+.2f.",
+                          ex$formation_days, ex$ic_t))
+              }),
               if (all_neg) tags$p(
                 "Every window does carry a negative sign, which is the reversal ",
                 "direction. That is suggestive but it is ", tags$strong("not"),
@@ -3263,7 +3351,9 @@ server <- function(input, output, session) {
                 "mistake.") else NULL,
               tags$p("Two hypotheses tested, both rejected on the evidence. Neither ",
                      "momentum nor reversal in risk-adjusted excess return predicts ",
-                     "forward performance for this universe at a one-month horizon.")))
+                     sprintf("forward performance for this universe at a %d-day horizon.",
+                             if (!is.null(bt_headline) && nrow(bt_headline) > 0)
+                               bt_headline$hold_days[1] else 63L))))
         )
       },
 
@@ -3331,11 +3421,24 @@ server <- function(input, output, session) {
                 "No free API provides reliable short-float data, so the field is explicitly ",
                 "NA rather than filled with an unrelated proxy."),
         tags$li(tags$strong("Small sample. "),
-                "One year of history supports only a handful of independent rebalances. ",
+                # Derived. The window is 2.2 years and the honest unit is the 8
+                # independent 63-day blocks, not a one-year pull that has not
+                # existed since the lookback went to three years.
+                local({
+                  yrs <- bt_window_years()
+                  nd  <- eq_stat("model", "n_decisions")
+                  paste0(
+                    if (is.na(yrs)) "The history here " else sprintf("%.1f years of history ", yrs),
+                    "supports only ",
+                    if (is.na(nd)) "a handful of" else sprintf("%.0f", nd),
+                    " independent holding periods. ")
+                }),
                 "Treat every figure above as directional, not conclusive.")),
 
       tags$h2("Engineering"),
-      tags$p("Five R modules run in sequence, each writing CSV that is committed back to the ",
+      # No count: it said five, the workflow sources six, R/05_run_all.R four.
+      # A number nothing derives goes stale on the next module.
+      tags$p("The R modules run in sequence, each writing CSV that is committed back to the ",
              "repo and copied into the app before deploy — so the dashboard is a pure read of ",
              "pre-computed state and stays responsive regardless of upstream API latency."),
       tags$ul(
@@ -3833,6 +3936,18 @@ server <- function(input, output, session) {
     if (nrow(row) == 0 || !field %in% names(row)) return(NA_real_)
     suppressWarnings(as.numeric(row[[field]][1]))
   }
+  # The backtest window, in years, derived once and used everywhere it is
+  # described. Three places said "two and a half years" / "2.5 years" about a
+  # span that is 2.2 and grows nightly, in sentences whose whole purpose was to
+  # state the sample honestly — while val_curve_meta printed the real dates on
+  # the same screen.
+  bt_window_years <- function() {
+    a <- eq_chr("model", "start_date"); b <- eq_chr("model", "end_date")
+    if (is.na(a) || is.na(b)) return(NA_real_)
+    d <- suppressWarnings(as.numeric(as.Date(b) - as.Date(a)))
+    if (is.na(d) || d <= 0) NA_real_ else d / 365.25
+  }
+
   # eq_stat coerces to numeric; this is its text sibling, for the few fields
   # that carry names rather than numbers.
   eq_chr <- function(series, field) {
@@ -3949,7 +4064,7 @@ server <- function(input, output, session) {
   # over the universe. It also invited the misreading the statistics review
   # warned about: a cloud of dots above a diagonal reads as "it worked 92% of
   # the time", as though 63 calendars were 63 trials. They are 63 views of the
-  # same two and a half years, sharing nearly all the same returns, which is
+  # same couple of years, sharing nearly all the same returns, which is
   # why the panel header calls this a range rather than a confidence interval.
   #
   # The diagonal is now the honest null: on it the score added nothing that
@@ -3990,7 +4105,9 @@ server <- function(input, output, session) {
       # Both axes share one range so the diagonal reads at 45 degrees and
       # vertical distance above it IS the edge. That leaves the x data in a
       # narrow band, which is the point: the unranked list barely moves across
-      # calendars (sd ~2pp) while the ranked book swings five times as far.
+      # calendars (sd ~1.9pp) while the ranked book swings about two and a half
+      # times as far (sd ~4.7pp). "Five times" was the ratio for the
+      # top-minus-bottom spread, not for the top quintile plotted here.
       layout(xaxis = list(title = "Same list, no ranking \u2014 annualised",
                           tickformat = ".0%", range = lim, zeroline = FALSE),
              yaxis = list(title = "Top quintile, annualised",
@@ -4043,6 +4160,22 @@ server <- function(input, output, session) {
     ex_p     <- eq_stat("model", "excess_p_tranche")
     df_tr    <- eq_stat("model", "df_tranche")
     t_crit   <- eq_stat("model", "t_crit_95")
+    # Same estimator on both legs of the comparison below.
+    u_alpha  <- eq_stat("univ", "alpha_vs_spy")
+    if (is.na(u_alpha) && !is.na(u_beta) && !is.na(u_cagr) && !is.na(b_cagr))
+      u_alpha <- u_cagr - u_beta * b_cagr
+    # What share of the universe's gap over the index beta actually explains.
+    u_share  <- if (!is.na(u_beta) && !is.na(u_cagr) && !is.na(b_cagr) &&
+                    (u_cagr - b_cagr) != 0)
+                  (u_beta - 1) * b_cagr / (u_cagr - b_cagr) else NA_real_
+    u_share_lede <- if (is.na(u_share)) "partly market exposure"
+                    else if (u_share > 0.5)  "mostly market exposure"
+                    else if (u_share > 0.33) "only partly market exposure"
+                    else                     "not mainly market exposure"
+    win_yrs  <- bt_window_years()
+    spy_dd   <- eq_stat("spy", "max_drawdown")
+    q5_beta  <- eq_stat("q5", "beta")
+    q5t      <- eq_stat("q5", "excess_t_tranche")
     ex2      <- eq_stat("model", "edge_vs_univ_ex_top2")
     ex2_win  <- eq_stat("model", "edge_vs_univ_ex_top2_win")
     ex2_nm   <- eq_chr("model",  "edge_vs_univ_ex_top2_names")
@@ -4073,11 +4206,33 @@ server <- function(input, output, session) {
 
       "<p><b>The bottom quintile is the control.</b> If the names the model ranks <i>worst</i> ",
       "also beat the index, the ranking is sorting on market exposure rather than skill. ",
+      # The DIAGNOSIS is measured, not assumed.
+      #
+      # This branch asserted "the score separates high-beta names from low-beta
+      # ones at least as much as good from bad" whenever the bottom quintile
+      # beat the index. But the betas are in the same row of the same file:
+      # 1.33 for the model against 1.30 for the bottom quintile. A spread of
+      # 0.03 is not beta-sorting, and the sentence was refuted by a column
+      # printed four paragraphs above it. It is also worth saying whether the
+      # control's excess clears significance — it does not, at t = 0.30.
       if (!is.na(q5x) && q5x > 0)
         paste0("<span style='color:#FF3D00'>It currently does beat the index, by ",
-               sprintf("%.1f", q5x * 100), " points a year. Treat the headline number with ",
-               "suspicion: on this evidence the score separates high-beta names from low-beta ",
-               "ones at least as much as good from bad.</span>")
+               sprintf("%.1f", q5x * 100), " points a year",
+               if (!is.na(q5t)) sprintf(" (t = %.2f, against the %s bar this page uses below)",
+                                        q5t, if (is.na(t_crit)) "conventional" else sprintf("%.2f", t_crit)) else "",
+               ". ",
+               if (!is.na(beta) && !is.na(q5_beta) && abs(beta - q5_beta) < 0.15)
+                 paste0("It is not, however, a beta story: the top quintile runs a beta of ",
+                        sprintf("%.2f", beta), " and the bottom ", sprintf("%.2f", q5_beta),
+                        " — all but identical market exposure. What the control is showing ",
+                        "is that this universe rose over the window whatever you held, which ",
+                        "is the same point the no-signal line makes below.")
+               else
+                 paste0("Treat the headline number with suspicion: the top quintile runs a ",
+                        "beta of ", sprintf("%.2f", beta), " against the bottom quintile's ",
+                        sprintf("%.2f", q5_beta), ", so on this evidence the score separates ",
+                        "high-beta names from low-beta ones at least as much as good from bad."),
+               "</span>")
       else
         "It currently underperforms the index, which is the result you want: the ranking separates.",
       "</p>",
@@ -4090,7 +4245,17 @@ server <- function(input, output, session) {
       if (is.na(beta_adj_t)) "" else sprintf(" (t = %.1f)", beta_adj_t),
       ", against a headline gap of ",
       if (is.na(m_cagr) || is.na(b_cagr)) "N/A" else sprintf("%+.1f%%", (m_cagr - b_cagr) * 100),
-      ". That figure assumes cash pays nothing; measured against T-bills it would be smaller.</p>",
+      # Direction derived from beta. The text said "measured against T-bills it
+      # would be smaller", which is backwards for a portfolio with beta above
+      # one: CAPM alpha is alpha_0 + Rf*(beta - 1), so a positive cash rate
+      # makes it LARGER here. At beta 1.33 and Rf 4.3% it is about 1.4pp
+      # larger, not smaller.
+      ". That figure assumes cash pays nothing; measured against T-bills it would be ",
+      if (is.na(beta)) "a little different"
+      else if (beta > 1.02) "slightly larger, because the portfolio\u2019s beta exceeds one"
+      else if (beta < 0.98) "slightly smaller, because the portfolio\u2019s beta is below one"
+      else "much the same, because the portfolio\u2019s beta is close to one",
+      ".</p>",
 
       "<p><b>Much of the edge is the universe, not the score.</b> The purple line holds every ",
       "name equal-weighted with no ranking at all, and it returns ",
@@ -4103,26 +4268,43 @@ server <- function(input, output, session) {
       if (is.na(m_cagr) || is.na(b_cagr)) "N/A" else sprintf("%+.1f", (m_cagr - b_cagr) * 100),
       " the index comparison suggests.</p>",
 
-      "<p><b>That universe gap is mostly market exposure.</b> An earlier version of this page ",
+      # Heading derived from the share, because "mostly" is a majority claim.
+      # It was fixed text asserting market exposure explains most of the
+      # universe gap while the body printed the number that refutes it: beta
+      # accounts for about a third, not a majority. The bold lede was arguing
+      # against the sentence beneath it.
+      #
+      # Both sides of the ratio now use the SAME estimator — the regression
+      # intercept, for the universe leg as well as the model's. Dividing a
+      # cagr-minus-beta shortcut by a regression intercept moved the printed
+      # share by five points for no reason a reader could see.
+      "<p><b>That universe gap is ", u_share_lede, ".</b> An earlier version of this page ",
       "called it survivorship. Measuring it says otherwise: the no-signal universe carries a ",
       "beta of ",
       if (is.na(u_beta)) "N/A" else sprintf("%.2f", u_beta),
-      ", and the part of its return the market does not explain is ",
-      if (is.na(u_beta) || is.na(u_cagr) || is.na(b_cagr)) "N/A"
-        else sprintf("%+.1f points a year", (u_cagr - u_beta * b_cagr) * 100),
+      ", which accounts for ",
+      if (is.na(u_share)) "N/A" else sprintf("%.0f%% of its %+.1f-point gap over the index",
+                                             u_share * 100, (u_cagr - b_cagr) * 100),
+      ". The part the market does not explain is ",
+      if (is.na(u_alpha)) "N/A" else sprintf("%+.1f points a year", u_alpha * 100),
       ". That is not a small number, and an earlier version of this paragraph called it ",
       "“only”. Set it beside the thing it is the control for: the score’s own ",
       "beta-adjusted edge over this same list is ",
       if (is.na(ed_u_ba)) "N/A" else sprintf("%+.1f points", ed_u_ba * 100),
       ". So picking the list contributed roughly ",
-      if (is.na(u_beta) || is.na(u_cagr) || is.na(b_cagr) || is.na(ed_u_ba) || ed_u_ba == 0)
+      if (is.na(u_alpha) || is.na(ed_u_ba) || ed_u_ba <= 0)
         "as much as" else
-        sprintf("%.0f%% as much as", 100 * (u_cagr - u_beta * b_cagr) / ed_u_ba),
+        sprintf("%.0f%% as much as", 100 * u_alpha / ed_u_ba),
       " ranking it did, and the list was picked with hindsight while the ranking was not. ",
-      "Checked on 2026-09-23, the reason is visible in the ticker list\'s own history: 145 of ",
-      "the names were added in August 2026 and are smaller and more volatile, while the 50 ",
-      "tracked before that returned 17.7% a year against the index\'s 17.7% — no excess at all. ",
-      "Adding them raised the universe\'s beta, and a rising market did the rest.</p>",
+      "The reason is visible in the ticker list\'s own history: 145 of the names were added in ",
+      "August 2026 and are smaller and more volatile, while the 50 tracked before that ",
+      "returned no more than the index did \u2014 measured once, in September 2026, when both ",
+      "came out within a tenth of a point of each other. The index leg of that comparison now ",
+      "reads ",
+      if (is.na(b_cagr)) "N/A" else sprintf("%.1f%% a year", b_cagr * 100),
+      "; the cohort figure is not recomputed nightly, so treat it as a dated observation ",
+      "rather than a current one. Adding those names raised the universe\'s beta, and a rising ",
+      "market did the rest.</p>",
 
       "<p><b>Survivorship was introduced deliberately, and it cannot be bounded.</b> An earlier ",
       "version of this paragraph said no name had ever been removed from the list, which made ",
@@ -4189,7 +4371,8 @@ server <- function(input, output, session) {
       "t would have needed roughly sixty. (The exact figure drifts with the bandwidth you ",
       "choose, which is why it is quoted loosely here; the point is the order of magnitude, ",
       "not the second decimal.) The per-period figure comes out close to the daily one rather ",
-      "than eight times smaller. The real limit is simply the sample: two and a half years.</p>",
+      "than eight times smaller. The real limit is simply the sample: ",
+      if (is.na(win_yrs)) "a short one" else sprintf("%.1f years", win_yrs), ".</p>",
 
       "<p><b>",
       # The heading and the closing sentence BOTH have to follow the measured
@@ -4245,7 +4428,18 @@ server <- function(input, output, session) {
       " across the same calendars simply from rebalancing on different days, against ",
       if (is.na(top_sd)) "N/A" else sprintf("%.1f points", top_sd * 100),
       " for the ranked book. Some of that scatter is the calendar, not the score. ",
-      "There is no bear market in the window, and the formation and holding periods were ",
+      # Derived. This was fixed text about a quantity the pipeline recomputes,
+      # sitting in the list of things the page concedes it cannot rule out —
+      # where a silently false concession is the worst kind. It holds today by
+      # 1.0pp.
+      if (is.na(spy_dd)) "There is no bear market in the window, "
+      else if (spy_dd > -0.20)
+        sprintf("The index's deepest drawdown in the window is %.0f%%, so there is no bear market in it, ",
+                spy_dd * 100)
+      else
+        sprintf("The window now contains a %.0f%% index drawdown, so it does include a bear market, ",
+                spy_dd * 100),
+      "and the formation and holding periods were ",
       "chosen after trying several, with no multiple-testing penalty applied.</p>",
 
       "<p><b>Data note.</b> Prices are Yahoo\'s raw close, never adjusted backwards for splits, ",
@@ -4258,7 +4452,10 @@ server <- function(input, output, session) {
       else
         "No bars in this window required it. ",
       "Genuine large moves are left alone: an earlier version of this filter used a plain 50% ",
-      "threshold and deleted real catalysts, understating the model by about 4 points a year. ",
+      "threshold and deleted real catalysts, which cost the model about 4 points a year when ",
+      "that was measured at the time of the change. Nothing in the nightly output recomputes ",
+      "it \u2014 the current filter neutralises no bars in this window \u2014 so it is history, ",
+      "not a live figure. ",
       "The same unadjusted prices still feed the momentum scores on the other tabs.</p>"
     ))
   })
