@@ -137,7 +137,9 @@ run_module4 <- function(fund_data = NULL) {
     sf <- read_csv(secfin_path, show_col_types = FALSE) %>%
       select(symbol, any_of(c("fcf_sec", "debt_equity_sec", "gross_margin_sec",
                               "revenue_sec", "total_debt_sec", "cash_sec",
-                              "rev_cagr_sec", "equity_sec")))
+                              "rev_cagr_sec", "equity_sec",
+                              "net_income_sec", "eps_sec", "shares_sec",
+                              "roe_sec", "net_margin_sec")))
     df <- left_join(df, sf, by = "symbol")
     for (c in c("fcf", "debt_equity", "gross_margin")) {
       if (!c %in% names(df)) df[[c]] <- NA_real_
@@ -183,6 +185,54 @@ run_module4 <- function(fund_data = NULL) {
   for (col in char_cols) df <- ensure_col(df, col, NA_character_)
   bool_cols <- c("golden_cross","macd_bullish","above_ma200","above_ma50","above_ma20")
   for (col in bool_cols) df <- ensure_col(df, col, FALSE)
+
+  # ── 2b. Rebuild the valuation ratios from filings ───────────────────────────
+  #
+  # pe_ratio, pb_ratio, roe and profit_margin come from Alpha Vantage's OVERVIEW
+  # endpoint, which went behind a paywall on 2026-10-06. Every one of them has
+  # been frozen at its 2026-10-05 value since -- 30 days as of 2026-11-04 -- and
+  # together they are 75% of quality_gate, which is 15% of the ranking. The page
+  # went on printing them as current because nothing measured whether they moved.
+  #
+  # SEC XBRL supplies the same quantities for free, from filings rather than a
+  # vendor, and because the price leg is live the two price ratios move daily
+  # again instead of only when a filing lands. Precedence matches the fcf and
+  # debt_equity merge above: SEC where it has a figure, the old value where it
+  # does not.
+  for (col in c("net_income_sec", "eps_sec", "shares_sec", "roe_sec",
+                "net_margin_sec", "equity_sec")) df <- ensure_col(df, col, NA_real_)
+
+  df <- df %>% mutate(
+    px_for_ratio = dplyr::coalesce(price_now, price),
+    # Trailing P/E on the filed diluted EPS. A loss-making filer has no
+    # meaningful P/E, so it is left missing rather than printed negative --
+    # q_pe already scores NA as a neutral 50.
+    pe_sec = ifelse(!is.na(px_for_ratio) & !is.na(eps_sec) & eps_sec > 0,
+                    round(px_for_ratio / eps_sec, 4), NA_real_),
+    # Price to book, from the filed equity and the share count the filing
+    # implies. Negative book value is a different statement from a high
+    # multiple, so it is left missing too.
+    pb_sec = ifelse(!is.na(px_for_ratio) & !is.na(shares_sec) &
+                    !is.na(equity_sec) & equity_sec > 0,
+                    round(px_for_ratio * shares_sec / equity_sec, 4), NA_real_),
+    pe_ratio      = dplyr::coalesce(pe_sec,         pe_ratio),
+    pb_ratio      = dplyr::coalesce(pb_sec,         pb_ratio),
+    roe           = dplyr::coalesce(roe_sec,        roe),
+    profit_margin = dplyr::coalesce(net_margin_sec, profit_margin),
+    # How many of the four came from filings, so the app can say so rather than
+    # presenting vendor data a month stale as though it were today's.
+    fundamentals_from_sec = (!is.na(pe_sec)) + (!is.na(pb_sec)) +
+                            (!is.na(roe_sec)) + (!is.na(net_margin_sec)),
+    fundamentals_source = dplyr::case_when(
+      fundamentals_from_sec == 4 ~ "SEC filings",
+      fundamentals_from_sec >  0 ~ "SEC filings + vendor",
+      TRUE                       ~ "vendor only")
+  ) %>% select(-px_for_ratio)
+
+  message("  Valuation ratios from SEC filings: ",
+          sum(df$fundamentals_from_sec == 4, na.rm = TRUE), "/", nrow(df),
+          " complete, ", sum(df$fundamentals_from_sec == 0, na.rm = TRUE),
+          " still vendor-only.")
 
   n <- nrow(df)
   message("Scoring ", n, " stocks...\n")

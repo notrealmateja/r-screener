@@ -1057,7 +1057,12 @@ ui <- fluidPage(
               ),
               # Previously claimed predicted returns and backtested confidence,
               # which is exactly what the Methodology tab disproves.
-              div(class="panel-head-meta","HIGHEST MODEL SCORE · RANKING OUTPUT, NOT A RECOMMENDATION")),
+              div(class="panel-head-meta",
+                  "HIGHEST MODEL SCORE · RANKING OUTPUT, NOT A RECOMMENDATION",
+                  local({
+                    p <- fundamentals_provenance(master_data)
+                    if (is.null(p)) NULL else tags$div(style="margin-top:3px;opacity:.75", p)
+                  }))),
             div(class="panel-body ss-table-wrap", DTOutput("top15_table"))
           ),
           div(class="panel",
@@ -1926,7 +1931,9 @@ server <- function(input, output, session) {
   })
 
   output$screener_badge <- renderUI({
-    div(class="panel-head-meta", glue("{nrow(filtered())} STOCKS"))
+    p <- fundamentals_provenance(master_data)
+    div(class="panel-head-meta", glue("{nrow(filtered())} STOCKS"),
+        if (is.null(p)) NULL else tags$div(style="margin-top:3px;opacity:.75", p))
   })
 
   output$screener_table <- renderDT({

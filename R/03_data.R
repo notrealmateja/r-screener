@@ -703,9 +703,12 @@ sec_filings_for <- function(sym, cik) {
 # 3-4 MB companyfacts each.
 SEC_FRAMES <- "https://data.sec.gov/api/xbrl/frames/us-gaap"
 
-sec_frame <- function(concept, frame) {
+# The unit is part of the frames path. It was fixed at USD, which reaches only
+# the money concepts -- earnings per share is filed under USD-per-shares and
+# share counts under shares, so neither could be requested at all.
+sec_frame <- function(concept, frame, unit = "USD") {
   tryCatch({
-    r <- GET(glue("{SEC_FRAMES}/{concept}/USD/{frame}.json"),
+    r <- GET(glue("{SEC_FRAMES}/{concept}/{unit}/{frame}.json"),
              add_headers(`User-Agent` = SEC_UA), timeout(60))
     if (status_code(r) != 200) return(NULL)
     d <- fromJSON(content(r, as = "text", encoding = "UTF-8"), simplifyVector = FALSE)
@@ -721,10 +724,10 @@ sec_frame <- function(concept, frame) {
 # Filers have different fiscal year ends, so no single calendar frame covers
 # everyone. Walk the frames most-recent-first and keep the first value found for
 # each company.
-sec_frame_merge <- function(concept, frames) {
+sec_frame_merge <- function(concept, frames, unit = "USD") {
   out <- numeric(0)
   for (f in frames) {
-    v <- sec_frame(concept, f)
+    v <- sec_frame(concept, f, unit)
     Sys.sleep(0.15)
     if (is.null(v)) next
     new <- setdiff(names(v), names(out))
@@ -797,6 +800,16 @@ get_sec_financials <- function(tickers) {
   })
   fcf_mat <- do.call(cbind, fcf_years)
 
+  # Earnings. Alpha Vantage paywalled OVERVIEW on 2026-10-06 and took pe_ratio,
+  # pb_ratio, roe and profit_margin with it -- 90% of quality_gate's weight,
+  # frozen at their 2026-10-05 values ever since while the page went on
+  # publishing them as current. These are the free replacements: net income and
+  # diluted EPS are filed quarterly and the frames API serves the whole universe
+  # in one request per concept.
+  ni     <- sec_frame_merge("NetIncomeLoss", af)
+  eps_a  <- sec_frame_merge("EarningsPerShareDiluted", af, "USD-per-shares")
+  eps_b  <- sec_frame_merge("EarningsPerShareBasic",   af, "USD-per-shares")
+
   ocf    <- sec_frame_merge("NetCashProvidedByUsedInOperatingActivities", af)
   capex_a <- sec_frame_merge("PaymentsToAcquirePropertyPlantAndEquipment", af)
   capex_b <- sec_frame_merge("PaymentsToAcquireProductiveAssets", af)
@@ -822,6 +835,28 @@ get_sec_financials <- function(tickers) {
                              sec_frame_merge("RevenueFromContractWithCustomerExcludingAssessedTax",
                                              paste0("CY", y - 3)))
 
+  ni_v    <- sec_pick(ciks, ni)
+  eps_v   <- sec_pick(ciks, eps_a, eps_b)
+
+  # Net income and EPS are answered by separate frame requests, and nothing
+  # guarantees they describe the same company-year. Dividing one by the other
+  # gives the share count the pair implies, which is a sharp test of whether
+  # they do: a real filer has millions of shares, and the two must agree in
+  # sign for the quotient to be positive at all.
+  #
+  # Both failures are in the live universe. ANET answered net income $3,511
+  # against EPS 2.75 -- 1,277 shares implied, three thousand dollars of profit
+  # on $9.0B of revenue. KYMR answered +$311M against EPS -3.69, a positive
+  # profit and a negative per-share loss for the same year; its $39.2M of
+  # revenue then produced a 794% net margin. Unguarded, both flow straight into
+  # the ranking looking like ordinary numbers.
+  implied_sh <- ifelse(!is.na(ni_v) & !is.na(eps_v) & eps_v != 0,
+                       ni_v / eps_v, NA_real_)
+  ni_ok <- !is.na(implied_sh) & implied_sh >= 1e6 & implied_sh <= 1e11
+  n_rej <- sum(!is.na(ni_v) & !ni_ok)
+  if (n_rej > 0)
+    message(glue("  Dropped {n_rej} net-income figure(s) that disagree with the ",
+                 "filed EPS on sign or scale."))
   ocf_v   <- sec_pick(ciks, ocf)
   capex_v <- sec_pick(ciks, capex_a, capex_b)
   rev_v   <- sec_pick(ciks, rev_a, rev_b)
@@ -859,6 +894,24 @@ get_sec_financials <- function(tickers) {
     revenue_sec       = rev_v,
     gross_margin_sec  = ifelse(!is.na(gp_v) & !is.na(rev_v) & rev_v != 0,
                                round(gp_v / rev_v, 4), NA_real_),
+    net_income_sec    = ifelse(ni_ok, ni_v, NA_real_),
+    eps_sec           = ifelse(ni_ok, eps_v, NA_real_),
+    # The share count the filing implies, so price-based ratios need no share
+    # figure from the paywalled feed. A loss-making filer still has shares --
+    # both terms are negative and the quotient is positive -- so this is not
+    # restricted to profitable companies.
+    shares_sec        = ifelse(ni_ok, implied_sh, NA_real_),
+    # Bounded as well as cross-checked. Neither bound changes a score: the
+    # roe band tops out above 0.30 and the margin band above 0.25, so an
+    # inflated value already scores the same as a true one. They exist because
+    # the figures are PRINTED, and a 794% margin on the page is a visible lie
+    # even when it ranks identically.
+    roe_sec           = ifelse(ni_ok & !is.na(eq_v) & eq_v > 0 &
+                               abs(ni_v / eq_v) <= 2.5,
+                               round(ni_v / eq_v, 4), NA_real_),
+    net_margin_sec    = ifelse(ni_ok & !is.na(rev_v) & rev_v > 0 &
+                               abs(ni_v / rev_v) <= 1,
+                               round(ni_v / rev_v, 4), NA_real_),
     equity_sec        = eq_v,
     total_debt_sec    = debt_v,
     cash_sec          = cash_v,

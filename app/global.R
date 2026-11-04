@@ -51,6 +51,36 @@ tv_channels    <- load_csv("tv_channels.csv")
 meta <- tryCatch(readRDS(file.path(APP_DATA_DIR, "meta.rds")),
                  error=function(e) list(last_updated="Not yet run", n_stocks=0))
 
+# Where the valuation ratios on the page came from, and how stale the vendor
+# leg is. The vendor's OVERVIEW endpoint went behind a paywall on 2026-10-06
+# and pe_ratio, pb_ratio, roe and profit_margin sat frozen for 30 days while
+# the page printed them as current -- nothing on screen said otherwise, which
+# is the actual defect. This states it.
+fundamentals_provenance <- function(df) {
+  if (is.null(df) || !nrow(df)) return(NULL)
+  n <- nrow(df)
+  sec <- if ("fundamentals_from_sec" %in% names(df))
+    sum(suppressWarnings(as.numeric(df$fundamentals_from_sec)) == 4, na.rm = TRUE) else 0
+  # as.Date() RAISES on an unparseable string instead of warning, and this line
+  # renders inside the screener panel header -- an unreadable vendor date would
+  # have taken the whole table down.
+  vend <- if ("last_fetched" %in% names(df)) {
+    d <- tryCatch(suppressWarnings(as.Date(as.character(df$last_fetched))),
+                  error = function(e) as.Date(NA))
+    if (!length(d) || all(is.na(d))) NA else max(d, na.rm = TRUE)
+  } else NA
+  age <- if (inherits(vend, "Date") && !is.na(vend))
+    as.numeric(Sys.Date() - vend) else NA_real_
+  paste0(
+    if (sec > 0) sprintf("P/E, P/B, ROE AND MARGIN FROM SEC FILINGS FOR %d OF %d", sec, n)
+    else "VALUATION RATIOS FROM VENDOR DATA ONLY",
+    " \u00b7 VENDOR FIELDS LAST REFRESHED ",
+    if (inherits(vend, "Date") && !is.na(vend))
+      paste0(format(vend, "%Y-%m-%d"),
+             if (!is.na(age) && age > 7) sprintf(" (%.0f DAYS AGO)", age) else "")
+    else "UNKNOWN")
+}
+
 # What share of a series' win over the index is explained by carrying more
 # market than the index does, rather than by skill. Excess over the index
 # decomposes as alpha + (beta - 1) * market return, so above a beta of one a
