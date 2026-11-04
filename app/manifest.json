@@ -1427,8 +1427,8 @@
       }
     },
     "openssl": {
-      "Source": "CRAN",
-      "Repository": "https://cran.rstudio.com",
+      "Source": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
       "description": {
         "Package": "openssl",
         "Type": "Package",
@@ -1449,9 +1449,9 @@
         "Packaged": "2026-11-01 10:34:10 UTC; jeroen",
         "Author": "Jeroen Ooms [aut, cre] (ORCID: <https://orcid.org/0000-0002-4035-0289>),\n  Oliver Keyes [ctb]",
         "Maintainer": "Jeroen Ooms <jeroenooms@gmail.com>",
-        "Repository": "CRAN",
+        "Repository": "RSPM",
         "Date/Publication": "2026-11-02 17:20:02 UTC",
-        "Built": "R 4.4.0; x86_64-pc-linux-gnu; 2026-11-03 03:00:22 UTC; unix"
+        "Built": "R 4.4.0; x86_64-pc-linux-gnu; 2026-11-03 03:58:41 UTC; unix"
       }
     },
     "otel": {
@@ -2544,85 +2544,85 @@
       "checksum": "5e692bae5263dfa20386d91073134349"
     },
     "backtest_components.csv": {
-      "checksum": "97cd02b3a09ba5352e3dbbf9b1da15fe"
+      "checksum": "be501f7241d922f5f814b8b42d8213fe"
     },
     "backtest_equity_stats.csv": {
-      "checksum": "603300f9600968bfafed432381b17156"
+      "checksum": "c0d1cdc8aec75031d85c6718393c4dcf"
     },
     "backtest_equity.csv": {
       "checksum": "277f5a29ca20f9eef5f32c13c286ea51"
     },
     "backtest_headline.csv": {
-      "checksum": "aa3c43bf82efb1d53060c7c86c65ae11"
+      "checksum": "252df9aa2b0e88c50df00c89f3857ce5"
     },
     "backtest_ic.csv": {
-      "checksum": "a02f55d0474da6248c5eb39cfc0a5e03"
+      "checksum": "957fa4173f2412ef9c6765b1f3581fb4"
     },
     "backtest_phase_sweep.csv": {
       "checksum": "bcd2424627bdc12d329ed21989533198"
     },
     "backtest_summary.csv": {
-      "checksum": "57bdedec80e8eb1a69748d261e49efd3"
+      "checksum": "f5e178ebaad5d8bdc85404d658893cfe"
     },
     "data/batch_tracker.rds": {
       "checksum": "6f1dddc156f656f2d4c4d382e7b64017"
     },
     "data/meta.rds": {
-      "checksum": "a14d9c5a4aba5300e83fb36be6357c2c"
+      "checksum": "c8183493067c1c58a25bd32e815dac9f"
     },
     "data/price_series_cache.rds": {
       "checksum": "266a1b7cfa8bbf9180380a4969dbc886"
     },
     "earnings_calendar.csv": {
-      "checksum": "296a2738100724a8ef1d06d6a8adcbcb"
+      "checksum": "ab932331f047cd7b53259d693940cae4"
     },
     "global.R": {
       "checksum": "55b7ee2946ae08b4d664acaf2d8f7b1d"
     },
     "macro_data.csv": {
-      "checksum": "f4b8794fc807cc2f65041ffb465b62ff"
+      "checksum": "a500f89826443de272d76183eaf17d55"
     },
     "market_news.csv": {
       "checksum": "40b59b1ef18dd32c084b345c018d8bfb"
     },
     "master_scored.csv": {
-      "checksum": "1a5e4761e5685861a2ee8bbb69b6e690"
+      "checksum": "72583cbe8adce78c9d060b08a8fd52a5"
     },
     "meta.rds": {
-      "checksum": "a14d9c5a4aba5300e83fb36be6357c2c"
+      "checksum": "c8183493067c1c58a25bd32e815dac9f"
     },
     "price_history.csv": {
-      "checksum": "e7020e2e16615a6f1f626807ce9be9e4"
+      "checksum": "a7655bd5f964c71af82fcbea2655674d"
     },
     "reversal_results.csv": {
-      "checksum": "d8aa017e9abc4dce846269dd2f782b4c"
+      "checksum": "f24045e95b3cf02dd0c0ad4b89a7c558"
     },
     "score_history.csv": {
-      "checksum": "d0b6a5d3176413225ab825fd9e9765c1"
+      "checksum": "b326b583f113fd255a36136ddee56f9f"
     },
     "sec_filings.csv": {
-      "checksum": "8647283aa80e06e793f25eb490fe7c3d"
+      "checksum": "a3ac3d45ab45473863f8c7425283b959"
     },
     "sector_performance.csv": {
       "checksum": "df70044d6d4d2bb69f8e06769952131d"
     },
     "stock_news.csv": {
-      "checksum": "d7f1d3edb33f03c49ee23ccde0512ee7"
+      "checksum": "dc9ed771a724cdeb9f1c12436b0da6fe"
     },
     "stocktwits_trending.csv": {
-      "checksum": "7331e38302013a9e1a84789aaf850f00"
+      "checksum": "f9d32230a4366bbf163c1fae6f44f081"
     },
     "top15_sweetspot.csv": {
-      "checksum": "55b4cb194f7e7f7817db7ec600dce8dc"
+      "checksum": "eea472968b6d7b9bf0707985d6690b44"
     },
     "top15_unicorns.csv": {
-      "checksum": "43a87c6aed396f5bf9ce6a0df592df3f"
+      "checksum": "9f7f323548207bceeeea5b7aae3132fb"
     },
     "tv_channels.csv": {
-      "checksum": "a02f69d39cf8031e73f56d901b56999a"
+      "checksum": "b28f4b7df6c04c075ca911d716ad6121"
     },
     "wsb_trending.csv": {
-      "checksum": "7dba662540e23f5b4f210c88c1e05b9d"
+      "checksum": "a454b1c8bb980e7e9b1f89395fdd6fa4"
     }
   },
   "users": null

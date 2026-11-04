@@ -519,6 +519,7 @@ date,price,series,ticker,value
 2026-10-28,5.05,10Y Treasury,DGS10,5.05
 2026-10-29,4.98,10Y Treasury,DGS10,4.98
 2026-10-30,4.94,10Y Treasury,DGS10,4.94
+2026-11-02,4.91,10Y Treasury,DGS10,4.91
 2024-11-04,4.17,2Y Treasury,DGS2,4.17
 2024-11-05,4.19,2Y Treasury,DGS2,4.19
 2024-11-06,4.27,2Y Treasury,DGS2,4.27
@@ -1039,6 +1040,7 @@ date,price,series,ticker,value
 2026-10-28,4.67,2Y Treasury,DGS2,4.67
 2026-10-29,4.61,2Y Treasury,DGS2,4.61
 2026-10-30,4.56,2Y Treasury,DGS2,4.56
+2026-11-02,4.59,2Y Treasury,DGS2,4.59
 2024-11-04,4.65,3M Treasury,DGS3MO,4.65
 2024-11-05,4.64,3M Treasury,DGS3MO,4.64
 2024-11-06,4.64,3M Treasury,DGS3MO,4.64
@@ -1559,6 +1561,7 @@ date,price,series,ticker,value
 2026-10-28,4.18,3M Treasury,DGS3MO,4.18
 2026-10-29,4.18,3M Treasury,DGS3MO,4.18
 2026-10-30,4.16,3M Treasury,DGS3MO,4.16
+2026-11-02,4.21,3M Treasury,DGS3MO,4.21
 2024-12-01,317.604,CPI,CPIAUCSL,317.604
 2025-01-01,318.961,CPI,CPIAUCSL,318.961
 2025-02-01,319.679,CPI,CPIAUCSL,319.679
@@ -2147,3 +2150,4 @@ date,price,series,ticker,value
 2026-10-29,0.37,Yield Curve Spread,T10Y2Y,0.37
 2026-10-30,0.38,Yield Curve Spread,T10Y2Y,0.38
 2026-11-02,0.32,Yield Curve Spread,T10Y2Y,0.32
+2026-11-03,0.34,Yield Curve Spread,T10Y2Y,0.34
