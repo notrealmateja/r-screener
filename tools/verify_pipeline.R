@@ -214,8 +214,18 @@ if (file.exists("data/tv_channels.csv")) {
 # stopped updating is never committed, so its commit age is the age
 # of the last SUCCESS and says nothing about today.
 feeds <- list(
+  # Routed around on 2026-11-04. pe_ratio, pb_ratio, roe and profit_margin now
+  # come from SEC XBRL, so this feed going quiet no longer freezes the ranking,
+  # and failing the build nightly over it asks for a fix that does not exist --
+  # the endpoint is paid now and no key changes that. It still carries analyst
+  # consensus, so it is still measured and still reported, just not fatal.
+  #
+  # The alarm is not removed, it MOVES to sec_cov below. Softening this without
+  # guarding what replaced it would trade a noisy alarm for no alarm, which is
+  # how the original 30-day freeze went unseen in the first place.
   list(file = "data/av_cache.csv", col = "last_fetched",
-       label = "Alpha Vantage fundamentals", warn = 14, dark = 21),
+       label = "Alpha Vantage fundamentals", warn = 14, dark = 21,
+       routed = TRUE),
   list(file = "data/market_news.csv", col = "publishedDate",
        label = "Alpha Vantage news", warn = 7, dark = 14),
   # write_history_or_keep in R/00_utils.R now refuses to replace
@@ -228,6 +238,45 @@ feeds <- list(
   list(file = "data/price_history.csv", col = "date",
        label = "Price history", warn = 7, dark = 12)
 )
+# Is the SEC replacement actually supplying the ratios it took over? Nothing
+# checked this. A silent break there puts the page straight back onto vendor
+# values that are no longer refreshed, with every other gate still green --
+# the exact shape of the bug the replacement was built to fix. Coverage is a
+# count of rows carrying at least one filed ratio; it was 181/195 when this
+# gate was written, so the fatal bar sits far below the normal operating point
+# and only trips on real breakage, not on a few filers missing a concept.
+SEC_COV_MIN  <- 0.50   # below this the replacement has failed: fatal
+SEC_COV_WARN <- 0.85   # below this it is degraded: reported, not fatal
+# Graded in a pure function, with the thresholds passed in rather than read
+# from the constants above, so a test can EXECUTE this on synthetic coverage.
+# The tests around this file grep it as text, and a grep cannot tell a live
+# branch from one guarded by FALSE -- this gate is the only thing standing
+# between a dead SEC fetch and a page of silently frozen ratios, so it gets
+# run, not matched.
+sec_grade <- function(v, n, min_frac, warn_frac) {
+  if (!is.numeric(n) || length(n) != 1 || is.na(n) || n <= 0)
+    return(list(n = 0L, cov = 0L, full = 0L, frac = NA_real_, verdict = "unknown"))
+  v <- suppressWarnings(as.numeric(v))
+  # No column is not no problem: it means the step that writes it did not run.
+  if (!length(v)) v <- rep(0, n)
+  cov  <- sum(v > 0, na.rm = TRUE)
+  frac <- cov / n
+  list(n = n, cov = cov, full = sum(v == 4, na.rm = TRUE), frac = frac,
+       verdict = if (frac < min_frac) "dead"
+                 else if (frac < warn_frac) "degraded" else "ok")
+}
+sec_cov <- local({
+  f <- "data/master_scored.csv"
+  if (!file.exists(f)) return(NULL)
+  d <- tryCatch(suppressWarnings(read_csv(f, show_col_types = FALSE)),
+                error = function(e) NULL)
+  if (is.null(d) || !nrow(d)) return(NULL)
+  v <- if ("fundamentals_from_sec" %in% names(d)) d$fundamentals_from_sec else numeric(0)
+  sec_grade(v, nrow(d), SEC_COV_MIN, SEC_COV_WARN)
+})
+# Degraded still counts as carrying the fields; dead and unknown do not.
+sec_live <- !is.null(sec_cov) && sec_cov$verdict %in% c("ok", "degraded")
+
 dark <- character(0)
 out <- c(out, "", "### Upstream feeds", "",
          "| Source | Last answered | Age (d) | Status |",
@@ -257,7 +306,18 @@ for (fd in feeds) {
         else if (age >= fd$warn) "STALE" else "ok"
   out <- c(out, sprintf("| %s | %s | %d | %s |",
                         fd$label, format(seen), age, st))
-  if (identical(st, "DARK")) {
+  # A feed whose fields have a working replacement is reported, not fatal.
+  # Only while the replacement is actually working: if it is not, this stays
+  # fatal and sec_cov raises its own alarm below, so a double failure is
+  # never quieter than a single one.
+  if (identical(st, "DARK") && isTRUE(fd$routed) && sec_live) {
+    problems <- c(problems, sprintf(
+      "%s silent %d days (its ratios now come from SEC filings for %d of %d names)",
+      fd$label, age, sec_cov$cov, sec_cov$n))
+  } else if (identical(st, "DARK")) {
+    # Everything NOT routed around stays fatal, which is the whole point of
+    # the clause above being narrow. Dropping this branch once already made
+    # every dark feed unreportable while the summary still printed "DARK".
     dark <- c(dark, sprintf("%s silent %d days", fd$label, age))
   } else if (identical(st, "STALE")) {
     problems <- c(problems,
@@ -268,6 +328,26 @@ for (fd in feeds) {
 # third-party credential must not block publication: the pipeline
 # still regenerated everything it could, and withholding all of it
 # would take the whole site down over one panel.
+if (is.null(sec_cov) || identical(sec_cov$verdict, "unknown")) {
+  out <- c(out, "", paste("**SEC fundamentals: cannot tell.**",
+                          "data/master_scored.csv is missing, empty or unreadable."))
+  dark <- c(dark, "SEC fundamentals coverage unknown")
+} else {
+  out <- c(out, "", sprintf(
+    "SEC fundamentals: %d of %d names carry a filed ratio (%.0f%%), %d have all four.",
+    sec_cov$cov, sec_cov$n, 100 * sec_cov$frac, sec_cov$full))
+  if (identical(sec_cov$verdict, "dead")) {
+    out <- c(out, "", sprintf(paste("**The SEC replacement is supplying almost nothing",
+                                    "(%.0f%%, floor %.0f%%).** The valuation ratios have",
+                                    "fallen back to vendor data that is no longer refreshed."),
+                              100 * sec_cov$frac, 100 * SEC_COV_MIN))
+    dark <- c(dark, sprintf("SEC fundamentals coverage %.0f%%", 100 * sec_cov$frac))
+  } else if (identical(sec_cov$verdict, "degraded")) {
+    problems <- c(problems, sprintf("SEC fundamentals coverage %.0f%% (normally above %.0f%%)",
+                                    100 * sec_cov$frac, 100 * SEC_COV_WARN))
+  }
+}
+
 gh_out <- Sys.getenv("GITHUB_OUTPUT")
 if (nzchar(gh_out) && length(dark) > 0)
   cat(sprintf("dark_feeds=%s\n", paste(dark, collapse = "; ")),

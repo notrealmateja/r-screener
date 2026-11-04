@@ -333,7 +333,7 @@ feed_src <- local({
 
 # Run the extracted fragment over a scratch tree holding the two cache files,
 # and return its table rows, soft problems, and whatever it declared dark.
-feed_run <- function(av_date, news_date) {
+feed_run <- function(av_date, news_date, sec = "healthy") {
   d <- file.path(tempdir(), paste0("feed-", basename(tempfile(""))))
   dir.create(file.path(d, "data"), recursive = TRUE, showWarnings = FALSE)
   old <- setwd(d)
@@ -345,6 +345,17 @@ feed_run <- function(av_date, news_date) {
   if (!is.na(news_date))
     writeLines(c("title,publishedDate", paste0("x,", news_date, "T01:02:03")),
                "data/market_news.csv")
+
+  # The fragment also grades the SEC replacement that took over the Alpha
+  # Vantage ratios, so the scratch tree needs a master_scored.csv or every
+  # case would read as a dead replacement. "healthy" mirrors the real shape on
+  # 2026-11-04: 181 of 195 names carry a filed ratio, 126 carry all four.
+  if (!identical(sec, "missing")) {
+    nv <- if (identical(sec, "dead")) rep(0L, 195L)
+          else c(rep(4L, 126L), rep(3L, 30L), rep(2L, 22L), rep(1L, 3L), rep(0L, 14L))
+    writeLines(c("symbol,fundamentals_from_sec",
+                 paste0("S", seq_along(nv), ",", nv)), "data/master_scored.csv")
+  }
 
   go <- file.path(d, "ghout.txt")
   file.create(go)
@@ -391,13 +402,45 @@ test_that("a feed quiet for a few days is soft, not fatal", {
 
 test_that("a feed silent past its threshold goes dark and reaches the step output", {
   skip_if(is.null(feed_src), "feed fragment not found")
+  # News has no replacement, so silence is still fatal, and it still names
+  # itself in the step output the workflow fails on.
   r <- feed_run(ago(26), ago(26))
   expect_length(r$dark, 1L)
   expect_match(r$dark, "^dark_feeds=")
-  expect_match(r$dark, "Alpha Vantage fundamentals silent 26 days")
   expect_match(r$dark, "Alpha Vantage news silent 26 days")
-  # Dark must not ALSO be reported as a soft problem; it has its own channel.
-  expect_length(r$problems, 0L)
+})
+
+test_that("a dark feed whose fields were replaced is reported, not fatal", {
+  skip_if(is.null(feed_src), "feed fragment not found")
+  # Changed on 2026-11-04. pe_ratio, pb_ratio, roe and profit_margin now come
+  # from SEC XBRL, so Alpha Vantage fundamentals going quiet no longer freezes
+  # the ranking, and a red nightly over it asked for a fix that does not exist.
+  # It must still be SAID, with the reason -- the failure mode being avoided is
+  # a dropped alarm, not a loud one.
+  r <- feed_run(ago(26), ago(0))
+  expect_false(grepl("fundamentals", paste(r$dark, collapse = "|")))
+  expect_match(paste(r$problems, collapse = "|"),
+               "Alpha Vantage fundamentals silent 26 days")
+  expect_match(paste(r$problems, collapse = "|"), "SEC filings for 181 of 195 names")
+})
+
+test_that("the exemption is withdrawn the moment the replacement stops working", {
+  skip_if(is.null(feed_src), "feed fragment not found")
+  # The entire risk in softening an alarm is softening it while the thing that
+  # replaced it is broken too. Then BOTH are fatal, not neither.
+  r <- feed_run(ago(26), ago(0), sec = "dead")
+  joined <- paste(r$dark, collapse = "|")
+  expect_match(joined, "Alpha Vantage fundamentals silent 26 days")
+  expect_match(joined, "SEC fundamentals coverage 0%", fixed = TRUE)
+
+  # A master_scored.csv that was never written is unknown, which is worse than
+  # low coverage rather than better, so it is fatal too.
+  r2 <- feed_run(ago(0), ago(0), sec = "missing")
+  expect_match(paste(r2$dark, collapse = "|"), "SEC fundamentals coverage unknown")
+
+  # The healthy case stays quiet, or the nightly goes red every night for
+  # nothing and the gate gets ignored.
+  expect_length(feed_run(ago(0), ago(0))$dark, 0L)
 })
 
 test_that("the two feeds carry independent thresholds", {
