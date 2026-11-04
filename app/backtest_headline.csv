@@ -1,2 +1,2 @@
-formation_days,hold_days,rebalances,n_buckets,q1_ann_alpha,q5_ann_alpha,spread_ann,mean_rank_ic,ic_t_stat,monotonic
-126,63,28,5,0.1840278796941577,0.01958077552864006,0.16444710416551764,0.055405920775293875,2.1515591821114732,FALSE
+formation_days,hold_days,rebalances,n_buckets,q1_ann_alpha,q5_ann_alpha,spread_ann,mean_rank_ic,ic_t_stat,monotonic,generated_at
+126,63,28,5,0.1840278796941577,0.01958077552864006,0.16444710416551764,0.055405920775293875,2.1515591821114732,FALSE,2026-11-04 20:09:48
