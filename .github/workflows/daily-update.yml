@@ -34,6 +34,7 @@ jobs:
 
     steps:
       - name: Checkout code
+        id: checkout
         uses: actions/checkout@v4
         with:
           # Full history. The default shallow clone leaves a single commit, so
@@ -43,6 +44,7 @@ jobs:
           fetch-depth: 0
 
       - name: Set up R
+        id: setup_r
         uses: r-lib/actions/setup-r@v2
         with:
           r-version: '4.4.0'
@@ -52,6 +54,7 @@ jobs:
       # only executed in production, so a dangling reference is discovered by a
       # failed nightly rather than by CI — which is how `csv_files` got through.
       - name: Lint embedded code in workflows
+        id: lint
         run: |
           Rscript tools/lint_workflow_r.R
           # The failure reporters are Python heredocs. They only execute when a
@@ -62,11 +65,13 @@ jobs:
           python3 tools/lint_workflow_py.py
 
       - name: Install system dependencies
+        id: apt
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev
 
       - name: Install R packages
+        id: rpkgs
         run: |
           Rscript -e '
             options(repos = c(
@@ -118,6 +123,7 @@ jobs:
       # Runs before the pipeline so a broken change fails fast, without first
       # burning API quota or deploying bad output to the live site.
       - name: Run unit tests
+        id: unittests
         run: |
           Rscript -e '
             library(testthat)
@@ -336,6 +342,7 @@ jobs:
       # working data with an empty file and take the live site down, while the
       # red run only tells you afterwards.
       - name: Clean stale files and commit updated data
+        id: commit
         # always() preserves the intent described above: a pipeline that ran and
         # partly failed still publishes its good data. A pipeline that never ran
         # has none to publish, and committing then stamps a stale snapshot with
@@ -400,6 +407,7 @@ jobs:
           git push
 
       - name: Strip Bioconductor packages before deploy
+        id: strip
         run: |
           Rscript -e '
             # rsconnect packrat scanner picks up ALL installed packages and their
@@ -488,6 +496,7 @@ jobs:
       # only trace was a row in a step summary nobody opens. So the data ships,
       # and THEN the run goes red, because red is what reaches a human.
       - name: Fail on a dark upstream feed
+        id: darkfeed
         if: always() && steps.verify.outputs.dark_feeds != ''
         run: |
           echo "An upstream data source has stopped answering:"
@@ -527,6 +536,55 @@ jobs:
           REPO: ${{ github.repository }}
           RUN_ID: ${{ github.run_id }}
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          # Resolved HERE, inside the job, not from the API. The reporter runs
+          # while its own job is still in progress, so the step that just failed
+          # has no conclusion recorded yet: the lookup came back empty, raised
+          # nothing, and run #255 emailed "Daily pipeline failed - unknown step"
+          # about a failure whose cause the job knew exactly. A step outcome is
+          # available the moment the step ends, so ask the job.
+          #
+          # Ordered by what a reader needs first: a genuine break outranks the
+          # dark-feed alarm, which fires on top of an otherwise healthy run.
+          # In pipeline order, so the FIRST real failure is named rather than
+          # one of the cascade behind it. The non-fatal shinyapps deploy is
+          # deliberately absent: it carries continue-on-error, so its failure is
+          # never why the job is red, and listing it would mask the real cause.
+          #
+          # CANCELLED counts as well as FAILURE. A job killed by the timeout --
+          # a hung fetch, the most likely way this pipeline dies -- is cancelled,
+          # not failed, and no step ever reports 'failure'. The reporter already
+          # fires on `failure() || cancelled()`; matching only 'failure' here
+          # would have left exactly that case unnamed, which is the bug the old
+          # API lookup had fixed by accepting a cancelled conclusion.
+          FAILED_STEP: >-
+            ${{ (steps.checkout.outcome == 'failure' || steps.checkout.outcome == 'cancelled')
+                && 'Checkout code'
+             || (steps.setup_r.outcome == 'failure' || steps.setup_r.outcome == 'cancelled')
+                && 'Set up R'
+             || (steps.lint.outcome == 'failure' || steps.lint.outcome == 'cancelled')
+                && 'Lint embedded code in workflows'
+             || (steps.apt.outcome == 'failure' || steps.apt.outcome == 'cancelled')
+                && 'Install system dependencies'
+             || (steps.rpkgs.outcome == 'failure' || steps.rpkgs.outcome == 'cancelled')
+                && 'Install R packages'
+             || (steps.unittests.outcome == 'failure' || steps.unittests.outcome == 'cancelled')
+                && 'Run unit tests'
+             || (steps.pipeline.outcome == 'failure' || steps.pipeline.outcome == 'cancelled')
+                && 'Run data pipeline'
+             || (steps.verify.outcome == 'failure' || steps.verify.outcome == 'cancelled')
+                && 'Verify pipeline output'
+             || (steps.verdict.outcome == 'failure' || steps.verdict.outcome == 'cancelled')
+                && 'Confirm the verifier reached a verdict'
+             || (steps.manifest.outcome == 'failure' || steps.manifest.outcome == 'cancelled')
+                && 'Refresh Connect Cloud manifest'
+             || (steps.commit.outcome == 'failure' || steps.commit.outcome == 'cancelled')
+                && 'Clean stale files and commit updated data'
+             || (steps.strip.outcome == 'failure' || steps.strip.outcome == 'cancelled')
+                && 'Strip Bioconductor packages before deploy'
+             || (steps.darkfeed.outcome == 'failure' || steps.darkfeed.outcome == 'cancelled')
+                && 'Fail on a dark upstream feed'
+             || '' }}
+          DARK_FEEDS: ${{ steps.verify.outputs.dark_feeds }}
         run: |
           cat > /tmp/report_failure.py <<'PYSCRIPT'
           import json, os, urllib.request, datetime
@@ -551,17 +609,28 @@ jobs:
           # consecutive failures from three unrelated causes (a rank-tie test,
           # a bash quoting bug, and an Ubuntu image roll) were indistinguishable
           # from one unfixed problem.
-          step = "unknown step"
-          try:
-              jobs = call(api + "/actions/runs/" + os.environ["RUN_ID"] + "/jobs")
-              for j in (jobs or {}).get("jobs", []):
-                  bad = [t for t in j.get("steps", [])
-                         if t.get("conclusion") in ("failure", "cancelled")]
-                  if bad:
-                      step = bad[0]["name"]
-                      break
-          except Exception as e:
-              print("step lookup failed:", e)
+          #
+          # This used to ask the Jobs API and fall back to "unknown step". The
+          # fallback is what shipped: the API does not report a conclusion for a
+          # step of a job that is still running, so the loop found nothing, no
+          # exception was raised, and the default went out in the email. The
+          # lookup is gone rather than kept as a second chance, because a dead
+          # code path that looks like it works is how this one survived.
+          step = os.environ.get("FAILED_STEP", "").strip()
+          attributed = bool(step)
+          if not attributed:
+              # Every step that can fail has an id and a branch above, so a
+              # blank here means a step without one failed. That is a gap in
+              # this workflow's own reporting, not a property of the failure,
+              # and it says so instead of guessing.
+              step = "a step this workflow cannot name"
+              print("FAILED_STEP was empty: a failing step is missing an id")
+
+          dark = os.environ.get("DARK_FEEDS", "").strip()
+          # The pipeline ran, published, and then went red on purpose to make a
+          # stalled vendor visible. Reporting that as a pipeline failure is what
+          # made run #255 read as a breakage.
+          stall = attributed and step == "Fail on a dark upstream feed"
 
           stale = ""
           try:
@@ -574,7 +643,35 @@ jobs:
           except Exception as e:
               print("staleness lookup failed:", e)
 
-          title = "Daily pipeline failed (%s) - %s" % (today, step)
+          # Two different events, two different subject lines. The subject is
+          # the whole notification for anyone reading on a phone.
+          if stall:
+              title = "Upstream feed stalled (%s): %s" % (today, (dark or "see run")[:110])
+              lede = ("**The pipeline ran and published normally.** This run is red "
+                      "deliberately, so that a stalled upstream source reaches a human. "
+                      "Nothing in the pipeline is broken.\n\n"
+                      "Stalled: %s\n\n" % (dark or "see the run log"))
+              tail = ("Everything else refreshed and the site is current for every source "
+                      "that is still answering.\n\n"
+                      "Before touching any secret, read the pipeline log. A "
+                      "premium-endpoint refusal means the key is valid and replacing "
+                      "`AV_KEY` will not help: either subscribe, or move the affected "
+                      "fields to the free SEC XBRL feed this pipeline already pulls into "
+                      "`data/sec_financials.csv`. Only a quota or invalid-key refusal "
+                      "calls for a new key.\n\n")
+          else:
+              title = "Daily pipeline failed (%s) - %s" % (today, step)
+              lede = "The scheduled run failed at **%s**.\n\n" % step
+              tail = ("The site is not down: data files are preserved when a fetch "
+                      "returns empty and the deploy is skipped, so it keeps serving "
+                      "the last good data. What is stalled is the refresh.\n\n")
+
+          # An unnamed step is a reporting bug, and saying so is the only way it
+          # gets fixed rather than read as part of the failure.
+          caveat = "" if attributed else (
+              "> This notification could not name the failing step: a step that can "
+              "fail is missing an `id:` in the workflow. That is a defect in the "
+              "reporting, not part of the failure above.\n\n")
 
           existing = None
           try:
@@ -587,8 +684,8 @@ jobs:
           try:
               if existing:
                   call(api + "/issues/%d/comments" % existing,
-                       {"body": "Failed again on %s at **%s**.\n\n%sRun: %s"
-                                % (today, step, stale, run)})
+                       {"body": "%s%s%sRun: %s"
+                                % (lede, caveat, stale, run)})
                   # Retitle, so the notification subject names the CURRENT cause
                   # rather than the date the first failure happened.
                   call(api + "/issues/%d" % existing, {"title": title})
@@ -597,15 +694,10 @@ jobs:
                   call(api + "/issues", {
                       "title": title,
                       "labels": ["pipeline-failure"],
-                      "body": ("The scheduled run failed at **%s**.\n\n"
-                               "%s"
-                               "Run: %s\n\n"
-                               "The site is not down: data files are preserved when a fetch "
-                               "returns empty and the deploy is skipped, so it keeps serving "
-                               "the last good data. What is stalled is the refresh.\n\n"
+                      "body": ("%s%s%sRun: %s\n\n%s"
                                "This issue closes itself on the next green run."
-                               % (step, stale, run))})
-                  print("opened a pipeline-failure issue")
+                               % (lede, caveat, stale, run, tail))})
+                  print("opened a pipeline-failure issue: %s" % title)
           except Exception as e:
               print("report failed:", e)
           PYSCRIPT

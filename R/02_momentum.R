@@ -44,6 +44,37 @@ if (!exists("corporate_action")) {
 }
 
 PRICE_LOOKBACK_DAYS <- 1095   # ~3 calendar years
+
+# The most recent US equity session that has FINISHED, as at `now_utc`.
+#
+# A session dated D closes at 20:00 UTC under EDT and 21:00 UTC under EST, so a
+# bar dated D is final once it is 21:15 UTC on D; before that, D is the session
+# in progress and the vendor serves it as a partial bar. Using a fixed UTC
+# cutoff is correct in both DST regimes and needs no timezone database.
+#
+# Weekends and holidays need no special case here: this only decides how far
+# the fetch window may reach, and the vendor simply returns no bar for a day
+# the market was shut.
+last_finished_session <- function(now_utc) {
+  now_utc <- as.POSIXct(now_utc, tz = "UTC")
+  d <- as.Date(now_utc, tz = "UTC")
+  if (now_utc >= as.POSIXct(paste(format(d), "21:15:00"), tz = "UTC")) d else d - 1
+}
+
+# Sessions the benchmark reached that the ticker universe did not.
+#
+# SPY trades every session, so the dates in its own bars ARE the market
+# calendar for whatever window was pulled -- no holiday table to maintain and
+# none to fall out of sync. A session SPY has and no ticker does is a real gap
+# in the pull; a session SPY lacks too is a market closure, and returning
+# nothing for it is the correct answer rather than something to warn about.
+sessions_behind <- function(newest, benchmark_days) {
+  if (length(benchmark_days) == 0) return(as.Date(character(0)))
+  benchmark_days <- sort(unique(as.Date(benchmark_days)))
+  if (length(newest) == 0 || !is.finite(as.numeric(newest)))
+    return(benchmark_days)
+  benchmark_days[benchmark_days > as.Date(newest)]
+}
 # Trailing window for the alpha statistics that drive the score. Full history
 # left the ranking frozen; see the note in the summarize block below.
 ALPHA_WINDOW        <- 126    # ~6 months of trading days
@@ -70,10 +101,35 @@ run_module2 <- function(tickers = NULL) {
   all_syms <- unique(c(tickers, "SPY"))
   message(glue("Pulling 1-year prices for {length(tickers)} stocks + SPY benchmark..."))
 
+  # tq_get's `to` is EXCLUSIVE of the date given. `to = Sys.Date()` therefore
+  # could never reach the session that had just closed: the cron fires at 21:30
+  # UTC, Sys.Date() is still that day, so the window ended the day BEFORE and
+  # the published data was permanently one trading day behind. The comment on
+  # the cron said the 21:30 slot was chosen "so each run captures the same
+  # day's close" -- it could not, and only runs that drifted past midnight UTC
+  # (as #254 and #255 did, 5.5h and 4h late) ever picked up the latest session.
+  # Verified against the vendor: from 2026-10-26 to 2026-10-30 returns
+  # 10-26..10-29.
+  #
+  # So reach one day PAST today, then drop any session that has not finished.
+  # That guard is not optional: Yahoo serves the in-progress day as a partial
+  # bar from the opening bell, and a half-session treated as a daily bar is a
+  # fabricated return that would flow straight into daily_alpha and the
+  # ranking.
+  now_utc      <- as.POSIXct(format(Sys.time(), tz = "UTC", usetz = FALSE), tz = "UTC")
+  today_utc    <- as.Date(now_utc, tz = "UTC")
+  last_session <- last_finished_session(now_utc)
+
   prices_raw <- tq_get(all_syms,
                        get  = "stock.prices",
-                       from = Sys.Date() - PRICE_LOOKBACK_DAYS,
-                       to   = Sys.Date())
+                       from = today_utc - PRICE_LOOKBACK_DAYS,
+                       to   = today_utc + 1)
+
+  in_progress <- sum(prices_raw$date > last_session, na.rm = TRUE)
+  if (in_progress > 0)
+    message(glue("  Held back {in_progress} bar(s) from the unfinished session ",
+                 "after {format(last_session)}."))
+  prices_raw <- prices_raw %>% filter(date <= last_session)
 
   spy_ret <- prices_raw %>%
     filter(symbol == "SPY", !is.na(close)) %>%
@@ -89,6 +145,24 @@ run_module2 <- function(tickers = NULL) {
 
   dropped <- nrow(prices_raw %>% filter(symbol != "SPY")) - nrow(prices)
   if (dropped > 0) message(glue("  Dropped {dropped} incomplete price bars before indicators."))
+
+  # Absence must not read as all-clear. SPY trades every session, so the dates
+  # in ITS own bars are the market calendar for this window -- no holiday table
+  # to maintain and nothing to keep in sync. A session SPY has and the universe
+  # does not is a real gap in the pull; a session SPY lacks too is a market
+  # closure, which is not a problem and must not warn.
+  spy_days <- sort(unique(prices_raw$date[prices_raw$symbol == "SPY"]))
+  newest   <- suppressWarnings(max(prices$date, na.rm = TRUE))
+  if (length(spy_days) > 0) {
+    behind <- sessions_behind(newest, spy_days)
+    message(glue("Newest session in the pull: {format(newest)} ",
+                 "(benchmark reached {format(max(spy_days))})"))
+    if (length(behind) > 0)
+      warning(sprintf(
+        "price pull is %d trading session(s) behind the benchmark: SPY has %s but no ticker does. The published data will end %s, and the freshness check in tools/verify_pipeline.R measures calendar days, so a single missed session does not trip it.",
+        length(behind), paste(format(behind), collapse = ", "), format(newest)),
+        call. = FALSE)
+  }
 
   # ── 2. Technical indicators ────────────────────────────────────────────────
   message("Calculating technical indicators...")

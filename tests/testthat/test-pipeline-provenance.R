@@ -469,20 +469,31 @@ test_that("a cancelled run still reports", {
 test_that("the failure report can name a cancelled step", {
   skip_if(is.null(wf), "workflow file not present")
   code <- decomment(step_body(wf, "Report failure"))
-  # Firing the step is not enough. The lookup matched only conclusion ==
-  # "failure"; on a cancelled run no step has that, so the issue title said
-  # "unknown step" — the same indistinguishable alert the reporter exists to
-  # prevent.
+  # Firing the step is not enough. The old Jobs-API lookup matched only
+  # conclusion == "failure"; on a cancelled run no step has that, so the issue
+  # title said "unknown step" — the same indistinguishable alert the reporter
+  # exists to prevent.
   #
-  # Assert against the LOOKUP, not the step body: a bare search for
-  # "cancelled" is satisfied by the `if:` condition one line above and so
-  # passes even with the lookup left failure-only. Mutation testing caught
-  # exactly that.
-  concl <- grep("conclusion", code, value = TRUE)
-  expect_gt(length(concl), 0L)
-  expect_true(any(grepl("cancelled", concl, fixed = TRUE)),
-              info = paste("lookup must accept a cancelled conclusion:",
-                           paste(concl, collapse = " | ")))
+  # That lookup is gone (it could not see its own in-flight job at all, so it
+  # returned "unknown step" for every failure, cancelled or not). Attribution
+  # now reads steps.<id>.outcome inside the job, and the cancellation case is
+  # the same trap one level down: a job killed by the timeout reports
+  # 'cancelled', never 'failure'. So every step consulted for one must be
+  # consulted for the other.
+  #
+  # Assert against the CHAIN, not the step body: a bare search for "cancelled"
+  # is satisfied by the `if: failure() || cancelled()` condition above and so
+  # passes with attribution left failure-only. Mutation testing caught exactly
+  # that on the previous version of this test.
+  chain <- grep("steps\\.[a-z_]+\\.outcome", code, value = TRUE)
+  expect_gt(length(chain), 8L)
+  joined <- paste(chain, collapse = "\n")
+  ids <- unique(gsub(".*steps\\.([a-z_]+)\\.outcome.*", "\\1",
+                     grep("== 'failure'", chain, value = TRUE)))
+  expect_gt(length(ids), 8L)
+  for (id in ids)
+    expect_true(grepl(sprintf("steps.%s.outcome == 'cancelled'", id), joined, fixed = TRUE),
+                info = sprintf("step id '%s' is consulted for failure but not for cancellation, so a timed-out run cannot name it", id))
 })
 
 test_that("price history is tracked as a feed so a refused write surfaces", {
