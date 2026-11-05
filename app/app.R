@@ -2673,7 +2673,12 @@ server <- function(input, output, session) {
   output$live_news_feed <- renderUI({
     d <- live_news()
     if (is.null(d) || nrow(d) == 0)
-      return(div("Live feeds unreachable right now. The nightly news panel below is unaffected.",
+      # This used to tell the reader the nightly panel below was unaffected --
+      # true when written, false the day that panel's source went quiet, and
+      # read by exactly the people already wondering whether the page was
+      # stale. A fallback must not vouch for a second panel's currency; that
+      # panel states its own age now, so point at it instead.
+      return(div("Live feeds unreachable right now. The Market News Feed below carries its own date.",
                  style="color:#666;padding:18px;font-family:IBM Plex Mono;font-size:11px;line-height:1.6;"))
 
     ago <- function(ts) {
@@ -2856,13 +2861,60 @@ server <- function(input, output, session) {
   output$unemployment <- renderPlotly({ make_macro_plot("Unemployment", "#64DD17") })
 
   # ── News & Events ──────────────────────────────────────────────────────────
+  # This panel is a nightly SNAPSHOT, and it sits directly beneath LIVE WIRE,
+  # which stamps every item "3m ago". It used to render source, headline,
+  # summary and category and no date at all, so when the snapshot stopped
+  # advancing -- Alpha Vantage moved NEWS_SENTIMENT behind a paywall on
+  # 2026-10-06 and market_news.csv has not moved since -- the page served
+  # month-old headlines with nothing to date them, immediately under a column
+  # of timestamps reading "3m ago". Nothing on the page was false; the
+  # arrangement did the lying.
+  #
+  # Age is computed at render rather than at load, so a session left open does
+  # not keep reporting the age it had when the tab was first drawn.
+  NEWS_STALE_DAYS <- 3
+  news_snapshot_age <- function(d = news_data, today = Sys.Date()) {
+    if (is.null(d) || !nrow(d) || !("publishedDate" %in% names(d)))
+      return(NA_real_)
+    # Format stated, not guessed: as.Date() RAISES on an unparseable string
+    # (see the note at the rank-movement helper below), so a single junk cell
+    # would take the whole News tab down rather than reading as "unknown".
+    pd <- suppressWarnings(as.Date(substr(as.character(d$publishedDate), 1, 10),
+                                   format = "%Y-%m-%d"))
+    if (!any(!is.na(pd))) return(NA_real_)
+    as.numeric(today - max(pd, na.rm = TRUE))
+  }
+
   output$news_count <- renderUI({
-    if (!is.null(news_data)) div(glue("{nrow(news_data)} STORIES")) else div("—")
+    if (is.null(news_data)) return(div("—"))
+    age <- news_snapshot_age()
+    # An unreadable date is reported as unknown, not quietly treated as fresh.
+    if (is.na(age))
+      return(div(glue("{nrow(news_data)} STORIES · DATE UNKNOWN"),
+                 style = "color:#FFD600;"))
+    if (age >= NEWS_STALE_DAYS)
+      return(div(glue("{nrow(news_data)} STORIES · {round(age)} DAYS OLD"),
+                 style = "color:#FF3D00;"))
+    div(glue("{nrow(news_data)} STORIES · THROUGH {toupper(format(Sys.Date() - age, '%b %d'))}"))
   })
 
   output$news_feed <- renderUI({
     if (is.null(news_data) || nrow(news_data)==0) return(div("No news data available.", style="color:#666;padding:20px;font-family:IBM Plex Mono;"))
+    # Said once at the top of the list, in words, because a reader who scrolls
+    # past the header still needs to know what they are looking at.
+    snap_age <- news_snapshot_age()
+    banner <- if (is.na(snap_age)) {
+      div("These stories carry no readable date. Treat them as undated.",
+          style="border-left:3px solid #FFD600;background:rgba(255,214,0,0.06);color:#FFD600;padding:10px 14px;margin-bottom:8px;font-family:IBM Plex Mono;font-size:10px;line-height:1.5;")
+    } else if (snap_age >= NEWS_STALE_DAYS) {
+      div(HTML(sprintf(paste("This snapshot stopped updating <b>%s</b> and is <b>%d days old</b>.",
+                             "Its source stopped answering; these are not today's",
+                             "headlines. LIVE WIRE above is current."),
+                       format(Sys.Date() - snap_age, "%b %d, %Y"), round(snap_age))),
+          style="border-left:3px solid #FF3D00;background:rgba(255,61,0,0.07);color:#FF8A65;padding:10px 14px;margin-bottom:8px;font-family:IBM Plex Mono;font-size:10px;line-height:1.5;")
+    } else NULL
     # Determine which columns exist
+    has_date     <- "publishedDate" %in% names(news_data)
     has_source   <- "source"   %in% names(news_data)
     has_headline <- "headline" %in% names(news_data)
     has_title    <- "title"    %in% names(news_data)
@@ -2878,6 +2930,14 @@ server <- function(input, output, session) {
       url      <- if(has_link)     replace_na(row$link,"#")    else if(has_url) replace_na(row$url,"#") else "#"
       summary  <- if(has_summary)  replace_na(row$summary,"")  else ""
       category <- if(has_category) replace_na(row$category,"") else ""
+      # Every item dates itself. The year is included because this feed can sit
+      # frozen across a month boundary, and "Oct 06" beside a live "3m ago"
+      # column still reads as this year's October to someone skimming.
+      when     <- if (has_date) {
+        dt <- suppressWarnings(as.Date(substr(as.character(row$publishedDate), 1, 10),
+                                       format = "%Y-%m-%d"))
+        if (is.na(dt)) "UNDATED" else toupper(format(dt, "%b %d %Y"))
+      } else "UNDATED"
 
       src_color <- switch(src,
         "CNBC Markets"="#E00000","CNBC Finance"="#E00000",
@@ -2901,7 +2961,8 @@ server <- function(input, output, session) {
           span(src, style=paste0("color:",src_color,";font-size:9px;font-weight:700;font-family:IBM Plex Mono;text-transform:uppercase;letter-spacing:1px;")),
           div(style="display:flex;gap:8px;align-items:center;",
             if (in_univ) span(sym, style="color:#FF6B00;font-size:9px;font-weight:700;font-family:IBM Plex Mono;border:1px solid #FF6B00;padding:1px 5px;") else NULL,
-            span(category, style="color:#333;font-size:9px;font-family:IBM Plex Mono;")
+            span(category, style="color:#333;font-size:9px;font-family:IBM Plex Mono;"),
+            span(when, style="color:#777;font-size:9px;font-family:IBM Plex Mono;letter-spacing:0.5px;")
           )
         ),
         tags$a(href=url, target="_blank",
@@ -2910,7 +2971,7 @@ server <- function(input, output, session) {
         div(summary, style="color:#555;font-size:10px;font-family:IBM Plex Mono;line-height:1.4;")
       )
     })
-    div(do.call(tagList, items))
+    div(banner, do.call(tagList, items))
   })
 
   # One source for the feed and its header, so the label cannot describe a

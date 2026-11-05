@@ -72,14 +72,22 @@ test_that("only the routed-around feed is exempt, and only conditionally", {
   skip_if_not(file.exists(vp_src), "verify_pipeline.R not present")
   src <- paste(readLines(vp_src, warn = FALSE), collapse = "\n")
 
-  # Alpha Vantage fundamentals carries the flag...
-  expect_match(src, 'label = "Alpha Vantage fundamentals", warn = 14, dark = 21,\n\\s*routed = TRUE')
-  # ...and it is the only feed that does. One exemption, granted deliberately.
-  expect_equal(length(regmatches(src, gregexpr("routed = TRUE", src))[[1]]), 1)
+  # Updated 2026-11-05. `routed` became a NAME rather than a bare TRUE when a
+  # second feed was routed around on different grounds (see
+  # test-news-staleness.R), so each exemption now says which replacement it
+  # leans on instead of all of them sharing one implicit guard.
+  expect_match(src, 'label = "Alpha Vantage fundamentals", warn = 14, dark = 21,\n\\s*routed = "sec"')
+  # It is still the only feed routed to the SEC replacement. Granting a second
+  # feed this guard would exempt it on evidence about a different data source.
+  expect_equal(length(regmatches(src, gregexpr('routed = "sec"', src))[[1]]), 1)
+  # And a bare TRUE is gone, so no feed can be exempt without naming its guard.
+  expect_false(grepl("routed = TRUE", src, fixed = TRUE))
 
-  # The exemption applies only while the replacement is carrying the fields,
-  # so a double failure is never quieter than a single one.
-  expect_match(src, 'identical\\(st, "DARK"\\) && isTRUE\\(fd\\$routed\\) && sec_live')
+  # The exemption applies only while the named replacement is carrying the
+  # fields, so a double failure is never quieter than a single one.
+  expect_match(src, 'repl <- if \\(!is\\.null\\(fd\\$routed\\)\\) replacements\\[\\[fd\\$routed\\]\\] else NULL')
+  expect_match(src, 'identical\\(st, "DARK"\\) && !is\\.null\\(repl\\) && isTRUE\\(repl\\$live\\)')
+  expect_match(src, 'sec = list\\(\\n\\s*live = sec_live')
   expect_match(src, 'sec_live <- !is\\.null\\(sec_cov\\)')
 
   # A dark feed that is NOT routed around is still fatal. This branch was

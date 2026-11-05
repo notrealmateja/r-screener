@@ -333,7 +333,7 @@ feed_src <- local({
 
 # Run the extracted fragment over a scratch tree holding the two cache files,
 # and return its table rows, soft problems, and whatever it declared dark.
-feed_run <- function(av_date, news_date, sec = "healthy") {
+feed_run <- function(av_date, news_date, sec = "healthy", alt_news = "healthy") {
   d <- file.path(tempdir(), paste0("feed-", basename(tempfile(""))))
   dir.create(file.path(d, "data"), recursive = TRUE, showWarnings = FALSE)
   old <- setwd(d)
@@ -355,6 +355,19 @@ feed_run <- function(av_date, news_date, sec = "healthy") {
           else c(rep(4L, 126L), rep(3L, 30L), rep(2L, 22L), rep(1L, 3L), rep(0L, 14L))
     writeLines(c("symbol,fundamentals_from_sec",
                  paste0("S", seq_along(nv), ",", nv)), "data/master_scored.csv")
+  }
+
+  # Added 2026-11-05. The Alpha Vantage news exemption is conditional on the
+  # RSS pull still answering, so the scratch tree needs a stock_news.csv or
+  # every case would grade as "live news unknown" and go dark for a reason the
+  # case was not testing.
+  if (!identical(alt_news, "missing")) {
+    stamp <- switch(alt_news,
+                    dead    = paste0(format(Sys.Date() - 30), "T00:00:00Z"),
+                    undated = "",
+                    paste0(format(Sys.Date()), "T00:00:00Z"))
+    writeLines(c("symbol,published_parsed", paste0("AAPL,", stamp)),
+               "data/stock_news.csv")
   }
 
   go <- file.path(d, "ghout.txt")
@@ -402,12 +415,13 @@ test_that("a feed quiet for a few days is soft, not fatal", {
 
 test_that("a feed silent past its threshold goes dark and reaches the step output", {
   skip_if(is.null(feed_src), "feed fragment not found")
-  # News has no replacement, so silence is still fatal, and it still names
-  # itself in the step output the workflow fails on.
-  r <- feed_run(ago(26), ago(26))
-  expect_length(r$dark, 1L)
+  # Rewritten 2026-11-05, not deleted: the news feed is now exempt WHILE the
+  # RSS pull still answers, so the fatal path has to be reached by taking that
+  # away. The behaviour under test is unchanged -- a dark feed with no working
+  # replacement names itself in the step output the workflow fails on.
+  r <- feed_run(ago(26), ago(26), alt_news = "dead")
   expect_match(r$dark, "^dark_feeds=")
-  expect_match(r$dark, "Alpha Vantage news silent 26 days")
+  expect_match(paste(r$dark, collapse = "|"), "Alpha Vantage news silent 26 days")
 })
 
 test_that("a dark feed whose fields were replaced is reported, not fatal", {
@@ -443,15 +457,58 @@ test_that("the exemption is withdrawn the moment the replacement stops working",
   expect_length(feed_run(ago(0), ago(0))$dark, 0L)
 })
 
+test_that("a frozen news snapshot is reported, not fatal, while RSS answers", {
+  skip_if(is.null(feed_src), "feed fragment not found")
+  # Changed 2026-11-05, and on different grounds from the fundamentals above:
+  # NOTHING replaced these stories. What changed is that the app stopped
+  # presenting them as current -- every item is dated now and the panel states
+  # its age. This gate existed to stop an undated month-old snapshot sitting
+  # beneath a live wire stamped "3m ago", and that job moved into the page
+  # itself (test-news-staleness.R holds it there).
+  #
+  # The loss must still be SAID. An exemption that stops reporting is how the
+  # original 30-day freeze went unseen in the first place.
+  r <- feed_run(ago(0), ago(30))
+  expect_false(grepl("Alpha Vantage news", paste(r$dark, collapse = "|")))
+  expect_match(paste(r$problems, collapse = "|"),
+               "Alpha Vantage news silent 30 days")
+  expect_match(paste(r$problems, collapse = "|"), "live headlines come from RSS")
+  # And it is still DARK in the table. A reader of the summary must not have
+  # to infer the state from the absence of a failure.
+  expect_true(any(grepl("| DARK |", r$out, fixed = TRUE)))
+})
+
+test_that("losing the live news feed too makes both fatal", {
+  skip_if(is.null(feed_src), "feed fragment not found")
+  # The entire risk in softening this alarm is softening it while the thing it
+  # leans on is broken too. Then the site has no current news from any source,
+  # and BOTH fire rather than neither.
+  r <- feed_run(ago(0), ago(30), alt_news = "dead")
+  joined <- paste(r$dark, collapse = "|")
+  expect_match(joined, "Alpha Vantage news silent 30 days")
+  expect_match(joined, "Live news silent 30 days")
+
+  # A stock_news.csv never written, or written with no date this check can
+  # read, is unknown -- which is worse than known-old, not better.
+  expect_match(paste(feed_run(ago(0), ago(0), alt_news = "missing")$dark,
+                     collapse = "|"), "Live news coverage unknown")
+  expect_match(paste(feed_run(ago(0), ago(0), alt_news = "undated")$dark,
+                     collapse = "|"), "Live news coverage unknown")
+
+  # The healthy case stays quiet.
+  expect_length(feed_run(ago(0), ago(0))$dark, 0L)
+})
+
 test_that("the two feeds carry independent thresholds", {
   skip_if(is.null(feed_src), "feed fragment not found")
   # News is refetched nightly, so 16 days dark; fundamentals rotate slowly and
   # get 21. A single shared threshold would either miss a dead news feed for
   # three weeks or cry wolf about healthy fundamentals.
-  r <- feed_run(ago(16), ago(16))
-  expect_length(r$dark, 1L)
-  expect_match(r$dark, "news silent 16 days")
-  expect_false(grepl("fundamentals silent", r$dark))
+  # Graded with the news replacement switched off, so the 16-day news feed
+  # reaches the fatal branch and the two thresholds can be told apart at all.
+  r <- feed_run(ago(16), ago(16), alt_news = "dead")
+  expect_match(paste(r$dark, collapse = "|"), "Alpha Vantage news silent 16 days")
+  expect_false(grepl("fundamentals silent", paste(r$dark, collapse = "|")))
   expect_match(paste(r$problems, collapse = "|"), "fundamentals last answered 16")
 })
 

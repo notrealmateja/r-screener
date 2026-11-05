@@ -225,9 +225,25 @@ feeds <- list(
   # how the original 30-day freeze went unseen in the first place.
   list(file = "data/av_cache.csv", col = "last_fetched",
        label = "Alpha Vantage fundamentals", warn = 14, dark = 21,
-       routed = TRUE),
+       routed = "sec"),
+  # Routed around on 2026-11-05, on a DIFFERENT footing from the one above.
+  # Nothing replaced these stories. What changed is that the page stopped
+  # presenting them as current: every item in the Market News Feed now carries
+  # its own date and the panel header carries the age of the newest story.
+  # The harm this gate existed to prevent was an undated month-old snapshot
+  # sitting directly beneath a live wire stamped "3m ago", and that harm now
+  # has its own guard in the app and its own tests.
+  #
+  # So this is not "the alarm was annoying". The alarm was asking for a fix
+  # that does not exist -- the endpoint is paid now and no key changes that --
+  # and it was failing every night, which made the one gate that still means
+  # something indistinguishable from the one that never clears.
+  #
+  # What stays fatal is losing news ALTOGETHER. The exemption holds only while
+  # the RSS pull is still answering, graded in news_grade below.
   list(file = "data/market_news.csv", col = "publishedDate",
-       label = "Alpha Vantage news", warn = 7, dark = 14),
+       label = "Alpha Vantage news", warn = 7, dark = 14,
+       routed = "news"),
   # write_history_or_keep in R/00_utils.R now refuses to replace
   # this file with a short or truncated pull, which protects the
   # history but leaves the prices frozen until the upstream
@@ -277,6 +293,55 @@ sec_cov <- local({
 # Degraded still counts as carrying the fields; dead and unknown do not.
 sec_live <- !is.null(sec_cov) && sec_cov$verdict %in% c("ok", "degraded")
 
+# The Alpha Vantage news exemption rests on the site still having a live news
+# surface at all. Graded like the SEC coverage above -- a pure function, RUN
+# rather than grepped, so a test can execute it on synthetic dates instead of
+# text-matching a branch that might be dead.
+NEWS_ALT_MAX_AGE <- 3   # days; the RSS pull runs nightly
+news_grade <- function(dates, max_age, today) {
+  # Explicit format, because as.Date() RAISES on an unparseable string rather
+  # than returning NA, and suppressWarnings does not catch an error. Without
+  # it a single malformed date in stock_news.csv kills the verifier outright
+  # -- turning "the news feed wrote something odd" into a dead nightly.
+  d <- suppressWarnings(as.Date(substr(as.character(dates), 1, 10),
+                                format = "%Y-%m-%d"))
+  d <- d[!is.na(d)]
+  # No parseable date is not "no news": it means the pull wrote something this
+  # check cannot read, which is a worse state than a known-old file.
+  if (!length(d)) return(list(age = NA_real_, verdict = "unknown"))
+  age <- as.numeric(today - max(d))
+  list(age = age, verdict = if (age > max_age) "dead" else "ok")
+}
+news_alt <- local({
+  f <- "data/stock_news.csv"
+  if (!file.exists(f)) return(NULL)
+  d <- tryCatch(suppressWarnings(read_csv(f, show_col_types = FALSE)),
+                error = function(e) NULL)
+  if (is.null(d) || !nrow(d) || !("published_parsed" %in% names(d))) return(NULL)
+  news_grade(d$published_parsed, NEWS_ALT_MAX_AGE, Sys.Date())
+})
+news_live <- !is.null(news_alt) && identical(news_alt$verdict, "ok")
+
+# Each entry names what took over and whether that thing is working RIGHT NOW.
+# A dark feed is let off only by a replacement that is live; the moment it is
+# not, the feed is fatal again and the replacement raises its own alarm below,
+# so a double failure is never quieter than a single one. The note is built
+# only in the live branch, because the live branch is the only one where the
+# objects it reads are guaranteed to exist.
+replacements <- list(
+  sec = list(
+    live = sec_live,
+    note = if (sec_live)
+      sprintf("its ratios now come from SEC filings for %d of %d names",
+              sec_cov$cov, sec_cov$n) else ""),
+  news = list(
+    live = news_live,
+    note = if (news_live)
+      sprintf(paste("the app now dates that panel instead of implying it is current;",
+                    "live headlines come from RSS, last answered %.0f day(s) ago"),
+              news_alt$age) else "")
+)
+
 dark <- character(0)
 out <- c(out, "", "### Upstream feeds", "",
          "| Source | Last answered | Age (d) | Status |",
@@ -294,9 +359,15 @@ for (fd in feeds) {
     next
   }
   # Timestamps appear as both dates and ISO datetimes, so take the
-  # leading 10 characters rather than guessing a format.
+  # leading 10 characters. The format is then stated rather than guessed:
+  # as.Date() RAISES on an unparseable string instead of returning NA, and
+  # suppressWarnings does not catch an error, so one junk cell in any feed
+  # file killed the verifier here and the NO DATES branch below could never
+  # be reached. With the format given, a bad cell becomes NA and that branch
+  # does its job.
   seen <- suppressWarnings(max(as.Date(
-            substr(as.character(dd[[fd$col]]), 1, 10)), na.rm = TRUE))
+            substr(as.character(dd[[fd$col]]), 1, 10),
+            format = "%Y-%m-%d"), na.rm = TRUE))
   if (!is.finite(as.numeric(seen))) {
     out <- c(out, sprintf("| %s | - | - | NO DATES |", fd$label))
     next
@@ -310,10 +381,10 @@ for (fd in feeds) {
   # Only while the replacement is actually working: if it is not, this stays
   # fatal and sec_cov raises its own alarm below, so a double failure is
   # never quieter than a single one.
-  if (identical(st, "DARK") && isTRUE(fd$routed) && sec_live) {
-    problems <- c(problems, sprintf(
-      "%s silent %d days (its ratios now come from SEC filings for %d of %d names)",
-      fd$label, age, sec_cov$cov, sec_cov$n))
+  repl <- if (!is.null(fd$routed)) replacements[[fd$routed]] else NULL
+  if (identical(st, "DARK") && !is.null(repl) && isTRUE(repl$live)) {
+    problems <- c(problems, sprintf("%s silent %d days (%s)",
+                                    fd$label, age, repl$note))
   } else if (identical(st, "DARK")) {
     # Everything NOT routed around stays fatal, which is the whole point of
     # the clause above being narrow. Dropping this branch once already made
@@ -345,6 +416,29 @@ if (is.null(sec_cov) || identical(sec_cov$verdict, "unknown")) {
   } else if (identical(sec_cov$verdict, "degraded")) {
     problems <- c(problems, sprintf("SEC fundamentals coverage %.0f%% (normally above %.0f%%)",
                                     100 * sec_cov$frac, 100 * SEC_COV_WARN))
+  }
+}
+
+# The other half of the news exemption. Reported in its own block rather than
+# as a feed row, because it is not a source the ranking reads -- it is the
+# thing that makes a dark Alpha Vantage survivable, exactly as SEC coverage is
+# for the ratios. If this goes quiet the exemption above lapses on its own AND
+# this says so, so the two failures are louder together than either alone.
+if (is.null(news_alt) || identical(news_alt$verdict, "unknown")) {
+  out <- c(out, "", paste("**Live news: cannot tell.**",
+                          "data/stock_news.csv is missing, empty, or carries no",
+                          "date this check can read."))
+  dark <- c(dark, "Live news coverage unknown")
+} else {
+  out <- c(out, "", sprintf("Live news: RSS last answered %.0f day(s) ago.",
+                            news_alt$age))
+  if (identical(news_alt$verdict, "dead")) {
+    out <- c(out, "", sprintf(paste("**The RSS news pull has stopped too (%.0f days,",
+                                    "floor %d).** The nightly Alpha Vantage snapshot was",
+                                    "already frozen, so the site now has no current news",
+                                    "from any source."),
+                              news_alt$age, NEWS_ALT_MAX_AGE))
+    dark <- c(dark, sprintf("Live news silent %.0f days", news_alt$age))
   }
 }
 
