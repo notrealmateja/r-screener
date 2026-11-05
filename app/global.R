@@ -56,29 +56,74 @@ meta <- tryCatch(readRDS(file.path(APP_DATA_DIR, "meta.rds")),
 # and pe_ratio, pb_ratio, roe and profit_margin sat frozen for 30 days while
 # the page printed them as current -- nothing on screen said otherwise, which
 # is the actual defect. This states it.
+# How old the vendor leg is ACROSS rows, not at its best row. last_fetched is
+# per symbol and the cache was filled in batches over several weeks, so on
+# 2026-11-05 the newest row was 30 days old, the median 35 and the oldest 68.
+# Reporting max(last_fetched) picked the single freshest row and presented its
+# age as the age of the feed -- the most flattering number available, on a
+# label whose entire job is to stop the reader being flattered.
+#
+# Format stated, not guessed: as.Date() RAISES on an unparseable string rather
+# than returning NA, and suppressWarnings does not catch an error. This renders
+# inside panel headers, so one bad cell would take a whole table down.
+vendor_age_stats <- function(df, today = Sys.Date()) {
+  if (is.null(df) || !nrow(df) || !("last_fetched" %in% names(df))) return(NULL)
+  d <- suppressWarnings(as.Date(substr(as.character(df$last_fetched), 1, 10),
+                                format = "%Y-%m-%d"))
+  d <- d[!is.na(d)]
+  if (!length(d)) return(NULL)
+  age <- as.numeric(today - d)
+  list(n = length(age), newest = min(age), median = median(age),
+       oldest = max(age), last = max(d))
+}
+
+# The one-line stale marker, shared by every panel that shows a vendor field.
+# Returns NULL when the feed is current, so a healthy day carries no warning
+# and the marker keeps its meaning. A spread is printed whenever the rows
+# disagree, because "35 DAYS OLD" over a 30-to-68 range is its own small lie.
+VENDOR_STALE_DAYS <- 7
+vendor_stale_note <- function(df, today = Sys.Date()) {
+  v <- vendor_age_stats(df, today)
+  if (is.null(v)) return("VENDOR FIELDS \u00b7 AGE UNKNOWN")
+  if (v$oldest <= VENDOR_STALE_DAYS) return(NULL)
+  if (v$newest == v$oldest)
+    sprintf("VENDOR FIELDS %.0f DAYS OLD", v$oldest)
+  else
+    sprintf("VENDOR FIELDS %.0f\u2013%.0f DAYS OLD (MEDIAN %.0f)",
+            v$newest, v$oldest, v$median)
+}
+
+# The marker as a tag, so every panel that shows a vendor field says it the same
+# way instead of each inventing its own wording. NULL when the feed is current,
+# so this adds nothing to a healthy page. `fields` names which numbers on that
+# particular panel are the vendor's, because a bare age on a panel of twenty
+# metrics leaves the reader guessing which ones it refers to.
+vendor_note_div <- function(df, fields = NULL, today = Sys.Date()) {
+  note <- vendor_stale_note(df, today)
+  if (is.null(note)) return(NULL)
+  div(if (is.null(fields)) note else paste0(fields, " · ", note),
+      style = paste("color:#8a6d3b;background:rgba(255,214,0,0.06);",
+                    "border-left:2px solid #FFD600;padding:6px 10px;",
+                    "margin-top:8px;font-family:IBM Plex Mono;font-size:9px;",
+                    "letter-spacing:0.5px;line-height:1.5;"))
+}
+
 fundamentals_provenance <- function(df) {
   if (is.null(df) || !nrow(df)) return(NULL)
   n <- nrow(df)
   sec <- if ("fundamentals_from_sec" %in% names(df))
     sum(suppressWarnings(as.numeric(df$fundamentals_from_sec)) == 4, na.rm = TRUE) else 0
-  # as.Date() RAISES on an unparseable string instead of warning, and this line
-  # renders inside the screener panel header -- an unreadable vendor date would
-  # have taken the whole table down.
-  vend <- if ("last_fetched" %in% names(df)) {
-    d <- tryCatch(suppressWarnings(as.Date(as.character(df$last_fetched))),
-                  error = function(e) as.Date(NA))
-    if (!length(d) || all(is.na(d))) NA else max(d, na.rm = TRUE)
-  } else NA
-  age <- if (inherits(vend, "Date") && !is.na(vend))
-    as.numeric(Sys.Date() - vend) else NA_real_
+  v <- vendor_age_stats(df)
   paste0(
     if (sec > 0) sprintf("P/E, P/B, ROE AND MARGIN FROM SEC FILINGS FOR %d OF %d", sec, n)
     else "VALUATION RATIOS FROM VENDOR DATA ONLY",
-    " \u00b7 VENDOR FIELDS LAST REFRESHED ",
-    if (inherits(vend, "Date") && !is.na(vend))
-      paste0(format(vend, "%Y-%m-%d"),
-             if (!is.na(age) && age > 7) sprintf(" (%.0f DAYS AGO)", age) else "")
-    else "UNKNOWN")
+    " \u00b7 ",
+    if (is.null(v)) "VENDOR FIELDS LAST REFRESHED UNKNOWN"
+    else paste0("VENDOR FIELDS LAST REFRESHED ", format(v$last, "%Y-%m-%d"),
+                if (v$oldest > VENDOR_STALE_DAYS)
+                  sprintf(", %.0f\u2013%.0f DAYS OLD (MEDIAN %.0f)",
+                          v$newest, v$oldest, v$median)
+                else ""))
 }
 
 # What share of a series' win over the index is explained by carrying more

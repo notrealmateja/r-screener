@@ -132,7 +132,12 @@ test_that("the page can say where its fundamentals came from", {
 test_that("the provenance line states staleness and never errors", {
   skip_if_not(file.exists(glb_src), "app/global.R not present")
   src <- readLines(glb_src, warn = FALSE)
-  a <- grep("^fundamentals_provenance <- function", src)
+  # Extraction starts at vendor_age_stats, not at fundamentals_provenance:
+  # on 2026-11-05 the age arithmetic moved into its own helpers above it, and
+  # an anchor on the caller alone pulled in a function whose dependencies had
+  # been left behind. The test errored rather than failing, which is the same
+  # colour as a real break but tells you much less.
+  a <- grep("^vendor_age_stats <- function", src)
   b <- grep("^bt_leverage_share <- function", src)
   skip_if(!length(a) || !length(b), "helper not found")
   e <- new.env(parent = globalenv())
@@ -147,14 +152,14 @@ test_that("the provenance line states staleness and never errors", {
   out <- f(d)
   expect_match(out, "VENDOR DATA ONLY")
   expect_match(out, "2026-10-05")
-  expect_match(out, "DAYS AGO")
+  expect_match(out, "DAYS OLD")
 
   # Filings supplying all four.
   d2 <- base; d2$fundamentals_from_sec <- 4
   d2$last_fetched <- format(Sys.Date())
   out2 <- f(d2)
   expect_match(out2, "SEC FILINGS FOR 10 OF 10")
-  expect_false(grepl("DAYS AGO", out2))
+  expect_false(grepl("DAYS OLD", out2))
 
   # A partial mix must not claim the full set.
   d3 <- base; d3$fundamentals_from_sec <- c(rep(4, 3), rep(1, 7))
@@ -168,4 +173,79 @@ test_that("the provenance line states staleness and never errors", {
     v <- expect_no_error(f(bad))
     if (!is.null(v)) expect_true(grepl("UNKNOWN|VENDOR|SEC", v))
   }
+})
+
+test_that("the vendor age is reported across rows, not at its freshest one", {
+  skip_if_not(file.exists(glb_src), "app/global.R not present")
+  src <- readLines(glb_src, warn = FALSE)
+  a <- grep("^vendor_age_stats <- function", src)
+  b <- grep("^bt_leverage_share <- function", src)
+  skip_if(!length(a) || !length(b), "helper not found")
+  e <- new.env(parent = globalenv())
+  eval(parse(text = paste(src[a[1]:(b[1] - 1)], collapse = "\n")), envir = e)
+  stats <- e$vendor_age_stats
+  note  <- e$vendor_stale_note
+  today <- as.Date("2026-11-05")
+
+  # The real shape on 2026-11-05: av_cache was filled in batches over several
+  # weeks, so last_fetched spans 2026-08-29..2026-10-06. Reporting max() named
+  # the single freshest row -- 30 days -- and called it the age of the feed,
+  # on a label whose only job is to stop the reader being flattered.
+  d <- data.frame(last_fetched = c("2026-08-29", "2026-09-26", "2026-09-30",
+                                   "2026-10-02", "2026-10-06"))
+  v <- stats(d, today)
+  expect_equal(v$newest, 30)
+  expect_equal(v$oldest, 68)
+  expect_equal(v$median, 36)
+  expect_equal(v$n, 5)
+
+  n <- note(d, today)
+  expect_match(n, "30")
+  expect_match(n, "68")
+  # The flattering number must not stand alone. If the note ever says only the
+  # newest age again, this fails.
+  expect_false(identical(n, "VENDOR FIELDS 30 DAYS OLD"))
+
+  # One age for every row needs no range.
+  same <- data.frame(last_fetched = rep("2026-09-26", 4))
+  expect_match(note(same, today), "^VENDOR FIELDS 40 DAYS OLD$")
+
+  # A current feed carries NO marker, so the marker keeps its meaning.
+  fresh <- data.frame(last_fetched = format(today - 0:3))
+  expect_null(note(fresh, today))
+  # And the boundary is the stated constant, not a number picked here.
+  expect_match(paste(src, collapse = "\n"), "VENDOR_STALE_DAYS <- 7")
+  expect_null(note(data.frame(last_fetched = format(today - 7)), today))
+  expect_false(is.null(note(data.frame(last_fetched = format(today - 8)), today)))
+
+  # Unreadable is unknown, never fresh, and never an error: this renders
+  # inside panel headers, so a throw takes the whole table down.
+  expect_null(stats(data.frame(last_fetched = c("n/a", "")), today))
+  expect_no_error(note(data.frame(last_fetched = "not a date"), today))
+  expect_match(note(data.frame(last_fetched = "not a date"), today), "AGE UNKNOWN")
+  expect_null(stats(NULL, today))
+  expect_match(note(NULL, today), "AGE UNKNOWN")
+})
+
+test_that("every panel showing a frozen vendor field carries the marker", {
+  app_src <- repo_path("app", "app.R")
+  skip_if_not(file.exists(app_src), "app.R not present")
+  src <- paste(readLines(app_src, warn = FALSE), collapse = "\n")
+
+  # These four columns are byte-identical passthroughs of av_cache, which
+  # stopped refreshing on 2026-10-06. Each surface that prints one says so.
+  # Verified against the data: market_cap, earningsGrowth, operating_margin
+  # and ev_ebitda are identical in av_cache.csv and master_scored.csv for all
+  # 195 symbols, while pe_ratio, pb_ratio, roe and profit_margin are not --
+  # those are re-sourced from filings and are deliberately NOT marked stale.
+  expect_match(src, 'uiOutput\\("unicorn_badge"')          # Unicorns panel head
+  expect_match(src, 'output\\$unicorn_badge <- renderUI')
+  expect_match(src, "vendor_note_div\\(master_data,\\n\\s*\"MARKET CAP, EV/EBITDA, OP\\. MARGIN, EPS GROWTH\"\\)")
+  expect_match(src, "Earnings Growth \\(%\\)\",\\n\\s*if \\(!is\\.null\\(v\\) && v\\$oldest > VENDOR_STALE_DAYS\\)")
+  expect_match(src, "eg_vintage = local\\(\\{")
+  expect_match(src, "eg_vintage\\),")                       # and it is RENDERED
+
+  # The Unicorn criteria line is built, not a constant: a constant cannot age,
+  # and that line asserts a market-cap threshold read off the frozen column.
+  expect_false(grepl('div(class="panel-head-meta","MARKET CAP < $5B', src, fixed = TRUE))
 })

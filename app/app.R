@@ -1068,7 +1068,11 @@ ui <- fluidPage(
           div(class="panel",
             div(class="panel-head",
               div(class="panel-head-title","🦄 TOP 15 UNICORNS"),
-              div(class="panel-head-meta","MARKET CAP < $5B · REVENUE GROWTH >15% · WEEKLY CONFIDENCE")),
+              # The screen's own criteria are vendor fields: market_cap is a
+              # frozen passthrough of av_cache. Stating a threshold computed
+              # from stale data is itself a stale claim, so the meta carries
+              # the age rather than asserting the cut unqualified.
+              div(class="panel-head-meta", uiOutput("unicorn_badge", inline = TRUE))),
             div(class="panel-body ss-table-wrap", DTOutput("unicorn_table"))
           )
         ),
@@ -1936,6 +1940,18 @@ server <- function(input, output, session) {
         if (is.null(p)) NULL else tags$div(style="margin-top:3px;opacity:.75", p))
   })
 
+  # The Unicorn screen's thresholds are read off vendor fields that stopped
+  # refreshing on 2026-10-06, so the criteria line says how old they are. Built
+  # here rather than as a static string in the UI for exactly that reason: a
+  # constant cannot age.
+  output$unicorn_badge <- renderUI({
+    n <- vendor_stale_note(master_data)
+    tagList(
+      "MARKET CAP < $5B · REVENUE GROWTH >15% · WEEKLY CONFIDENCE",
+      if (is.null(n)) NULL
+      else tags$div(style="margin-top:3px;color:#FFD600;opacity:.85", n))
+  })
+
   output$screener_table <- renderDT({
     d <- filtered(); if (nrow(d)==0) return(datatable(data.frame(Msg="No matches")))
     df <- d %>%
@@ -1979,13 +1995,25 @@ server <- function(input, output, session) {
       mutate(
         earningsGrowth_safe = coalesce(earningsGrowth, 0.03),
         eg = earningsGrowth_safe * 100,
-        sf = replace_na(short_percent_float, 0) * 100
+        sf = replace_na(short_percent_float, 0) * 100,
+        # Carried as a column rather than a free variable so the plotly
+        # formula below resolves it in the data frame, where it cannot be
+        # shadowed or silently dropped. Empty string when the feed is current.
+        eg_vintage = local({
+          v <- vendor_age_stats(master_data)
+          if (is.null(v) || v$oldest <= VENDOR_STALE_DAYS) ""
+          else sprintf(" <i>(vendor, %.0f–%.0f d old)</i>", v$newest, v$oldest)
+        })
       )
     clrs <- c("High Conviction"="#FF3D00","Watch List"="#FFD600","Low Signal"="#00B8D9","No Signal"="#333")
     plot_ly(d, x=~eg, y=~sf, type="scatter", mode="markers",
       color=~squeeze_tier, colors=clrs,
+      # EPS Growth is a frozen passthrough of av_cache. The tooltip is the only
+      # place this number appears on the chart, so the age rides with it there.
       text=~paste0("<b>",symbol,"</b><br>",company,"<br>Squeeze: ",squeeze_score,
-                   "<br>Short Float: ",short_float_pct,"<br>EPS Growth: ",round(earningsGrowth*100,1),"%"),
+                   "<br>Short Float: ",short_float_pct,
+                   "<br>EPS Growth: ",round(earningsGrowth*100,1),"%",
+                   eg_vintage),
       hoverinfo="text",
       # Sizes are scaled here rather than through plotly's `size=`/`sizes=`
       # arguments. That path rescales marker sizes internally and writes
@@ -2246,7 +2274,14 @@ server <- function(input, output, session) {
       c("1Y Return",      s$ret_1y_fmt)
     )
     trs <- lapply(rows, function(r) tags$tr(tags$td(class="mk",r[1]),tags$td(class="mv",r[2])))
-    tags$table(class="mt", do.call(tagList,trs))
+    # Market Cap, EV/EBITDA, Op. Margin and EPS Growth are frozen passthroughs
+    # of av_cache; the returns and price beside them are current. Naming which
+    # rows the age applies to, because an unqualified note on a table of
+    # nineteen metrics reads as if all nineteen were stale.
+    tagList(
+      tags$table(class="mt", do.call(tagList,trs)),
+      vendor_note_div(master_data,
+                      "MARKET CAP, EV/EBITDA, OP. MARGIN, EPS GROWTH"))
   })
 
   output$dd_short <- renderUI({
@@ -3740,7 +3775,16 @@ server <- function(input, output, session) {
         div(class="metric-box", span("Sector", class="metric-label"), span(s$sector, class="metric-val")),
         div(class="metric-box", span("Rating", class="metric-label"), span(s$rating, class="metric-val")),
         div(class="metric-box", span("Tier", class="metric-label"), span(coalesce(s$tier,"N/A"), class="metric-val"))
-      )
+      ),
+      # Market Cap here is a frozen passthrough of av_cache. P/E, P/B, ROE and
+      # Profit Margin are re-sourced from SEC filings for most names, so they
+      # are not named -- the four of them carry their own provenance line on
+      # the panels that show the whole universe.
+      #
+      # NOTE: this output is currently unreachable -- nothing in the UI calls
+      # uiOutput("dd_key_metrics"), so none of the above renders today. The
+      # marker is here so that wiring the panel up cannot ship it unlabelled.
+      vendor_note_div(master_data, "MARKET CAP")
     )
   })
 
@@ -3961,7 +4005,20 @@ server <- function(input, output, session) {
     }
     
     yvar   <- if("earningsGrowth" %in% names(df)) df$earningsGrowth * 100 else df$fundamental_score
-    ylabel <- if("earningsGrowth" %in% names(df)) "Earnings Growth (%)" else "Fundamental Score"
+    # earningsGrowth is a frozen passthrough of av_cache, so the axis carries
+    # its age. A chart has no panel footer to put this in; the axis title is
+    # the only thing a reader looks at while reading the y values.
+    #
+    # NOTE: this output is currently unreachable -- nothing in the UI calls
+    # plotlyOutput("short_float_scatter"). Marked anyway so that wiring the
+    # chart up cannot ship an unlabelled vendor axis.
+    ylabel <- if("earningsGrowth" %in% names(df)) {
+      v <- vendor_age_stats(master_data)
+      paste0("Earnings Growth (%)",
+             if (!is.null(v) && v$oldest > VENDOR_STALE_DAYS)
+               sprintf(" — vendor, %.0f–%.0f days old", v$newest, v$oldest)
+             else "")
+    } else "Fundamental Score"
     
     color_vals <- df$master_score
     
