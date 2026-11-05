@@ -248,4 +248,47 @@ test_that("every panel showing a frozen vendor field carries the marker", {
   # The Unicorn criteria line is built, not a constant: a constant cannot age,
   # and that line asserts a market-cap threshold read off the frozen column.
   expect_false(grepl('div(class="panel-head-meta","MARKET CAP < $5B', src, fixed = TRUE))
+
+  # The valuation panels, found by a later sweep. These matter more than the
+  # tables above: each turns a frozen column into a single headline number.
+  expect_match(src, 'vendor_note_div\\(master_data, "SHARES OUTSTANDING, MARKET CAP"\\)')
+  expect_match(src, 'vendor_note_div\\(master_data, "MARKET CAP, EBITDA"\\)')
+  expect_match(src, 'vendor_note_div\\(master_data, "EV/EBITDA, AND THE DCF AND LBO FIGURES QUOTED ABOVE"\\)')
+  expect_match(src, 'output\\$dd_comps_badge <- renderUI')
+  expect_match(src, 'uiOutput\\("dd_comps_badge"')
+  expect_match(src, "cap: vendor, %\\.0f")          # the Deep Dive header line
+})
+
+test_that("no panel claims a provenance it does not have", {
+  app_src <- repo_path("app", "app.R")
+  skip_if_not(file.exists(app_src), "app.R not present")
+  src <- paste(readLines(app_src, warn = FALSE), collapse = "\n")
+
+  # The DCF footnote named the three filing-sourced inputs and stopped there,
+  # which read as a provenance statement for the whole model. The headline is
+  # equity value DIVIDED BY shares_outstanding -- a frozen vendor column -- and
+  # the upside beside it compares that against a live price. Naming only the
+  # fresh half of a calculation is worse than naming nothing.
+  expect_match(src, "come from SEC XBRL filings, and beta is")
+  expect_match(src, "come from the vendor cache instead")
+  expect_false(grepl("cash flow, debt and cash come from SEC XBRL filings. A DCF is",
+                     src, fixed = TRUE))
+
+  # The research brief said it was assembled from "filings, prices and
+  # sentiment" -- three live sources -- while quoting frozen multiples in prose.
+  expect_match(src, "filings, prices, vendor fundamentals and")
+  expect_false(grepl("same filings, prices and sentiment shown on this",
+                     src, fixed = TRUE))
+
+  # The Data sources table advertised a refresh cadence that stopped on
+  # 2026-10-06. A provenance table that is itself out of date is the worst
+  # place in the app for a stale claim.
+  expect_false(grepl("22 tickers/run — free tier is 25 calls/day", src, fixed = TRUE))
+  expect_match(src, "<b>Stopped 2026-10-06</b>")
+  expect_equal(length(gregexpr("<b>Stopped 2026-10-06</b>", src)[[1]]), 2L)
+
+  # And the indirect leg is disclosed once, in Methodology, rather than badged
+  # onto a dozen panels that each carry the same 10% component.
+  expect_match(src, "Where the frozen fields still reach the scores")
+  expect_match(src, "tenth of the")
 })

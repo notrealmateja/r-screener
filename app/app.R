@@ -1231,7 +1231,13 @@ ui <- fluidPage(
           div(class="panel-body", uiOutput("dd_dcf"))
         ),
         div(class="panel",
-          div(class="panel-head", div(class="panel-head-title","PEER COMPS")),
+          # The note goes in the head because dd_comps is a renderDT and a
+          # datatable cannot carry a footer div. Its "Mkt Cap" column is
+          # formatted straight off the frozen market_cap, and the eight peers
+          # shown are also SELECTED by that column, so the comparison set
+          # itself is chosen on stale caps.
+          div(class="panel-head", div(class="panel-head-title","PEER COMPS"),
+              div(class="panel-head-meta", uiOutput("dd_comps_badge", inline = TRUE))),
           div(class="panel-body", DTOutput("dd_comps"))
         )
       ),
@@ -2151,7 +2157,20 @@ server <- function(input, output, session) {
       div(style=glue("font-family:IBM Plex Mono;font-size:10px;color:{badge_col};",
                      "border:1px solid {badge_col};border-radius:3px;padding:1px 5px;",
                      "letter-spacing:.5px;"), p$label),
-      div(style="font-size:13px;color:#AAA;", paste(s$company,"•",s$sector,"•",s$mktcap_fmt))
+      # The market cap rides on the same line as that LIVE/stored badge, so a
+      # reader who has just been told the price's age reads the cap three items
+      # to the right as equally current. It is the one place in the app where a
+      # deliberate freshness badge and an undated 68-day-old vendor figure share
+      # a row, so the cap states its own age inline rather than in a footer.
+      div(style="font-size:13px;color:#AAA;",
+          paste(s$company,"•",s$sector,"•",s$mktcap_fmt),
+          local({
+            v <- vendor_age_stats(master_data)
+            if (is.null(v) || v$oldest <= VENDOR_STALE_DAYS) NULL
+            else tags$span(style="color:#8a6d3b;font-size:10px;margin-left:5px;",
+                           sprintf("(cap: vendor, %.0f–%.0f d old)",
+                                   v$newest, v$oldest))
+          }))
     )
   })
 
@@ -2355,8 +2374,18 @@ server <- function(input, output, session) {
           paste0("Ten-year two-stage model: growth held five years, then fading to ",
                  "terminal, discounted at a CAPM-derived WACC. Free cash flow is ",
                  "averaged across available filing years to smooth the capex cycle; ",
-                 "cash flow, debt and cash come from SEC XBRL filings. A DCF is ",
-                 "highly sensitive to its assumptions — see Methodology."))
+                 "cash flow, debt and cash come from SEC XBRL filings, and beta is ",
+                 "the live 252-day rolling estimate. The share count that turns ",
+                 "equity value into a per-share figure, and the market cap that ",
+                 "weights the WACC, come from the vendor cache instead. A DCF is ",
+                 "highly sensitive to its assumptions — see Methodology.")),
+      # This footnote used to name only the filing-sourced inputs, which read as
+      # a provenance statement for the whole model. It was selectively true: the
+      # headline is equity value DIVIDED BY shares_outstanding, a frozen vendor
+      # column, and the upside beside it compares that figure against a live
+      # price -- so the single most prominent number on the panel mixes today's
+      # close with a share count up to 68 days old.
+      vendor_note_div(master_data, "SHARES OUTSTANDING, MARKET CAP")
     )
   })
 
@@ -2393,6 +2422,16 @@ server <- function(input, output, session) {
         s$symbol[1]))) %>%
       formatPercentage(c("Margin","ROE"),1)
     dt
+  })
+
+  # MARKET CAP only: the Margin and ROE columns beside it are the partly
+  # SEC-re-sourced profit_margin and roe, and marking those stale would be
+  # the opposite error.
+  output$dd_comps_badge <- renderUI({
+    n <- vendor_stale_note(master_data)
+    if (is.null(n)) NULL
+    else tags$span(style="color:#FFD600;opacity:.85",
+                   paste0("MKT CAP · ", n))
   })
 
   # ── Macro ─────────────────────────────────────────────────────────────────
@@ -2608,7 +2647,13 @@ server <- function(input, output, session) {
                  "% cost of debt, ", round(LBO_TAX*100), "% tax, and capex plus working capital at ",
                  round(LBO_REINVEST*100), "% of EBITDA swept against the debt. Cells are equity IRR. ",
                  "The grid exists because the answer is dominated by two guesses — what you pay ",
-                 "and what you sell for — so a single IRR would be false precision."))
+                 "and what you sell for — so a single IRR would be false precision.")),
+      # Every other input here is a hardcoded constant, so market_cap and ebitda
+      # are the only live-data inputs the model has -- and both are frozen. The
+      # entry multiple, the debt, the sponsor cheque and every cell of the IRR
+      # grid derive from them, which makes this the purest frozen surface in the
+      # app: nothing on it is current.
+      vendor_note_div(master_data, "MARKET CAP, EBITDA")
     )
   })
 
@@ -2639,16 +2684,23 @@ server <- function(input, output, session) {
     tagList(
       div(style="font-size:13px;color:var(--text);line-height:1.6;margin-bottom:14px;",
         tags$strong(p$company), glue(" ({p$symbol}) — {tolower(p$sector)}. ",
-          "What follows is assembled from the same filings, prices and sentiment shown on this ",
-          "page. It is a summary of the evidence, not advice, and it deliberately argues both ",
-          "directions.")),
+          "What follows is assembled from the same filings, prices, vendor fundamentals and ",
+          "sentiment shown on this page, and inherits their vintages. It is a summary of the ",
+          "evidence, not advice, and it deliberately argues both directions.")),
       div(style="display:flex;gap:26px;flex-wrap:wrap;",
         side("What supports the name", p$supports, "#00C853"),
         side("What argues against it", p$against,  "#FF3D00")),
       div(style="color:#555;font-size:10px;font-family:IBM Plex Mono;margin-top:14px;line-height:1.6;",
           paste0("Generated from this page's data at render time — no forecast, no price target, ",
                  "and no position. Every figure above appears in the panels on this page; read ",
-                 "the linked filings and stories before relying on any of it."))
+                 "the linked filings and stories before relying on any of it.")),
+      # Prose is the hardest form for a reader to discount, and this panel puts
+      # frozen numbers into sentences: the EV/EBITDA bullet compares a stale
+      # multiple against a sector median taken over the same stale column, and
+      # the SIGN of that comparison decides whether the bullet is filed under
+      # "supports" or "argues against". Stale data picks the side of the
+      # argument, so the vintage belongs here more than anywhere.
+      vendor_note_div(master_data, "EV/EBITDA, AND THE DCF AND LBO FIGURES QUOTED ABOVE")
     )
   })
 
@@ -3536,8 +3588,16 @@ server <- function(input, output, session) {
         tags$thead(tags$tr(tags$th("Source"), tags$th("Provides"), tags$th("Cadence"))),
         tags$tbody(
           tags$tr(tags$td("Yahoo Finance"), tags$td("Prices, market cap, P/E, EPS"), tags$td("Every run, all 195")),
-          tags$tr(tags$td("Alpha Vantage OVERVIEW"), tags$td("P/B, ROE, margins, growth, analyst ratings, sector"), tags$td("22 tickers/run — free tier is 25 calls/day")),
-          tags$tr(tags$td("Alpha Vantage NEWS"), tags$td("Market news with sentiment scoring"), tags$td("Daily")),
+          # Both of these rows described a cadence that stopped on 2026-10-06,
+          # when Alpha Vantage moved the endpoints to a paid plan. A table of
+          # data sources that advertises a refresh rate no longer being met is
+          # a stale claim in the one place a reader goes to check provenance.
+          tags$tr(tags$td("Alpha Vantage OVERVIEW"),
+                  tags$td(HTML("Market cap, EBITDA, EV/EBITDA, share count, analyst ratings, forward P/E, PEG &mdash; <b>frozen</b>")),
+                  tags$td(HTML("<b>Stopped 2026-10-06</b> — moved to a paid plan. P/E, P/B, ROE and margin were re-sourced from SEC filings; the fields listed here were not, and are served from the last cache."))),
+          tags$tr(tags$td("Alpha Vantage NEWS"),
+                  tags$td(HTML("Market news with sentiment scoring &mdash; <b>frozen</b>")),
+                  tags$td(HTML("<b>Stopped 2026-10-06</b> — moved to a paid plan. The Market News Feed states its own age; live headlines come from RSS."))),
           tags$tr(tags$td("Alpha Vantage EARNINGS"), tags$td("Earnings dates and EPS estimates"), tags$td("Cached 3 days")),
           tags$tr(tags$td("FRED"), tags$td("Treasury curve, CPI, unemployment, Fed funds"), tags$td("Daily")),
           tags$tr(tags$td("ApeWisdom"), tags$td("r/wallstreetbets mentions and rank deltas"), tags$td("Daily")),
@@ -3546,6 +3606,23 @@ server <- function(input, output, session) {
           tags$tr(tags$td("SEC EDGAR (submissions)"), tags$td("Recent filings, insider Form 4 counts, M&A flags"), tags$td("Daily, whole universe")),
           tags$tr(tags$td("Yahoo Finance RSS"), tags$td("Per-ticker company news"), tags$td("Daily, whole universe")),
           tags$tr(tags$td("Polygon.io"), tags$td("Options positioning, share counts"), tags$td("See limitations")))),
+      # Said once here rather than badged on a dozen panels. analyst_score is
+      # a tenth of quality_gate, which feeds value, quality and safety, so the
+      # frozen analyst votes reach the radar, the sector heatmap and the master
+      # score as a small indirect leg. A per-panel marker on a 10% component of
+      # a derived score would be arbitrary -- it would fire on the radar and not
+      # on the dozen other panels carrying the identical leg -- and it would
+      # spend the marker's meaning, which is reserved for a number the reader
+      # reads directly off the vendor.
+      tags$p(style="color:#8a6d3b;font-size:11px;line-height:1.6;margin-top:10px;",
+             HTML(paste0("<b>Where the frozen fields still reach the scores.</b> ",
+                         "The five analyst vote counts are part of the Alpha Vantage ",
+                         "cache above and carry its age. They make up a tenth of the ",
+                         "quality gate, which in turn feeds the value, quality and ",
+                         "safety scores, so the radar, the sector heatmap and the ",
+                         "master score all inherit a small frozen component. The ",
+                         "valuation ratios themselves — P/E, P/B, ROE and margin — ",
+                         "do not: those are read from SEC filings."))),
 
       tags$h2("Valuation model"),
       tags$p("The Deep Dive carries a discounted cash flow estimate. It is a ",
