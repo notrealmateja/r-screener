@@ -242,7 +242,7 @@ Rscript -e 'install.packages(c("quantmod","tidyquant","dplyr","tidyr","readr","h
 ```bash
 export AV_KEY=your_alpha_vantage_key
 export POLY_KEY=your_polygon_key
-Rscript -e 'SOURCED_BY_MASTER <- TRUE; for (f in list.files("R", full.names=TRUE)) source(f); fund <- run_module1(); run_module2(fund$symbol); run_module_polygon(fund$symbol); run_module3(fund$symbol); run_module4()'
+Rscript -e 'SOURCED_BY_MASTER <- TRUE; for (f in list.files("R", pattern="[.]R$", full.names=TRUE)) source(f); fund <- run_module1(); run_module2(fund$symbol); run_module_polygon(fund$symbol); run_module3(fund$symbol); run_module4()'
 ```
 
 ```bash
