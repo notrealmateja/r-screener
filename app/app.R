@@ -2020,6 +2020,15 @@ server <- function(input, output, session) {
   output$squeeze_top <- renderDT({
     if (is.null(master_data)) return(datatable(data.frame()))
     master_data %>% filter(squeeze_tier=="High Conviction") %>%
+      # Sort before taking the head, or this is not a top-eight panel. The
+      # file is written in alphabetical order, so without this it showed the
+      # first eight High Conviction names BY SYMBOL and labelled them the top:
+      # on 2026-11-04 that was ANAB, ARHS, CAVA, CELH, CFR, DKS, DUOL, ETSY,
+      # while seven of the eight genuinely strongest -- HALO, LOVE, OLLI,
+      # PTGX, TROW, UPST, WING -- were not on the page at all. ordering=FALSE
+      # below means the reader cannot re-sort it either, so the order this
+      # produces is the only one they ever see.
+      arrange(desc(squeeze_score)) %>%
       select(Symbol=symbol, Score=squeeze_score, `Short Float`=short_float_pct, Trend=short_trend) %>%
       head(8) %>%
       datatable(rownames=FALSE, selection="none", callback=dd_click(),

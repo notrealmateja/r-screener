@@ -94,14 +94,18 @@ if (have_pkgs("dplyr", "tibble", "readr", "glue", "httr", "jsonlite")) {
     expect_true(any(sq$squeeze_score >= 60))
   })
 
-  test_that("the squeeze multiplier is live", {
+  test_that("the squeeze bonus is live", {
     skip_if_not(exists("build_squeeze_score"), "R/03_data.R not sourced")
     skip_if(is.null(sq), "build_squeeze_score returned NULL")
     # It tests fundamentals_improving, so stubbing the flags killed it too.
-    expect_true(any(sq$squeeze_mult > 1))
-    boosted <- sq[sq$squeeze_mult > 1, ]
+    # Was squeeze_mult, a 1.20 multiplier, until it was found clipping nine
+    # names to a tie at 100 -- see test-squeeze-ceiling.R.
+    expect_true(any(sq$squeeze_bonus > 0))
+    boosted <- sq[sq$squeeze_bonus > 0, ]
     expect_true(all(boosted$short_percent_float > 0.10))
     expect_true(all(boosted$fundamentals_improving))
+    # And it has to actually move the score, or it is decoration.
+    expect_true(all(boosted$squeeze_score > boosted$squeeze_score_raw))
   })
 
   test_that("absent fundamentals stop the build instead of capping the score", {

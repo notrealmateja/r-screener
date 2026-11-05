@@ -999,9 +999,28 @@ build_squeeze_score <- function(short_data, fund_data) {
       fi_score   = ifelse(is.na(improvement_count), 0, (improvement_count/3)*100),
       st_score   = case_when(short_trend=="Decreasing"~80, short_trend=="Increasing"~20, TRUE~40),
       squeeze_score_raw = sf_score*0.25 + dtc_score*0.20 + fi_score*0.40 + st_score*0.15,
-      squeeze_mult  = ifelse(!is.na(short_percent_float) & short_percent_float>0.10 &
-                               !is.na(fundamentals_improving) & fundamentals_improving, 1.20, 1.0),
-      squeeze_score = pmin(squeeze_score_raw * squeeze_mult, 100),
+      # A confirmed setup -- more than 10% of float short AND fundamentals
+      # improving -- earns a bonus. It used to be a 1.20 multiplier applied to
+      # the composite, which overflowed the scale the composite is scored on.
+      # The four terms cap squeeze_score_raw at 97, because st_score tops out
+      # at 80, so everything from raw 83.34 upward multiplied past 100 and was
+      # clipped back to it by pmin.
+      #
+      # On 2026-11-04 that clipped nine names to exactly 100.00 -- CAVA, HALO,
+      # LOVE, OLLI, PTGX, TROW, UPST, WING, WLDN -- erasing 11.92 points of
+      # real spread between them (UPST at 112.13 down to CAVA at 100.21). The
+      # top of the ranking became a nine-way tie, and because ties keep row
+      # order and master_scored.csv is written alphabetically, the WEAKEST of
+      # the nine sorted first and was presented as the strongest name.
+      #
+      # The bonus now moves a name a fifth of the way from where it already
+      # stands to the top of the scale, rather than scaling it past the end.
+      # That is bounded by 100 by construction, so there is no clip and
+      # nothing to tie, and it is strictly increasing in squeeze_score_raw, so
+      # the order the four components produced always survives into the score.
+      squeeze_bonus = ifelse(!is.na(short_percent_float) & short_percent_float>0.10 &
+                               !is.na(fundamentals_improving) & fundamentals_improving, 0.20, 0),
+      squeeze_score = squeeze_score_raw + (100 - squeeze_score_raw) * squeeze_bonus,
       squeeze_tier  = case_when(
         squeeze_score>=80 ~ "High Conviction",
         squeeze_score>=60 ~ "Watch List",
