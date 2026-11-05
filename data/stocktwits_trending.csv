@@ -1,31 +1,31 @@
 symbol,title,watchlist_count,st_rank,trending_score,messages,bullish,bearish,sentiment_label,fetched_at
-SMCI,Super Micro Computer Inc,94166,1,14.3441,4,0,0,Neutral,2026-11-04T20:02:37Z
-TRUMP.X,Trump For President,12820,2,12.8801,2,0,0,Neutral,2026-11-04T20:02:37Z
-BB,BlackBerry Ltd,151490,3,12.0465,3,2,0,Very Bullish,2026-11-04T20:02:37Z
-BCRX,Biocryst Pharmaceuticals Inc.,37025,4,9.98255,0,0,0,Neutral,2026-11-04T20:02:37Z
-VST,Vistra Corp,18553,5,9.73616,0,0,0,Neutral,2026-11-04T20:02:37Z
-AAPL,Apple Inc,1000217,6,8.71375,1,0,0,Neutral,2026-11-04T20:02:37Z
-STRL,"Sterling Construction Company, Inc.",3460,7,8.61119,0,0,0,Neutral,2026-11-04T20:02:37Z
-FSLR,First Solar Inc,35881,8,8.49942,0,0,0,Neutral,2026-11-04T20:02:37Z
-AMD,Advanced Micro Devices Inc,567242,9,8.42531,5,1,1,Neutral,2026-11-04T20:02:37Z
-COHR,Coherent Corp,11549,10,8.35367,0,0,0,Neutral,2026-11-04T20:02:37Z
-MRVL,Marvell Technology Inc,54761,11,7.97946,0,0,0,Neutral,2026-11-04T20:02:37Z
-BTC.X,Bitcoin,685918,12,7.83723,1,0,1,Very Bearish,2026-11-04T20:02:37Z
-VRT,Vertiv Holdings Co,21230,13,7.80498,0,0,0,Neutral,2026-11-04T20:02:37Z
-KURA,Kura Oncology Inc,3963,14,7.80041,0,0,0,Neutral,2026-11-04T20:02:37Z
-SNDX,Syndax Pharmaceuticals Inc,3831,15,7.56745,1,0,0,Neutral,2026-11-04T20:02:37Z
-OUST,Ouster Inc - Ordinary Shares - Class A,17748,16,7.31001,0,0,0,Neutral,2026-11-04T20:02:37Z
-CRDO,Credo Technology Group Holding Ltd,14085,17,6.94075,0,0,0,Neutral,2026-11-04T20:02:37Z
-SOXX,iShares Semiconductor ETF,11625,18,6.76562,0,0,0,Neutral,2026-11-04T20:02:37Z
-SMCX,Defiance Daily Target 2X Long SMCI ETF,3603,19,6.696,0,0,0,Neutral,2026-11-04T20:02:37Z
-QCOM,"Qualcomm, Inc.",78143,20,6.48658,0,0,0,Neutral,2026-11-04T20:02:37Z
-TSLA,Tesla Inc,1072149,21,6.42416,6,1,1,Neutral,2026-11-04T20:02:37Z
-MCD,McDonald's Corp,42891,22,6.2867,0,0,0,Neutral,2026-11-04T20:02:37Z
-DUOL,Duolingo Inc,9558,23,5.909,0,0,0,Neutral,2026-11-04T20:02:37Z
-MU,Micron Technology Inc,221162,24,5.73435,4,1,1,Neutral,2026-11-04T20:02:37Z
-SNDK,Sandisk Corp,38025,25,5.66834,1,0,0,Neutral,2026-11-04T20:02:37Z
-FSLY,Fastly Inc,36204,26,5.58952,1,1,0,Very Bullish,2026-11-04T20:02:37Z
-HUT,Hut 8 Corp,29975,27,5.58802,0,0,0,Neutral,2026-11-04T20:02:37Z
-RIOT,Riot Platforms Inc,129964,28,5.54083,0,0,0,Neutral,2026-11-04T20:02:37Z
-UMAC,Unusual Machines Inc,12562,29,5.44221,0,0,0,Neutral,2026-11-04T20:02:37Z
-ARM,Arm Holdings Plc.,34152,30,5.37569,0,0,0,Neutral,2026-11-04T20:02:37Z
+MU,Micron Technology Inc,221228,1,20.7198,8,4,1,Very Bullish,2026-11-05T01:47:19Z
+NVDA,NVIDIA Corp,674706,2,19.3788,0,0,0,Neutral,2026-11-05T01:47:19Z
+NBIS,Nebius Group N.V. ,55699,3,16.8581,5,1,0,Very Bullish,2026-11-05T01:47:19Z
+SNDK,Sandisk Corp,38055,4,15.9905,4,2,0,Very Bullish,2026-11-05T01:47:19Z
+APP,Applovin Corp,25790,5,12.4133,1,1,0,Very Bullish,2026-11-05T01:47:19Z
+DRAM,Roundhill ETF Trust - Roundhill Memory ETF,15127,6,10.4252,0,0,0,Neutral,2026-11-05T01:47:19Z
+SMCI,Super Micro Computer Inc,94196,7,10.2676,1,1,0,Very Bullish,2026-11-05T01:47:19Z
+SOXX,iShares Semiconductor ETF,11637,8,9.32762,0,0,0,Neutral,2026-11-05T01:47:19Z
+GLD,SPDR Gold Shares ETF,96923,9,9.28627,2,1,0,Very Bullish,2026-11-05T01:47:19Z
+IREN,IREN Limited,53986,10,8.92443,0,0,0,Neutral,2026-11-05T01:47:19Z
+MRVL,Marvell Technology Inc,54796,11,8.74738,0,0,0,Neutral,2026-11-05T01:47:19Z
+IWM,iShares Russell 2000 ETF,50182,12,8.32666,0,0,0,Neutral,2026-11-05T01:47:19Z
+BCRX,Biocryst Pharmaceuticals Inc.,37027,13,8.32642,0,0,0,Neutral,2026-11-05T01:47:19Z
+QCOM,"Qualcomm, Inc.",78219,14,8.2391,0,0,0,Neutral,2026-11-05T01:47:19Z
+SOXL,Direxion Daily Semiconductor Bull 3X Shares,42043,15,8.17874,1,0,0,Neutral,2026-11-05T01:47:19Z
+SNAP,Snap Inc,234437,16,8.06209,2,0,0,Neutral,2026-11-05T01:47:19Z
+SMH,VanEck Semiconductor ETF,19566,17,7.96438,0,0,0,Neutral,2026-11-05T01:47:19Z
+SOXS,Direxion Daily Semiconductor Bear 3X ETF,19134,18,7.48991,0,0,0,Neutral,2026-11-05T01:47:19Z
+DDOG,Datadog Inc,26005,19,7.19452,0,0,0,Neutral,2026-11-05T01:47:19Z
+SEZL,Sezzle Inc.,4518,20,6.9779,0,0,0,Neutral,2026-11-05T01:47:19Z
+VST,Vistra Corp,18585,21,6.93348,1,0,0,Neutral,2026-11-05T01:47:19Z
+ADMA,Adma Biologics Inc,20633,22,6.73425,0,0,0,Neutral,2026-11-05T01:47:19Z
+HUT,Hut 8 Corp,29978,23,6.72974,0,0,0,Neutral,2026-11-05T01:47:19Z
+CAPR,Capricor Therapeutics Inc,33960,24,6.6956,0,0,0,Neutral,2026-11-05T01:47:19Z
+QQQ,Invesco QQQ Trust Series 1,282524,25,6.54584,2,2,0,Very Bullish,2026-11-05T01:47:19Z
+FIG,Figma,16882,26,6.29917,0,0,0,Neutral,2026-11-05T01:47:19Z
+COHR,Coherent Corp,11621,27,6.28061,0,0,0,Neutral,2026-11-05T01:47:19Z
+DUOL,Duolingo Inc,9579,28,6.25763,0,0,0,Neutral,2026-11-05T01:47:19Z
+GLXY,Galaxy Digital Inc. - Ordinary Shares - Class A,18914,29,6.16281,0,0,0,Neutral,2026-11-05T01:47:19Z
+RDW,Redwire Corp,24210,30,6.08472,0,0,0,Neutral,2026-11-05T01:47:19Z
