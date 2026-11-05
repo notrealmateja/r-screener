@@ -388,7 +388,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-11-02,AFRM,61.6,Neutral,63,195
 2026-11-03,AFRM,44,Weak,118,195
 2026-11-04,AFRM,55.6,Neutral,79,195
-2026-11-05,AFRM,56.1,Neutral,78,195
+2026-11-05,AFRM,56.2,Neutral,77,195
 2026-08-05,AI,34.5,Underperform,154,195
 2026-08-07,AI,21.1,Avoid,186,195
 2026-08-10,AI,23.1,Avoid,185,195
@@ -7582,7 +7582,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-11-02,NET,43.5,Weak,119,195
 2026-11-03,NET,46.2,Neutral,111,195
 2026-11-04,NET,41.4,Weak,131,195
-2026-11-05,NET,38.3,Weak,132,195
+2026-11-05,NET,38.3,Weak,131,195
 2026-05-05,NFLX,45.4,Hold,22,50
 2026-06-01,NFLX,41.6,Underperform,48,50
 2026-06-02,NFLX,41.8,Underperform,46,50
@@ -8700,7 +8700,7 @@ date,symbol,master_score,rating,rank,n_universe
 2026-11-02,PINS,41.2,Weak,124,195
 2026-11-03,PINS,41.4,Weak,124,195
 2026-11-04,PINS,45.2,Neutral,112,195
-2026-11-05,PINS,38.4,Weak,131,195
+2026-11-05,PINS,38.3,Weak,131,195
 2026-08-05,PLNT,21.9,Avoid,186,195
 2026-08-07,PLNT,21.5,Avoid,185,195
 2026-08-10,PLNT,23.4,Avoid,183,195
