@@ -65,6 +65,9 @@ html, body { background:var(--bg); color:var(--text); font-family:var(--sans);
   letter-spacing:0.5px;
 }
 .ticker-scroll-wrap { overflow:hidden; flex:1; }
+/* The strip says LIVE. When quotes are being served from a backed-off cache
+   they can be up to five minutes old, so the strip has to stop saying it. */
+.ticker-label.delayed { background:#8a6d3b !important; color:#0D0D0D !important; }
 .ticker-content {
   display:flex; gap:0; white-space:nowrap;
   animation:ticker-scroll 60s linear infinite;
@@ -1467,19 +1470,34 @@ ui <- fluidPage(
 
   # ── JS ────────────────────────────────────────────────────────────────────
   tags$script(HTML("
-    function showPane(name) {
+    function showPane(name, opts) {
       document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
       document.querySelectorAll('.topbar-nav-item').forEach(n => n.classList.remove('active'));
       document.querySelectorAll('.mobile-nav-item').forEach(n => n.classList.remove('active'));
       // The stream lives on the Overview pane now. Panes are hidden with CSS
       // rather than unmounted, so without this the video keeps playing — and
       // keeps making sound — while the viewer is on another tab.
+      //
+      // The frame is DETACHED rather than pointed at about:blank. Assigning
+      // iframe.src navigates the frame, and a frame navigation pushes an entry
+      // onto the PARENT page's session history. That cost nothing while the
+      // app ignored history, but once panes became addressable every move cost
+      // two entries, and the viewer's first Back undid only the invisible one
+      // and looked broken. Removing the element destroys its browsing context,
+      // which stops the audio just as well and writes no history at all.
       if (name !== 'overview') {
         var f = document.querySelector('#pane-overview iframe');
-        if (f && f.src && f.src !== 'about:blank') { f.dataset.src = f.src; f.src = 'about:blank'; }
+        if (f) { window.__edgeStream = {node: f, parent: f.parentNode, next: f.nextSibling}; f.remove(); }
       } else {
-        var f2 = document.querySelector('#pane-overview iframe');
-        if (f2 && f2.src === 'about:blank' && f2.dataset.src) f2.src = f2.dataset.src;
+        var st = window.__edgeStream;
+        // Shiny re-renders this panel on a timer, so it may have built a fresh
+        // frame while the stashed one was away. Putting the old node back then
+        // would show two players, one of them dead.
+        if (st && st.parent && st.parent.isConnected && !st.parent.querySelector('iframe')) {
+          var ref = (st.next && st.next.parentNode === st.parent) ? st.next : null;
+          st.parent.insertBefore(st.node, ref);
+        }
+        window.__edgeStream = null;
       }
       var pane = document.getElementById('pane-' + name);
       pane.classList.add('active');
@@ -1499,6 +1517,121 @@ ui <- fluidPage(
       // Scroll to top on mobile
       window.scrollTo(0, 0);
       setTimeout(function(){ window.dispatchEvent(new Event('resize')); }, 80);
+      // A move the viewer made gets a history entry. A move the URL asked for
+      // does not, or restoring a link would push a duplicate over it and make
+      // the first Back a no-op.
+      if (!opts || !opts.fromUrl) syncUrl(true);
+    }
+
+    // ── URL routing ────────────────────────────────────────────────────────
+    // Posit Connect Cloud 404s any path below the app root, so a real
+    // /deepdive URL cannot survive a refresh: the request is answered by
+    // Connect and never reaches Shiny at all. A query string does survive,
+    // because the path stays at the root -- the reload returns the app, and
+    // is rebuilt from ?pane=. Panes are plain divs that are only hidden with
+    // CSS, never unmounted, so the restore can run as soon as the DOM is
+    // ready without waiting for Shiny to connect.
+    var PANE_DEFAULT = 'overview';
+
+    function paneExists(name) {
+      return !!(name && /^[a-z]+$/.test(name) && document.getElementById('pane-' + name));
+    }
+    function activePane() {
+      var el = document.querySelector('.tab-pane.active');
+      return el ? el.id.replace(/^pane-/, '') : PANE_DEFAULT;
+    }
+    function currentTicker() {
+      var el = document.getElementById('dd_ticker');
+      return (el && el.value) ? el.value : null;
+    }
+    function urlFor(pane, ticker) {
+      var q = new URLSearchParams();
+      q.set('pane', pane);
+      // The ticker only means anything on Deep Dive. Carrying it everywhere
+      // would put a stock in the URL of pages that do not show one.
+      if (pane === 'deepdive' && ticker) q.set('t', ticker);
+      return location.pathname + '?' + q.toString();
+    }
+    function syncUrl(push) {
+      var url = urlFor(activePane(), currentTicker());
+      if (url === location.pathname + location.search) return;  // nothing moved
+      try {
+        var st = {pane: activePane(), t: currentTicker()};
+        if (push) history.pushState(st, '', url); else history.replaceState(st, '', url);
+      } catch (e) {
+        // Some embeds forbid history writes. Navigation itself still works;
+        // only the address bar stops following along.
+      }
+    }
+    function applyTicker(sym) {
+      if (!sym) return;
+      var el = document.getElementById('dd_ticker');
+      if (!el || !el.selectize) return;          // not built yet: the server restores it
+      if (!(sym in el.selectize.options)) return; // unknown symbol clears the box
+      if (el.selectize.getValue() !== sym) el.selectize.setValue(sym, false);
+    }
+    function restoreFromUrl() {
+      var q = new URLSearchParams(location.search);
+      var pane = q.get('pane');
+      // An unknown or malformed ?pane= falls back rather than throwing, so a
+      // mangled link still opens the app instead of a blank frame.
+      showPane(paneExists(pane) ? pane : PANE_DEFAULT, {fromUrl: true});
+      // The stock has to move with the pane. The server-side restore fires
+      // once per session, so on Back and Forward it is already spent -- without
+      // this the address bar says one stock and the screen shows another, for
+      // the rest of the session.
+      applyTicker(q.get('t'));
+    }
+
+    // Shiny mounts the TV player asynchronously. A deep link that opens on any
+    // other pane therefore has NO iframe for showPane to park, and the player
+    // then arrives inside a hidden Overview and plays -- with sound -- unseen.
+    // This parks any frame that appears while Overview is not the active pane.
+    (function watchStream() {
+      var host = document.getElementById('pane-overview');
+      if (!host) { document.addEventListener('DOMContentLoaded', watchStream); return; }
+      new MutationObserver(function() {
+        if (activePane() === 'overview') return;
+        var f = host.querySelector('iframe');
+        if (f) { window.__edgeStream = {node: f, parent: f.parentNode, next: f.nextSibling}; f.remove(); }
+      }).observe(host, {childList: true, subtree: true});
+    })();
+    window.addEventListener('popstate', restoreFromUrl);
+    if (document.readyState === 'loading')
+      document.addEventListener('DOMContentLoaded', restoreFromUrl);
+    else
+      restoreFromUrl();
+    // The ticker is restored server-side, so the URL is refreshed from there
+    // once the selector actually holds the new value.
+    if (window.Shiny && Shiny.addCustomMessageHandler) {
+      Shiny.addCustomMessageHandler('edgeSyncUrl', function(_) { syncUrl(false); });
+      // Prices are written INTO the existing tape nodes. Re-rendering the tape
+      // would restart its 60s scroll animation from 0%, which at a 10s poll
+      // snaps the marquee back six times a cycle and leaves five sixths of the
+      // top 25 permanently off screen. Writing textContent does not touch it.
+      Shiny.addCustomMessageHandler('edgeTape', function(d) {
+        if (!d || !d.sym) return;
+        var syms = [].concat(d.sym), ps = [].concat(d.price), cs = [].concat(d.chg);
+        var map = {};
+        for (var i = 0; i < syms.length; i++) map[syms[i]] = {p: ps[i], c: Number(cs[i])};
+        document.querySelectorAll('.ticker-item').forEach(function(el) {
+          var q = map[el.dataset.sym];
+          if (!q) return;
+          var pe = el.querySelector('.ticker-price');
+          var ce = el.querySelector('.ticker-up, .ticker-dn');
+          if (pe) pe.textContent = '$' + q.p;
+          if (ce && isFinite(q.c)) {
+            var up = q.c >= 0;
+            ce.className = up ? 'ticker-up' : 'ticker-dn';
+            ce.textContent = (up ? '▲' : '▼') + ' ' + Math.abs(q.c).toFixed(2) + '%';
+          }
+        });
+        var lab = document.querySelector('.ticker-label');
+        if (lab) {
+          lab.textContent = d.stale ? '⏸ DELAYED' : '▶ LIVE';
+          lab.classList.toggle('delayed', !!d.stale);
+        }
+      });
     }
     // Opens a stock in Deep Dive from any table row. Setting the value through
     // selectize is what notifies Shiny; assigning to .value alone does not.
@@ -1648,15 +1781,75 @@ server <- function(input, output, session) {
   # Absent input (before the first client message) counts as visible.
   tab_is_visible <- function() !identical(input$tab_visible, FALSE)
 
+  # ── URL routing (server half) ───────────────────────────────────────────
+  # The pane is restored in the browser, because panes are static divs and do
+  # not need Shiny. The ticker cannot be: writing a value into selectize before
+  # it has finished initialising is silently dropped -- the same failure mode
+  # the openDeepDive helper already documents -- so the restore goes through
+  # the server, which only talks to the input once the client is connected.
+  observeEvent(session$clientData$url_search, once = TRUE, {
+    t <- route_ticker(session$clientData$url_search,
+                      if (is.null(master_data)) NULL else master_data$symbol)
+    if (is.null(t)) return()
+    # Do not overwrite a choice the viewer has already made. The pane restore
+    # is client-side and instant, so the selector is usable well before this
+    # message arrives; applying the URL unconditionally would yank the stock
+    # out from under someone who had already picked another during the flush.
+    cur  <- isolate(input$dd_ticker)
+    dflt <- if (is.null(master_data)) NULL else sort(master_data$symbol)[1]
+    if (!is.null(cur) && nzchar(cur) && !identical(cur, dflt)) return()
+    updateSelectInput(session, "dd_ticker", selected = t)
+  })
+
+  # Keep the URL in step with the stock on screen, so a refresh or a pasted
+  # link reopens the same one. Replace rather than push: changing stock refines
+  # the current view, and pushing an entry per change would fill the history
+  # with near-identical states and make Back useless.
+  observeEvent(input$dd_ticker, {
+    session$sendCustomMessage("edgeSyncUrl", list())
+  }, ignoreInit = TRUE)
+
   live_quotes <- reactive({
-    if (tab_is_visible()) invalidateLater(60000)
+    if (tab_is_visible()) invalidateLater(quote_poll_interval())
     if (is.null(master_data)) return(NULL)
     top_syms <- master_data %>%
       arrange(desc(master_score)) %>%
       head(25) %>%
       pull(symbol)
-    tryCatch({
-      q <- getQuote(top_syms)
+
+    # Rows rebuilt from a cache entry. Absolute change is not cached because
+    # the tape renders only the percentage; the column stays so that a cached
+    # tape and a fetched one have the same shape.
+    as_rows <- function(hits) {
+      if (!length(hits)) return(NULL)
+      bind_rows(lapply(names(hits), function(s) {
+        e  <- hits[[s]]
+        tm <- suppressWarnings(as.POSIXct(e$time))
+        tibble(symbol     = s,
+               price      = as.numeric(e$price),
+               change     = NA_real_,
+               change_pct = as.numeric(e$chg),
+               qtime      = if (length(tm) == 1 && !is.na(tm)) tm else Sys.time())
+      })) %>% filter(!is.na(price), price > 0)
+    }
+
+    # Read the shared cache before reaching upstream. Every session polls on the
+    # same pacing, so the second and later viewers inside one interval find the
+    # tape already fetched and make no request at all. Upstream load stops
+    # scaling with the size of the audience, and that is what pays for the
+    # faster rate: at 10s with the cache, a busy app asks Yahoo for less than it
+    # did at 60s without it.
+    cached <- quote_cache_get_many(top_syms)
+    if (!length(cached$missing)) return(as_rows(cached$hits))
+
+    # A refusal backs every session off at once. Serving the cached tape a
+    # little past its interval beats hammering a feed that is already saying no,
+    # and beats the static-CSV fallback below it, which is a whole day old.
+    if (quote_is_blocked())
+      return(as_rows(quote_cache_get_many(top_syms, ttl = QUOTE_POLL_SLOW / 1000)$hits))
+
+    fetched <- tryCatch({
+      q <- getQuote(cached$missing)
       # The trade time is carried INTO the tibble so it survives the filter
       # below. Passing q$`Trade Time` separately meant a pre-filter vector met
       # post-filter symbols, and one dropped row shifted every timestamp after
@@ -1668,49 +1861,91 @@ server <- function(input, output, session) {
         change_pct = as.numeric(q$`% Change`),
         qtime      = if ("Trade Time" %in% names(q)) q$`Trade Time` else Sys.time()
       ) %>% filter(!is.na(price), price > 0)
+      # A 200 response whose fields are all empty is a refusal wearing a success
+      # costume -- it throws nothing. Treated as success it would clear the
+      # backoff and leave the app asking at full rate into a feed that is
+      # already refusing, so it is raised into the handler below instead.
+      if (!nrow(out)) stop("getQuote returned no usable rows")
       # Share them, so opening one of these in Deep Dive costs no request.
       quote_cache_put(out$symbol, out$price, out$change_pct, out$qtime)
+      # basket = TRUE: this is the 25-symbol poll, so it is entitled to answer
+      # the process-wide question of whether the market traded today. A single
+      # name is not -- see quote_note_success in global.R.
+      quote_note_success(out$qtime, basket = TRUE)
       out
     }, error = function(e) {
-      message("getQuote failed: ", e$message)
+      wait <- quote_note_failure()
+      message("getQuote failed (backing off ", wait, "s): ", conditionMessage(e))
       NULL
     })
+    # Back into score order. bind_rows puts every cache hit ahead of every
+    # fetched row, so with the cache partly warm the tape would reshuffle
+    # between ticks instead of reading top-down by master_score.
+    rows <- bind_rows(as_rows(cached$hits), fetched)
+    if (!is.null(rows) && nrow(rows)) rows <- rows[order(match(rows$symbol, top_syms)), ]
+    rows
+  })
+
+  # The tape is built ONCE and then patched in place. It must not be re-rendered
+  # on every quote: .ticker-content carries a 60s scroll animation, and
+  # replacing the node restarts that animation from 0%. At the old 60s poll the
+  # replacement landed on the loop point and was invisible; at 10s it would snap
+  # the tape back six times a cycle and only the first sixth would ever be seen.
+  # So this renderUI depends on the SYMBOL LIST only -- which comes from the
+  # nightly CSV and does not change within a session -- and prices arrive
+  # separately as a patch. Initial values come from the stored close, so the
+  # tape is never blank while the first quote is in flight.
+  tape_seed <- reactive({
+    if (is.null(master_data)) return(NULL)
+    master_data %>%
+      filter(!is.na(close), !is.na(changesPercentage)) %>%
+      arrange(desc(master_score)) %>%
+      head(25) %>%
+      select(symbol, close, changesPercentage)
   })
 
   output$ticker_tape <- renderUI({
-    lq <- live_quotes()
+    seed <- tape_seed()
+    if (is.null(seed) || !nrow(seed))
+      return(div(class="ticker-content",
+        div(class="ticker-item",
+          span(class="ticker-sym","EDGESCREENER"),
+          span(class="ticker-price","Run pipeline to load live data"))))
 
     make_item <- function(sym, price, chg) {
       cls <- if (chg >= 0) "ticker-up" else "ticker-dn"
       arrow <- if (chg >= 0) "▲" else "▼"
       # Clicking a tape entry opens that stock in Deep Dive, same as a table row.
-      div(class="ticker-item", onclick=sprintf("openDeepDive('%s')", sym),
+      # data-sym is what the price patch addresses; the items are duplicated for
+      # the seamless loop, so each symbol matches twice and both get updated.
+      div(class="ticker-item", `data-sym`=sym,
+          onclick=sprintf("openDeepDive('%s')", sym),
           title=paste("Open", sym, "in Deep Dive"),
         span(class="ticker-sym", sym),
         span(class="ticker-price", paste0("$", formatC(price, format="f", digits=2, big.mark=","))),
         span(class=cls, paste0(arrow, " ", round(abs(chg), 2), "%"))
       )
     }
-
-    if (!is.null(lq) && nrow(lq) > 0) {
-      # Live data available
-      items <- mapply(make_item, lq$symbol, lq$price, lq$change_pct, SIMPLIFY=FALSE)
-    } else if (!is.null(master_data)) {
-      # Fallback to static CSV data
-      static <- master_data %>%
-        filter(!is.na(close), !is.na(changesPercentage)) %>%
-        arrange(desc(abs(changesPercentage))) %>%
-        head(25)
-      items <- mapply(make_item, static$symbol, static$close, static$changesPercentage, SIMPLIFY=FALSE)
-    } else {
-      return(div(class="ticker-content",
-        div(class="ticker-item",
-          span(class="ticker-sym","EDGESCREENER"),
-          span(class="ticker-price","Run pipeline to load live data"))))
-    }
-
+    items <- mapply(make_item, seed$symbol, seed$close, seed$changesPercentage,
+                    SIMPLIFY = FALSE)
     # Duplicate items for seamless infinite scroll
     div(class="ticker-content", do.call(tagList, c(items, items)))
+  })
+
+  # Prices, pushed as data rather than markup. Also carries whether the quotes
+  # are being served from a backed-off cache, because the strip beside them
+  # literally says LIVE and must stop saying it when that is no longer true.
+  observe({
+    lq <- live_quotes()
+    if (is.null(lq) || !nrow(lq)) return()
+    session$sendCustomMessage("edgeTape", list(
+      sym   = as.character(lq$symbol),
+      price = vapply(lq$price, function(x)
+                formatC(x, format = "f", digits = 2, big.mark = ","), character(1),
+                USE.NAMES = FALSE),
+      chg   = as.numeric(lq$change_pct),
+      stale = isTRUE(quote_is_blocked())
+    ))
   })
 
   # ── KPIs ─────────────────────────────────────────────────────────────────
@@ -2113,25 +2348,51 @@ server <- function(input, output, session) {
   })
 
   # The tape polls only the top 25 by score, so the stock on screen is usually
-  # not in it. This quotes whichever one Deep Dive is showing, on the same 60s
+  # not in it. This quotes whichever one Deep Dive is showing, on the same
   # cadence and the same visibility gate, so a hidden tab stops polling.
   dd_quote <- reactive({
     sym <- input$dd_ticker
     if (is.null(sym) || !nzchar(sym)) return(NULL)
-    if (tab_is_visible()) invalidateLater(60000)
-    # A fresh enough quote from the tape beats waiting on a request.
-    hit <- quote_cache_get(sym)
+    if (tab_is_visible()) invalidateLater(quote_poll_interval())
+    # A fresh enough quote from the tape beats waiting on a request. "Fresh
+    # enough" now moves with the poll rate rather than sitting at a fixed 60s,
+    # so the header can never be five polls staler than the tape above it.
+    hit <- quote_cache_get(sym, ttl = quote_fresh_ttl())
     if (!is.null(hit)) return(hit)
+    # Backed off: show the last known quote rather than add to the refusals.
+    # pick_price still dates it, so an old one cannot pass itself off as live.
+    if (quote_is_blocked())
+      return(quote_cache_get(sym, ttl = QUOTE_POLL_SLOW / 1000))
     tryCatch({
       q <- getQuote(sym)
       if (is.null(q) || !nrow(q)) return(NULL)
       tt <- if ("Trade Time" %in% names(q)) q$`Trade Time`[1] else Sys.time()
       quote_cache_put(sym, as.numeric(q$Last), as.numeric(q$`% Change`), tt)
+      # basket = FALSE (the default, stated here because it matters): one
+      # symbol must not set the process-wide traded_today. A viewer on a thin
+      # name that has not printed today would otherwise demote the tape -- and
+      # every other session -- from 10s to 60s.
+      quote_note_success(tt, basket = FALSE)
       list(price = as.numeric(q$Last), chg = as.numeric(q$`% Change`), time = tt)
     }, error = function(e) {
-      message("dd_quote failed for ", sym, ": ", conditionMessage(e))
+      wait <- quote_note_failure()
+      message("dd_quote failed for ", sym, " (backing off ", wait, "s): ",
+              conditionMessage(e))
       NULL
     })
+  })
+
+  # The price chart must NOT ride the 10s quote cadence. output$dd_price
+  # rebuilds the whole figure -- seven traces over ~365 rows, re-serialised and
+  # pushed to Plotly.react -- and every push discards the viewer's zoom and pan.
+  # At 60s that was once a minute; at 10s it would be six times a minute and the
+  # chart would be unusable. This keeps the old 60s beat and only READS the
+  # shared cache, so the slower redraw costs no extra upstream request.
+  dd_quote_chart <- reactive({
+    if (tab_is_visible()) invalidateLater(60000)
+    sym <- input$dd_ticker
+    if (is.null(sym) || !nzchar(sym)) return(NULL)
+    quote_cache_get(sym, ttl = 60)
   })
 
   output$dd_header <- renderUI({
@@ -2205,8 +2466,9 @@ server <- function(input, output, session) {
     if (is.null(p) || nrow(p) == 0) return(no_data("No price data available"))
 
     # Carry the line forward to the quote in the header, so the chart does not
-    # stop two days short of the price printed above it.
-    lq <- dd_quote()
+    # stop two days short of the price printed above it. Deliberately the
+    # chart-cadence quote, not dd_quote(): see dd_quote_chart above.
+    lq <- dd_quote_chart()
     if (!is.null(lq)) p <- append_live_point(p, lq$price, lq$time)
 
     plt <- plot_ly(p) %>%

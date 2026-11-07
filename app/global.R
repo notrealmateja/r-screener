@@ -819,8 +819,12 @@ pick_price <- function(live_price = NA_real_, live_chg = NA_real_,
       if (is.na(lt)) lt <- NULL
     }
     if (is.null(lt))
-      # Nothing to check it against. The fetch is at most QUOTE_TTL old, so the
-      # price is current; there is simply no timestamp to print beside it.
+      # Nothing to check it against. The fetch is at most one poll interval old
+      # -- quote_fresh_ttl(), which tracks the current rate -- so the price is
+      # current; there is simply no trade time to print beside it. This used to
+      # cite QUOTE_TTL, which stopped being what gates these call sites once the
+      # poll rate became variable, leaving a true-sounding claim about a
+      # constant that no longer applied.
       return(list(price = as.numeric(live_price), chg = chg,
                   is_live = TRUE, label = "LIVE"))
     if (format(lt, "%Y-%m-%d") >= format(now, "%Y-%m-%d"))
@@ -971,4 +975,145 @@ quote_cache_get <- function(symbol, ttl = QUOTE_TTL, now = Sys.time()) {
   e <- get(symbol, envir = .quote_cache, inherits = FALSE)
   if (as.numeric(difftime(now, e$at, units = "secs")) > ttl) return(NULL)
   e
+}
+
+# ── Live-quote pacing ────────────────────────────────────────────────────────
+# The tape polled every 60 seconds, from every session, around the clock. That
+# is slower than a viewer wants while the market is trading and pure waste at
+# 3am -- and the waste is what makes an upstream block likely, which would take
+# the tape out entirely. Pacing is now driven by whether the market is actually
+# trading, and every session shares one fetch.
+#
+# Deliberately NOT a hardcoded holiday calendar. A baked-in list of market
+# holidays is a constant that silently goes stale, which is the same class of
+# bug as the frozen vendor fields this app already had to label. Instead the
+# feed is asked: if a poll comes back and no symbol has traded today, the
+# market is not trading whatever the clock says, and the rate drops to the old
+# 60s. That is self-correcting for holidays, early closes and halts alike, and
+# on a holiday it is never worse than the behaviour it replaced.
+
+QUOTE_POLL_FAST  <- 10000L   # ms, regular session, feed confirmed advancing
+QUOTE_POLL_IDLE  <- 60000L   # ms, clock says open but nothing has traded today
+QUOTE_POLL_SLOW  <- 300000L  # ms, outside the session; still catches a reopen
+
+# Regular US equities session, 09:30-16:00 America/New_York, Mon-Fri.
+# Returns FALSE outside it. Holidays are NOT handled here, by design: see above.
+market_is_trading <- function(now = Sys.time()) {
+  ny <- as.POSIXlt(now, tz = "America/New_York")
+  if (is.na(ny$wday) || ny$wday == 0L || ny$wday == 6L) return(FALSE)
+  mins <- ny$hour * 60L + ny$min
+  mins >= (9L * 60L + 30L) && mins < (16L * 60L)
+}
+
+# Process-wide pacing state. Shared across sessions so that N viewers cost the
+# upstream what one viewer costs, and so a refusal backs every session off at
+# once rather than each discovering it separately.
+.quote_state <- new.env(parent = emptyenv())
+.quote_state$fails        <- 0L
+.quote_state$blocked_until <- as.POSIXct(NA)
+.quote_state$traded_today  <- NA   # NA = not yet observed this session
+
+QUOTE_BACKOFF_STEPS <- c(15, 30, 60, 120, 300)  # seconds
+
+# A refusal blocks fetching process-wide for a growing interval. Without this,
+# every session independently rediscovers that Yahoo is refusing, which is the
+# surest way to turn throttling into a block.
+quote_note_failure <- function(now = Sys.time()) {
+  .quote_state$fails <- min(.quote_state$fails + 1L, length(QUOTE_BACKOFF_STEPS))
+  wait <- QUOTE_BACKOFF_STEPS[.quote_state$fails]
+  .quote_state$blocked_until <- now + wait
+  invisible(wait)
+}
+
+quote_note_success <- function(qtimes = NULL, now = Sys.time(), basket = FALSE) {
+  .quote_state$fails <- 0L
+  .quote_state$blocked_until <- as.POSIXct(NA)
+  # Did anything actually trade today? Compared as formatted local strings for
+  # the same reason pick_price does: as.Date() on a POSIXct converts in UTC and
+  # would shift the day for anyone west of Greenwich.
+  #
+  # Only a caller that polled a BASKET may answer this, because the answer is
+  # process-wide and the test is any(). One Deep Dive viewer looking at a thin
+  # name that has not printed today would otherwise set it FALSE and demote the
+  # tape -- and every other session -- from 10s to 60s. "Did the market trade?"
+  # is a question about the market, so only the 25-symbol tape gets to answer.
+  if (isTRUE(basket) && !is.null(qtimes) && length(qtimes)) {
+    t <- suppressWarnings(as.POSIXct(qtimes))
+    t <- t[!is.na(t)]
+    .quote_state$traded_today <-
+      if (!length(t)) NA else any(format(t, "%Y-%m-%d") >= format(now, "%Y-%m-%d"))
+  }
+  invisible(TRUE)
+}
+
+quote_is_blocked <- function(now = Sys.time()) {
+  bu <- .quote_state$blocked_until
+  !is.na(bu) && now < bu
+}
+
+# Milliseconds until the next regular open. Each day's 09:30 is constructed
+# directly in New York time rather than by adding 86400 to a POSIXct, so the
+# daylight-saving changeover cannot shift it by an hour.
+ms_to_next_open <- function(now = Sys.time()) {
+  d0 <- as.Date(format(now, "%Y-%m-%d", tz = "America/New_York"))
+  for (i in 0:7) {
+    d  <- d0 + i
+    wd <- as.POSIXlt(as.POSIXct(paste(d, "12:00:00"), tz = "America/New_York"))$wday
+    if (identical(wd, 0L) || identical(wd, 6L)) next
+    op <- as.POSIXct(paste(d, "09:30:00"), tz = "America/New_York")
+    if (op > now) return(as.numeric(difftime(op, now, units = "secs")) * 1000)
+  }
+  QUOTE_POLL_SLOW
+}
+
+# Milliseconds until the next poll.
+quote_poll_interval <- function(now = Sys.time(), trading = market_is_trading(now)) {
+  # Closed: idle, but never past the bell. A flat 300s scheduled at 09:29 meant
+  # a session already sitting open did not poll again until as late as 09:34,
+  # showing a pre-open price for five minutes of live trading.
+  if (!trading) return(max(1000, min(QUOTE_POLL_SLOW, ms_to_next_open(now))))
+  # Clock says open, but the feed says nothing has traded today: holiday or a
+  # closure the calendar does not know about. identical() so that NA -- meaning
+  # "not yet observed" -- reads as "assume trading" and does not slow the open.
+  if (identical(.quote_state$traded_today, FALSE)) return(QUOTE_POLL_IDLE)
+  QUOTE_POLL_FAST
+}
+
+# A cache hit must never be older than the current refresh interval, which is
+# the promise the cache's own comment makes. With pacing that interval moves,
+# so the TTL moves with it instead of sitting at a fixed 60.
+quote_fresh_ttl <- function(now = Sys.time()) quote_poll_interval(now) / 1000
+
+# Batch read. Returns the rows still fresh enough to use and the symbols that
+# are not, so a caller fetches only what it actually needs -- and, when two
+# sessions poll within one interval of each other, fetches nothing at all.
+quote_cache_get_many <- function(symbols, ttl = quote_fresh_ttl(), now = Sys.time()) {
+  symbols <- unique(symbols[!is.na(symbols) & nzchar(symbols)])
+  hits <- list()
+  missing <- character(0)
+  for (s in symbols) {
+    e <- quote_cache_get(s, ttl = ttl, now = now)
+    if (is.null(e)) missing <- c(missing, s) else hits[[s]] <- e
+  }
+  list(hits = hits, missing = missing)
+}
+
+# ── URL routing ──────────────────────────────────────────────────────────────
+# Pulls the ticker out of a query string, returning NULL unless it names a
+# symbol the app actually carries. Feeding an unknown value to selectize clears
+# the selection, so a stale link, a delisted ticker or a hand-edited URL would
+# otherwise land the viewer on an empty Deep Dive with no clue why.
+#
+# Lives here rather than inline in the observer so that it can be run in a test.
+# The pane half of routing is done in the browser -- panes are static divs -- so
+# there is deliberately no matching route_pane() here to go stale unused.
+route_ticker <- function(search, symbols) {
+  if (is.null(search) || !length(search) || is.na(search) || !nzchar(search))
+    return(NULL)
+  q <- shiny::parseQueryString(search)
+  t <- q[["t"]]
+  if (is.null(t) || !length(t) || is.na(t) || !nzchar(t)) return(NULL)
+  if (is.null(symbols) || !length(symbols)) return(NULL)
+  if (!(t %in% symbols)) return(NULL)
+  t
 }
