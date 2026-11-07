@@ -1,5 +1,4 @@
 date,price,series,ticker,value
-2024-11-06,4.42,10Y Treasury,DGS10,4.42
 2024-11-07,4.31,10Y Treasury,DGS10,4.31
 2024-11-08,4.3,10Y Treasury,DGS10,4.3
 2024-11-11,NA,10Y Treasury,DGS10,NA
@@ -520,7 +519,7 @@ date,price,series,ticker,value
 2026-11-02,4.91,10Y Treasury,DGS10,4.91
 2026-11-03,4.95,10Y Treasury,DGS10,4.95
 2026-11-04,4.9,10Y Treasury,DGS10,4.9
-2024-11-06,4.27,2Y Treasury,DGS2,4.27
+2026-11-05,4.84,10Y Treasury,DGS10,4.84
 2024-11-07,4.21,2Y Treasury,DGS2,4.21
 2024-11-08,4.26,2Y Treasury,DGS2,4.26
 2024-11-11,NA,2Y Treasury,DGS2,NA
@@ -1041,7 +1040,7 @@ date,price,series,ticker,value
 2026-11-02,4.59,2Y Treasury,DGS2,4.59
 2026-11-03,4.61,2Y Treasury,DGS2,4.61
 2026-11-04,4.58,2Y Treasury,DGS2,4.58
-2024-11-06,4.64,3M Treasury,DGS3MO,4.64
+2026-11-05,4.46,2Y Treasury,DGS2,4.46
 2024-11-07,4.63,3M Treasury,DGS3MO,4.63
 2024-11-08,4.63,3M Treasury,DGS3MO,4.63
 2024-11-11,NA,3M Treasury,DGS3MO,NA
@@ -1562,6 +1561,7 @@ date,price,series,ticker,value
 2026-11-02,4.21,3M Treasury,DGS3MO,4.21
 2026-11-03,4.21,3M Treasury,DGS3MO,4.21
 2026-11-04,4.21,3M Treasury,DGS3MO,4.21
+2026-11-05,4.17,3M Treasury,DGS3MO,4.17
 2024-12-01,317.604,CPI,CPIAUCSL,317.604
 2025-01-01,318.961,CPI,CPIAUCSL,318.961
 2025-02-01,319.679,CPI,CPIAUCSL,319.679
@@ -1606,6 +1606,7 @@ date,price,series,ticker,value
 2026-07-01,4.1,Unemployment,UNRATE,4.1
 2026-08-01,4.1,Unemployment,UNRATE,4.1
 2026-09-01,4.2,Unemployment,UNRATE,4.2
+2026-10-01,4.1,Unemployment,UNRATE,4.1
 2024-12-01,4.48,Fed Funds Rate,FEDFUNDS,4.48
 2025-01-01,4.33,Fed Funds Rate,FEDFUNDS,4.33
 2025-02-01,4.33,Fed Funds Rate,FEDFUNDS,4.33
@@ -1629,7 +1630,6 @@ date,price,series,ticker,value
 2026-08-01,3.63,Fed Funds Rate,FEDFUNDS,3.63
 2026-09-01,3.75,Fed Funds Rate,FEDFUNDS,3.75
 2026-10-01,3.88,Fed Funds Rate,FEDFUNDS,3.88
-2024-11-06,0.15,Yield Curve Spread,T10Y2Y,0.15
 2024-11-07,0.1,Yield Curve Spread,T10Y2Y,0.1
 2024-11-08,0.04,Yield Curve Spread,T10Y2Y,0.04
 2024-11-11,NA,Yield Curve Spread,T10Y2Y,NA
@@ -2151,3 +2151,4 @@ date,price,series,ticker,value
 2026-11-03,0.34,Yield Curve Spread,T10Y2Y,0.34
 2026-11-04,0.32,Yield Curve Spread,T10Y2Y,0.32
 2026-11-05,0.38,Yield Curve Spread,T10Y2Y,0.38
+2026-11-06,0.35,Yield Curve Spread,T10Y2Y,0.35

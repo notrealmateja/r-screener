@@ -1,31 +1,31 @@
 symbol,title,watchlist_count,st_rank,trending_score,messages,bullish,bearish,sentiment_label,fetched_at
-AAOI,Applied Optoelectronics Inc,27248,1,11.1858,1,1,0,Very Bullish,2026-11-06T02:12:42Z
-NVDA,NVIDIA Corp,675258,2,9.70089,4,1,0,Very Bullish,2026-11-06T02:12:42Z
-DKNG,DraftKings Inc,120364,3,9.27244,0,0,0,Neutral,2026-11-06T02:12:42Z
-SMH,VanEck Semiconductor ETF,19655,4,8.99606,1,0,0,Neutral,2026-11-06T02:12:42Z
-NLST,Netlist Inc,28136,5,7.72196,1,1,0,Very Bullish,2026-11-06T02:12:42Z
-IREN,IREN Limited,54379,6,7.27217,1,0,0,Neutral,2026-11-06T02:12:42Z
-ABNB,Airbnb Inc,55070,7,6.85024,0,0,0,Neutral,2026-11-06T02:12:42Z
-NET,Cloudflare Inc,35616,8,6.81196,0,0,0,Neutral,2026-11-06T02:12:42Z
-PFE,Pfizer Inc,114901,9,6.63797,0,0,0,Neutral,2026-11-06T02:12:42Z
-CELH,Celsius Holdings Inc,31005,10,6.42134,0,0,0,Neutral,2026-11-06T02:12:42Z
-AMD,Advanced Micro Devices Inc,567483,11,6.34003,0,0,0,Neutral,2026-11-06T02:12:42Z
-UMAC,Unusual Machines Inc,12560,12,5.94518,0,0,0,Neutral,2026-11-06T02:12:42Z
-UVXY,ProShares Ultra VIX Short-Term Futures ETF,85154,13,5.84754,0,0,0,Neutral,2026-11-06T02:12:42Z
-SOL.X,Solana,85608,14,5.79372,0,0,0,Neutral,2026-11-06T02:12:42Z
-SMCX,Defiance Daily Target 2X Long SMCI ETF,3604,15,5.83304,0,0,0,Neutral,2026-11-06T02:12:42Z
-AXON,Axon Enterprise Inc,15511,16,5.56991,0,0,0,Neutral,2026-11-06T02:12:42Z
-MGNI,Magnite Inc,12035,17,5.44189,0,0,0,Neutral,2026-11-06T02:12:42Z
-QQQ,Invesco QQQ Trust Series 1,282815,18,5.35197,6,0,0,Neutral,2026-11-06T02:12:42Z
-MP,MP Materials Corporation,36400,19,5.23311,0,0,0,Neutral,2026-11-06T02:12:42Z
-CASHCAT.X,Cash Cat,633,20,4.89361,0,0,0,Neutral,2026-11-06T02:12:42Z
-CLSK,Cleanspark Inc,56681,21,4.68215,0,0,0,Neutral,2026-11-06T02:12:42Z
-SOXX,iShares Semiconductor ETF,11756,22,4.5963,0,0,0,Neutral,2026-11-06T02:12:42Z
-MU,Micron Technology Inc,221728,23,4.58247,3,0,0,Neutral,2026-11-06T02:12:42Z
-SNDK,Sandisk Corp,38518,24,4.52892,2,1,0,Very Bullish,2026-11-06T02:12:42Z
-GEV,GE Vernova Inc.,11285,25,4.50174,0,0,0,Neutral,2026-11-06T02:12:42Z
-SMCI,Super Micro Computer Inc,94254,26,4.4906,2,1,0,Very Bullish,2026-11-06T02:12:42Z
-ET,Energy Transfer LP Unit,23113,27,4.42457,0,0,0,Neutral,2026-11-06T02:12:42Z
-SOXL,Direxion Daily Semiconductor Bull 3X Shares,42499,28,4.30143,3,1,0,Very Bullish,2026-11-06T02:12:42Z
-CAT,Caterpillar Inc.,36506,29,4.19637,0,0,0,Neutral,2026-11-06T02:12:42Z
-JD,JD.com Inc - ADR,65958,30,4.07651,0,0,0,Neutral,2026-11-06T02:12:42Z
+FLY,Firefly Aerospace Inc.,9909,1,7.66948,2,0,0,Neutral,2026-11-07T01:11:43Z
+AXON,Axon Enterprise Inc,15601,2,7.10381,2,0,2,Very Bearish,2026-11-07T01:11:43Z
+CSCO,"Cisco Systems, Inc.",62449,3,6.1371,2,0,0,Neutral,2026-11-07T01:11:43Z
+XERS,Xeris Biopharma Holdings Inc,10924,4,5.47829,0,0,0,Neutral,2026-11-07T01:11:43Z
+DKNG,DraftKings Inc,120593,5,4.89824,2,0,0,Neutral,2026-11-07T01:11:43Z
+RYCEY,Rolls-Royce Holdings Plc - ADR,23314,6,4.84351,1,0,0,Neutral,2026-11-07T01:11:43Z
+ADBE,Adobe Inc,50887,7,4.27627,2,0,0,Neutral,2026-11-07T01:11:43Z
+HIMX,"Himax Technologies, Inc.",18665,8,4.24918,1,0,0,Neutral,2026-11-07T01:11:43Z
+XLK,Technology Select Sector SPDR Fund,11971,9,4.2284,0,0,0,Neutral,2026-11-07T01:11:43Z
+IONQ,IonQ Inc,61728,10,4.18194,2,1,0,Very Bullish,2026-11-07T01:11:43Z
+RGTI,Rigetti Computing Inc,52422,11,4.05024,2,0,0,Neutral,2026-11-07T01:11:43Z
+AVGO,Broadcom Inc,76751,12,3.69146,2,1,0,Very Bullish,2026-11-07T01:11:43Z
+TTD,Trade Desk Inc,49139,13,3.48599,1,1,0,Very Bullish,2026-11-07T01:11:43Z
+CORZ,Core Scientific Inc,14288,14,3.39549,0,0,0,Neutral,2026-11-07T01:11:43Z
+KRMN,Karman Holdings Ord Shs,1684,15,3.26205,0,0,0,Neutral,2026-11-07T01:11:43Z
+CRM,Salesforce Inc,71444,16,3.2307,0,0,0,Neutral,2026-11-07T01:11:43Z
+CEG,Constellation Energy Corporation,12820,17,2.95827,1,1,0,Very Bullish,2026-11-07T01:11:43Z
+VXX,iPath S&P 500 VIX Short-Term Futures ETN,30371,18,2.90844,1,0,0,Neutral,2026-11-07T01:11:43Z
+LKNCY,Luckin Coffee Inc - ADR,40111,19,2.89749,1,0,0,Neutral,2026-11-07T01:11:43Z
+ALM,Almonty Industries Inc,1357,20,2.86798,0,0,0,Neutral,2026-11-07T01:11:43Z
+MDB,MongoDB Inc,21904,21,2.82381,0,0,0,Neutral,2026-11-07T01:11:43Z
+MUU,Direxion Daily MU Bull 2X Shares,2214,22,2.8204,1,0,0,Neutral,2026-11-07T01:11:43Z
+ET,Energy Transfer LP Unit,23110,23,2.76101,1,0,1,Very Bearish,2026-11-07T01:11:43Z
+VOYG,Voyager Technologies Inc. - Ordinary Shares - Class A,12354,24,2.68647,2,0,0,Neutral,2026-11-07T01:11:43Z
+REPL,Replimune Group Inc,4925,25,2.62357,0,0,0,Neutral,2026-11-07T01:11:43Z
+UUUU,Energy Fuels Inc,23575,26,2.59354,0,0,0,Neutral,2026-11-07T01:11:43Z
+VOO,Vanguard S&P 500 ETF,54010,27,2.59116,0,0,0,Neutral,2026-11-07T01:11:43Z
+KLAC,KLA Corp.,6575,28,2.54233,0,0,0,Neutral,2026-11-07T01:11:43Z
+NVAX,Novavax Inc,108231,29,2.50611,1,0,0,Neutral,2026-11-07T01:11:43Z
+CELH,Celsius Holdings Inc,31010,30,2.41037,0,0,0,Neutral,2026-11-07T01:11:43Z
