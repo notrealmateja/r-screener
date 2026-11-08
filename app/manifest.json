@@ -1455,31 +1455,30 @@
       }
     },
     "otel": {
-      "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Source": "CRAN",
+      "Repository": "https://cran.rstudio.com",
       "description": {
         "Package": "otel",
         "Title": "OpenTelemetry R API",
-        "Version": "0.2.0",
+        "Version": "0.3.0",
         "Authors@R": "\n    person(\"Gábor\", \"Csárdi\", , \"csardi.gabor@gmail.com\", role = c(\"aut\", \"cre\"))",
         "Description": "High-quality, ubiquitous, and portable telemetry to enable\n    effective observability. OpenTelemetry is a collection of tools,\n    APIs, and SDKs used to instrument, generate, collect, and export\n    telemetry data (metrics, logs, and traces) for analysis in order to\n    understand your software's performance and behavior.\n    This package implements the OpenTelemetry API:\n    <https://opentelemetry.io/docs/specs/otel/>.\n    Use this package as a dependency if you want to instrument your R\n    package for OpenTelemetry.",
         "License": "MIT + file LICENSE",
         "Encoding": "UTF-8",
-        "RoxygenNote": "7.3.2.9000",
         "Depends": "R (>= 3.6.0)",
-        "Suggests": "callr, cli, glue, jsonlite, otelsdk, processx, shiny,\nspelling, testthat (>= 3.0.0), utils, withr",
+        "Suggests": "callr, cli, glue, jsonlite, otelsdk (>= 0.2.4), processx,\nshiny, spelling, testthat (>= 3.0.0), utils, withr",
         "Config/Needs/website": "tidyverse/tidytemplate",
         "Config/testthat/edition": "3",
         "URL": "https://otel.r-lib.org, https://github.com/r-lib/otel",
-        "Additional_repositories": "https://github.com/r-lib/otelsdk/releases/download/devel",
         "BugReports": "https://github.com/r-lib/otel/issues",
+        "Config/roxygen2/version": "8.1.1",
         "NeedsCompilation": "no",
-        "Packaged": "2025-08-29 12:46:28 UTC; gaborcsardi",
+        "Packaged": "2026-11-07 14:37:49 UTC; gaborcsardi",
         "Author": "Gábor Csárdi [aut, cre]",
         "Maintainer": "Gábor Csárdi <csardi.gabor@gmail.com>",
-        "Repository": "RSPM",
-        "Date/Publication": "2025-08-29 13:30:07 UTC",
-        "Built": "R 4.4.0; ; 2026-08-12 19:07:38 UTC; unix"
+        "Repository": "CRAN",
+        "Date/Publication": "2026-11-07 15:20:02 UTC",
+        "Built": "R 4.4.0; ; 2026-11-08 00:52:37 UTC; unix"
       }
     },
     "pillar": {
@@ -2547,19 +2546,19 @@
       "checksum": "61e60139ad3f14272052adcbc545e486"
     },
     "backtest_equity_stats.csv": {
-      "checksum": "f469a2e51e12ea3665635f4e5f3fe645"
+      "checksum": "78d23abeab76653a5e77aa0704793d08"
     },
     "backtest_equity.csv": {
-      "checksum": "aafc786abd3c905ac381545c3b5e5a3d"
+      "checksum": "3f776e70f74024cf534f9ef51b5fde4d"
     },
     "backtest_headline.csv": {
-      "checksum": "3f29df329ef1a89e029164716e037060"
+      "checksum": "dc355ea838f344815b46e1e1ecc164f0"
     },
     "backtest_ic.csv": {
       "checksum": "ddc503b2e30e58a2297f3e419581d4cf"
     },
     "backtest_phase_sweep.csv": {
-      "checksum": "f1017f4273963d645e3c33dfb4f0dd92"
+      "checksum": "3d637d08d01fbe7393197ce7992f4955"
     },
     "backtest_summary.csv": {
       "checksum": "119022fd0873098e9612ac9f19fa830b"
@@ -2568,61 +2567,61 @@
       "checksum": "6f1dddc156f656f2d4c4d382e7b64017"
     },
     "data/meta.rds": {
-      "checksum": "7bb2d44cac9a31ebe8454a19cd2dbb08"
+      "checksum": "8e2ad54b1bd3ed69941621956c0947fe"
     },
     "data/price_series_cache.rds": {
       "checksum": "266a1b7cfa8bbf9180380a4969dbc886"
     },
     "earnings_calendar.csv": {
-      "checksum": "2716b60d2823a575312e8caaa2704ff7"
+      "checksum": "d7fc5c3fb5b74a7d7e3fb8751f3d38cc"
     },
     "global.R": {
       "checksum": "1d0fffb1479609f4c7e7d806c2a889d7"
     },
     "macro_data.csv": {
-      "checksum": "f778aa23717cdd04e52ee8336cba22cb"
+      "checksum": "5cba8dc309458f3b45e4eb74d19f38d0"
     },
     "market_news.csv": {
       "checksum": "40b59b1ef18dd32c084b345c018d8bfb"
     },
     "master_scored.csv": {
-      "checksum": "1d2ff4145f15faf498b5306de93c0add"
+      "checksum": "7d5cb52c2e2afa2ab3f0850de7a412bb"
     },
     "meta.rds": {
-      "checksum": "7bb2d44cac9a31ebe8454a19cd2dbb08"
+      "checksum": "8e2ad54b1bd3ed69941621956c0947fe"
     },
     "price_history.csv": {
-      "checksum": "d7144cebfc8e468a9344bf348b828d46"
+      "checksum": "94ae2afad523a72c6f3a40fa7941ed26"
     },
     "reversal_results.csv": {
       "checksum": "1b776beb98b092d1429aa70ba8eefbed"
     },
     "score_history.csv": {
-      "checksum": "fe38e1e49b46a6ce6ebb114b146d0495"
+      "checksum": "1af5005f7fa8b75dfe9b0b8f2dbc4ac2"
     },
     "sec_filings.csv": {
-      "checksum": "f17aaa2403af9e1c97fd1828ac062c3b"
+      "checksum": "d0706d6ed6e9eff2ff9682e0577694cb"
     },
     "sector_performance.csv": {
-      "checksum": "590d933c18b73b6b7cda36a7bb87c55e"
+      "checksum": "2defafcb2825535243517c2f482bbab6"
     },
     "stock_news.csv": {
-      "checksum": "eb158412851b5d61f133d3187b2b3783"
+      "checksum": "594e12b96971f8fef58b33a149eb6374"
     },
     "stocktwits_trending.csv": {
-      "checksum": "a06862a5a8d7202800917595af30a97c"
+      "checksum": "a44017be68c9bcf7ce5d2772e573c7f3"
     },
     "top15_sweetspot.csv": {
-      "checksum": "6765d19dfdc04da78c3df8c00943dfe5"
+      "checksum": "deda4bbd5463ef31ab67ac5596aaedca"
     },
     "top15_unicorns.csv": {
-      "checksum": "b4247e1bee9ae44fdcb582c0e01ba5cb"
+      "checksum": "74122c0ae978edc01228be97407b6d51"
     },
     "tv_channels.csv": {
-      "checksum": "a8c5551b69f39569ddf88868c84212fb"
+      "checksum": "93205b4e422cbbcea7c7f7165eff7826"
     },
     "wsb_trending.csv": {
-      "checksum": "3004dc051c21e0822d7f3b380d36f4a0"
+      "checksum": "e1c1401040694a1ca42ccbfcc1623114"
     }
   },
   "users": null
