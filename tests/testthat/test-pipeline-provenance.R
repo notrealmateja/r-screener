@@ -663,33 +663,83 @@ test_that("nothing is committed against a stale manifest", {
 
 # ── Tests must fail, not vanish ──────────────────────────────────────────────
 #
-# A test_that registered inside `if (exists(...))` at file scope is not skipped
-# when the condition is false -- it is ABSENT. testthat reports no skip and no
-# failure, just a smaller suite, so a module that fails to load deletes its own
-# tests and the run goes green. Measured on test-equity-curve.R: with
-# R/05_backtest.R made to error, the old file dropped from 22 blocks to 15 and
-# still reported zero failures.
+# A test_that registered inside a file-scope `if (...)` is not skipped when the
+# condition is false -- it is ABSENT. testthat reports no skip and no failure,
+# just a smaller suite, so a module that fails to load or a package that fails
+# to install deletes its own tests and the run goes green.
+#
+# Measured twice. With R/05_backtest.R made to error, test-equity-curve.R
+# dropped from 22 blocks to 15 and still reported zero failures. With `tibble`
+# reported absent, the whole suite dropped from 394 blocks to 275 -- 119 blocks
+# gone, 0 failures, green.
 #
 # The guard belongs with the pipeline-trust tests because that is the same
 # failure shape as the rest of this file: a check that cannot fail.
 
-test_that("no test file gates whole blocks behind a bare exists() wrapper", {
+test_that("no test file registers blocks inside a file-scope if()", {
   files <- list.files(repo_path("tests", "testthat"), pattern = "^test-.*\\.R$",
                       full.names = TRUE)
   expect_gt(length(files), 0L)
+  # The parser, not a regex: it knows which `if` is top level and where it ends,
+  # for every spelling of the condition -- exists(), have_pkgs(), nzchar(), any
+  # other. An `if` nested inside a test_that body is ordinary control flow and
+  # is not top level, so it is not reached here.
   offenders <- character(0)
   for (f in files) {
-    src <- readLines(f, warn = FALSE)
-    # Column 0 only: an `if (exists(...))` nested inside a test_that body is
-    # ordinary control flow, not a registration gate.
-    hit <- grep("^if\\s*\\(\\s*(!\\s*)?exists\\(", src)
-    if (length(hit))
-      offenders <- c(offenders, sprintf("%s:%s", basename(f),
-                                        paste(hit, collapse = ",")))
+    exprs <- parse(f, keep.source = TRUE)
+    refs  <- attr(exprs, "srcref")
+    for (k in seq_along(exprs)) {
+      ex <- exprs[[k]]
+      if (!is.call(ex) || !identical(as.character(ex[[1]])[1], "if")) next
+      if (any(grepl("test_that\\s*\\(", as.character(refs[[k]]))))
+        offenders <- c(offenders, sprintf("%s:%d", basename(f),
+                                          as.integer(refs[[k]])[1]))
+    }
   }
-  expect_length(offenders, 0L)
   if (length(offenders))
-    cat("Put the guard inside each test_that as skip_if_not(exists(...), ...)",
-        "so an absent symbol is a countable skip:",
+    cat("Guard the setup, register the block, and skip from inside it:",
+        "if (cond) { <setup> } then skip_if_not(cond, reason) as the first",
+        "line of each test_that body. Offending files:",
         paste(offenders, collapse = "; "), "\n")
+  expect_length(offenders, 0L)
+})
+
+# The sweep above turns a vanished block into a countable skip, which shows in
+# the log -- but a skip does not fail the build, so a package that failed to
+# install on the runner would still produce a green night with a third of the
+# suite inert. On CI every declared package must actually be there.
+test_that("the runner has every package the test files declare", {
+  skip_if_not(nzchar(Sys.getenv("CI")), "only meaningful on a CI runner")
+  files <- list.files(repo_path("tests", "testthat"), pattern = "\\.R$",
+                      full.names = TRUE)
+  declared <- character(0)
+  for (f in files) {
+    src <- readLines(f, warn = FALSE)
+    calls <- unlist(regmatches(src, gregexpr("have_pkgs\\([^)]*\\)", src)))
+    for (one in calls)
+      declared <- c(declared,
+                    unlist(regmatches(one, gregexpr('"[^"]+"', one))))
+  }
+  declared <- sort(unique(gsub('"', "", declared)))
+  expect_gt(length(declared), 5L)
+  # requireNamespace(quietly = TRUE) returns FALSE for a package that is
+  # INSTALLED but cannot be loaded, and throws the reason away -- how xml2
+  # presented when its binary was linked against another libxml2. Load each one
+  # and keep the condition message, the same way the workflow's own package
+  # check does.
+  why <- character(0)
+  for (p in declared) {
+    err <- tryCatch({ loadNamespace(p); NULL },
+                    error = function(e) conditionMessage(e))
+    if (!is.null(err)) {
+      state <- if (nzchar(system.file(package = p)))
+                 "installed but will not load" else "not installed"
+      why <- c(why, sprintf("%s [%s]: %s", p, state, err))
+    }
+  }
+  if (length(why))
+    cat("Declared by a test file but unusable on this runner, so those blocks",
+        "skip instead of running:\n", paste(why, collapse = "\n"),
+        "\nDeclared set:", paste(declared, collapse = ", "), "\n")
+  expect_length(why, 0L)
 })

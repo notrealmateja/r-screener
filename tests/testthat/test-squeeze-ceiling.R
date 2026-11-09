@@ -17,7 +17,10 @@
 # strongest name in the universe, and the ninth was pushed off the page by an
 # alphabetical accident.
 
-if (have_pkgs("dplyr", "tibble", "readr", "glue", "httr", "jsonlite")) {
+pkgs_ok  <- have_pkgs("dplyr", "tibble", "readr", "glue", "httr", "jsonlite")
+pkgs_why <- missing_pkgs("dplyr", "tibble", "readr", "glue", "httr", "jsonlite")
+
+if (pkgs_ok) {
   suppressMessages({ library(dplyr); library(tibble) })
   SOURCED_BY_MASTER <- TRUE
   suppressMessages(try(source(repo_path("R", "03_data.R"), local = TRUE),
@@ -40,84 +43,89 @@ if (have_pkgs("dplyr", "tibble", "readr", "glue", "httr", "jsonlite")) {
     tryCatch(suppressMessages(build_squeeze_score(s[need], f)),
              error = function(e) NULL)
   })
-
-  test_that("the bonus cannot push a score past the top of its own scale", {
-    skip_if(is.null(live), "live squeeze inputs unavailable")
-    # No clip, because nothing can overflow: raw + (100 - raw) * bonus is a
-    # weighted average of raw and 100 whenever bonus is in [0, 1].
-    expect_true(all(live$squeeze_score <= 100))
-    expect_true(all(live$squeeze_score >= 0))
-    expect_true(all(live$squeeze_score >= live$squeeze_score_raw - 1e-9))
-    # And the clip itself is gone from the source, not merely unreached.
-    src <- paste(readLines(repo_path("R", "03_data.R"), warn = FALSE),
-                 collapse = "\n")
-    expect_false(grepl("pmin(squeeze_score_raw", src, fixed = TRUE))
-    expect_match(src,
-      "squeeze_score = squeeze_score_raw \\+ \\(100 - squeeze_score_raw\\) \\* squeeze_bonus")
-  })
-
-  test_that("no name is clipped to the ceiling any more", {
-    skip_if(is.null(live), "live squeeze inputs unavailable")
-    # The symptom: a pile of names sharing one value because the scale ran out.
-    expect_lt(sum(live$squeeze_score >= 100 - 1e-9), 2)
-    top <- max(live$squeeze_score, na.rm = TRUE)
-    expect_equal(sum(live$squeeze_score >= top - 1e-9), 1L)
-    # The nine that used to tie are now all distinct from one another.
-    nine <- c("CAVA", "HALO", "LOVE", "OLLI", "PTGX", "TROW", "UPST", "WING", "WLDN")
-    got <- live[live$symbol %in% nine, ]
-    skip_if(nrow(got) < length(nine), "the 2026-11-04 book is not the current one")
-    expect_equal(dplyr::n_distinct(got$squeeze_score), length(nine))
-  })
-
-  test_that("the score keeps the order the four components produced", {
-    skip_if(is.null(live), "live squeeze inputs unavailable")
-    # Strict monotonicity in raw is the property the clip destroyed, and it is
-    # what makes the ranking mean anything. Checked within the bonus group and
-    # within the unbonused group, since the two sit on different lines.
-    for (b in unique(live$squeeze_bonus)) {
-      g <- live[live$squeeze_bonus == b & !is.na(live$squeeze_score_raw), ]
-      g <- g[order(g$squeeze_score_raw), ]
-      if (nrow(g) < 3) next
-      expect_false(is.unsorted(g$squeeze_score),
-                   info = sprintf("score not monotone in raw at bonus %s", b))
-      ds <- diff(g$squeeze_score)
-      dr <- diff(g$squeeze_score_raw)
-      expect_true(all(ds[dr > 1e-9] > 0),
-                  info = sprintf("distinct raws collapsed to one score at bonus %s", b))
-    }
-    # UPST had the highest raw of the nine and CAVA the lowest, so the fix has
-    # to put them at opposite ends rather than side by side at 100.
-    g <- live[live$symbol %in% c("UPST", "CAVA"), ]
-    skip_if(nrow(g) < 2, "the 2026-11-04 book is not the current one")
-    expect_gt(g$squeeze_score[g$symbol == "UPST"],
-              g$squeeze_score[g$symbol == "CAVA"])
-  })
-
-  test_that("the bonus is still worth having", {
-    skip_if(is.null(live), "live squeeze inputs unavailable")
-    # A fix that quietly neutered the bonus would pass every test above.
-    expect_true(any(live$squeeze_bonus > 0))
-    b <- live[live$squeeze_bonus > 0, ]
-    expect_true(all(b$squeeze_score > b$squeeze_score_raw))
-    # Worth a fifth of the distance remaining to 100. squeeze_score is stored
-    # rounded to two decimals, so this is checked to that precision, not finer.
-    expect_equal(mean((b$squeeze_score - b$squeeze_score_raw) /
-                        (100 - b$squeeze_score_raw)), 0.20, tolerance = 1e-3)
-    # What the bonus is worth at the High Conviction cut: it lowers the raw a
-    # name needs from 80 to 75, so the cut and the bonus still interact.
-    #
-    # Evaluated at the boundary rather than searched for in the book. Today's
-    # universe contains no bonused name with a raw between 75 and 80, so an
-    # any() over the live rows would assert a fact about this Tuesday's data
-    # and fail on a different one. The formula itself is pinned by the exact
-    # source line asserted in the first test above.
-    hc <- function(raw, bn) raw + (100 - raw) * bn >= 80
-    expect_true(hc(75, 0.20))
-    expect_false(hc(74.9, 0.20))
-    expect_false(hc(79.9, 0))
-    expect_true(hc(80, 0))
-  })
 }
+
+test_that("the bonus cannot push a score past the top of its own scale", {
+  skip_if_not(pkgs_ok, pkgs_why)
+  skip_if(is.null(live), "live squeeze inputs unavailable")
+  # No clip, because nothing can overflow: raw + (100 - raw) * bonus is a
+  # weighted average of raw and 100 whenever bonus is in [0, 1].
+  expect_true(all(live$squeeze_score <= 100))
+  expect_true(all(live$squeeze_score >= 0))
+  expect_true(all(live$squeeze_score >= live$squeeze_score_raw - 1e-9))
+  # And the clip itself is gone from the source, not merely unreached.
+  src <- paste(readLines(repo_path("R", "03_data.R"), warn = FALSE),
+               collapse = "\n")
+  expect_false(grepl("pmin(squeeze_score_raw", src, fixed = TRUE))
+  expect_match(src,
+    "squeeze_score = squeeze_score_raw \\+ \\(100 - squeeze_score_raw\\) \\* squeeze_bonus")
+})
+
+test_that("no name is clipped to the ceiling any more", {
+  skip_if_not(pkgs_ok, pkgs_why)
+  skip_if(is.null(live), "live squeeze inputs unavailable")
+  # The symptom: a pile of names sharing one value because the scale ran out.
+  expect_lt(sum(live$squeeze_score >= 100 - 1e-9), 2)
+  top <- max(live$squeeze_score, na.rm = TRUE)
+  expect_equal(sum(live$squeeze_score >= top - 1e-9), 1L)
+  # The nine that used to tie are now all distinct from one another.
+  nine <- c("CAVA", "HALO", "LOVE", "OLLI", "PTGX", "TROW", "UPST", "WING", "WLDN")
+  got <- live[live$symbol %in% nine, ]
+  skip_if(nrow(got) < length(nine), "the 2026-11-04 book is not the current one")
+  expect_equal(dplyr::n_distinct(got$squeeze_score), length(nine))
+})
+
+test_that("the score keeps the order the four components produced", {
+  skip_if_not(pkgs_ok, pkgs_why)
+  skip_if(is.null(live), "live squeeze inputs unavailable")
+  # Strict monotonicity in raw is the property the clip destroyed, and it is
+  # what makes the ranking mean anything. Checked within the bonus group and
+  # within the unbonused group, since the two sit on different lines.
+  for (b in unique(live$squeeze_bonus)) {
+    g <- live[live$squeeze_bonus == b & !is.na(live$squeeze_score_raw), ]
+    g <- g[order(g$squeeze_score_raw), ]
+    if (nrow(g) < 3) next
+    expect_false(is.unsorted(g$squeeze_score),
+                 info = sprintf("score not monotone in raw at bonus %s", b))
+    ds <- diff(g$squeeze_score)
+    dr <- diff(g$squeeze_score_raw)
+    expect_true(all(ds[dr > 1e-9] > 0),
+                info = sprintf("distinct raws collapsed to one score at bonus %s", b))
+  }
+  # UPST had the highest raw of the nine and CAVA the lowest, so the fix has
+  # to put them at opposite ends rather than side by side at 100.
+  g <- live[live$symbol %in% c("UPST", "CAVA"), ]
+  skip_if(nrow(g) < 2, "the 2026-11-04 book is not the current one")
+  expect_gt(g$squeeze_score[g$symbol == "UPST"],
+            g$squeeze_score[g$symbol == "CAVA"])
+})
+
+test_that("the bonus is still worth having", {
+  skip_if_not(pkgs_ok, pkgs_why)
+  skip_if(is.null(live), "live squeeze inputs unavailable")
+  # A fix that quietly neutered the bonus would pass every test above.
+  expect_true(any(live$squeeze_bonus > 0))
+  b <- live[live$squeeze_bonus > 0, ]
+  expect_true(all(b$squeeze_score > b$squeeze_score_raw))
+  # Worth a fifth of the distance remaining to 100. squeeze_score is stored
+  # rounded to two decimals, so this is checked to that precision, not finer.
+  expect_equal(mean((b$squeeze_score - b$squeeze_score_raw) /
+                      (100 - b$squeeze_score_raw)), 0.20, tolerance = 1e-3)
+  # What the bonus is worth at the High Conviction cut: it lowers the raw a
+  # name needs from 80 to 75, so the cut and the bonus still interact.
+  #
+  # Evaluated at the boundary rather than searched for in the book. Today's
+  # universe contains no bonused name with a raw between 75 and 80, so an
+  # any() over the live rows would assert a fact about this Tuesday's data
+  # and fail on a different one. The formula itself is pinned by the exact
+  # source line asserted in the first test above.
+  hc <- function(raw, bn) raw + (100 - raw) * bn >= 80
+  expect_true(hc(75, 0.20))
+  expect_false(hc(74.9, 0.20))
+  expect_false(hc(79.9, 0))
+  expect_true(hc(80, 0))
+})
+
 
 test_that("the Top Squeeze panel sorts before it takes the head", {
   app <- repo_path("app", "app.R")

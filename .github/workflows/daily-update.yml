@@ -82,6 +82,11 @@ jobs:
               CRAN = "https://cloud.r-project.org"
             ))
             install.packages(c("httr","jsonlite","readr","dplyr","tidyr","glue","lubridate","scales"))
+            # tibble is used by seven runtime files and curl by httr, but
+            # neither was ever installed in its own right -- both arrived only
+            # as a dependency of another package. The test suite names them, so
+            # ask for them directly.
+            install.packages(c("tibble","curl"))
             install.packages("xml2")   # RSS parsing for per-ticker news
             install.packages(c("xts","zoo","TTR","quantmod"))
             install.packages("tidyquant")  # Module 2 uses tq_get() for price data
@@ -98,7 +103,7 @@ jobs:
             required <- c("httr","jsonlite","readr","dplyr","tidyr","glue","lubridate",
                           "scales","xts","zoo","TTR","quantmod","xml2",
                           "shiny","shinydashboard","DT","plotly","ggplot2","rsconnect",
-                          "testthat")
+                          "testthat","tibble","curl")
             # requireNamespace(quietly=TRUE) returns FALSE for a package that
             # is INSTALLED but cannot be loaded, and throws the reason away.
             # That is exactly how xml2 presented: the install said DONE, this

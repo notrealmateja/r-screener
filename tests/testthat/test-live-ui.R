@@ -3,7 +3,10 @@
 # The nightly CSV cannot change during the day, so a timer that re-read it
 # would redraw identical rows. The wire re-fetches the feeds instead.
 
-if (have_pkgs("dplyr", "tibble")) {
+pkgs_ok  <- have_pkgs("dplyr", "tibble")
+pkgs_why <- missing_pkgs("dplyr", "tibble")
+
+if (pkgs_ok) {
   suppressMessages({ library(dplyr); library(tibble) })
 
   ui_src <- readLines(repo_path("app", "global.R"))
@@ -13,49 +16,56 @@ if (have_pkgs("dplyr", "tibble")) {
     eval(parse(text = paste(ui_src[ui_start:length(ui_src)], collapse = "\n")))
   }
   have_ui <- exists("parse_feed_time") && exists("tv_embed_url")
+}
 
-  # ── feed timestamps ──────────────────────────────────────────────────────
-  test_that("RFC-822 pubDates parse", {
-    skip_if_not(have_ui, "global.R live section missing")
-    expect_false(is.na(parse_feed_time("Sat, 22 Aug 2026 17:01:18 GMT")))
-    expect_false(is.na(parse_feed_time("Mon, 27 Jan 2025 14:26:00 -0500")))
-  })
+# ── feed timestamps ──────────────────────────────────────────────────────
+test_that("RFC-822 pubDates parse", {
+  skip_if_not(pkgs_ok, pkgs_why)
+  skip_if_not(have_ui, "global.R live section missing")
+  expect_false(is.na(parse_feed_time("Sat, 22 Aug 2026 17:01:18 GMT")))
+  expect_false(is.na(parse_feed_time("Mon, 27 Jan 2025 14:26:00 -0500")))
+})
 
-  test_that("a non-RFC-822 pubDate still parses", {
-    skip_if_not(have_ui, "global.R live section missing")
-    # Investing.com emits plain "2026-08-22 17:04:56". Parsing only RFC-822 left
-    # those items with no timestamp, so they sorted last and were cut by the
-    # item cap — the feed looked broken when it was only mis-parsed.
-    t <- parse_feed_time("2026-08-22 17:04:56")
-    expect_false(is.na(t))
-    expect_equal(format(t, "%Y-%m-%d"), "2026-08-22")
-  })
+test_that("a non-RFC-822 pubDate still parses", {
+  skip_if_not(pkgs_ok, pkgs_why)
+  skip_if_not(have_ui, "global.R live section missing")
+  # Investing.com emits plain "2026-08-22 17:04:56". Parsing only RFC-822 left
+  # those items with no timestamp, so they sorted last and were cut by the
+  # item cap — the feed looked broken when it was only mis-parsed.
+  t <- parse_feed_time("2026-08-22 17:04:56")
+  expect_false(is.na(t))
+  expect_equal(format(t, "%Y-%m-%d"), "2026-08-22")
+})
 
-  test_that("mixed formats in one vector all parse", {
-    skip_if_not(have_ui, "global.R live section missing")
-    v <- parse_feed_time(c("Sat, 22 Aug 2026 17:01:18 GMT",
-                           "2026-08-22 17:04:56",
-                           "2026-08-22T17:04:56"))
-    expect_equal(sum(!is.na(v)), 3)
-  })
+test_that("mixed formats in one vector all parse", {
+  skip_if_not(pkgs_ok, pkgs_why)
+  skip_if_not(have_ui, "global.R live section missing")
+  v <- parse_feed_time(c("Sat, 22 Aug 2026 17:01:18 GMT",
+                         "2026-08-22 17:04:56",
+                         "2026-08-22T17:04:56"))
+  expect_equal(sum(!is.na(v)), 3)
+})
 
-  test_that("an unparseable date yields NA rather than erroring", {
-    skip_if_not(have_ui, "global.R live section missing")
-    expect_true(is.na(parse_feed_time("not a date")))
-    expect_equal(length(parse_feed_time(character(0))), 0)
-  })
+test_that("an unparseable date yields NA rather than erroring", {
+  skip_if_not(pkgs_ok, pkgs_why)
+  skip_if_not(have_ui, "global.R live section missing")
+  expect_true(is.na(parse_feed_time("not a date")))
+  expect_equal(length(parse_feed_time(character(0))), 0)
+})
 
-  test_that("the stale WSJ feed is not in the feed list", {
-    skip_if_not(have_ui, "global.R live section missing")
-    # It still serves, but its newest item is dated January 2025. A stale feed
-    # is worse than no feed because it reads as coverage.
-    expect_false(any(grepl("dj\\.com", LIVE_NEWS_FEEDS)))
-    expect_gte(length(LIVE_NEWS_FEEDS), 2)
-    expect_true(all(grepl("^https://", LIVE_NEWS_FEEDS)))
-    expect_true(all(nzchar(names(LIVE_NEWS_FEEDS))))
-  })
+test_that("the stale WSJ feed is not in the feed list", {
+  skip_if_not(pkgs_ok, pkgs_why)
+  skip_if_not(have_ui, "global.R live section missing")
+  # It still serves, but its newest item is dated January 2025. A stale feed
+  # is worse than no feed because it reads as coverage.
+  expect_false(any(grepl("dj\\.com", LIVE_NEWS_FEEDS)))
+  expect_gte(length(LIVE_NEWS_FEEDS), 2)
+  expect_true(all(grepl("^https://", LIVE_NEWS_FEEDS)))
+  expect_true(all(nzchar(names(LIVE_NEWS_FEEDS))))
+})
 
-  # ── live TV ──────────────────────────────────────────────────────────────
+# ── live TV ──────────────────────────────────────────────────────────────
+if (pkgs_ok) {
   # tv_embed_url resolves the current live video id over the network, so these
   # stub the resolver: the URL shape is the thing under test, not YouTube.
   with_stub_id <- function(id, expr) {
@@ -64,87 +74,98 @@ if (have_pkgs("dplyr", "tibble")) {
     on.exit(assign("tv_live_video_id", orig, envir = environment(tv_embed_url)), add = TRUE)
     force(expr)
   }
+}
 
-  test_that("a live channel embeds its resolved video id", {
-    skip_if_not(have_ui, "global.R live section missing")
-    # /embed/live_stream?channel= is the documented form, but it renders "This
-    # video is unavailable" even while the channel is demonstrably live, so the
-    # current video id is resolved and embedded directly instead.
-    with_stub_id("QB5BNdBFujE", {
-      u <- tv_embed_url("Bloomberg TV")
-      expect_match(u, "^https://www\\.youtube\\.com/embed/QB5BNdBFujE\\?")
-      expect_false(grepl("live_stream", u, fixed = TRUE))
-    })
+test_that("a live channel embeds its resolved video id", {
+  skip_if_not(pkgs_ok, pkgs_why)
+  skip_if_not(have_ui, "global.R live section missing")
+  # /embed/live_stream?channel= is the documented form, but it renders "This
+  # video is unavailable" even while the channel is demonstrably live, so the
+  # current video id is resolved and embedded directly instead.
+  with_stub_id("QB5BNdBFujE", {
+    u <- tv_embed_url("Bloomberg TV")
+    expect_match(u, "^https://www\\.youtube\\.com/embed/QB5BNdBFujE\\?")
+    expect_false(grepl("live_stream", u, fixed = TRUE))
   })
+})
 
-  test_that("an unresolvable channel falls back rather than erroring", {
-    skip_if_not(have_ui, "global.R live section missing")
-    with_stub_id(NA_character_, {
-      u <- tv_embed_url("Bloomberg TV")
-      expect_match(u, "live_stream\\?channel=")
-      expect_match(u, TV_CHANNELS[["Bloomberg TV"]], fixed = TRUE)
-    })
+test_that("an unresolvable channel falls back rather than erroring", {
+  skip_if_not(pkgs_ok, pkgs_why)
+  skip_if_not(have_ui, "global.R live section missing")
+  with_stub_id(NA_character_, {
+    u <- tv_embed_url("Bloomberg TV")
+    expect_match(u, "live_stream\\?channel=")
+    expect_match(u, TV_CHANNELS[["Bloomberg TV"]], fixed = TRUE)
   })
+})
 
-  test_that("no video id is hardcoded in source", {
-    skip_if_not(have_ui, "global.R live section missing")
-    # Ids change whenever the broadcaster restarts the stream, so a pinned id
-    # dies within days. Only the channel ids may live in source.
-    src <- paste(readLines(repo_path("app", "global.R")), collapse = "\n")
-    expect_false(grepl('embed/[A-Za-z0-9_-]{11}\\?autoplay', src))
-  })
+test_that("no video id is hardcoded in source", {
+  skip_if_not(pkgs_ok, pkgs_why)
+  skip_if_not(have_ui, "global.R live section missing")
+  # Ids change whenever the broadcaster restarts the stream, so a pinned id
+  # dies within days. Only the channel ids may live in source.
+  src <- paste(readLines(repo_path("app", "global.R")), collapse = "\n")
+  expect_false(grepl('embed/[A-Za-z0-9_-]{11}\\?autoplay', src))
+})
 
-  test_that("streams start muted, since browsers block autoplay with sound", {
-    skip_if_not(have_ui, "global.R live section missing")
-    with_stub_id("QB5BNdBFujE", expect_match(tv_embed_url("Bloomberg TV"), "mute=1", fixed = TRUE))
-    with_stub_id(NA_character_,  expect_match(tv_embed_url("Bloomberg TV"), "mute=1", fixed = TRUE))
-  })
+test_that("streams start muted, since browsers block autoplay with sound", {
+  skip_if_not(pkgs_ok, pkgs_why)
+  skip_if_not(have_ui, "global.R live section missing")
+  with_stub_id("QB5BNdBFujE", expect_match(tv_embed_url("Bloomberg TV"), "mute=1", fixed = TRUE))
+  with_stub_id(NA_character_,  expect_match(tv_embed_url("Bloomberg TV"), "mute=1", fixed = TRUE))
+})
 
-  test_that("channel ids look like real YouTube channel ids", {
-    skip_if_not(have_ui, "global.R live section missing")
-    expect_gte(length(TV_CHANNELS), 2)
-    for (id in TV_CHANNELS) expect_match(id, "^UC[A-Za-z0-9_-]{22}$")
-  })
+test_that("channel ids look like real YouTube channel ids", {
+  skip_if_not(pkgs_ok, pkgs_why)
+  skip_if_not(have_ui, "global.R live section missing")
+  expect_gte(length(TV_CHANNELS), 2)
+  for (id in TV_CHANNELS) expect_match(id, "^UC[A-Za-z0-9_-]{22}$")
+})
 
-  # ── the chart hover regression ───────────────────────────────────────────
+# ── the chart hover regression ───────────────────────────────────────────
+if (pkgs_ok) {
   # Strip comments first: the fix is described in a comment that names the old
   # setting, and a naive grep over the whole file matches that prose.
   app_code <- function() {
     l <- readLines(repo_path("app", "app.R"))
     paste(l[!grepl("^\\s*#", l)], collapse = "\n")
   }
-
-  test_that("the price chart no longer uses unified hover", {
-    src <- app_code()
-    # "x unified" stacks price, three moving averages and both Bollinger bands
-    # into one tall tooltip that jumps as the cursor moves.
-    expect_false(grepl('hovermode\\s*=\\s*"x unified"', src))
-    expect_true(grepl('hovertemplate', src))
-    # the overlays must not answer the hover
-    expect_true(grepl('name="MA20",\\s*hoverinfo="skip"', src))
-    expect_true(grepl('name="MA200",\\s*hoverinfo="skip"', src))
-  })
-
-  test_that("leaving the overview stops the embedded stream", {
-    src <- app_code()
-    # The player lives on the Overview pane. Panes are hidden with CSS rather
-    # than unmounted, so without this the video keeps playing, and keeps making
-    # sound, while the viewer is on another tab.
-    expect_true(grepl("about:blank", src, fixed = TRUE))
-    expect_true(grepl("pane-overview iframe", src, fixed = TRUE))
-    # the standalone TV tab was folded into Overview
-    expect_false(grepl('id="pane-tv"', src, fixed = TRUE))
-  })
-
-  test_that("the all-100% confidence columns are gone from the tables", {
-    src <- app_code()
-    # sweet_spot_confidence and unicorn_confidence each had exactly one
-    # distinct value across the universe, so the bar drew an identical green
-    # line on every row and told the reader nothing.
-    expect_false(grepl("Confidence\\s*=\\s*sapply", src))
-    expect_false(grepl("`Wk Conf`\\s*=", src))
-  })
 }
+
+test_that("the price chart no longer uses unified hover", {
+  skip_if_not(pkgs_ok, pkgs_why)
+  src <- app_code()
+  # "x unified" stacks price, three moving averages and both Bollinger bands
+  # into one tall tooltip that jumps as the cursor moves.
+  expect_false(grepl('hovermode\\s*=\\s*"x unified"', src))
+  expect_true(grepl('hovertemplate', src))
+  # the overlays must not answer the hover
+  expect_true(grepl('name="MA20",\\s*hoverinfo="skip"', src))
+  expect_true(grepl('name="MA200",\\s*hoverinfo="skip"', src))
+})
+
+test_that("leaving the overview stops the embedded stream", {
+  skip_if_not(pkgs_ok, pkgs_why)
+  src <- app_code()
+  # The player lives on the Overview pane. Panes are hidden with CSS rather
+  # than unmounted, so without this the video keeps playing, and keeps making
+  # sound, while the viewer is on another tab.
+  expect_true(grepl("about:blank", src, fixed = TRUE))
+  expect_true(grepl("pane-overview iframe", src, fixed = TRUE))
+  # the standalone TV tab was folded into Overview
+  expect_false(grepl('id="pane-tv"', src, fixed = TRUE))
+})
+
+test_that("the all-100% confidence columns are gone from the tables", {
+  skip_if_not(pkgs_ok, pkgs_why)
+  src <- app_code()
+  # sweet_spot_confidence and unicorn_confidence each had exactly one
+  # distinct value across the universe, so the bar drew an identical green
+  # line on every row and told the reader nothing.
+  expect_false(grepl("Confidence\\s*=\\s*sapply", src))
+  expect_false(grepl("`Wk Conf`\\s*=", src))
+})
+
 
 # ── the live-vs-recorded regression ─────────────────────────────────────────
 test_that("resolution goes through the Data API, not page scraping", {
@@ -219,36 +240,40 @@ test_that("table rows are held to a single line", {
 # every channel resolved as unavailable there and the panel told the viewer
 # that four broadcasters were simultaneously off air. Ids are resolved nightly
 # in CI and shipped; the app falls back to that file.
-if (have_pkgs("dplyr", "readr", "tibble")) {
-  test_that("liveness is tri-state, so unreachable is not reported as off air", {
-    skip_if_not(have_ui, "global.R live section missing")
-    src <- paste(readLines(repo_path("app", "global.R")), collapse = "\n")
-    expect_true(grepl("tv_live_state", src, fixed = TRUE))
-    # the player must only refuse to mount on a positive off-air determination
-    app <- paste(readLines(repo_path("app", "app.R")), collapse = "\n")
-    expect_true(grepl('identical(tryCatch(tv_live_state(ch)', app, fixed = TRUE))
-  })
+pkgs_ok2  <- have_pkgs("dplyr", "readr", "tibble")
+pkgs_why2 <- missing_pkgs("dplyr", "readr", "tibble")
 
-  test_that("the nightly channel file carries what the fallback needs", {
-    p <- repo_path("data", "tv_channels.csv")
-    skip_if_not(file.exists(p), "tv_channels.csv not generated yet")
-    d <- readr::read_csv(p, show_col_types = FALSE)
-    expect_true(all(c("channel", "video_id", "is_live", "resolved_at") %in% names(d)))
-    expect_gt(nrow(d), 0)
-    # every row flagged live must carry a real 11-character video id
-    live <- d[!is.na(d$is_live) & as.logical(d$is_live), ]
-    if (nrow(live) > 0) {
-      expect_true(all(!is.na(live$video_id)))
-      expect_true(all(grepl("^[A-Za-z0-9_-]{11}$", live$video_id)))
-    }
-    # Deliberately NOT asserting that some channel is live. That is a statement
-    # about the outside world, not about this code, and putting it here halted
-    # the whole pipeline and blocked a deploy when the resolver came back empty
-    # from a datacenter IP. The health check reports live-channel counts and
-    # flags zero; a unit test should only hold the schema.
-    expect_true(is.logical(as.logical(d$is_live)))
-  })
-}
+test_that("liveness is tri-state, so unreachable is not reported as off air", {
+  skip_if_not(pkgs_ok2, pkgs_why2)
+  skip_if_not(have_ui, "global.R live section missing")
+  src <- paste(readLines(repo_path("app", "global.R")), collapse = "\n")
+  expect_true(grepl("tv_live_state", src, fixed = TRUE))
+  # the player must only refuse to mount on a positive off-air determination
+  app <- paste(readLines(repo_path("app", "app.R")), collapse = "\n")
+  expect_true(grepl('identical(tryCatch(tv_live_state(ch)', app, fixed = TRUE))
+})
+
+test_that("the nightly channel file carries what the fallback needs", {
+  skip_if_not(pkgs_ok2, pkgs_why2)
+  p <- repo_path("data", "tv_channels.csv")
+  skip_if_not(file.exists(p), "tv_channels.csv not generated yet")
+  d <- readr::read_csv(p, show_col_types = FALSE)
+  expect_true(all(c("channel", "video_id", "is_live", "resolved_at") %in% names(d)))
+  expect_gt(nrow(d), 0)
+  # every row flagged live must carry a real 11-character video id
+  live <- d[!is.na(d$is_live) & as.logical(d$is_live), ]
+  if (nrow(live) > 0) {
+    expect_true(all(!is.na(live$video_id)))
+    expect_true(all(grepl("^[A-Za-z0-9_-]{11}$", live$video_id)))
+  }
+  # Deliberately NOT asserting that some channel is live. That is a statement
+  # about the outside world, not about this code, and putting it here halted
+  # the whole pipeline and blocked a deploy when the resolver came back empty
+  # from a datacenter IP. The health check reports live-channel counts and
+  # flags zero; a unit test should only hold the schema.
+  expect_true(is.logical(as.logical(d$is_live)))
+})
+
 
 # ── the two page shapes YouTube serves ──────────────────────────────────────
 # A home connection gets a page with a canonical link and lengthSeconds; a

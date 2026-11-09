@@ -2,7 +2,10 @@
 # money", so an error here misleads more directly than a wrong IC. These tests
 # cover the arithmetic offline plus the shape of the shipped file.
 
-if (have_pkgs("dplyr", "readr", "tibble")) {
+pkgs_ok  <- have_pkgs("dplyr", "readr", "tibble")
+pkgs_why <- missing_pkgs("dplyr", "readr", "tibble")
+
+if (pkgs_ok) {
   suppressMessages({ library(dplyr); library(readr); library(tibble) })
 
   bt_deps <- have_pkgs("tidyr", "glue")
@@ -10,99 +13,107 @@ if (have_pkgs("dplyr", "readr", "tibble")) {
     SOURCED_BY_MASTER <- TRUE
     suppressMessages(try(source(repo_path("R", "05_backtest.R"), local = TRUE), silent = TRUE))
   }
-
-  test_that("equity_stats recovers known values from a constructed series", {
-    skip_if_not(exists("equity_stats"), "05_backtest.R not sourced")
-    # 252 days of exactly +0.1%/day against a flat benchmark.
-    r <- rep(0.001, 252); b <- rep(0, 252)
-    s <- equity_stats(r, b)
-    expect_equal(s$total_return, 1.001^252 - 1, tolerance = 1e-10)
-    expect_equal(s$cagr,         1.001^252 - 1, tolerance = 1e-8)
-    expect_equal(s$vol, 0, tolerance = 1e-12)
-    expect_equal(s$max_drawdown, 0, tolerance = 1e-12)   # monotone rise never draws down
-    expect_equal(s$days, 252)
-  })
-
-  test_that("beta is 1 against itself and 2 for a doubled series", {
-    skip_if_not(exists("equity_stats"), "05_backtest.R not sourced")
-    set.seed(42)
-    b <- rnorm(300, 0.0004, 0.01)
-    expect_equal(equity_stats(b, b)$beta,     1, tolerance = 1e-10)
-    expect_equal(equity_stats(2 * b, b)$beta, 2, tolerance = 1e-10)
-  })
-
-  test_that("drawdown is measured peak-to-trough, not from the start", {
-    skip_if_not(exists("equity_stats"), "05_backtest.R not sourced")
-    # up 10%, down 50%, up 10% -> worst drawdown is the -50% leg
-    s <- equity_stats(c(0.10, -0.50, 0.10), c(0, 0, 0))
-    expect_equal(s$max_drawdown, -0.5, tolerance = 1e-12)
-  })
-
-  test_that("equity_stats declines to guess on too little data", {
-    skip_if_not(exists("equity_stats"), "05_backtest.R not sourced")
-    expect_null(equity_stats(c(0.01), c(0.01)))
-    expect_null(equity_stats(numeric(0), numeric(0)))
-  })
-
-  # ── shipped file shape ────────────────────────────────────────────────────
-  test_that("backtest_equity.csv is internally consistent", {
-    p <- repo_path("data", "backtest_equity.csv")
-    skip_if_not(file.exists(p), "equity curve not generated yet")
-    d <- read_csv(p, show_col_types = FALSE)
-    expect_true(all(c("date","model_ret","q5_ret","spy_ret",
-                      "model_cum","q5_cum","spy_cum","rel_cum",
-                      "model_dd","spy_dd") %in% names(d)))
-    skip_if(nrow(d) < 2, "too few rows")
-
-    # A duplicated date would mean two tranches compounding the same day twice.
-    expect_equal(anyDuplicated(d$date), 0)
-    expect_false(is.unsorted(d$date))
-
-    # The cumulative columns must actually be the compounded returns.
-    expect_equal(d$model_cum, cumprod(1 + d$model_ret), tolerance = 1e-9)
-    expect_equal(d$spy_cum,   cumprod(1 + d$spy_ret),   tolerance = 1e-9)
-    expect_equal(d$rel_cum,   d$model_cum / d$spy_cum,  tolerance = 1e-9)
-    expect_equal(d$univ_cum,  cumprod(1 + d$univ_ret),  tolerance = 1e-9)
-
-    # Drawdown is non-positive and bottoms out no lower than -100%.
-    expect_true(all(d$model_dd <= 1e-12))
-    expect_true(all(d$model_dd >= -1))
-  })
-
-  test_that("the split guard kept corporate actions out of the curve", {
-    p <- repo_path("data", "backtest_equity.csv")
-    skip_if_not(file.exists(p), "equity curve not generated yet")
-    d <- read_csv(p, show_col_types = FALSE)
-    skip_if(nrow(d) < 2, "too few rows")
-    # PRPL's +2010% and BRCC's +872% are unadjusted reverse splits. A ~39-name
-    # equal-weight book would show roughly +9.8% and +4.4% on those days if they
-    # leaked through; no genuine daily move for this portfolio approaches that.
-    expect_true(max(abs(d$model_ret), na.rm = TRUE) < 0.25)
-    expect_true(max(abs(d$q5_ret),    na.rm = TRUE) < 0.25)
-  })
-
-  test_that("stats file carries all three series and agrees with the curve", {
-    ps <- repo_path("data", "backtest_equity_stats.csv")
-    pc <- repo_path("data", "backtest_equity.csv")
-    skip_if_not(file.exists(ps) && file.exists(pc), "equity stats not generated yet")
-    s <- read_csv(ps, show_col_types = FALSE)
-    d <- read_csv(pc, show_col_types = FALSE)
-    # "univ" is the no-signal control: the same 195 names equal-weighted with no
-    # ranking. Without it the tab credits the model for its universe's
-    # survivorship bias, which is worth about 7pp a year on its own.
-    expect_setequal(s$series, c("model", "q5", "univ", "spy"))
-    expect_true(all(c("cagr","beta","max_drawdown","excess_cagr") %in% names(s)))
-
-    # The benchmark is its own benchmark, so its beta is exactly 1 and its
-    # excess return exactly 0 — a cheap check that the rows are not transposed.
-    spy <- s[s$series == "spy", ]
-    expect_equal(spy$beta[1], 1, tolerance = 1e-8)
-    expect_equal(spy$excess_cagr[1], 0, tolerance = 1e-10)
-
-    mdl <- s[s$series == "model", ]
-    expect_equal(mdl$total_return[1], tail(d$model_cum, 1) - 1, tolerance = 1e-8)
-  })
 }
+
+test_that("equity_stats recovers known values from a constructed series", {
+  skip_if_not(pkgs_ok, pkgs_why)
+  skip_if_not(exists("equity_stats"), "05_backtest.R not sourced")
+  # 252 days of exactly +0.1%/day against a flat benchmark.
+  r <- rep(0.001, 252); b <- rep(0, 252)
+  s <- equity_stats(r, b)
+  expect_equal(s$total_return, 1.001^252 - 1, tolerance = 1e-10)
+  expect_equal(s$cagr,         1.001^252 - 1, tolerance = 1e-8)
+  expect_equal(s$vol, 0, tolerance = 1e-12)
+  expect_equal(s$max_drawdown, 0, tolerance = 1e-12)   # monotone rise never draws down
+  expect_equal(s$days, 252)
+})
+
+test_that("beta is 1 against itself and 2 for a doubled series", {
+  skip_if_not(pkgs_ok, pkgs_why)
+  skip_if_not(exists("equity_stats"), "05_backtest.R not sourced")
+  set.seed(42)
+  b <- rnorm(300, 0.0004, 0.01)
+  expect_equal(equity_stats(b, b)$beta,     1, tolerance = 1e-10)
+  expect_equal(equity_stats(2 * b, b)$beta, 2, tolerance = 1e-10)
+})
+
+test_that("drawdown is measured peak-to-trough, not from the start", {
+  skip_if_not(pkgs_ok, pkgs_why)
+  skip_if_not(exists("equity_stats"), "05_backtest.R not sourced")
+  # up 10%, down 50%, up 10% -> worst drawdown is the -50% leg
+  s <- equity_stats(c(0.10, -0.50, 0.10), c(0, 0, 0))
+  expect_equal(s$max_drawdown, -0.5, tolerance = 1e-12)
+})
+
+test_that("equity_stats declines to guess on too little data", {
+  skip_if_not(pkgs_ok, pkgs_why)
+  skip_if_not(exists("equity_stats"), "05_backtest.R not sourced")
+  expect_null(equity_stats(c(0.01), c(0.01)))
+  expect_null(equity_stats(numeric(0), numeric(0)))
+})
+
+# ── shipped file shape ────────────────────────────────────────────────────
+test_that("backtest_equity.csv is internally consistent", {
+  skip_if_not(pkgs_ok, pkgs_why)
+  p <- repo_path("data", "backtest_equity.csv")
+  skip_if_not(file.exists(p), "equity curve not generated yet")
+  d <- read_csv(p, show_col_types = FALSE)
+  expect_true(all(c("date","model_ret","q5_ret","spy_ret",
+                    "model_cum","q5_cum","spy_cum","rel_cum",
+                    "model_dd","spy_dd") %in% names(d)))
+  skip_if(nrow(d) < 2, "too few rows")
+
+  # A duplicated date would mean two tranches compounding the same day twice.
+  expect_equal(anyDuplicated(d$date), 0)
+  expect_false(is.unsorted(d$date))
+
+  # The cumulative columns must actually be the compounded returns.
+  expect_equal(d$model_cum, cumprod(1 + d$model_ret), tolerance = 1e-9)
+  expect_equal(d$spy_cum,   cumprod(1 + d$spy_ret),   tolerance = 1e-9)
+  expect_equal(d$rel_cum,   d$model_cum / d$spy_cum,  tolerance = 1e-9)
+  expect_equal(d$univ_cum,  cumprod(1 + d$univ_ret),  tolerance = 1e-9)
+
+  # Drawdown is non-positive and bottoms out no lower than -100%.
+  expect_true(all(d$model_dd <= 1e-12))
+  expect_true(all(d$model_dd >= -1))
+})
+
+test_that("the split guard kept corporate actions out of the curve", {
+  skip_if_not(pkgs_ok, pkgs_why)
+  p <- repo_path("data", "backtest_equity.csv")
+  skip_if_not(file.exists(p), "equity curve not generated yet")
+  d <- read_csv(p, show_col_types = FALSE)
+  skip_if(nrow(d) < 2, "too few rows")
+  # PRPL's +2010% and BRCC's +872% are unadjusted reverse splits. A ~39-name
+  # equal-weight book would show roughly +9.8% and +4.4% on those days if they
+  # leaked through; no genuine daily move for this portfolio approaches that.
+  expect_true(max(abs(d$model_ret), na.rm = TRUE) < 0.25)
+  expect_true(max(abs(d$q5_ret),    na.rm = TRUE) < 0.25)
+})
+
+test_that("stats file carries all three series and agrees with the curve", {
+  skip_if_not(pkgs_ok, pkgs_why)
+  ps <- repo_path("data", "backtest_equity_stats.csv")
+  pc <- repo_path("data", "backtest_equity.csv")
+  skip_if_not(file.exists(ps) && file.exists(pc), "equity stats not generated yet")
+  s <- read_csv(ps, show_col_types = FALSE)
+  d <- read_csv(pc, show_col_types = FALSE)
+  # "univ" is the no-signal control: the same 195 names equal-weighted with no
+  # ranking. Without it the tab credits the model for its universe's
+  # survivorship bias, which is worth about 7pp a year on its own.
+  expect_setequal(s$series, c("model", "q5", "univ", "spy"))
+  expect_true(all(c("cagr","beta","max_drawdown","excess_cagr") %in% names(s)))
+
+  # The benchmark is its own benchmark, so its beta is exactly 1 and its
+  # excess return exactly 0 — a cheap check that the rows are not transposed.
+  spy <- s[s$series == "spy", ]
+  expect_equal(spy$beta[1], 1, tolerance = 1e-8)
+  expect_equal(spy$excess_cagr[1], 0, tolerance = 1e-10)
+
+  mdl <- s[s$series == "model", ]
+  expect_equal(mdl$total_return[1], tail(d$model_cum, 1) - 1, tolerance = 1e-8)
+})
+
 
 # The block above sources R/05_backtest.R inside try(silent = TRUE), and the
 # blocks below used to gate their whole contents on exists(). That combination
@@ -224,49 +235,54 @@ test_that("a missing cell freezes the position rather than excluding it", {
 # model for two things it had not earned: the survivorship bias in its own
 # ticker list, and a t-statistic computed as though every day of a 63-day hold
 # were a fresh independent observation.
-if (have_pkgs("dplyr", "readr")) {
-  test_that("the no-signal universe baseline is present and independent of the model", {
-    ps <- repo_path("data", "backtest_equity_stats.csv")
-    pc <- repo_path("data", "backtest_equity.csv")
-    skip_if_not(file.exists(ps) && file.exists(pc), "equity stats not generated yet")
-    s <- read_csv(ps, show_col_types = FALSE)
-    d <- read_csv(pc, show_col_types = FALSE)
-    expect_true("univ" %in% s$series)
-    expect_true(all(c("univ_ret", "univ_cum") %in% names(d)))
-    # It must not simply track the model — it is a different portfolio.
-    expect_false(isTRUE(all.equal(d$univ_ret, d$model_ret)))
-    u <- s[s$series == "univ", ]
-    expect_equal(u$total_return[1], tail(d$univ_cum, 1) - 1, tolerance = 1e-8)
-  })
+pkgs_ok2  <- have_pkgs("dplyr", "readr")
+pkgs_why2 <- missing_pkgs("dplyr", "readr")
 
-  # The curve used to end on 2026-09-22, a day carrying 35 of 194 symbols
-  # because the pull was still landing. Every absent name was marked flat.
-  test_that("the curve does not end on a day most of the universe is missing", {
-    pp <- repo_path("data", "price_history.csv")
-    ps <- repo_path("data", "backtest_equity_stats.csv")
-    skip_if_not(file.exists(pp) && file.exists(ps), "not generated yet")
-    px <- read_csv(pp, col_select = c(symbol, date, daily_ret),
-                   show_col_types = FALSE) %>% filter(!is.na(daily_ret))
-    cov <- px %>% count(date, name = "n_sym")
-    ref <- stats::median(cov$n_sym)
-    end <- as.Date(read_csv(ps, show_col_types = FALSE)$end_date[1])
-    n_end <- cov$n_sym[cov$date == end]
-    skip_if(length(n_end) != 1, "end date not present in price history")
-    expect_gte(n_end, 0.80 * ref)
-  })
+test_that("the no-signal universe baseline is present and independent of the model", {
+  skip_if_not(pkgs_ok2, pkgs_why2)
+  ps <- repo_path("data", "backtest_equity_stats.csv")
+  pc <- repo_path("data", "backtest_equity.csv")
+  skip_if_not(file.exists(ps) && file.exists(pc), "equity stats not generated yet")
+  s <- read_csv(ps, show_col_types = FALSE)
+  d <- read_csv(pc, show_col_types = FALSE)
+  expect_true("univ" %in% s$series)
+  expect_true(all(c("univ_ret", "univ_cum") %in% names(d)))
+  # It must not simply track the model — it is a different portfolio.
+  expect_false(isTRUE(all.equal(d$univ_ret, d$model_ret)))
+  u <- s[s$series == "univ", ]
+  expect_equal(u$total_return[1], tail(d$univ_cum, 1) - 1, tolerance = 1e-8)
+})
 
-  test_that("significance is measured per rebalance, not per day", {
-    ps <- repo_path("data", "backtest_equity_stats.csv")
-    skip_if_not(file.exists(ps), "equity stats not generated yet")
-    s <- read_csv(ps, show_col_types = FALSE)
-    expect_true(all(c("excess_t_tranche", "n_decisions") %in% names(s)))
-    m <- s[s$series == "model", ]
-    # ~10 rebalances over 2.5 years, not 623 daily observations
-    expect_true(m$n_decisions[1] >= 2 && m$n_decisions[1] <= 40)
-    expect_true(m$n_decisions[1] < m$days[1] / 10)
-    expect_false(is.na(m$excess_t_tranche[1]))
-  })
-}
+# The curve used to end on 2026-09-22, a day carrying 35 of 194 symbols
+# because the pull was still landing. Every absent name was marked flat.
+test_that("the curve does not end on a day most of the universe is missing", {
+  skip_if_not(pkgs_ok2, pkgs_why2)
+  pp <- repo_path("data", "price_history.csv")
+  ps <- repo_path("data", "backtest_equity_stats.csv")
+  skip_if_not(file.exists(pp) && file.exists(ps), "not generated yet")
+  px <- read_csv(pp, col_select = c(symbol, date, daily_ret),
+                 show_col_types = FALSE) %>% filter(!is.na(daily_ret))
+  cov <- px %>% count(date, name = "n_sym")
+  ref <- stats::median(cov$n_sym)
+  end <- as.Date(read_csv(ps, show_col_types = FALSE)$end_date[1])
+  n_end <- cov$n_sym[cov$date == end]
+  skip_if(length(n_end) != 1, "end date not present in price history")
+  expect_gte(n_end, 0.80 * ref)
+})
+
+test_that("significance is measured per rebalance, not per day", {
+  skip_if_not(pkgs_ok2, pkgs_why2)
+  ps <- repo_path("data", "backtest_equity_stats.csv")
+  skip_if_not(file.exists(ps), "equity stats not generated yet")
+  s <- read_csv(ps, show_col_types = FALSE)
+  expect_true(all(c("excess_t_tranche", "n_decisions") %in% names(s)))
+  m <- s[s$series == "model", ]
+  # ~10 rebalances over 2.5 years, not 623 daily observations
+  expect_true(m$n_decisions[1] >= 2 && m$n_decisions[1] <= 40)
+  expect_true(m$n_decisions[1] < m$days[1] / 10)
+  expect_false(is.na(m$excess_t_tranche[1]))
+})
+
 
 # ── the overlapping composite ───────────────────────────────────────────────
 # A single rebalance calendar has to start somewhere, and because the price
@@ -275,87 +291,95 @@ if (have_pkgs("dplyr", "readr")) {
 # +10.1pp to -5.4pp. Sweeping all 63 start days put that spread between -10.3pp
 # and +41.6pp. The curve now holds every calendar at once, and the sweep is
 # published so the sensitivity is visible rather than drawn from blindly.
-if (have_pkgs("dplyr", "readr")) {
+pkgs_ok3  <- have_pkgs("dplyr", "readr")
+pkgs_why3 <- missing_pkgs("dplyr", "readr")
+
+if (pkgs_ok3) {
   suppressMessages({ library(dplyr); library(readr) })
-
-  test_that("the calendar sweep is published and complete", {
-    p <- repo_path("data", "backtest_phase_sweep.csv")
-    skip_if_not(file.exists(p), "phase sweep not generated yet")
-    d <- read_csv(p, show_col_types = FALSE)
-    expect_true(all(c("phase","n_tranches","days","top","bottom","univ","spy",
-                      "spread","edge_vs_univ","excess") %in% names(d)))
-    expect_gt(nrow(d), 1)
-    expect_equal(anyDuplicated(d$phase), 0)
-    # Each calendar must cover the SAME dates, or the spread measures different
-    # windows as much as different calendars.
-    expect_equal(length(unique(d$days)), 1)
-    expect_equal(d$spread, d$top - d$bottom, tolerance = 1e-12)
-  })
-
-  test_that("the headline is the average of the calendars, not one of them", {
-    ps <- repo_path("data", "backtest_equity_stats.csv")
-    pw <- repo_path("data", "backtest_phase_sweep.csv")
-    skip_if_not(file.exists(ps) && file.exists(pw), "not generated yet")
-    s <- read_csv(ps, show_col_types = FALSE)
-    w <- read_csv(pw, show_col_types = FALSE)
-    skip_if(nrow(w) < 2, "too few calendars")
-    for (ser in c("model", "q5", "univ")) {
-      col <- c(model = "top", q5 = "bottom", univ = "univ")[[ser]]
-      got <- s$cagr[s$series == ser]
-      # The composite averages daily returns across calendars, so it is not
-      # identical to the mean of the per-calendar CAGRs — but it must sit
-      # inside their range, and close to their centre.
-      expect_gte(got, min(w[[col]]), label = paste(ser, "below every calendar"))
-      expect_lte(got, max(w[[col]]), label = paste(ser, "above every calendar"))
-      # Absolute, and tight. A relative tolerance of 0.03 on a figure near 0.41
-      # permits a 1.2pp error while the thing it guards is 0.03pp — it would
-      # have passed through the annualisation mismatch it was written to catch.
-      expect_lt(abs(got - mean(w[[col]])), 0.006,
-                label = paste(ser, "composite far from the calendar mean"))
-    }
-  })
-
-  test_that("every date in the curve has all calendars live", {
-    p <- repo_path("data", "backtest_equity.csv")
-    pw <- repo_path("data", "backtest_phase_sweep.csv")
-    skip_if_not(file.exists(p) && file.exists(pw), "not generated yet")
-    d <- read_csv(p, show_col_types = FALSE)
-    skip_if(!"n_books" %in% names(d), "pre-composite curve")
-    w <- read_csv(pw, show_col_types = FALSE)
-    # A date averaging fewer books is noisier by construction and would make
-    # the start of the curve look more volatile than the strategy is.
-    expect_equal(unique(d$n_books), nrow(w))
-  })
-
-  test_that("averaging calendars does not inflate the independent sample", {
-    ps <- repo_path("data", "backtest_equity_stats.csv")
-    pc <- repo_path("data", "backtest_equity.csv")
-    skip_if_not(file.exists(ps) && file.exists(pc), "not generated yet")
-    s <- read_csv(ps, show_col_types = FALSE)
-    d <- read_csv(pc, show_col_types = FALSE)
-    skip_if(!"block" %in% names(d), "pre-composite curve")
-    n_dec <- s$n_decisions[s$series == "model"]
-    # 63 overlapping calendars are not 63x the evidence: on any day 62/63 of
-    # the book is yesterday's. The independent unit is still one holding
-    # period, so n_decisions counts whole 63-day blocks, not days or calendars.
-    whole <- d %>% count(block) %>% filter(n == 63) %>% nrow()
-    expect_equal(n_dec, whole)
-    expect_lt(n_dec, nrow(d) / 50)        # nowhere near one per day
-    n_cal <- nrow(read_csv(repo_path("data", "backtest_phase_sweep.csv"),
-                           show_col_types = FALSE))
-    expect_lt(n_dec, n_cal)               # nor one per calendar
-  })
-
-  test_that("the calendar spread is reported, and not as a confidence interval", {
-    ps <- repo_path("data", "backtest_equity_stats.csv")
-    pw <- repo_path("data", "backtest_phase_sweep.csv")
-    skip_if_not(file.exists(ps) && file.exists(pw), "not generated yet")
-    s <- read_csv(ps, show_col_types = FALSE); w <- read_csv(pw, show_col_types = FALSE)
-    skip_if(!"phase_spread_min" %in% names(s), "pre-composite stats")
-    expect_equal(s$phase_model_cagr_min[1], min(w$top), tolerance = 1e-12)
-    expect_equal(s$phase_model_cagr_max[1], max(w$top), tolerance = 1e-12)
-    expect_equal(s$phase_spread_med[1], median(w$spread), tolerance = 1e-12)
-    expect_equal(s$phase_top_beats_bottom[1], mean(w$spread > 0), tolerance = 1e-12)
-    expect_equal(s$phases[1], nrow(w))
-  })
 }
+
+test_that("the calendar sweep is published and complete", {
+  skip_if_not(pkgs_ok3, pkgs_why3)
+  p <- repo_path("data", "backtest_phase_sweep.csv")
+  skip_if_not(file.exists(p), "phase sweep not generated yet")
+  d <- read_csv(p, show_col_types = FALSE)
+  expect_true(all(c("phase","n_tranches","days","top","bottom","univ","spy",
+                    "spread","edge_vs_univ","excess") %in% names(d)))
+  expect_gt(nrow(d), 1)
+  expect_equal(anyDuplicated(d$phase), 0)
+  # Each calendar must cover the SAME dates, or the spread measures different
+  # windows as much as different calendars.
+  expect_equal(length(unique(d$days)), 1)
+  expect_equal(d$spread, d$top - d$bottom, tolerance = 1e-12)
+})
+
+test_that("the headline is the average of the calendars, not one of them", {
+  skip_if_not(pkgs_ok3, pkgs_why3)
+  ps <- repo_path("data", "backtest_equity_stats.csv")
+  pw <- repo_path("data", "backtest_phase_sweep.csv")
+  skip_if_not(file.exists(ps) && file.exists(pw), "not generated yet")
+  s <- read_csv(ps, show_col_types = FALSE)
+  w <- read_csv(pw, show_col_types = FALSE)
+  skip_if(nrow(w) < 2, "too few calendars")
+  for (ser in c("model", "q5", "univ")) {
+    col <- c(model = "top", q5 = "bottom", univ = "univ")[[ser]]
+    got <- s$cagr[s$series == ser]
+    # The composite averages daily returns across calendars, so it is not
+    # identical to the mean of the per-calendar CAGRs — but it must sit
+    # inside their range, and close to their centre.
+    expect_gte(got, min(w[[col]]), label = paste(ser, "below every calendar"))
+    expect_lte(got, max(w[[col]]), label = paste(ser, "above every calendar"))
+    # Absolute, and tight. A relative tolerance of 0.03 on a figure near 0.41
+    # permits a 1.2pp error while the thing it guards is 0.03pp — it would
+    # have passed through the annualisation mismatch it was written to catch.
+    expect_lt(abs(got - mean(w[[col]])), 0.006,
+              label = paste(ser, "composite far from the calendar mean"))
+  }
+})
+
+test_that("every date in the curve has all calendars live", {
+  skip_if_not(pkgs_ok3, pkgs_why3)
+  p <- repo_path("data", "backtest_equity.csv")
+  pw <- repo_path("data", "backtest_phase_sweep.csv")
+  skip_if_not(file.exists(p) && file.exists(pw), "not generated yet")
+  d <- read_csv(p, show_col_types = FALSE)
+  skip_if(!"n_books" %in% names(d), "pre-composite curve")
+  w <- read_csv(pw, show_col_types = FALSE)
+  # A date averaging fewer books is noisier by construction and would make
+  # the start of the curve look more volatile than the strategy is.
+  expect_equal(unique(d$n_books), nrow(w))
+})
+
+test_that("averaging calendars does not inflate the independent sample", {
+  skip_if_not(pkgs_ok3, pkgs_why3)
+  ps <- repo_path("data", "backtest_equity_stats.csv")
+  pc <- repo_path("data", "backtest_equity.csv")
+  skip_if_not(file.exists(ps) && file.exists(pc), "not generated yet")
+  s <- read_csv(ps, show_col_types = FALSE)
+  d <- read_csv(pc, show_col_types = FALSE)
+  skip_if(!"block" %in% names(d), "pre-composite curve")
+  n_dec <- s$n_decisions[s$series == "model"]
+  # 63 overlapping calendars are not 63x the evidence: on any day 62/63 of
+  # the book is yesterday's. The independent unit is still one holding
+  # period, so n_decisions counts whole 63-day blocks, not days or calendars.
+  whole <- d %>% count(block) %>% filter(n == 63) %>% nrow()
+  expect_equal(n_dec, whole)
+  expect_lt(n_dec, nrow(d) / 50)        # nowhere near one per day
+  n_cal <- nrow(read_csv(repo_path("data", "backtest_phase_sweep.csv"),
+                         show_col_types = FALSE))
+  expect_lt(n_dec, n_cal)               # nor one per calendar
+})
+
+test_that("the calendar spread is reported, and not as a confidence interval", {
+  skip_if_not(pkgs_ok3, pkgs_why3)
+  ps <- repo_path("data", "backtest_equity_stats.csv")
+  pw <- repo_path("data", "backtest_phase_sweep.csv")
+  skip_if_not(file.exists(ps) && file.exists(pw), "not generated yet")
+  s <- read_csv(ps, show_col_types = FALSE); w <- read_csv(pw, show_col_types = FALSE)
+  skip_if(!"phase_spread_min" %in% names(s), "pre-composite stats")
+  expect_equal(s$phase_model_cagr_min[1], min(w$top), tolerance = 1e-12)
+  expect_equal(s$phase_model_cagr_max[1], max(w$top), tolerance = 1e-12)
+  expect_equal(s$phase_spread_med[1], median(w$spread), tolerance = 1e-12)
+  expect_equal(s$phase_top_beats_bottom[1], mean(w$spread > 0), tolerance = 1e-12)
+  expect_equal(s$phases[1], nrow(w))
+})
