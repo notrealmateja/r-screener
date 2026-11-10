@@ -35,8 +35,8 @@ APPN,2027-02-04,Appian Corp,,USD,,2026-11-05,91,38,SEC 8-K Item 2.02,NA
 APPN,2027-05-06,Appian Corp,,USD,,2026-11-05,91,38,SEC 8-K Item 2.02,0.3411
 ARHS,2027-02-04,Arhaus Inc,,USD,,2026-11-05,91,20,SEC 8-K Item 2.02,NA
 ARHS,2027-05-06,Arhaus Inc,,USD,,2026-11-05,91,20,SEC 8-K Item 2.02,0.0373
-ARWR,2026-11-09,Arrowhead Pharmaceuticals Inc,,USD,amc,2026-08-04,89,65,SEC 8-K Item 2.02,-1.6184
-ARWR,2027-02-06,Arrowhead Pharmaceuticals Inc,,USD,,2026-08-04,89,65,SEC 8-K Item 2.02,-1.3936
+ARWR,2026-11-10,Arrowhead Pharmaceuticals Inc,,USD,amc,2026-08-04,89,65,SEC 8-K Item 2.02,-1.6184
+ARWR,2027-02-07,Arrowhead Pharmaceuticals Inc,,USD,,2026-08-04,89,65,SEC 8-K Item 2.02,-1.3936
 ASAN,2026-12-02,Asana Inc,,USD,,2026-09-03,90,25,SEC 8-K Item 2.02,0.0824
 ASAN,2027-03-02,Asana Inc,,USD,amc,2026-09-03,90,25,SEC 8-K Item 2.02,0.0939
 ATI,2027-01-26,Allegheny Technologies Incorporated,,USD,bmo,2026-10-29,89,50,SEC 8-K Item 2.02,1.5699
@@ -69,8 +69,8 @@ CELH,2027-02-04,Celsius Holdings Inc,,USD,,2026-11-05,91,21,SEC 8-K Item 2.02,NA
 CELH,2027-05-06,Celsius Holdings Inc,,USD,,2026-11-05,91,21,SEC 8-K Item 2.02,0.4197
 CFR,2027-01-28,Cullen/Frost Bankers Inc,,USD,amc,2026-10-29,91,48,SEC 8-K Item 2.02,2.9352
 CFR,2027-04-29,Cullen/Frost Bankers Inc,,USD,,2026-10-29,91,48,SEC 8-K Item 2.02,2.969
-CGEM,2026-11-09,Cullinan Oncology LLC,,USD,,2026-08-06,77,24,SEC 8-K Item 2.02,NA
-CGEM,2027-01-25,Cullinan Oncology LLC,,USD,,2026-08-06,77,24,SEC 8-K Item 2.02,NA
+CGEM,2026-11-10,Cullinan Oncology LLC,,USD,,2026-08-06,77,24,SEC 8-K Item 2.02,NA
+CGEM,2027-01-26,Cullinan Oncology LLC,,USD,,2026-08-06,77,24,SEC 8-K Item 2.02,NA
 COIN,2027-01-28,Coinbase Global Inc,,USD,amc,2026-10-29,91,19,SEC 8-K Item 2.02,-0.0204
 COIN,2027-04-29,Coinbase Global Inc,,USD,,2026-10-29,91,19,SEC 8-K Item 2.02,NA
 COST,2026-12-17,Costco Wholesale Corp,,USD,,2026-09-24,84,40,SEC 8-K Item 2.02,5.0343
@@ -105,8 +105,8 @@ DUOL,2027-01-21,Duolingo Inc,,USD,,2026-11-03,79,23,SEC 8-K Item 2.02,NA
 DUOL,2027-04-10,Duolingo Inc,,USD,,2026-11-03,79,23,SEC 8-K Item 2.02,NA
 ENTG,2027-01-29,Entegris Inc,,USD,bmo,2026-10-29,92,38,SEC 8-K Item 2.02,1.3667
 ENTG,2027-05-01,Entegris Inc,,USD,,2026-10-29,92,38,SEC 8-K Item 2.02,1.2282
-ERAS,2026-11-09,Erasca Inc,,USD,amc,2026-08-11,80.5,21,SEC 8-K Item 2.02,-0.1326
-ERAS,2027-01-28,Erasca Inc,,USD,,2026-08-11,80.5,21,SEC 8-K Item 2.02,NA
+ERAS,2026-11-10,Erasca Inc,,USD,amc,2026-08-11,80.5,21,SEC 8-K Item 2.02,-0.1326
+ERAS,2027-01-29,Erasca Inc,,USD,,2026-08-11,80.5,21,SEC 8-K Item 2.02,NA
 ETSY,2027-01-27,"Etsy, Inc.",,USD,,2026-10-28,91,30,SEC 8-K Item 2.02,NA
 ETSY,2027-04-28,"Etsy, Inc.",,USD,,2026-10-28,91,30,SEC 8-K Item 2.02,1.0358
 EXP,2027-02-05,Eagle Materials Inc,,USD,,2026-11-04,93,41,SEC 8-K Item 2.02,2.8483
@@ -153,8 +153,8 @@ IBM,2027-01-20,International Business Machines,,USD,amc,2026-10-21,91,27,SEC 8-K
 IBM,2027-04-21,International Business Machines,,USD,,2026-10-21,91,27,SEC 8-K Item 2.02,2.1654
 IDYA,2027-02-02,Ideaya Biosciences Inc,,USD,,2026-11-03,91,30,SEC 8-K Item 2.02,NA
 IDYA,2027-05-04,Ideaya Biosciences Inc,,USD,,2026-11-03,91,30,SEC 8-K Item 2.02,-1.3187
-IESC,2026-11-09,IES Holdings Inc,,USD,,2026-07-31,91,60,SEC 8-K Item 2.02,2.5041
-IESC,2027-02-08,IES Holdings Inc,,USD,,2026-07-31,91,60,SEC 8-K Item 2.02,NA
+IESC,2026-11-10,IES Holdings Inc,,USD,,2026-07-31,91,60,SEC 8-K Item 2.02,NA
+IESC,2027-02-09,IES Holdings Inc,,USD,,2026-07-31,91,60,SEC 8-K Item 2.02,NA
 INCY,2027-01-28,Incyte Corporation,,USD,,2026-10-29,91,30,SEC 8-K Item 2.02,NA
 INCY,2027-04-29,Incyte Corporation,,USD,,2026-10-29,91,30,SEC 8-K Item 2.02,1.7119
 INTA,2027-01-26,Intapp Inc,,USD,,2026-10-27,91,21,SEC 8-K Item 2.02,0.3912
@@ -205,8 +205,8 @@ MEDP,2027-01-20,Medpace Holdings Inc,,USD,,2026-10-21,91,41,SEC 8-K Item 2.02,NA
 MEDP,2027-04-21,Medpace Holdings Inc,,USD,,2026-10-21,91,41,SEC 8-K Item 2.02,4.7857
 META,2027-01-20,Meta Platforms Inc.,,USD,amc,2026-10-21,91,10,SEC 8-K Item 2.02,8.5691
 META,2027-04-21,Meta Platforms Inc.,,USD,,2026-10-21,91,10,SEC 8-K Item 2.02,7.6166
-MITK,2026-11-09,"Mitek Systems, Inc.",,USD,,2026-08-06,91,58,SEC 8-K Item 2.02,NA
-MITK,2027-02-08,"Mitek Systems, Inc.",,USD,,2026-08-06,91,58,SEC 8-K Item 2.02,0.2591
+MITK,2026-11-10,"Mitek Systems, Inc.",,USD,,2026-08-06,91,58,SEC 8-K Item 2.02,NA
+MITK,2027-02-09,"Mitek Systems, Inc.",,USD,,2026-08-06,91,58,SEC 8-K Item 2.02,0.2591
 MLI,2027-01-19,Mueller Industries Inc,,USD,,2026-10-20,91,54,SEC 8-K Item 2.02,NA
 MLI,2027-04-20,Mueller Industries Inc,,USD,,2026-10-20,91,54,SEC 8-K Item 2.02,1.0757
 MPWR,2027-01-28,Monolithic Power Systems Inc,,USD,amc,2026-10-29,91,28,SEC 8-K Item 2.02,9.6391
@@ -243,8 +243,8 @@ OKTA,2026-11-25,Okta Inc,,USD,,2026-08-26,91,36,SEC 8-K Item 2.02,0.9526
 OKTA,2027-02-24,Okta Inc,,USD,amc,2026-08-26,91,36,SEC 8-K Item 2.02,1.0491
 OLLI,2026-12-02,Ollie's Bargain Outlet Hldg,,USD,,2026-09-02,91,46,SEC 8-K Item 2.02,0.7825
 OLLI,2027-03-03,Ollie's Bargain Outlet Hldg,,USD,,2026-09-02,91,46,SEC 8-K Item 2.02,NA
-OLMA,2026-11-09,Olema Pharmaceuticals Inc,,USD,,2026-08-10,76.5,24,SEC 8-K Item 2.02,-0.6374
-OLMA,2027-01-24,Olema Pharmaceuticals Inc,,USD,,2026-08-10,76.5,24,SEC 8-K Item 2.02,NA
+OLMA,2026-11-10,Olema Pharmaceuticals Inc,,USD,,2026-08-10,76.5,24,SEC 8-K Item 2.02,-0.6374
+OLMA,2027-01-25,Olema Pharmaceuticals Inc,,USD,,2026-08-10,76.5,24,SEC 8-K Item 2.02,NA
 ON,2027-02-01,ON Semiconductor Corporation,,USD,amc,2026-11-02,91,41,SEC 8-K Item 2.02,1.0318
 ON,2027-05-03,ON Semiconductor Corporation,,USD,,2026-11-02,91,41,SEC 8-K Item 2.02,1.0634
 ORCL,2026-12-11,Oracle Corporation,,USD,,2026-09-10,92,42,SEC 8-K Item 2.02,1.9298
@@ -271,16 +271,16 @@ PRPL,2027-02-10,Purple Innovation Inc,,USD,,2026-11-04,98,36,SEC 8-K Item 2.02,N
 PRPL,2027-05-19,Purple Innovation Inc,,USD,,2026-11-04,98,36,SEC 8-K Item 2.02,NA
 PTGX,2027-02-05,Protagonist Therapeutics Inc,,USD,,2026-11-05,92,41,SEC 8-K Item 2.02,NA
 PTGX,2027-05-08,Protagonist Therapeutics Inc,,USD,,2026-11-05,92,41,SEC 8-K Item 2.02,-0.2457
-QBTS,2026-11-09,D-Wave Quantum Inc. Common Stock,,USD,bmo,2026-08-06,91,17,SEC 8-K Item 2.02,-0.1033
-QBTS,2027-02-08,D-Wave Quantum Inc. Common Stock,,USD,,2026-08-06,91,17,SEC 8-K Item 2.02,NA
+QBTS,2026-11-10,D-Wave Quantum Inc. Common Stock,,USD,bmo,2026-08-06,91,17,SEC 8-K Item 2.02,-0.1033
+QBTS,2027-02-09,D-Wave Quantum Inc. Common Stock,,USD,,2026-08-06,91,17,SEC 8-K Item 2.02,NA
 QCOM,2027-02-03,Qualcomm Incorporated,,USD,,2026-11-04,91,33,SEC 8-K Item 2.02,2.2981
 QCOM,2027-05-05,Qualcomm Incorporated,,USD,,2026-11-04,91,33,SEC 8-K Item 2.02,2.3154
 RARE,2027-02-02,Ultragenyx,,USD,amc,2026-11-03,91,46,SEC 8-K Item 2.02,-0.7521
 RARE,2027-05-04,Ultragenyx,,USD,,2026-11-03,91,46,SEC 8-K Item 2.02,-0.7371
 RBLX,2027-01-28,Roblox Corp,,USD,amc,2026-10-29,91,16,SEC 8-K Item 2.02,-0.4701
 RBLX,2027-04-29,Roblox Corp,,USD,,2026-10-29,91,16,SEC 8-K Item 2.02,-0.3028
-RGTI,2026-11-09,Rigetti Computing Inc,,USD,amc,2026-08-06,90,19,SEC 8-K Item 2.02,-0.0523
-RGTI,2027-02-07,Rigetti Computing Inc,,USD,,2026-08-06,90,19,SEC 8-K Item 2.02,NA
+RGTI,2026-11-10,Rigetti Computing Inc,,USD,amc,2026-08-06,90,19,SEC 8-K Item 2.02,-0.0523
+RGTI,2027-02-08,Rigetti Computing Inc,,USD,,2026-08-06,90,19,SEC 8-K Item 2.02,NA
 RJF,2027-01-27,Raymond James Financial Inc.,,USD,,2026-10-28,91,26,SEC 8-K Item 2.02,3.3535
 RJF,2027-04-28,Raymond James Financial Inc.,,USD,,2026-10-28,91,26,SEC 8-K Item 2.02,3.5046
 ROAD,2027-02-04,Construction Partners Inc,,USD,,2026-11-05,91,36,SEC 8-K Item 2.02,0.408
@@ -365,8 +365,8 @@ WMT,2026-11-19,Walmart Inc.,,USD,,2026-08-20,91,13,SEC 8-K Item 2.02,0.6427
 WMT,2027-02-18,Walmart Inc.,,USD,amc,2026-08-20,91,13,SEC 8-K Item 2.02,0.7949
 WTS,2027-02-03,Watts Water Technologies Inc,,USD,amc,2026-11-04,91,51,SEC 8-K Item 2.02,3.0702
 WTS,2027-05-05,Watts Water Technologies Inc,,USD,,2026-11-04,91,51,SEC 8-K Item 2.02,3.3574
-XENE,2026-11-09,Xenon Pharmaceuticals Inc,,USD,amc,2026-08-06,91,48,SEC 8-K Item 2.02,-1.1566
-XENE,2027-02-08,Xenon Pharmaceuticals Inc,,USD,,2026-08-06,91,48,SEC 8-K Item 2.02,NA
+XENE,2027-02-08,Xenon Pharmaceuticals Inc,,USD,,2026-11-09,91,49,SEC 8-K Item 2.02,NA
+XENE,2027-05-10,Xenon Pharmaceuticals Inc,,USD,,2026-11-09,91,49,SEC 8-K Item 2.02,-1.2573
 XOM,2027-01-29,Exxon Mobil Corp,,USD,,2026-10-30,91,2,SEC 8-K Item 2.02,4.1742
 XOM,2027-04-30,Exxon Mobil Corp,,USD,,2026-10-30,91,2,SEC 8-K Item 2.02,NA
 YETI,2026-11-12,YETI Holdings Inc,,USD,bmo,2026-08-13,91,32,SEC 8-K Item 2.02,0.8571
@@ -377,7 +377,7 @@ ZION,2027-01-18,Zions Bancorporation,,USD,amc,2026-10-19,91,25,SEC 8-K Item 2.02
 ZION,2027-04-19,Zions Bancorporation,,USD,,2026-10-19,91,25,SEC 8-K Item 2.02,1.5713
 ZM,2026-11-26,Zoom Video Communications Inc,,USD,amc,2026-08-25,93,26,SEC 8-K Item 2.02,1.5308
 ZM,2027-02-27,Zoom Video Communications Inc,,USD,amc,2026-08-25,93,26,SEC 8-K Item 2.02,1.5968
-ZNTL,2026-11-09,Zentalis Pharmaceuticals Llc,,USD,,2026-08-06,91,25,SEC 8-K Item 2.02,-0.5471
-ZNTL,2027-02-08,Zentalis Pharmaceuticals Llc,,USD,,2026-08-06,91,25,SEC 8-K Item 2.02,NA
+ZNTL,2027-02-12,Zentalis Pharmaceuticals Llc,,USD,,2026-11-09,95.5,26,SEC 8-K Item 2.02,NA
+ZNTL,2027-05-19,Zentalis Pharmaceuticals Llc,,USD,,2026-11-09,95.5,26,SEC 8-K Item 2.02,NA
 ZS,2026-12-05,Zscaler Inc,,USD,,2026-09-03,93,33,SEC 8-K Item 2.02,1.1947
 ZS,2027-03-08,Zscaler Inc,,USD,,2026-09-03,93,33,SEC 8-K Item 2.02,NA
