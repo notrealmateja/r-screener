@@ -793,12 +793,12 @@
       }
     },
     "ggplot2": {
-      "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Source": "CRAN",
+      "Repository": "https://cran.rstudio.com",
       "description": {
         "Package": "ggplot2",
         "Title": "Create Elegant Data Visualisations Using the Grammar of Graphics",
-        "Version": "4.0.3",
+        "Version": "4.0.4",
         "Authors@R": "c(\n    person(\"Hadley\", \"Wickham\", , \"hadley@posit.co\", role = \"aut\",\n           comment = c(ORCID = \"0000-0003-4757-117X\")),\n    person(\"Winston\", \"Chang\", role = \"aut\",\n           comment = c(ORCID = \"0000-0002-1576-2126\")),\n    person(\"Lionel\", \"Henry\", role = \"aut\"),\n    person(\"Thomas Lin\", \"Pedersen\", , \"thomas.pedersen@posit.co\", role = c(\"aut\", \"cre\"),\n           comment = c(ORCID = \"0000-0002-5147-4711\")),\n    person(\"Kohske\", \"Takahashi\", role = \"aut\"),\n    person(\"Claus\", \"Wilke\", role = \"aut\",\n           comment = c(ORCID = \"0000-0002-7470-9261\")),\n    person(\"Kara\", \"Woo\", role = \"aut\",\n           comment = c(ORCID = \"0000-0002-5125-4188\")),\n    person(\"Hiroaki\", \"Yutani\", role = \"aut\",\n           comment = c(ORCID = \"0000-0002-3385-7233\")),\n    person(\"Dewey\", \"Dunnington\", role = \"aut\",\n           comment = c(ORCID = \"0000-0002-9415-4582\")),\n    person(\"Teun\", \"van den Brand\", role = \"aut\",\n           comment = c(ORCID = \"0000-0002-9335-7468\")),\n    person(\"Posit, PBC\", role = c(\"cph\", \"fnd\"),\n           comment = c(ROR = \"03wc8by49\"))\n  )",
         "Description": "A system for 'declaratively' creating graphics, based on \"The\n    Grammar of Graphics\". You provide the data, tell 'ggplot2' how to map\n    variables to aesthetics, what graphical primitives to use, and it\n    takes care of the details.",
         "License": "MIT + file LICENSE",
@@ -817,12 +817,12 @@
         "RoxygenNote": "7.3.3",
         "Collate": "'ggproto.R' 'ggplot-global.R' 'aaa-.R'\n'aes-colour-fill-alpha.R' 'aes-evaluation.R'\n'aes-group-order.R' 'aes-linetype-size-shape.R'\n'aes-position.R' 'all-classes.R' 'compat-plyr.R' 'utilities.R'\n'aes.R' 'annotation-borders.R' 'utilities-checks.R'\n'legend-draw.R' 'geom-.R' 'annotation-custom.R'\n'annotation-logticks.R' 'scale-type.R' 'layer.R'\n'make-constructor.R' 'geom-polygon.R' 'geom-map.R'\n'annotation-map.R' 'geom-raster.R' 'annotation-raster.R'\n'annotation.R' 'autolayer.R' 'autoplot.R' 'axis-secondary.R'\n'backports.R' 'bench.R' 'bin.R' 'coord-.R' 'coord-cartesian-.R'\n'coord-fixed.R' 'coord-flip.R' 'coord-map.R' 'coord-munch.R'\n'coord-polar.R' 'coord-quickmap.R' 'coord-radial.R'\n'coord-sf.R' 'coord-transform.R' 'data.R' 'docs_layer.R'\n'facet-.R' 'facet-grid-.R' 'facet-null.R' 'facet-wrap.R'\n'fortify-map.R' 'fortify-models.R' 'fortify-spatial.R'\n'fortify.R' 'stat-.R' 'geom-abline.R' 'geom-rect.R'\n'geom-bar.R' 'geom-tile.R' 'geom-bin2d.R' 'geom-blank.R'\n'geom-boxplot.R' 'geom-col.R' 'geom-path.R' 'geom-contour.R'\n'geom-point.R' 'geom-count.R' 'geom-crossbar.R'\n'geom-segment.R' 'geom-curve.R' 'geom-defaults.R'\n'geom-ribbon.R' 'geom-density.R' 'geom-density2d.R'\n'geom-dotplot.R' 'geom-errorbar.R' 'geom-freqpoly.R'\n'geom-function.R' 'geom-hex.R' 'geom-histogram.R'\n'geom-hline.R' 'geom-jitter.R' 'geom-label.R'\n'geom-linerange.R' 'geom-pointrange.R' 'geom-quantile.R'\n'geom-rug.R' 'geom-sf.R' 'geom-smooth.R' 'geom-spoke.R'\n'geom-text.R' 'geom-violin.R' 'geom-vline.R'\n'ggplot2-package.R' 'grob-absolute.R' 'grob-dotstack.R'\n'grob-null.R' 'grouping.R' 'properties.R' 'margins.R'\n'theme-elements.R' 'guide-.R' 'guide-axis.R'\n'guide-axis-logticks.R' 'guide-axis-stack.R'\n'guide-axis-theta.R' 'guide-legend.R' 'guide-bins.R'\n'guide-colorbar.R' 'guide-colorsteps.R' 'guide-custom.R'\n'guide-none.R' 'guide-old.R' 'guides-.R' 'guides-grid.R'\n'hexbin.R' 'import-standalone-obj-type.R'\n'import-standalone-types-check.R' 'labeller.R' 'labels.R'\n'layer-sf.R' 'layout.R' 'limits.R' 'performance.R'\n'plot-build.R' 'plot-construction.R' 'plot-last.R' 'plot.R'\n'position-.R' 'position-collide.R' 'position-dodge.R'\n'position-dodge2.R' 'position-identity.R' 'position-jitter.R'\n'position-jitterdodge.R' 'position-nudge.R' 'position-stack.R'\n'quick-plot.R' 'reshape-add-margins.R' 'save.R' 'scale-.R'\n'scale-alpha.R' 'scale-binned.R' 'scale-brewer.R'\n'scale-colour.R' 'scale-continuous.R' 'scale-date.R'\n'scale-discrete-.R' 'scale-expansion.R' 'scale-gradient.R'\n'scale-grey.R' 'scale-hue.R' 'scale-identity.R'\n'scale-linetype.R' 'scale-linewidth.R' 'scale-manual.R'\n'scale-shape.R' 'scale-size.R' 'scale-steps.R' 'scale-view.R'\n'scale-viridis.R' 'scales-.R' 'stat-align.R' 'stat-bin.R'\n'stat-summary-2d.R' 'stat-bin2d.R' 'stat-bindot.R'\n'stat-binhex.R' 'stat-boxplot.R' 'stat-connect.R'\n'stat-contour.R' 'stat-count.R' 'stat-density-2d.R'\n'stat-density.R' 'stat-ecdf.R' 'stat-ellipse.R'\n'stat-function.R' 'stat-identity.R' 'stat-manual.R'\n'stat-qq-line.R' 'stat-qq.R' 'stat-quantilemethods.R'\n'stat-sf-coordinates.R' 'stat-sf.R' 'stat-smooth-methods.R'\n'stat-smooth.R' 'stat-sum.R' 'stat-summary-bin.R'\n'stat-summary-hex.R' 'stat-summary.R' 'stat-unique.R'\n'stat-ydensity.R' 'summarise-plot.R' 'summary.R' 'theme.R'\n'theme-defaults.R' 'theme-current.R' 'theme-sub.R'\n'utilities-break.R' 'utilities-grid.R' 'utilities-help.R'\n'utilities-patterns.R' 'utilities-resolution.R'\n'utilities-tidy-eval.R' 'zxx.R' 'zzz.R'",
         "NeedsCompilation": "no",
-        "Packaged": "2026-04-21 12:47:29 UTC; thomas",
+        "Packaged": "2026-11-11 10:47:46 UTC; thomas",
         "Author": "Hadley Wickham [aut] (ORCID: <https://orcid.org/0000-0003-4757-117X>),\n  Winston Chang [aut] (ORCID: <https://orcid.org/0000-0002-1576-2126>),\n  Lionel Henry [aut],\n  Thomas Lin Pedersen [aut, cre] (ORCID:\n    <https://orcid.org/0000-0002-5147-4711>),\n  Kohske Takahashi [aut],\n  Claus Wilke [aut] (ORCID: <https://orcid.org/0000-0002-7470-9261>),\n  Kara Woo [aut] (ORCID: <https://orcid.org/0000-0002-5125-4188>),\n  Hiroaki Yutani [aut] (ORCID: <https://orcid.org/0000-0002-3385-7233>),\n  Dewey Dunnington [aut] (ORCID: <https://orcid.org/0000-0002-9415-4582>),\n  Teun van den Brand [aut] (ORCID:\n    <https://orcid.org/0000-0002-9335-7468>),\n  Posit, PBC [cph, fnd] (ROR: <https://ror.org/03wc8by49>)",
         "Maintainer": "Thomas Lin Pedersen <thomas.pedersen@posit.co>",
-        "Repository": "RSPM",
-        "Date/Publication": "2026-04-22 09:10:03 UTC",
-        "Built": "R 4.4.0; ; 2026-08-12 19:09:24 UTC; unix"
+        "Repository": "CRAN",
+        "Date/Publication": "2026-11-14 00:20:15 UTC",
+        "Built": "R 4.4.0; ; 2026-11-14 01:36:10 UTC; unix"
       }
     },
     "glue": {
@@ -2543,85 +2543,85 @@
       "checksum": "978adf69f3a9762aa4e834da27e0a780"
     },
     "backtest_components.csv": {
-      "checksum": "81d6dedc28b6d0bdc048dafdf1f336da"
+      "checksum": "19775fc95dfb84750d30239b1507fa81"
     },
     "backtest_equity_stats.csv": {
-      "checksum": "cceecbc5b375e7cd2fb7c792d0730258"
+      "checksum": "a7a39ffe980aea2b6ff8cba0fe0e6f4f"
     },
     "backtest_equity.csv": {
-      "checksum": "107052a81d269b591b713f262cafcfd9"
+      "checksum": "c725c6b9ad2843cea846ab456dfc05f0"
     },
     "backtest_headline.csv": {
-      "checksum": "2520e840715f4f7895444dfb3e09d9de"
+      "checksum": "b44f83447e91a8dd6eb23529b723e11d"
     },
     "backtest_ic.csv": {
-      "checksum": "fd2b2d8cf97d57ee0532e7d16dc98f72"
+      "checksum": "115290bf3817abc446249712407d652e"
     },
     "backtest_phase_sweep.csv": {
-      "checksum": "62ea77dea0d48fc1fb8630bfc1366a20"
+      "checksum": "f44a60938b5502db7e83495219eaca13"
     },
     "backtest_summary.csv": {
-      "checksum": "4e096bac7fb470e3b78abceb1a96c2b6"
+      "checksum": "e7373a9519e8fd9ddbc6c9405de4a9ba"
     },
     "data/batch_tracker.rds": {
       "checksum": "6f1dddc156f656f2d4c4d382e7b64017"
     },
     "data/meta.rds": {
-      "checksum": "1be2cdb8ec80b06db31a16bd136a9321"
+      "checksum": "ccc3627f6f8354fa2ac38acfdb516349"
     },
     "data/price_series_cache.rds": {
       "checksum": "266a1b7cfa8bbf9180380a4969dbc886"
     },
     "earnings_calendar.csv": {
-      "checksum": "8dae977fe8bc7f7f5911c60c7e7fb542"
+      "checksum": "32c62ffee7a37e12f28322ec26eb4a18"
     },
     "global.R": {
       "checksum": "1d0fffb1479609f4c7e7d806c2a889d7"
     },
     "macro_data.csv": {
-      "checksum": "2318345325dd732209e08196cce9d2ac"
+      "checksum": "9da39f0b13eb57a6451f4e9fe5785df1"
     },
     "market_news.csv": {
       "checksum": "40b59b1ef18dd32c084b345c018d8bfb"
     },
     "master_scored.csv": {
-      "checksum": "867d5c632edad0e845ab71ce9f0119b5"
+      "checksum": "ca1d2b39cf455c90076c7b3ccb2cc245"
     },
     "meta.rds": {
-      "checksum": "1be2cdb8ec80b06db31a16bd136a9321"
+      "checksum": "ccc3627f6f8354fa2ac38acfdb516349"
     },
     "price_history.csv": {
-      "checksum": "ab0e44d9983650123a706023181e103e"
+      "checksum": "36b78a061e3c6ffd5a68e25a633ec851"
     },
     "reversal_results.csv": {
-      "checksum": "ce7dabb587aa80f960f1a525014a9896"
+      "checksum": "3e2f889bc7e86432d288d4b6f29d07ab"
     },
     "score_history.csv": {
-      "checksum": "afcf799caf0680c7aeb9c35b27a03aac"
+      "checksum": "bc4005ab2bd9eb64c85294dabd692875"
     },
     "sec_filings.csv": {
-      "checksum": "8232abacd01707de8cf1cc3fa8cbc008"
+      "checksum": "c11a972b15cc9ac39aa07770c6ee57fd"
     },
     "sector_performance.csv": {
-      "checksum": "304c35989a308b8e9fa8e8310727147f"
+      "checksum": "3f99cc5da4e39278a4ecfe5c73b8a3b9"
     },
     "stock_news.csv": {
-      "checksum": "7cab4cc0e80ce982b68cc5d47d27dd9f"
+      "checksum": "b304cdd8a2f3768aef0a30faa9de08ca"
     },
     "stocktwits_trending.csv": {
-      "checksum": "c91e590b530242e26b7fb3c95bd57abb"
+      "checksum": "e45302ed1221bb9e893779b275f8c46c"
     },
     "top15_sweetspot.csv": {
-      "checksum": "c1a9ca7079c113ade0f62fb5d1d7d14d"
+      "checksum": "e464f1e2f7251ae329d180bc828428a3"
     },
     "top15_unicorns.csv": {
-      "checksum": "0b09fca82044b7672bda40c9373f73e2"
+      "checksum": "783d413acd6574048bc7122d775dbd39"
     },
     "tv_channels.csv": {
-      "checksum": "779a42735cd13d605b565fbb8ce6d90f"
+      "checksum": "df7c845c39c47984b803ec1195705b6e"
     },
     "wsb_trending.csv": {
-      "checksum": "7fae6fdae4af4868a23413002fdda5ba"
+      "checksum": "3f95c6e10832b3e3208fd236df4ff3c8"
     }
   },
   "users": null

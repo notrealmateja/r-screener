@@ -1,31 +1,31 @@
 symbol,title,watchlist_count,st_rank,trending_score,messages,bullish,bearish,sentiment_label,fetched_at
-SLS,SELLAS Life Sciences Group Inc,63272,1,21.1485,6,3,0,Very Bullish,2026-11-13T02:11:46Z
-MSFT,Microsoft Corp,556675,2,15.9635,3,0,2,Very Bearish,2026-11-13T02:11:46Z
-CADL,Candel Therapeutics Inc,10663,3,9.40022,0,0,0,Neutral,2026-11-13T02:11:46Z
-GLD,SPDR Gold Shares ETF,97073,4,8.35247,0,0,0,Neutral,2026-11-13T02:11:46Z
-CSCO,"Cisco Systems, Inc.",62774,5,8.107,0,0,0,Neutral,2026-11-13T02:11:46Z
-MOD,Modine Manufacturing Co.,3013,6,7.53884,0,0,0,Neutral,2026-11-13T02:11:46Z
-CBRS,Cerebras Systems Inc,16075,7,7.23903,2,1,0,Very Bullish,2026-11-13T02:11:46Z
-BTC.X,Bitcoin,686802,8,6.62369,4,1,1,Neutral,2026-11-13T02:11:46Z
-FLO,"Flowers Foods, Inc.",1616,9,6.5317,0,0,0,Neutral,2026-11-13T02:11:46Z
-AMAT,Applied Materials Inc.,36321,10,5.0996,0,0,0,Neutral,2026-11-13T02:11:46Z
-NVDA,NVIDIA Corp,683289,11,4.89062,11,1,1,Neutral,2026-11-13T02:11:46Z
-ONDS,Ondas Inc,38033,12,4.23407,0,0,0,Neutral,2026-11-13T02:11:46Z
-XLV,Health Care Select Sector SPDR Fund,7980,13,4.12343,0,0,0,Neutral,2026-11-13T02:11:46Z
-JNJ,Johnson & Johnson,49650,14,4.11082,0,0,0,Neutral,2026-11-13T02:11:46Z
-MSTR,Strategy,83613,15,4.00821,2,0,1,Very Bearish,2026-11-13T02:11:46Z
-XBI,SPDR S&P Biotech ETF,29279,16,3.97635,0,0,0,Neutral,2026-11-13T02:11:46Z
-VG,Venture Global Inc,4856,17,3.88181,0,0,0,Neutral,2026-11-13T02:11:46Z
-IBB,iShares Biotechnology ETF,23764,18,3.87936,0,0,0,Neutral,2026-11-13T02:11:46Z
-IBRX,ImmunityBio Inc,31480,19,3.82783,0,0,0,Neutral,2026-11-13T02:11:46Z
-RIVN,Rivian Automotive Inc,88550,20,3.73615,0,0,0,Neutral,2026-11-13T02:11:46Z
-RKT,Rocket Companies Inc,58209,21,3.73205,0,0,0,Neutral,2026-11-13T02:11:46Z
-AGNC,AGNC Investment Corp,13099,22,3.63872,0,0,0,Neutral,2026-11-13T02:11:46Z
-HELP,Helus Pharma Inc.,8398,23,3.63308,0,0,0,Neutral,2026-11-13T02:11:46Z
-AVGO,Broadcom Inc,77272,24,3.61693,0,0,0,Neutral,2026-11-13T02:11:46Z
-GTBIF,Green Thumb Industries,6364,25,3.44187,0,0,0,Neutral,2026-11-13T02:11:46Z
-NDAQ,Nasdaq Inc,6842,26,3.4144,0,0,0,Neutral,2026-11-13T02:11:46Z
-BABA,Alibaba Group Holding Ltd,425334,27,3.38388,0,0,0,Neutral,2026-11-13T02:11:46Z
-RVMD,Revolution Medicines Inc,3431,28,3.37144,0,0,0,Neutral,2026-11-13T02:11:46Z
-KLAR,Klarna Group plc,7897,29,3.36067,0,0,0,Neutral,2026-11-13T02:11:46Z
-BRK.A,Berkshire Hathaway Inc. - Ordinary Shares - Class A,12461,30,3.30324,0,0,0,Neutral,2026-11-13T02:11:46Z
+TRUMP.X,Trump For President,12826,1,9.09639,0,0,0,Neutral,2026-11-14T01:44:01Z
+LHX,L3Harris Technologies Inc,4577,2,8.91961,3,0,2,Very Bearish,2026-11-14T01:44:01Z
+DAL,"Delta Air Lines, Inc.",83916,3,8.68733,2,0,1,Very Bearish,2026-11-14T01:44:01Z
+AAL,American Airlines Group Inc,109816,4,8.2426,0,0,0,Neutral,2026-11-14T01:44:01Z
+SMMT,Summit Therapeutics Inc,10808,5,7.79321,0,0,0,Neutral,2026-11-14T01:44:01Z
+UAL,United Airlines Holdings Inc,39937,6,7.22131,0,0,0,Neutral,2026-11-14T01:44:01Z
+VKTX,Viking Therapeutics Inc,40098,7,6.9658,1,0,0,Neutral,2026-11-14T01:44:01Z
+NMAX,Newsmax Inc,5852,8,5.75606,1,0,0,Neutral,2026-11-14T01:44:01Z
+CRWD,Crowdstrike Holdings Inc,64406,9,5.66409,0,0,0,Neutral,2026-11-14T01:44:01Z
+PANW,Palo Alto Networks Inc,40281,10,5.45662,0,0,0,Neutral,2026-11-14T01:44:01Z
+UPST,Upstart Holdings Inc,47522,11,5.334,1,0,0,Neutral,2026-11-14T01:44:01Z
+SPCX,SpaceX,113352,12,4.14836,4,1,2,Bearish,2026-11-14T01:44:01Z
+MSFT,Microsoft Corp,557002,13,3.87995,0,0,0,Neutral,2026-11-14T01:44:01Z
+KO,Coca-Cola Co,53950,14,3.75334,0,0,0,Neutral,2026-11-14T01:44:01Z
+LMT,Lockheed Martin Corp.,37653,15,3.53869,1,0,0,Neutral,2026-11-14T01:44:01Z
+ALM,Almonty Industries Inc,1380,16,3.46924,0,0,0,Neutral,2026-11-14T01:44:01Z
+XLE,Energy Select Sector SPDR Fund,24879,17,3.44088,1,0,0,Neutral,2026-11-14T01:44:01Z
+ZS,Zscaler Inc,23834,18,3.42488,0,0,0,Neutral,2026-11-14T01:44:01Z
+TER,"Teradyne, Inc.",8495,19,3.24581,1,0,0,Neutral,2026-11-14T01:44:01Z
+S,SentinelOne Inc,32276,20,3.24531,0,0,0,Neutral,2026-11-14T01:44:01Z
+FIS,"Fidelity National Information Services, Inc.",2108,21,3.24242,1,0,0,Neutral,2026-11-14T01:44:01Z
+ISRG,Intuitive Surgical Inc,21980,22,3.2307,1,0,0,Neutral,2026-11-14T01:44:01Z
+TGT,Target Corp,50081,23,3.04589,0,0,0,Neutral,2026-11-14T01:44:01Z
+RIG,Transocean Ltd,25118,24,3.02367,0,0,0,Neutral,2026-11-14T01:44:01Z
+DELL,Dell Technologies Inc,31895,25,2.99129,1,0,0,Neutral,2026-11-14T01:44:01Z
+VIR,Vir Biotechnology Inc,6841,26,2.91621,1,0,0,Neutral,2026-11-14T01:44:01Z
+CSCO,"Cisco Systems, Inc.",62927,27,2.88568,2,0,0,Neutral,2026-11-14T01:44:01Z
+PG,Procter & Gamble Co.,23712,28,2.88055,0,0,0,Neutral,2026-11-14T01:44:01Z
+ABSI,Absci Corp,3536,29,2.87415,0,0,0,Neutral,2026-11-14T01:44:01Z
+EROC,ERock Inc. - Ordinary Shares - Class A,1087,30,2.84294,0,0,0,Neutral,2026-11-14T01:44:01Z
