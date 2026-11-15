@@ -793,8 +793,8 @@
       }
     },
     "ggplot2": {
-      "Source": "CRAN",
-      "Repository": "https://cran.rstudio.com",
+      "Source": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
       "description": {
         "Package": "ggplot2",
         "Title": "Create Elegant Data Visualisations Using the Grammar of Graphics",
@@ -820,9 +820,9 @@
         "Packaged": "2026-11-11 10:47:46 UTC; thomas",
         "Author": "Hadley Wickham [aut] (ORCID: <https://orcid.org/0000-0003-4757-117X>),\n  Winston Chang [aut] (ORCID: <https://orcid.org/0000-0002-1576-2126>),\n  Lionel Henry [aut],\n  Thomas Lin Pedersen [aut, cre] (ORCID:\n    <https://orcid.org/0000-0002-5147-4711>),\n  Kohske Takahashi [aut],\n  Claus Wilke [aut] (ORCID: <https://orcid.org/0000-0002-7470-9261>),\n  Kara Woo [aut] (ORCID: <https://orcid.org/0000-0002-5125-4188>),\n  Hiroaki Yutani [aut] (ORCID: <https://orcid.org/0000-0002-3385-7233>),\n  Dewey Dunnington [aut] (ORCID: <https://orcid.org/0000-0002-9415-4582>),\n  Teun van den Brand [aut] (ORCID:\n    <https://orcid.org/0000-0002-9335-7468>),\n  Posit, PBC [cph, fnd] (ROR: <https://ror.org/03wc8by49>)",
         "Maintainer": "Thomas Lin Pedersen <thomas.pedersen@posit.co>",
-        "Repository": "CRAN",
+        "Repository": "RSPM",
         "Date/Publication": "2026-11-14 00:20:15 UTC",
-        "Built": "R 4.4.0; ; 2026-11-14 01:36:10 UTC; unix"
+        "Built": "R 4.4.0; ; 2026-11-14 03:48:35 UTC; unix"
       }
     },
     "glue": {
@@ -2546,19 +2546,19 @@
       "checksum": "19775fc95dfb84750d30239b1507fa81"
     },
     "backtest_equity_stats.csv": {
-      "checksum": "a7a39ffe980aea2b6ff8cba0fe0e6f4f"
+      "checksum": "432fc541cdeb50edeb225e84a35d0f57"
     },
     "backtest_equity.csv": {
-      "checksum": "c725c6b9ad2843cea846ab456dfc05f0"
+      "checksum": "01df822ceafb92f1a9c22239c50d867c"
     },
     "backtest_headline.csv": {
-      "checksum": "b44f83447e91a8dd6eb23529b723e11d"
+      "checksum": "bb5ec5978b1e1be6d7f78117f6cf8da6"
     },
     "backtest_ic.csv": {
       "checksum": "115290bf3817abc446249712407d652e"
     },
     "backtest_phase_sweep.csv": {
-      "checksum": "f44a60938b5502db7e83495219eaca13"
+      "checksum": "8484455c9be626d3065b846cb95a0914"
     },
     "backtest_summary.csv": {
       "checksum": "e7373a9519e8fd9ddbc6c9405de4a9ba"
@@ -2567,61 +2567,61 @@
       "checksum": "6f1dddc156f656f2d4c4d382e7b64017"
     },
     "data/meta.rds": {
-      "checksum": "ccc3627f6f8354fa2ac38acfdb516349"
+      "checksum": "aaf3a77eb7ed751f7329cf19f0788cd8"
     },
     "data/price_series_cache.rds": {
       "checksum": "266a1b7cfa8bbf9180380a4969dbc886"
     },
     "earnings_calendar.csv": {
-      "checksum": "32c62ffee7a37e12f28322ec26eb4a18"
+      "checksum": "b591ee674be723b2856bbb66c9694bd7"
     },
     "global.R": {
       "checksum": "1d0fffb1479609f4c7e7d806c2a889d7"
     },
     "macro_data.csv": {
-      "checksum": "9da39f0b13eb57a6451f4e9fe5785df1"
+      "checksum": "f6f1bc719cbe935ff4414dc655252b26"
     },
     "market_news.csv": {
       "checksum": "40b59b1ef18dd32c084b345c018d8bfb"
     },
     "master_scored.csv": {
-      "checksum": "ca1d2b39cf455c90076c7b3ccb2cc245"
+      "checksum": "2eacd1bcb67d0e0d8e855d4c4d847fc2"
     },
     "meta.rds": {
-      "checksum": "ccc3627f6f8354fa2ac38acfdb516349"
+      "checksum": "aaf3a77eb7ed751f7329cf19f0788cd8"
     },
     "price_history.csv": {
-      "checksum": "36b78a061e3c6ffd5a68e25a633ec851"
+      "checksum": "562b877f7f46b1007e57d0b236611a61"
     },
     "reversal_results.csv": {
       "checksum": "3e2f889bc7e86432d288d4b6f29d07ab"
     },
     "score_history.csv": {
-      "checksum": "bc4005ab2bd9eb64c85294dabd692875"
+      "checksum": "647d38bbbd0b23fc249842773b50c9e9"
     },
     "sec_filings.csv": {
-      "checksum": "c11a972b15cc9ac39aa07770c6ee57fd"
+      "checksum": "0a6b8519532c29689d767f79a3040838"
     },
     "sector_performance.csv": {
-      "checksum": "3f99cc5da4e39278a4ecfe5c73b8a3b9"
+      "checksum": "89411b4305f45b677b75f0f725dd8441"
     },
     "stock_news.csv": {
-      "checksum": "b304cdd8a2f3768aef0a30faa9de08ca"
+      "checksum": "c57bd8f65f006da9d5d837c14c67c8cc"
     },
     "stocktwits_trending.csv": {
-      "checksum": "e45302ed1221bb9e893779b275f8c46c"
+      "checksum": "3d9569a502bdaf7a7a2170a5c3a7cd9a"
     },
     "top15_sweetspot.csv": {
-      "checksum": "e464f1e2f7251ae329d180bc828428a3"
+      "checksum": "01c13e2417101b8a44f99a6b9ec46808"
     },
     "top15_unicorns.csv": {
-      "checksum": "783d413acd6574048bc7122d775dbd39"
+      "checksum": "34a62dc595d7ad850fc79683da494301"
     },
     "tv_channels.csv": {
-      "checksum": "df7c845c39c47984b803ec1195705b6e"
+      "checksum": "0fee5658805c1f302c1fa6383c28d748"
     },
     "wsb_trending.csv": {
-      "checksum": "3f95c6e10832b3e3208fd236df4ff3c8"
+      "checksum": "095cdb9b75a580f0fa8306942eec3870"
     }
   },
   "users": null
