@@ -1,31 +1,31 @@
 symbol,title,watchlist_count,st_rank,trending_score,messages,bullish,bearish,sentiment_label,fetched_at
-SMMT,Summit Therapeutics Inc,11043,1,10.656,1,0,1,Very Bearish,2026-11-16T01:25:16Z
-HELP,Helus Pharma Inc.,8456,2,7.06509,0,0,0,Neutral,2026-11-16T01:25:16Z
-GLD,SPDR Gold Shares ETF,97107,3,5.96147,0,0,0,Neutral,2026-11-16T01:25:16Z
-DRTS,ALPHA TAU MEDICAL LTD,3504,4,5.72437,0,0,0,Neutral,2026-11-16T01:25:16Z
-XLP,Consumer Staples Select Sector SPDR Fund,4524,5,5.72301,0,0,0,Neutral,2026-11-16T01:25:16Z
-AERO.X,Aerodrome Finance,4731,6,5.29314,0,0,0,Neutral,2026-11-16T01:25:16Z
-MSTX,Defiance Daily Target 2x Long MSTR ETF,3996,7,5.2426,0,0,0,Neutral,2026-11-16T01:25:16Z
-CAPR,Capricor Therapeutics Inc,34566,8,4.97441,0,0,0,Neutral,2026-11-16T01:25:16Z
-FROG,JFrog Ltd,5152,9,4.83957,0,0,0,Neutral,2026-11-16T01:25:16Z
-LUNC.X,Terra Luna Classic,33296,10,4.42089,0,0,0,Neutral,2026-11-16T01:25:16Z
-MSTR,Strategy,83718,11,4.3359,2,2,0,Very Bullish,2026-11-16T01:25:16Z
-OCUL,Ocular Therapeutix Inc,12280,12,4.24036,0,0,0,Neutral,2026-11-16T01:25:16Z
-SPCX,SpaceX,113580,13,3.50357,2,1,0,Very Bullish,2026-11-16T01:25:16Z
-KOLD,ProShares UltraShort Bloomberg Natural Gas,10336,14,3.42074,0,0,0,Neutral,2026-11-16T01:25:16Z
-SKYD,Skydance Corp. - Ordinary Shares - Class B,27378,15,3.32938,0,0,0,Neutral,2026-11-16T01:25:16Z
-BHVN,Biohaven Pharmaceutical Holding Company Ltd,3530,16,3.20333,1,0,0,Neutral,2026-11-16T01:25:16Z
-NBIS,Nebius Group N.V. ,57655,17,2.99256,8,0,2,Very Bearish,2026-11-16T01:25:16Z
-XAUUSD,Gold U.S. Dollar,18157,18,2.88366,0,0,0,Neutral,2026-11-16T01:25:16Z
-NVDA,NVIDIA Corp,685598,19,2.8381,15,5,7,Bearish,2026-11-16T01:25:16Z
-JEPQ,JPMorgan Nasdaq Equity Premium Income ETF,9611,20,2.8204,0,0,0,Neutral,2026-11-16T01:25:16Z
-ALB,Albemarle Corp,14717,21,2.8204,0,0,0,Neutral,2026-11-16T01:25:16Z
-UUUU,Energy Fuels Inc,23564,22,2.8204,0,0,0,Neutral,2026-11-16T01:25:16Z
-PZZA,"Papa John`s International, Inc.",5337,23,2.8204,0,0,0,Neutral,2026-11-16T01:25:16Z
-JD,JD.com Inc - ADR,65972,24,2.8204,0,0,0,Neutral,2026-11-16T01:25:16Z
-QUBT,Quantum Computing Inc,33570,25,2.75332,0,0,0,Neutral,2026-11-16T01:25:16Z
-EWY,iShares MSCI South Korea ETF,3258,26,2.59887,0,0,0,Neutral,2026-11-16T01:25:16Z
-BOIL,ProShares Ultra Bloomberg Natural Gas,17369,27,2.58827,0,0,0,Neutral,2026-11-16T01:25:16Z
-AMGN,AMGEN Inc.,15117,28,2.53738,0,0,0,Neutral,2026-11-16T01:25:16Z
-NVO,Novo Nordisk A/S,32204,29,2.53738,0,0,0,Neutral,2026-11-16T01:25:16Z
-UNG,"United States Natural Gas Fund, LP",17726,30,2.43972,0,0,0,Neutral,2026-11-16T01:25:16Z
+SLS,SELLAS Life Sciences Group Inc,63614,1,8.43016,10,3,6,Bearish,2026-11-17T04:13:45Z
+JPM,JPMorgan Chase & Co,98672,2,7.65736,1,0,0,Neutral,2026-11-17T04:13:45Z
+USDSEK,U.S. Dollar/Swedish Krona,222,3,6.10613,0,0,0,Neutral,2026-11-17T04:13:45Z
+INFQ,Infleqtion Inc.,17065,4,5.83969,1,0,1,Very Bearish,2026-11-17T04:13:45Z
+OMER,Omeros Corp,11863,5,5.74786,0,0,0,Neutral,2026-11-17T04:13:45Z
+AMD,Advanced Micro Devices Inc,569239,6,5.62854,3,0,2,Very Bearish,2026-11-17T04:13:45Z
+QUBT,Quantum Computing Inc,33564,7,5.4471,4,1,0,Very Bullish,2026-11-17T04:13:45Z
+XAGUSD,Silver US Dollar,3679,8,5.30113,0,0,0,Neutral,2026-11-17T04:13:45Z
+OKLO,Oklo Inc.,40726,9,5.14009,1,0,0,Neutral,2026-11-17T04:13:45Z
+KTOS,Kratos Defense & Security Solutions Inc,22053,10,5.0692,0,0,0,Neutral,2026-11-17T04:13:45Z
+XLF,Financial Select Sector SPDR Fund,18573,11,4.93752,0,0,0,Neutral,2026-11-17T04:13:45Z
+LYFT,Lyft Inc,42374,12,4.85191,0,0,0,Neutral,2026-11-17T04:13:45Z
+DXYZ,DESTINY TECH 100 INC,9057,13,4.70068,0,0,0,Neutral,2026-11-17T04:13:45Z
+SHAZ,SharonAI Holdings Inc. - Ordinary Shares - Class A,1857,14,4.69221,0,0,0,Neutral,2026-11-17T04:13:45Z
+FUBO,fuboTV Inc,67525,15,4.67919,0,0,0,Neutral,2026-11-17T04:13:45Z
+KURA,Kura Oncology Inc,4081,16,4.6743,0,0,0,Neutral,2026-11-17T04:13:45Z
+UAL,United Airlines Holdings Inc,39968,17,4.64378,0,0,0,Neutral,2026-11-17T04:13:45Z
+BB.TSX,BlackBerry Ltd,1085,18,4.61012,0,0,0,Neutral,2026-11-17T04:13:45Z
+LUNC.X,Terra Luna Classic,33296,19,4.59527,0,0,0,Neutral,2026-11-17T04:13:45Z
+QUANT,Quant Traders and Investors,288,20,3.86114,0,0,0,Neutral,2026-11-17T04:13:45Z
+IBRX,ImmunityBio Inc,31515,21,3.78325,3,0,0,Neutral,2026-11-17T04:13:45Z
+STUDY,Stocktwits Education,5986,22,3.70026,0,0,0,Neutral,2026-11-17T04:13:45Z
+GME,GameStop Corp,308025,23,3.66482,1,1,0,Very Bullish,2026-11-17T04:13:45Z
+BCRX,Biocryst Pharmaceuticals Inc.,37017,24,3.60092,0,0,0,Neutral,2026-11-17T04:13:45Z
+LHX,L3Harris Technologies Inc,4728,25,3.55234,0,0,0,Neutral,2026-11-17T04:13:45Z
+BABA,Alibaba Group Holding Ltd,425418,26,3.55082,5,0,0,Neutral,2026-11-17T04:13:45Z
+AG,First Majestic Silver Corporation,19877,27,3.54322,0,0,0,Neutral,2026-11-17T04:13:45Z
+BAC,Bank of America Corp,147345,28,3.54071,0,0,0,Neutral,2026-11-17T04:13:45Z
+XLP,Consumer Staples Select Sector SPDR Fund,4537,29,3.48291,0,0,0,Neutral,2026-11-17T04:13:45Z
+NOK,Nokia Corp,115151,30,3.44161,0,0,0,Neutral,2026-11-17T04:13:45Z
