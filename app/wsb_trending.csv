@@ -1,51 +1,51 @@
 rank,ticker,name,mentions,upvotes,rank_24h_ago,mentions_24h_ago,mentions_chg,rank_chg,momentum
-1,NVDA,NVIDIA,810,4047,1,1313,-503,0,Steady
-2,SPY,SPDR S&amp;P 500 ETF Trust,617,2504,2,293,324,0,Steady
-3,AMD,AMD,502,1488,3,169,333,0,Steady
-4,QQQ,Invesco QQQ ETF,368,995,4,154,214,0,Steady
-5,GOOG,Alphabet (Google),130,343,11,51,79,6,Surging
-6,MU,Micron Technology,117,199,5,111,6,-1,Steady
-7,SPCX,SpaceX,116,642,6,100,16,-1,Steady
-8,NBIS,Nebius Group,91,189,7,59,32,-1,Steady
-9,GOOGL,Alphabet (Google),83,449,9,60,23,0,Steady
-10,GME,GameStop,70,182,23,26,44,13,Surging
-11,DTE,DTE Energy,59,748,15,43,16,4,Rising
-12,SOXL,Direxion Shares ETF Trust - Direxion Daily Semiconductor Bull 3X Share,57,123,26,26,31,14,Surging
-13,AMZN,Amazon,54,97,8,73,-19,-5,Falling
-14,IT,Gartner,54,173,17,32,22,3,Rising
-15,ET,Energy Transfer Partners,47,67,20,26,21,5,Surging
-16,DOW,Dow,46,112,37,17,29,21,Surging
-17,SNDK,Sandisk,43,85,13,55,-12,-4,Fading
-18,AM,Antero Midstream,42,72,25,24,18,7,Surging
-19,SLS,Sellas Life Sciences,42,65,19,26,16,0,Steady
-20,YOU,CLEAR Secure,37,787,38,16,21,18,Surging
-21,VOO,Vanguard S&amp;P 500 ETF,36,156,27,28,8,6,Surging
-22,MSFT,Microsoft,35,422,18,36,-1,-4,Fading
-23,NOW,ServiceNow,34,71,28,20,14,5,Surging
-24,AAPL,Apple,32,89,21,25,7,-3,Fading
-25,ALL,Allstate,31,787,43,13,18,18,Surging
-26,META,Meta Platforms (Facebook),30,90,34,15,15,8,Surging
-27,ASTS,AST SpaceMobile,29,78,16,40,-11,-11,Falling
-28,TTWO,Take 2 Interactive,28,42,14,46,-18,-14,Falling
-29,GLD,SSgA SPDR Gold Shares,28,61,22,19,9,-7,Falling
-30,INTC,Intel,27,43,35,20,7,5,Surging
-31,CRWV,CoreWeave,27,98,29,21,6,-2,Fading
-32,WMT,Walmart,26,85,55,11,15,23,Surging
-33,UNH,UnitedHealth,26,77,12,51,-25,-21,Falling
-34,TQQQ,ProShares Trust - ProShares UltraPro QQQ,24,52,61,8,16,27,Surging
-35,TSLA,Tesla,20,421,24,26,-6,-11,Falling
-36,VC,Visteon,20,71,45,8,12,9,Surging
-37,IREN,Iris Energy,20,45,46,10,10,9,Surging
-38,AGI,Alamos Gold,19,102,454,2,17,416,Surging
-39,MSTR,MicroStrategy,19,37,31,20,-1,-8,Falling
-40,OPEN,Opendoor,19,30,75,7,12,35,Surging
-41,NFLX,Netflix,18,33,36,14,4,-5,Falling
-42,FOR,Forestar Group,18,718,108,3,15,66,Surging
-43,TLT,BlackRock Institutional Trust Company N.A. - BTC iShares 20+ Year Trea,17,20,72,6,11,29,Surging
-44,COST,Costco,16,35,56,7,9,12,Surging
-45,PS,Pluralsight,15,91,48,13,2,3,Rising
-46,IP,International Paper,14,29,44,15,-1,-2,Fading
-47,GO,Grocery Outlet,14,20,372,3,11,325,Surging
-48,SGOV,iShares Trust - iShares 0-3 Month Treasury Bond ETF,13,18,106,4,9,58,Surging
-49,RDDT,Reddit,13,52,64,11,2,15,Surging
-50,BULL,Webull,13,23,65,6,7,15,Surging
+1,NVDA,NVIDIA,1407,4870,1,813,594,0,Steady
+2,SPY,SPDR S&amp;P 500 ETF Trust,994,2944,2,616,378,0,Steady
+3,QQQ,Invesco QQQ ETF,361,836,4,370,-9,1,Steady
+4,AMD,AMD,217,804,3,502,-285,-1,Steady
+5,MU,Micron Technology,214,534,7,117,97,2,Rising
+6,SNDK,Sandisk,186,377,17,43,143,11,Surging
+7,SO,Southern Company,141,88,62,12,129,55,Surging
+8,GOOG,Alphabet (Google),135,209,6,131,4,-2,Fading
+9,PUMP,ProPetro,118,-67,66,7,111,57,Surging
+10,SOXL,Direxion Shares ETF Trust - Direxion Daily Semiconductor Bull 3X Share,106,191,13,58,48,3,Rising
+11,VOO,Vanguard S&amp;P 500 ETF,106,340,20,36,70,9,Surging
+12,NBIS,Nebius Group,105,265,8,91,14,-4,Fading
+13,GOOGL,Alphabet (Google),87,169,9,83,4,-4,Fading
+14,AAPL,Apple,82,134,33,32,50,19,Surging
+15,DTE,DTE Energy,70,207,12,59,11,-3,Fading
+16,SPCX,SpaceX,64,126,5,117,-53,-11,Falling
+17,ET,Energy Transfer Partners,57,4836,14,49,8,-3,Fading
+18,IT,Gartner,55,111,18,54,1,0,Steady
+19,GME,GameStop,55,110,11,70,-15,-8,Falling
+20,YOU,CLEAR Secure,48,341,21,37,11,1,Steady
+21,AM,Antero Midstream,40,59,19,42,-2,-2,Fading
+22,TSLA,Tesla,39,112,34,20,19,12,Surging
+23,AMZN,Amazon,37,54,10,54,-17,-13,Falling
+24,CRWV,CoreWeave,37,67,31,27,10,7,Surging
+25,WMT,Walmart,36,63,30,26,10,5,Surging
+26,ALL,Allstate,36,70,23,31,5,-3,Fading
+27,NOW,ServiceNow,36,68,24,34,2,-3,Fading
+28,ASTS,AST SpaceMobile,36,115,28,29,7,0,Steady
+29,IREN,Iris Energy,35,89,39,20,15,10,Surging
+30,MSTR,MicroStrategy,34,92,36,19,15,6,Surging
+31,AVGO,Broadcom,33,84,61,11,22,30,Surging
+32,TQQQ,ProShares Trust - ProShares UltraPro QQQ,32,71,29,24,8,-3,Fading
+33,META,Meta Platforms (Facebook),32,93,32,30,2,-1,Steady
+34,EU,enCore Energy,32,1694,52,10,22,18,Surging
+35,CRWD,CrowdStrike,30,64,101,2,28,66,Surging
+36,TLT,BlackRock Institutional Trust Company N.A. - BTC iShares 20+ Year Trea,30,41,57,17,13,21,Surging
+37,UP,Wheels Up,29,57,77,12,17,40,Surging
+38,DOW,Dow,28,142,15,46,-18,-23,Falling
+39,GLD,SSgA SPDR Gold Shares,26,44,43,28,-2,4,Rising
+40,MSFT,Microsoft,25,45,22,35,-10,-18,Falling
+41,NYT,New York Times,23,83,132,4,19,91,Surging
+42,ORCL,Oracle,22,41,85,8,14,43,Surging
+43,SOXX,BlackRock Institutional Trust Company N.A. - BTC iShares PHLX Semicond,22,30,119,5,17,76,Surging
+44,RDDT,Reddit,22,43,40,13,9,-4,Fading
+45,COST,Costco,20,60,48,16,4,3,Rising
+46,ZS,Zscaler,20,40,313,1,19,267,Surging
+47,SMH,VanEck Vectors ETF Trust - VanEck Vectors Semiconductor ETF,20,34,176,5,15,129,Surging
+48,SOXS,Direxion Shares ETF Trust - Direxion Daily Semiconductor Bear 3X Share,20,31,50,11,9,2,Rising
+49,UNH,UnitedHealth,19,28,27,26,-7,-22,Falling
+50,MRVL,Marvell Technology Group,19,46,130,4,15,80,Surging

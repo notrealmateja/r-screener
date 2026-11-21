@@ -1,31 +1,31 @@
 symbol,title,watchlist_count,st_rank,trending_score,messages,bullish,bearish,sentiment_label,fetched_at
-ANT,Anthropic,34189,1,17.4776,2,0,1,Very Bearish,2026-11-20T02:39:04Z
-GLD,SPDR Gold Shares ETF,97410,2,15.0111,1,0,0,Neutral,2026-11-20T02:39:04Z
-SLV,iShares Silver Trust,62119,3,12.9192,1,0,0,Neutral,2026-11-20T02:39:04Z
-AMD,Advanced Micro Devices Inc,569745,4,10.668,1,0,0,Neutral,2026-11-20T02:39:04Z
-GME,GameStop Corp,308155,5,10.5654,1,0,1,Very Bearish,2026-11-20T02:39:04Z
-NBIS,Nebius Group N.V. ,58284,6,10.5253,4,0,1,Very Bearish,2026-11-20T02:39:04Z
-CAPR,Capricor Therapeutics Inc,35465,7,7.55452,1,1,0,Very Bullish,2026-11-20T02:39:04Z
-SOFI,SoFi Technologies Inc,157463,8,7.36668,0,0,0,Neutral,2026-11-20T02:39:04Z
-SNDK,Sandisk Corp,39930,9,7.32184,1,0,0,Neutral,2026-11-20T02:39:04Z
-INTU,Intuit Inc,12938,10,7.05298,0,0,0,Neutral,2026-11-20T02:39:04Z
-GDXU,Bank of Montreal - MicroSectors Gold Miners 3X Leveraged ETN,2305,11,6.61413,1,0,0,Neutral,2026-11-20T02:39:04Z
-QQQ,Invesco QQQ Trust Series 1,283612,12,6.39703,2,0,0,Neutral,2026-11-20T02:39:04Z
-VOO,Vanguard S&P 500 ETF,54343,13,6.1332,0,0,0,Neutral,2026-11-20T02:39:04Z
-TTWO,"Take-Two Interactive Software, Inc.",26511,14,6.03742,0,0,0,Neutral,2026-11-20T02:39:04Z
-DIA,SPDR Dow Jones Industrial Average ETF,77072,15,5.91563,0,0,0,Neutral,2026-11-20T02:39:04Z
-FRVO,Fervo Energy Co,2098,16,5.79367,0,0,0,Neutral,2026-11-20T02:39:04Z
-MRVL,Marvell Technology Inc,55419,17,5.65108,1,0,0,Neutral,2026-11-20T02:39:04Z
-SCHD,Schwab US Dividend Equity ETF,24789,18,5.48701,0,0,0,Neutral,2026-11-20T02:39:04Z
-RBRK,Rubrik Inc. - Class A,6468,19,5.45083,0,0,0,Neutral,2026-11-20T02:39:04Z
-NN,NextNav Inc,1295,20,5.33057,0,0,0,Neutral,2026-11-20T02:39:04Z
-AGQ,ProShares Ultra Silver,4595,21,5.27603,0,0,0,Neutral,2026-11-20T02:39:04Z
-VXX,iPath S&P 500 VIX Short-Term Futures ETN,30390,22,5.07831,0,0,0,Neutral,2026-11-20T02:39:04Z
-HYMC,Hycroft Mining Holding Corp,20619,23,5.07437,0,0,0,Neutral,2026-11-20T02:39:04Z
-UVXY,ProShares Ultra VIX Short-Term Futures ETF,85154,24,5.03481,0,0,0,Neutral,2026-11-20T02:39:04Z
-NVDA,NVIDIA Corp,690204,25,4.9637,8,0,3,Very Bearish,2026-11-20T02:39:04Z
-QQQI,NEOS Nasdaq 100 High Income ETF,6208,26,4.79995,0,0,0,Neutral,2026-11-20T02:39:04Z
-MU,Micron Technology Inc,223076,27,4.73522,3,2,0,Very Bullish,2026-11-20T02:39:04Z
-WMT,Walmart Inc,139518,28,4.35626,0,0,0,Neutral,2026-11-20T02:39:04Z
-IREN,IREN Limited,55440,29,4.16827,0,0,0,Neutral,2026-11-20T02:39:04Z
-AVAV,AeroVironment Inc.,13985,30,4.08289,0,0,0,Neutral,2026-11-20T02:39:04Z
+CAPR,Capricor Therapeutics Inc,35926,1,19.4489,19,1,2,Bearish,2026-11-21T02:51:10Z
+ZS,Zscaler Inc,23949,2,6.38323,0,0,0,Neutral,2026-11-21T02:51:10Z
+VGT,Vanguard Information Technology ETF,11356,3,5.79768,0,0,0,Neutral,2026-11-21T02:51:10Z
+SVIX,Volatility Shares 1x Short VIX Futures ETF,2382,4,5.25863,0,0,0,Neutral,2026-11-21T02:51:10Z
+HUM,Humana Inc,7333,5,5.09952,0,0,0,Neutral,2026-11-21T02:51:10Z
+XBI,SPDR S&P Biotech ETF,29302,6,5.07484,0,0,0,Neutral,2026-11-21T02:51:10Z
+ET,Energy Transfer LP Unit,23129,7,4.96552,0,0,0,Neutral,2026-11-21T02:51:10Z
+CRO.X,Crypto.com Coin,37059,8,4.61902,0,0,0,Neutral,2026-11-21T02:51:10Z
+HYPE.X,Hype,4085,9,3.96748,2,0,0,Neutral,2026-11-21T02:51:10Z
+RTX,Raytheon Technologies Corporation,24566,10,3.89616,0,0,0,Neutral,2026-11-21T02:51:10Z
+OUST,Ouster Inc - Ordinary Shares - Class A,17733,11,3.55416,1,0,1,Very Bearish,2026-11-21T02:51:10Z
+ABCL,AbCellera Biologics Inc,9872,12,3.53326,0,0,0,Neutral,2026-11-21T02:51:10Z
+ANT,Anthropic,40237,13,3.50142,3,0,0,Neutral,2026-11-21T02:51:10Z
+BRK.A,Berkshire Hathaway Inc. - Ordinary Shares - Class A,12472,14,3.43283,0,0,0,Neutral,2026-11-21T02:51:10Z
+NXT,Nextpower Inc.,2260,15,3.39423,0,0,0,Neutral,2026-11-21T02:51:10Z
+SHIB.X,Shiba Inu,191280,16,3.34917,0,0,0,Neutral,2026-11-21T02:51:10Z
+CSIQ,Canadian Solar Inc,14874,17,3.2571,0,0,0,Neutral,2026-11-21T02:51:10Z
+NEAR.X,Near,5863,18,3.13837,0,0,0,Neutral,2026-11-21T02:51:10Z
+SOFI,SoFi Technologies Inc,157457,19,3.10956,0,0,0,Neutral,2026-11-21T02:51:10Z
+STRL,"Sterling Construction Company, Inc.",3572,20,3.04144,0,0,0,Neutral,2026-11-21T02:51:10Z
+APLD,Applied Digital Corporation,48567,21,2.98802,0,0,0,Neutral,2026-11-21T02:51:10Z
+SRPT,Sarepta Therapeutics Inc,26665,22,2.93298,0,0,0,Neutral,2026-11-21T02:51:10Z
+CVS,CVS Health Corp,29906,23,2.86982,0,0,0,Neutral,2026-11-21T02:51:10Z
+REPL,Replimune Group Inc,4904,24,2.84996,0,0,0,Neutral,2026-11-21T02:51:10Z
+EROC,ERock Inc. - Ordinary Shares - Class A,1087,25,2.8204,0,0,0,Neutral,2026-11-21T02:51:10Z
+TEAM,Atlassian Corporation Plc,15018,26,2.5414,0,0,0,Neutral,2026-11-21T02:51:10Z
+LYFT,Lyft Inc,42355,27,2.53956,0,0,0,Neutral,2026-11-21T02:51:10Z
+DELL,Dell Technologies Inc,31976,28,2.48553,0,0,0,Neutral,2026-11-21T02:51:10Z
+UMAC,Unusual Machines Inc,12511,29,2.47314,0,0,0,Neutral,2026-11-21T02:51:10Z
+LTC.X,Litecoin,112657,30,2.45436,0,0,0,Neutral,2026-11-21T02:51:10Z
