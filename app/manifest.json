@@ -1838,8 +1838,8 @@
       }
     },
     "sass": {
-      "Source": "CRAN",
-      "Repository": "https://cran.rstudio.com",
+      "Source": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
       "description": {
         "Type": "Package",
         "Package": "sass",
@@ -1861,9 +1861,9 @@
         "Packaged": "2026-11-18 22:44:24 UTC; cpsievert",
         "Author": "Joe Cheng [aut],\n  Timothy Mastny [aut],\n  Richard Iannone [aut] (ORCID: <https://orcid.org/0000-0003-3925-190X>),\n  Barret Schloerke [aut] (ORCID: <https://orcid.org/0000-0001-9986-114X>),\n  Carson Sievert [aut, cre] (ORCID:\n    <https://orcid.org/0000-0002-4958-2844>),\n  Christophe Dervieux [ctb] (ORCID:\n    <https://orcid.org/0000-0003-4474-2498>),\n  RStudio [cph, fnd],\n  Sass Open Source Foundation [ctb, cph] (LibSass library),\n  Greter Marcel [ctb, cph] (LibSass library),\n  Mifsud Michael [ctb, cph] (LibSass library),\n  Hampton Catlin [ctb, cph] (LibSass library),\n  Natalie Weizenbaum [ctb, cph] (LibSass library),\n  Chris Eppstein [ctb, cph] (LibSass library),\n  Adams Joseph [ctb, cph] (json.cpp),\n  Trifunovic Nemanja [ctb, cph] (utf8.h)",
         "Maintainer": "Carson Sievert <carson@posit.co>",
-        "Repository": "CRAN",
+        "Repository": "RSPM",
         "Date/Publication": "2026-11-20 08:50:18 UTC",
-        "Built": "R 4.4.0; x86_64-pc-linux-gnu; 2026-11-21 02:42:09 UTC; unix"
+        "Built": "R 4.4.0; x86_64-pc-linux-gnu; 2026-11-21 04:01:49 UTC; unix"
       }
     },
     "scales": {
@@ -1897,8 +1897,8 @@
       }
     },
     "shiny": {
-      "Source": "CRAN",
-      "Repository": "https://cran.rstudio.com",
+      "Source": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
       "description": {
         "Type": "Package",
         "Package": "shiny",
@@ -1921,9 +1921,9 @@
         "Packaged": "2026-11-19 14:54:12 UTC; barret",
         "Author": "Winston Chang [aut] (ORCID: <https://orcid.org/0000-0002-1576-2126>),\n  Joe Cheng [aut],\n  JJ Allaire [aut],\n  Carson Sievert [aut, cre] (ORCID:\n    <https://orcid.org/0000-0002-4958-2844>),\n  Barret Schloerke [aut] (ORCID: <https://orcid.org/0000-0001-9986-114X>),\n  Garrick Aden-Buie [aut] (ORCID:\n    <https://orcid.org/0000-0002-7111-0077>),\n  Yihui Xie [aut],\n  Jeff Allen [aut],\n  Jonathan McPherson [aut],\n  Alan Dipert [aut],\n  Barbara Borges [aut],\n  Posit Software, PBC [cph, fnd] (ROR: <https://ror.org/03wc8by49>),\n  jQuery Foundation [cph] (jQuery library and jQuery UI library),\n  jQuery contributors [ctb, cph] (jQuery library; authors listed in\n    inst/www/shared/jquery-AUTHORS.txt),\n  jQuery UI contributors [ctb, cph] (jQuery UI library; authors listed in\n    inst/www/shared/jqueryui/AUTHORS.txt),\n  Mark Otto [ctb] (Bootstrap library),\n  Jacob Thornton [ctb] (Bootstrap library),\n  Bootstrap contributors [ctb] (Bootstrap library),\n  Twitter, Inc [cph] (Bootstrap library),\n  Prem Nawaz Khan [ctb] (Bootstrap accessibility plugin),\n  Victor Tsaran [ctb] (Bootstrap accessibility plugin),\n  Dennis Lembree [ctb] (Bootstrap accessibility plugin),\n  Srinivasu Chakravarthula [ctb] (Bootstrap accessibility plugin),\n  Cathy O'Connor [ctb] (Bootstrap accessibility plugin),\n  PayPal, Inc [cph] (Bootstrap accessibility plugin),\n  Stefan Petre [ctb, cph] (Bootstrap-datepicker library),\n  Andrew Rowls [ctb, cph] (Bootstrap-datepicker library),\n  Brian Reavis [ctb, cph] (selectize.js library),\n  Salmen Bejaoui [ctb, cph] (selectize-plugin-a11y library),\n  Denis Ineshin [ctb, cph] (ion.rangeSlider library),\n  Sami Samhuri [ctb, cph] (Javascript strftime library),\n  SpryMedia Limited [ctb, cph] (DataTables library),\n  Ivan Sagalaev [ctb, cph] (highlight.js library),\n  R Core Team [ctb, cph] (tar implementation from R)",
         "Maintainer": "Carson Sievert <carson@posit.co>",
-        "Repository": "CRAN",
+        "Repository": "RSPM",
         "Date/Publication": "2026-11-20 08:50:02 UTC",
-        "Built": "R 4.4.0; ; 2026-11-21 02:43:36 UTC; unix"
+        "Built": "R 4.4.0; ; 2026-11-21 04:06:12 UTC; unix"
       }
     },
     "sourcetools": {
@@ -2579,19 +2579,19 @@
       "checksum": "afebe79242b753530b3882e4058d7fbd"
     },
     "backtest_equity_stats.csv": {
-      "checksum": "3aa62d424293555d5386732ce0c11a5c"
+      "checksum": "ab021ff328d0c86f2705f032518d0560"
     },
     "backtest_equity.csv": {
-      "checksum": "fa61282c4ef58bdd57515292d815b118"
+      "checksum": "7e3bfea10863bd1aee4cc5c3e8bcaaa8"
     },
     "backtest_headline.csv": {
-      "checksum": "114267f63a6cca58d3358350c868ab63"
+      "checksum": "f3e88e598ddf2dd1f43bab0181c81c42"
     },
     "backtest_ic.csv": {
       "checksum": "e06936115946f4dfd080b1eddf6c9540"
     },
     "backtest_phase_sweep.csv": {
-      "checksum": "dd4a5a1a7301e03f7f6c0d6699e0c021"
+      "checksum": "657ca8dd02f96e2679e78fefb0fcfdab"
     },
     "backtest_summary.csv": {
       "checksum": "581aff9bd8f0f04dd5560f2b3cf2225d"
@@ -2600,31 +2600,31 @@
       "checksum": "6f1dddc156f656f2d4c4d382e7b64017"
     },
     "data/meta.rds": {
-      "checksum": "5ccc4395d1545374b97058486083cb40"
+      "checksum": "a2cc0b0866c02e17eea0586c11f833c4"
     },
     "data/price_series_cache.rds": {
       "checksum": "266a1b7cfa8bbf9180380a4969dbc886"
     },
     "earnings_calendar.csv": {
-      "checksum": "71d637466ef9451905d77ceb79a776c5"
+      "checksum": "0a12c2705dced598d11236e788a99c89"
     },
     "global.R": {
       "checksum": "1d0fffb1479609f4c7e7d806c2a889d7"
     },
     "macro_data.csv": {
-      "checksum": "29f7ace4052ac465f1a32f2856cdc065"
+      "checksum": "1f700aa00ebf8e2f45c1061f07ab5256"
     },
     "market_news.csv": {
       "checksum": "40b59b1ef18dd32c084b345c018d8bfb"
     },
     "master_scored.csv": {
-      "checksum": "96a0a0f747d4db248fe8676ff7d5f7d6"
+      "checksum": "7e084de4c63dbae84c67f39a2087044f"
     },
     "meta.rds": {
-      "checksum": "5ccc4395d1545374b97058486083cb40"
+      "checksum": "a2cc0b0866c02e17eea0586c11f833c4"
     },
     "price_history.csv": {
-      "checksum": "234eb88899580a2caebd9b00e5db72da"
+      "checksum": "7a78dfaec6dac8c7b234159e43de62fd"
     },
     "reversal_results.csv": {
       "checksum": "5d2d41684dfb33d33579352bd50d5c26"
@@ -2633,28 +2633,28 @@
       "checksum": "b1c1389f77f9f292138f2d72d0040187"
     },
     "sec_filings.csv": {
-      "checksum": "266f82cd1aa1e6d1ceb035073aa0e225"
+      "checksum": "c3fdf5efc137cceb15e8fe861d349272"
     },
     "sector_performance.csv": {
       "checksum": "39799509d1a92c7a1e6685ae1a8573e9"
     },
     "stock_news.csv": {
-      "checksum": "924c4c1409e174c5f517b1413c2e335c"
+      "checksum": "551d5e9fd6ddb8ac66d499a1f82cfb5e"
     },
     "stocktwits_trending.csv": {
-      "checksum": "e97a3c8f69cf945d800b7ce93dd1bdbb"
+      "checksum": "1bb500a10b53bc8e98aa79fdd11b43bf"
     },
     "top15_sweetspot.csv": {
-      "checksum": "2f1917ea1f6a86de940972663365691e"
+      "checksum": "e12fe98ae849edf8a7825595358e4d9c"
     },
     "top15_unicorns.csv": {
-      "checksum": "b158aa4c34f622a32677ef8027a1b68f"
+      "checksum": "b75615cf02f2e8c70c7035b7d7362fca"
     },
     "tv_channels.csv": {
-      "checksum": "d1c2831dad0236fc15eef6c2e78d01d1"
+      "checksum": "3c490fcfde5ae17a9b8123e50270239d"
     },
     "wsb_trending.csv": {
-      "checksum": "7266955d5177f534ac1a6b64754a60a7"
+      "checksum": "ea4ba2884985a4c4c6c5034b46598b05"
     }
   },
   "users": null
