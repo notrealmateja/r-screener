@@ -510,13 +510,13 @@
       }
     },
     "curl": {
-      "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+      "Source": "CRAN",
+      "Repository": "https://cran.rstudio.com",
       "description": {
         "Package": "curl",
         "Type": "Package",
         "Title": "A Modern and Flexible Web Client for R",
-        "Version": "8.1.0",
+        "Version": "8.2.0",
         "Authors@R": "c(\n    person(\"Jeroen\", \"Ooms\", role = c(\"aut\", \"cre\"), email = \"jeroenooms@gmail.com\",\n      comment = c(ORCID = \"0000-0002-4035-0289\")),\n    person(\"Hadley\", \"Wickham\", role = \"ctb\"),\n    person(\"Posit Software, PBC\", role = \"cph\"))",
         "Description": "Bindings to 'libcurl' <https://curl.se/libcurl/> for performing fully\n    configurable HTTP/FTP requests where responses can be processed in memory, on\n    disk, or streaming via the callback or connection interfaces. Some knowledge\n    of 'libcurl' is recommended; for a more-user-friendly web client see the \n    'httr2' package which builds on this package with http specific tools and logic.",
         "License": "MIT + file LICENSE",
@@ -530,12 +530,12 @@
         "Language": "en-US",
         "Config/roxygen2/version": "8.0.0",
         "NeedsCompilation": "yes",
-        "Packaged": "2026-10-14 10:10:35 UTC; jeroen",
+        "Packaged": "2026-11-23 18:28:09 UTC; jeroen",
         "Author": "Jeroen Ooms [aut, cre] (ORCID: <https://orcid.org/0000-0002-4035-0289>),\n  Hadley Wickham [ctb],\n  Posit Software, PBC [cph]",
         "Maintainer": "Jeroen Ooms <jeroenooms@gmail.com>",
-        "Repository": "RSPM",
-        "Date/Publication": "2026-10-14 12:12:13 UTC",
-        "Built": "R 4.4.0; x86_64-pc-linux-gnu; 2026-10-15 03:47:54 UTC; unix"
+        "Repository": "CRAN",
+        "Date/Publication": "2026-11-23 21:50:08 UTC",
+        "Built": "R 4.4.0; x86_64-pc-linux-gnu; 2026-11-24 05:48:05 UTC; unix"
       }
     },
     "data.table": {
@@ -2576,85 +2576,85 @@
       "checksum": "978adf69f3a9762aa4e834da27e0a780"
     },
     "backtest_components.csv": {
-      "checksum": "afebe79242b753530b3882e4058d7fbd"
+      "checksum": "abc1b7c94dcf1433a04805efc3d21f68"
     },
     "backtest_equity_stats.csv": {
-      "checksum": "c1424a47a0a8f4f34dee39cdd051dc14"
+      "checksum": "d8c61eaee358fe2b4604c47a83445e8c"
     },
     "backtest_equity.csv": {
-      "checksum": "7e3bfea10863bd1aee4cc5c3e8bcaaa8"
+      "checksum": "1cbb37d7221f88b69838cc86a9a31c58"
     },
     "backtest_headline.csv": {
-      "checksum": "cb0115d3501f1df3acb1965ce6c780a0"
+      "checksum": "34dcff22d0dc66d05459a07d71e7cca1"
     },
     "backtest_ic.csv": {
-      "checksum": "e06936115946f4dfd080b1eddf6c9540"
+      "checksum": "4be7b42930793db86cb4b6aa24b30fae"
     },
     "backtest_phase_sweep.csv": {
-      "checksum": "657ca8dd02f96e2679e78fefb0fcfdab"
+      "checksum": "c98b1b1303a2c37ad140f47121ce4a9e"
     },
     "backtest_summary.csv": {
-      "checksum": "581aff9bd8f0f04dd5560f2b3cf2225d"
+      "checksum": "841e94b867371ae6a8b182a1855c5dfc"
     },
     "data/batch_tracker.rds": {
       "checksum": "6f1dddc156f656f2d4c4d382e7b64017"
     },
     "data/meta.rds": {
-      "checksum": "d157fc9d0df19cd3d08ad94441ad3f8f"
+      "checksum": "8f50f6373fc4343c5a0f7bb34380e2d5"
     },
     "data/price_series_cache.rds": {
       "checksum": "266a1b7cfa8bbf9180380a4969dbc886"
     },
     "earnings_calendar.csv": {
-      "checksum": "5ffa56ba4a594a03eb3f61b29a7133d0"
+      "checksum": "dab93e8a8a39e008c6ad62bb38d48309"
     },
     "global.R": {
       "checksum": "1d0fffb1479609f4c7e7d806c2a889d7"
     },
     "macro_data.csv": {
-      "checksum": "a949a6ccdc90dfd871f97856c978f54c"
+      "checksum": "cea0b049d50632b5302df76f61ccd4a7"
     },
     "market_news.csv": {
       "checksum": "40b59b1ef18dd32c084b345c018d8bfb"
     },
     "master_scored.csv": {
-      "checksum": "9b401dce29f5e2722d9e1204dc511e80"
+      "checksum": "1d6d272a9b84e26b34b6be73c74b69fb"
     },
     "meta.rds": {
-      "checksum": "d157fc9d0df19cd3d08ad94441ad3f8f"
+      "checksum": "8f50f6373fc4343c5a0f7bb34380e2d5"
     },
     "price_history.csv": {
-      "checksum": "7a78dfaec6dac8c7b234159e43de62fd"
+      "checksum": "1368a788c42c563ba562c334b538a4fc"
     },
     "reversal_results.csv": {
-      "checksum": "5d2d41684dfb33d33579352bd50d5c26"
+      "checksum": "789f9ed4506a0069b607baf22cbdfaf8"
     },
     "score_history.csv": {
-      "checksum": "b1c1389f77f9f292138f2d72d0040187"
+      "checksum": "51787ca154c04a8af79b193b42106d3c"
     },
     "sec_filings.csv": {
-      "checksum": "bcc19bce0dddcb2c24bf97748b0d6e49"
+      "checksum": "00c668da77ee3a5809f9ae1518ff7b17"
     },
     "sector_performance.csv": {
-      "checksum": "39799509d1a92c7a1e6685ae1a8573e9"
+      "checksum": "04263ff01b3123517ca992de0a65988a"
     },
     "stock_news.csv": {
-      "checksum": "37ab6288d9022091055186aee8d0d3ec"
+      "checksum": "56a86d4be7b0f50bdde82e9c8a4a4be7"
     },
     "stocktwits_trending.csv": {
-      "checksum": "1e4bb0936dc97bfceef3a2c005060194"
+      "checksum": "4021b6e50216ef0ba5bb2d7e1f5998cb"
     },
     "top15_sweetspot.csv": {
-      "checksum": "e12fe98ae849edf8a7825595358e4d9c"
+      "checksum": "f814c3e50260020f51be57e606844306"
     },
     "top15_unicorns.csv": {
-      "checksum": "b75615cf02f2e8c70c7035b7d7362fca"
+      "checksum": "699d6e54c1f29209e3b0bb6adf64d8c7"
     },
     "tv_channels.csv": {
-      "checksum": "4eadaf34a8fad1a32c2f95511b219750"
+      "checksum": "ea310e684c8884e52748508bebaffcad"
     },
     "wsb_trending.csv": {
-      "checksum": "2950ac65aadcb281e4d6ca10d94dad95"
+      "checksum": "0c0d306bd64b3268716a6b903e45bec0"
     }
   },
   "users": null
