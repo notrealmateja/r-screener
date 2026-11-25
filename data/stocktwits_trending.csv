@@ -1,31 +1,31 @@
 symbol,title,watchlist_count,st_rank,trending_score,messages,bullish,bearish,sentiment_label,fetched_at
-FPS,Forgent Power Solutions Inc.,3642,1,5.34594,1,1,0,Very Bullish,2026-11-24T05:56:44Z
-ZM,Zoom Communications Inc. - Ordinary Shares - Class A,64700,2,5.27841,0,0,0,Neutral,2026-11-24T05:56:44Z
-BABA,Alibaba Group Holding Ltd,425649,3,5.13544,4,1,2,Bearish,2026-11-24T05:56:44Z
-TQQQ,ProShares UltraPro QQQ,45236,4,4.4121,0,0,0,Neutral,2026-11-24T05:56:44Z
-HPE,Hewlett Packard Enterprise Co,14201,5,4.3089,0,0,0,Neutral,2026-11-24T05:56:44Z
-SQQQ,ProShares UltraPro Short QQQ,43362,6,4.01104,0,0,0,Neutral,2026-11-24T05:56:44Z
-APPS,Digital Turbine Inc,25231,7,3.98731,0,0,0,Neutral,2026-11-24T05:56:44Z
-MLTX,MoonLake Immunotherapeutics,6631,8,3.75824,1,1,0,Very Bullish,2026-11-24T05:56:44Z
-IBB,iShares Biotechnology ETF,23763,9,3.44025,0,0,0,Neutral,2026-11-24T05:56:44Z
-BMY,Bristol-Myers Squibb Co.,36371,10,3.42014,0,0,0,Neutral,2026-11-24T05:56:44Z
-IONS,Ionis Pharmaceuticals Inc,7052,11,3.31949,0,0,0,Neutral,2026-11-24T05:56:44Z
-KO,Coca-Cola Co,54083,12,3.29905,0,0,0,Neutral,2026-11-24T05:56:44Z
-OPEAZZX.P,OpenAI,2469,13,2.8204,0,0,0,Neutral,2026-11-24T05:56:44Z
-RSP,Invesco S&P 500 Equal Weight ETF,2640,14,2.8204,0,0,0,Neutral,2026-11-24T05:56:44Z
-SKYD,Skydance Corp. - Ordinary Shares - Class B,27399,15,2.8204,0,0,0,Neutral,2026-11-24T05:56:44Z
-DDOG,Datadog Inc,26021,16,2.8204,0,0,0,Neutral,2026-11-24T05:56:44Z
-DELL,Dell Technologies Inc,32261,17,2.72846,0,0,0,Neutral,2026-11-24T05:56:44Z
-NVDA,NVIDIA Corp,693472,18,2.68734,19,5,1,Very Bullish,2026-11-24T05:56:44Z
-LKNCY,Luckin Coffee Inc - ADR,40113,19,2.60642,0,0,0,Neutral,2026-11-24T05:56:44Z
-VRT,Vertiv Holdings Co,21493,20,2.53738,0,0,0,Neutral,2026-11-24T05:56:44Z
-SHIB.X,Shiba Inu,191382,21,2.4698,0,0,0,Neutral,2026-11-24T05:56:44Z
-WLFI.X,WorldFinancial,4451,22,2.46692,0,0,0,Neutral,2026-11-24T05:56:44Z
-LEU,Centrus Energy Corp ,9071,23,2.44867,0,0,0,Neutral,2026-11-24T05:56:44Z
-IBRX,ImmunityBio Inc,31583,24,2.27837,3,2,0,Very Bullish,2026-11-24T05:56:44Z
-AMKR,AMKOR Technology Inc.,6546,25,2.24818,0,0,0,Neutral,2026-11-24T05:56:44Z
-COIN,Coinbase Global Inc,138947,26,2.175,0,0,0,Neutral,2026-11-24T05:56:44Z
-COST,Costco Wholesale Corp,65758,27,2.13813,0,0,0,Neutral,2026-11-24T05:56:44Z
-META,Meta Platforms Inc,618673,28,2.13415,0,0,0,Neutral,2026-11-24T05:56:44Z
-JPM,JPMorgan Chase & Co,98740,29,2.10373,0,0,0,Neutral,2026-11-24T05:56:44Z
-RYCEY,Rolls-Royce Holdings Plc - ADR,23356,30,2.08572,0,0,0,Neutral,2026-11-24T05:56:44Z
+DELL,Dell Technologies Inc,32941,1,11.9053,3,0,0,Neutral,2026-11-25T04:38:01Z
+SOXL,Direxion Daily Semiconductor Bull 3X Shares,43818,2,8.51438,2,0,0,Neutral,2026-11-25T04:38:01Z
+AMBA,Ambarella Inc,17430,3,7.71577,3,0,0,Neutral,2026-11-25T04:38:01Z
+MLTX,MoonLake Immunotherapeutics,6660,4,5.47811,2,1,0,Very Bullish,2026-11-25T04:38:01Z
+MU,Micron Technology Inc,223792,5,5.17878,8,3,0,Very Bullish,2026-11-25T04:38:01Z
+AMD,Advanced Micro Devices Inc,570181,6,4.75821,2,0,0,Neutral,2026-11-25T04:38:01Z
+XBI,SPDR S&P Biotech ETF,29411,7,4.60048,0,0,0,Neutral,2026-11-25T04:38:01Z
+JD,JD.com Inc - ADR,66015,8,4.44299,0,0,0,Neutral,2026-11-25T04:38:01Z
+INSM,Insmed Inc,3459,9,3.56064,0,0,0,Neutral,2026-11-25T04:38:01Z
+ABSI,Absci Corp,3551,10,3.48476,0,0,0,Neutral,2026-11-25T04:38:01Z
+XRP,Bitwise XRP ETF,1993,11,3.36331,0,0,0,Neutral,2026-11-25T04:38:01Z
+SNDK,Sandisk Corp,41049,12,3.32549,1,0,0,Neutral,2026-11-25T04:38:01Z
+ETN,Eaton Corporation plc,6068,13,3.2307,0,0,0,Neutral,2026-11-25T04:38:01Z
+MSTY,YieldMax MSTR Option Income Strategy ETF,9209,14,3.2307,0,0,0,Neutral,2026-11-25T04:38:01Z
+QBTS,D-Wave Quantum Inc,55874,15,3.13837,0,0,0,Neutral,2026-11-25T04:38:01Z
+ADBE,Adobe Inc,50874,16,3.125,0,0,0,Neutral,2026-11-25T04:38:01Z
+TSM,Taiwan Semiconductor Manufacturing - ADR,71567,17,3.08812,1,0,0,Neutral,2026-11-25T04:38:01Z
+HIMX,"Himax Technologies, Inc.",18642,18,2.94609,0,0,0,Neutral,2026-11-25T04:38:01Z
+NVTS,Navitas Semiconductor Corp,27501,19,2.8204,0,0,0,Neutral,2026-11-25T04:38:01Z
+PENG,Penguin Solutions Inc.,4739,20,2.68256,0,0,0,Neutral,2026-11-25T04:38:01Z
+AXSM,Axsome Therapeutics Inc,12068,21,2.63651,0,0,0,Neutral,2026-11-25T04:38:01Z
+SNY,Sanofi-Aventis,6002,22,2.57908,0,0,0,Neutral,2026-11-25T04:38:01Z
+RGTI,Rigetti Computing Inc,52448,23,2.53738,0,0,0,Neutral,2026-11-25T04:38:01Z
+VG,Venture Global Inc,4853,24,2.53738,0,0,0,Neutral,2026-11-25T04:38:01Z
+ANT,Anthropic,44723,25,2.52659,2,0,0,Neutral,2026-11-25T04:38:01Z
+GILD,"Gilead Sciences, Inc.",77636,26,2.50955,0,0,0,Neutral,2026-11-25T04:38:01Z
+SMH,VanEck Semiconductor ETF,20066,27,2.49603,0,0,0,Neutral,2026-11-25T04:38:01Z
+CRMD,CorMedix Inc,23774,28,2.40701,0,0,0,Neutral,2026-11-25T04:38:01Z
+TGTX,TG Therapeutics Inc,22028,29,2.36449,0,0,0,Neutral,2026-11-25T04:38:01Z
+QXO,QXO Inc.,5210,30,2.32638,0,0,0,Neutral,2026-11-25T04:38:01Z
